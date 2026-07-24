@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { analyzeFootageUsage } from "./orvyq_duplicate_footage_audit.mjs";
 
 function footageShot(id, asset, { trim_in_sec = 0, trim_out_sec = 5, reuse_reason = null } = {}) {
-  return { shot_id: id, asset_type: "footage", asset, trim_in_sec, trim_out_sec, reuse_reason, editorial_purpose: "Present evidence." };
+  return { shot_id: id, asset_type: "footage", video_asset: asset, trim_in_sec, trim_out_sec, reuse_reason, editorial_purpose: "Present evidence." };
 }
 
 test("a single use of an asset is never flagged", () => {

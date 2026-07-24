@@ -67,9 +67,10 @@ test("sliceClaimWindow splits a window into slices no longer than the max, with 
   // Every slice uses the claim's own primary visual_treatment -- there is no
   // evidence/context/metaphor rotation and no forced "boundary" kind.
   for (const slice of slices) assert.equal(slice.kind, "concept_map");
-  // Interior slices are exactly equal (no DURATION_VARIATION_DELTA jitter).
+  // Interior slices are exactly equal (no DURATION_VARIATION_DELTA jitter),
+  // up to float noise from sequential re-centering (1e-9 tolerance).
   const interior = slices.slice(0, -1);
-  for (const slice of interior) assert.equal(slice.end - slice.start, interior[0].end - interior[0].start);
+  for (const slice of interior) assert.ok(Math.abs(slice.end - slice.start - (interior[0].end - interior[0].start)) < 1e-9);
   // Every slice's own 0-based array index is directly usable as a
   // FOOTAGE_ASSIGNMENTS[claim_id][sliceIndex] key -- there is no positional
   // restriction on which slice may carry a footage assignment (no
@@ -83,6 +84,73 @@ test("sliceClaimWindow returns a single slice when the window already fits withi
   assert.equal(slices.length, 1);
   assert.equal(slices[0].start, 10);
   assert.equal(slices[0].end, 14);
+});
+
+// Real-narration boundary snapping (the orvyq_pacing_audit.mjs pacing fix):
+// without real word tokens in range, sliceClaimWindow must still fall back
+// to the plain equal-fraction split -- this keeps every caller that has no
+// alignment data (and the two tests above) byte-identical to before.
+test("sliceClaimWindow without tokens falls back to exact equal-width slices", () => {
+  const claim = { visual_treatment: { primary: "evidence_mosaic" } };
+  const slices = sliceClaimWindow(claim, 0, 20, 8);
+  const interior = slices.slice(0, -1);
+  for (const slice of interior) assert.ok(Math.abs(slice.end - slice.start - (interior[0].end - interior[0].start)) < 1e-9);
+});
+
+// With real word tokens in range, an interior boundary snaps onto whichever
+// real word-end timestamp is closest to the exact equal-fraction point --
+// here a sentence end sits just after the ideal split, and the boundary
+// should land exactly there instead of at the untouched fraction point.
+// A 0-14s/8s-cap window makes exactly 2 slices with an ideal split at t=7;
+// the search window is bounded below by max(start, 7-2.8)=4.2 and above by
+// min(coverEnd, start+8, 7+2.8)=8 -- every filler word is placed below 4.2
+// (outside that window) so only the sentence end under test is a candidate.
+test("sliceClaimWindow snaps an interior boundary onto a nearby real sentence end", () => {
+  const claim = { visual_treatment: { primary: "evidence_mosaic" } };
+  const words = [
+    { text: "Intro", start: 0, end: 0.6 },
+    { text: "words", start: 0.8, end: 1.2 },
+    { text: "leading", start: 1.4, end: 2 },
+    { text: "up", start: 2.2, end: 2.6 },
+    { text: "to", start: 2.8, end: 3.2 },
+    { text: "the", start: 3.3, end: 3.6 },
+    { text: "split", start: 3.7, end: 4 },
+    { text: "here.", start: 4.5, end: 7.35 },
+    { text: "More", start: 8.5, end: 9.3 },
+    { text: "narration", start: 9.4, end: 10.5 },
+    { text: "continues", start: 10.6, end: 11.5 },
+    { text: "onward.", start: 11.6, end: 12.5 }
+  ];
+  const tokens = tokenizeWords(words);
+  const slices = sliceClaimWindow(claim, 0, 14, 8, tokens, []);
+  assert.equal(slices.length, 2);
+  assert.equal(slices[0].end, 7.35);
+  assert.notEqual(slices[0].end - slices[0].start, slices[1].end - slices[1].start);
+});
+
+// A boundary never moves far enough to push either neighboring slice past
+// maxShotSeconds, even when a real word end sits well outside the safe
+// search window: same layout as above, but the candidate word now ends
+// well past t=8 (the hard maxShotSeconds-relative cap for this boundary),
+// so it must be ignored and the boundary must fall back to the exact
+// ideal fraction point (t=7).
+test("sliceClaimWindow ignores a real word end that is too far from the ideal split to use safely", () => {
+  const claim = { visual_treatment: { primary: "evidence_mosaic" } };
+  const words = [
+    { text: "Intro", start: 0, end: 0.6 },
+    { text: "words", start: 0.8, end: 1.2 },
+    { text: "leading", start: 1.4, end: 2 },
+    { text: "up", start: 2.2, end: 2.6 },
+    { text: "to", start: 2.8, end: 3.2 },
+    { text: "the", start: 3.3, end: 3.6 },
+    { text: "split", start: 3.7, end: 4 },
+    { text: "here.", start: 5.1, end: 13 },
+    { text: "More", start: 13.2, end: 13.4 }
+  ];
+  const tokens = tokenizeWords(words);
+  const slices = sliceClaimWindow(claim, 0, 14, 8, tokens, []);
+  assert.equal(slices[0].end, 7);
+  assert.ok(slices.every((slice) => slice.end - slice.start <= 8 + 1e-9));
 });
 
 // expandFootageAssignments -- the direct replacement for the removed

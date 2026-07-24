@@ -43,8 +43,19 @@ export function tokenizeAnchorText(text) {
     .filter(Boolean);
 }
 
-function endsAtSentenceBoundary(text) {
+// Exported so scripts/orvyq_full_production_plan.mjs's slice-boundary
+// picker can recognize the same real sentence endings this resolver
+// requires pause anchors to land on -- one punctuation-boundary definition,
+// not two independently-drifting regexes.
+export function endsAtSentenceBoundary(text) {
   return /[.!?]['")’]?\s*$/.test(String(text).trim());
+}
+
+// A softer real boundary than a full sentence end: a clause break (comma,
+// semicolon, colon, dash) still marks a place a real editor would
+// plausibly cut, just less strongly than a sentence end.
+export function endsAtClauseBoundary(text) {
+  return /[,;:—–-]['")’]?\s*$/.test(String(text).trim());
 }
 
 export function findAnchorMatch(tokens, anchorTokens, searchFromTokenIndex) {

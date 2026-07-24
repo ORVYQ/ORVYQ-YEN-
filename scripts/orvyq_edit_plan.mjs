@@ -250,7 +250,13 @@ async function buildFullPlan(dir, projectId, blueprint) {
       motion_variant: spec.motion || "hold",
       hook_footage: isHookFootage,
       contextual_footage: isContextualFootage,
-      provenance_mode: isHookFootage ? "approved_motion_hook" : "approved_contextual_footage"
+      provenance_mode: isHookFootage ? "approved_motion_hook" : "approved_contextual_footage",
+      // scripts/orvyq_full_production_plan.mjs only sets this when a
+      // FOOTAGE_ASSIGNMENTS entry declares a real reuse_reason (a second
+      // use of an already-used clip) -- scripts/orvyq_duplicate_footage_
+      // audit.mjs's own hard-use-limit check reads it straight off this
+      // same shot object, so it must survive this conversion.
+      ...(spec.reuse_reason ? { reuse_reason: spec.reuse_reason } : {})
     });
   }
 

@@ -43,7 +43,7 @@ const SEMANTIC_CATEGORY_KEYWORDS = {
 const SEMANTIC_CATEGORY_REPEAT_LIMIT = 3;
 
 function isContiguous(a, b) {
-  return a.asset_type === "footage" && b.asset_type === "footage" && a.asset === b.asset && Math.abs(Number(a.trim_out_sec) - Number(b.trim_in_sec)) < 0.02;
+  return a.asset_type === "footage" && b.asset_type === "footage" && a.video_asset === b.video_asset && Math.abs(Number(a.trim_out_sec) - Number(b.trim_in_sec)) < 0.02;
 }
 
 export function analyzeFootageUsage(shots) {
@@ -55,9 +55,9 @@ export function analyzeFootageUsage(shots) {
     if (shot.asset_type !== "footage") continue;
     const previous = shots[i - 1];
     if (previous && isContiguous(previous, shot)) continue; // one continuous use, not a new one
-    const list = usesByAsset.get(shot.asset) || [];
+    const list = usesByAsset.get(shot.video_asset) || [];
     list.push(shot);
-    usesByAsset.set(shot.asset, list);
+    usesByAsset.set(shot.video_asset, list);
   }
 
   const usage = [];
@@ -75,7 +75,7 @@ export function analyzeFootageUsage(shots) {
     }
   }
 
-  const purposeText = (shot) => `${shot.editorial_purpose || ""} ${shot.motif || ""} ${shot.asset || ""}`.toLowerCase();
+  const purposeText = (shot) => `${shot.editorial_purpose || ""} ${shot.motif || ""} ${shot.video_asset || ""}`.toLowerCase();
   const categoryHits = new Map();
   for (const shot of shots) {
     if (shot.asset_type !== "footage") continue;
@@ -83,7 +83,7 @@ export function analyzeFootageUsage(shots) {
     for (const [category, keywords] of Object.entries(SEMANTIC_CATEGORY_KEYWORDS)) {
       if (keywords.some((keyword) => text.includes(keyword))) {
         const list = categoryHits.get(category) || new Set();
-        list.add(shot.asset);
+        list.add(shot.video_asset);
         categoryHits.set(category, list);
       }
     }
@@ -145,7 +145,7 @@ export async function runDuplicateFootageAudit(projectId = PROJECT_ID, { checkPe
 
   let perceptualSimilarity = { checked: false, reason: "skipped", pairs: [] };
   if (checkPerceptualSimilarity) {
-    const distinctAssets = [...new Set(plan.shots.filter((s) => s.asset_type === "footage").map((s) => s.asset))];
+    const distinctAssets = [...new Set(plan.shots.filter((s) => s.asset_type === "footage").map((s) => s.video_asset))];
     const available = await ffmpegAvailable();
     if (!available) {
       failures.push("ffmpeg is unavailable -- perceptual footage-similarity check could not run and is reported as a failure, not silently skipped");
@@ -159,7 +159,7 @@ export async function runDuplicateFootageAudit(projectId = PROJECT_ID, { checkPe
           missing.push(asset);
           continue;
         }
-        const firstShot = plan.shots.find((s) => s.asset_type === "footage" && s.asset === asset);
+        const firstShot = plan.shots.find((s) => s.asset_type === "footage" && s.video_asset === asset);
         const at = Number(firstShot?.trim_in_sec || 0) + 0.2;
         hashes.set(asset, await perceptualHashOfFrame(absPath, at));
       }
