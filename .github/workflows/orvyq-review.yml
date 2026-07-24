@@ -1,0 +1,28 @@
+name: ORVYQ Full-Length Candidate Review
+
+# Dispatcher stub on the default branch.
+# GitHub only shows the workflow_dispatch UI when this workflow path exists on
+# the default branch. The actual validated review workflow lives on
+# claude/orvyq-canonical-candidate-parity-bl7w0u and is used when that branch is
+# selected in the Run workflow dialog.
+
+on:
+  workflow_dispatch:
+    inputs:
+      approved_validation_run_id:
+        description: "Successful ORVYQ Candidate Validation run ID for the selected branch and exact source commit"
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  wrong-branch-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Refuse review from the default-branch dispatcher stub
+        run: |
+          echo "This default-branch file only exposes the Run workflow UI."
+          echo "Select branch claude/orvyq-canonical-candidate-parity-bl7w0u in the dialog."
+          exit 1
