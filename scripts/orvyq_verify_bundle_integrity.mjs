@@ -12,7 +12,8 @@
 // never do (see docs/canonical-candidate-audit.md: "validation candidate ==
 // review candidate == final candidate").
 import path from "node:path";
-import { projectDir, readJson, parseArgs, printJson } from "./lib/fs-utils.mjs";
+import { promises as fs } from "node:fs";
+import { projectDir, readJson, parseArgs, printJson, pathExists } from "./lib/fs-utils.mjs";
 import { sha256OfFile, sha256OfDirectoryTree } from "./orvyq_frozen_candidate.mjs";
 
 const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
@@ -35,9 +36,30 @@ export async function verifyBundleIntegrity(projectId = PROJECT_ID, { renderRead
   const mismatches = [];
   for (const [field, filePath] of fileChecks) {
     const expected = identity[field];
-    if (!expected) continue; // field not recorded for this candidate -- nothing to check
+    if (!expected) continue;
+    if (!(await pathExists(filePath))) {
+      mismatches.push(`${field}: expected ${expected}, but file is missing (${filePath})`);
+      continue;
+    }
     const actual = await sha256OfFile(filePath);
     if (actual !== expected) mismatches.push(`${field}: expected ${expected}, got ${actual} (${filePath})`);
+  }
+
+  // The immutable bundle must carry every binary asset that was frozen, not
+  // merely an asset registry containing their names. Without this check a
+  // source-only bundle can pass typecheck and identity checks, then fail only
+  // when Remotion tries to resolve staticFile() at render time.
+  const assetManifest = candidate.asset_manifest || [];
+  for (const asset of assetManifest) {
+    const assetPath = path.join(dir, asset.path);
+    if (!(await pathExists(assetPath))) {
+      mismatches.push(`asset_manifest: missing ${asset.path}`);
+      continue;
+    }
+    const stat = await fs.stat(assetPath);
+    if (stat.size !== asset.bytes) mismatches.push(`asset_manifest: ${asset.path} expected ${asset.bytes} bytes, got ${stat.size}`);
+    const actual = await sha256OfFile(assetPath);
+    if (actual !== asset.sha256) mismatches.push(`asset_manifest: ${asset.path} expected ${asset.sha256}, got ${actual}`);
   }
 
   if (identity.render_ready_source_hash) {
@@ -47,9 +69,15 @@ export async function verifyBundleIntegrity(projectId = PROJECT_ID, { renderRead
   }
 
   if (mismatches.length)
-    throw new Error(`Bundle integrity check failed -- ${mismatches.length} file(s) do not match the bundle's own frozen_candidate.json:\n- ${mismatches.join("\n- ")}`);
+    throw new Error(`Bundle integrity check failed -- ${mismatches.length} mismatch(es) against the bundle's own frozen_candidate.json:\n- ${mismatches.join("\n- ")}`);
 
-  return { ok: true, candidate_hash: candidate.candidate_hash, render_bundle_hash: candidate.render_bundle_hash, checked: fileChecks.filter(([field]) => identity[field]).map(([field]) => field).concat(identity.render_ready_source_hash ? ["render_ready_source_hash"] : []) };
+  return {
+    ok: true,
+    candidate_hash: candidate.candidate_hash,
+    render_bundle_hash: candidate.render_bundle_hash,
+    checked: fileChecks.filter(([field]) => identity[field]).map(([field]) => field).concat(identity.render_ready_source_hash ? ["render_ready_source_hash"] : []),
+    checked_assets: assetManifest.length
+  };
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
