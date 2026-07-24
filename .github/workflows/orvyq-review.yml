@@ -47,7 +47,14 @@ env:
   PROJECT_ID: 001-the-ai-race-no-one-can-afford-to-win
   # 1280x720 preferred; render-time --scale on the same 1920x1080
   # composition, never a different composition or timeline.
-  REVIEW_SCALE: "0.6667"
+  #
+  # Must be the exact double for 2/3, not a rounded decimal: Remotion's
+  # stitchFramesToVideo() requires integer output dimensions, and 1080 *
+  # 0.6667 = 720.036 (not an integer) hard-fails the render. 1080 * (2/3)
+  # and 1920 * (2/3) both land on exact integers in IEEE 754 double
+  # arithmetic; "0.6666666666666666" is (2/3).toString() in JS, so it
+  # round-trips to that exact same double when Remotion parses it.
+  REVIEW_SCALE: "0.6666666666666666"
   REVIEW_BITRATE: "6M"
   REVIEW_WIDTH: "1280"
   REVIEW_HEIGHT: "720"
