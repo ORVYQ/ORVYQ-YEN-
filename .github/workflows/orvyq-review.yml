@@ -12,21 +12,9 @@ name: ORVYQ Full-Length Candidate Review
 # "ORVYQ Candidate Validation" (.github/workflows/orvyq-candidate-validation.yml).
 # This workflow requires the run ID of an already-successful validation run
 # for THIS EXACT source commit as an input, verifies that claim for real
-# against the GitHub Actions API (not just a comment saying so), downloads
-# that run's immutable orvyq-validated-candidate-bundle artifact UNCHANGED,
-# verifies every file's hash against the bundle's own frozen_candidate.json,
-# and renders that bundle exactly as downloaded -- so "validation candidate
-# == review candidate" is a real, code-enforced guarantee, not a convention.
-#
-# This workflow NEVER commits or pushes anything back to the branch and
-# never runs any of orvyq_full_production_plan.mjs / orvyq_edit_plan.mjs /
-# orvyq_music_resolve.mjs / orvyq_audio_mix.mjs / orvyq_caption_build.mjs /
-# orvyq_asset_registry.mjs / remotion_build.mjs derive-configs|build-project.
-#
-# workflow_dispatch only, deliberately: this workflow renders the entire
-# candidate and is comparatively expensive/slow, and must only ever be
-# triggered once "ORVYQ Candidate Validation" is green for this exact
-# commit -- see docs/canonical-candidate-audit.md.
+# against the GitHub Actions API, downloads that run's complete immutable
+# candidate bundle, verifies every frozen asset and source hash, and renders
+# those exact bytes. No creative script or asset fetch runs here.
 on:
   workflow_dispatch:
     inputs:
@@ -45,15 +33,7 @@ concurrency:
 
 env:
   PROJECT_ID: 001-the-ai-race-no-one-can-afford-to-win
-  # 1280x720 preferred; render-time --scale on the same 1920x1080
-  # composition, never a different composition or timeline.
-  #
-  # Must be the exact double for 2/3, not a rounded decimal: Remotion's
-  # stitchFramesToVideo() requires integer output dimensions, and 1080 *
-  # 0.6667 = 720.036 (not an integer) hard-fails the render. 1080 * (2/3)
-  # and 1920 * (2/3) both land on exact integers in IEEE 754 double
-  # arithmetic; "0.6666666666666666" is (2/3).toString() in JS, so it
-  # round-trips to that exact same double when Remotion parses it.
+  # Exact 2/3 double: 1920x1080 -> 1280x720 with integer dimensions.
   REVIEW_SCALE: "0.6666666666666666"
   REVIEW_BITRATE: "6M"
   REVIEW_WIDTH: "1280"
@@ -82,13 +62,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # ---- code-enforced validation gate (not just a documented convention) ----
-      # Confirms, against the real GitHub Actions API: the named run is
-      # actually a run of orvyq-candidate-validation.yml, it actually
-      # concluded "success", it ran on this same branch, and -- the part a
-      # human clicking a button could get wrong -- it validated this EXACT
-      # source commit, not an earlier one. Any mismatch hard-fails before
-      # anything is downloaded.
       - name: Verify the named Candidate Validation run is real, successful, and matches this exact commit
         uses: actions/github-script@v7
         with:
@@ -100,15 +73,10 @@ jobs:
             if (!run.path || !run.path.endsWith("orvyq-candidate-validation.yml")) failures.push(`run ${runId} is workflow "${run.path}", not orvyq-candidate-validation.yml`);
             if (run.conclusion !== "success") failures.push(`run ${runId} conclusion is "${run.conclusion}", not "success"`);
             if (run.head_branch !== currentBranch) failures.push(`run ${runId} ran on branch "${run.head_branch}", this workflow is running on "${currentBranch}"`);
-            if (run.head_sha !== context.sha) failures.push(`run ${runId} validated source commit ${run.head_sha}, this workflow is running at ${context.sha} -- the candidate has changed since that validation run; re-validate before reviewing`);
+            if (run.head_sha !== context.sha) failures.push(`run ${runId} validated source commit ${run.head_sha}, this workflow is running at ${context.sha} -- re-validate before reviewing`);
             if (failures.length) core.setFailed(failures.join("; "));
             else core.info(`Validation run ${runId} verified: path=${run.path}, conclusion=success, branch=${run.head_branch}, sha=${run.head_sha}`);
 
-      # ---- download the exact immutable bundle Candidate Validation produced ----
-      # No creative script runs here -- these are the literal bytes
-      # Candidate Validation already built, QA'd, and froze, including the
-      # fully assembled render_ready_project SOURCE (used as-is below; this
-      # workflow never runs derive-configs or build-project).
       - name: Download the validated candidate bundle
         uses: actions/download-artifact@v4
         with:
@@ -123,40 +91,33 @@ jobs:
           BUNDLE_SHA="$(cat candidate-bundle/validation-source-sha.txt)"
           test "$BUNDLE_SHA" = "$GITHUB_SHA"
 
-      - name: Place the downloaded candidate bundle into the project tree
+      - name: Place the complete immutable candidate bundle into the project tree
         run: |
           set -euo pipefail
           SRC="candidate-bundle/projects/$PROJECT_ID"
           DEST="projects/$PROJECT_ID"
-          mkdir -p "$DEST/direction" "$DEST/remotion" "$DEST/assets/audio" "$DEST/assets/music" "$DEST/assets/sfx" "$DEST/qa"
+          test -d "$SRC/assets"
+          test -d "$SRC/remotion/render_ready_project"
+          mkdir -p "$DEST/direction" "$DEST/remotion" "$DEST/qa"
           cp "$SRC/direction/edit_plan.json" "$DEST/direction/edit_plan.json"
           cp "$SRC/remotion/captions.json" "$DEST/remotion/captions.json"
-          cp "$SRC/assets/asset_registry.json" "$DEST/assets/asset_registry.json"
-          cp "$SRC/assets/audio/final_mix.mp3" "$DEST/assets/audio/final_mix.mp3"
-          cp "$SRC/assets/audio/final_mix.metadata.json" "$DEST/assets/audio/final_mix.metadata.json"
-          cp "$SRC/assets/music/approved_bed.mp3" "$DEST/assets/music/approved_bed.mp3"
-          cp "$SRC/assets/music/approved_bed.provenance.json" "$DEST/assets/music/approved_bed.provenance.json"
-          cp "$SRC"/assets/sfx/*.wav "$DEST/assets/sfx/" 2>/dev/null || true
           cp "$SRC/qa/frozen_candidate.json" "$DEST/qa/frozen_candidate.json"
+          rm -rf "$DEST/assets"
+          cp -r "$SRC/assets" "$DEST/assets"
           rm -rf "$DEST/remotion/render_ready_project"
           cp -r "$SRC/remotion/render_ready_project" "$DEST/remotion/render_ready_project"
 
-      - name: Verify every downloaded file's hash matches the bundle's own frozen candidate (no rebuild, integrity only)
+      - name: Verify every downloaded source and binary asset against the frozen candidate
         run: node scripts/orvyq_verify_bundle_integrity.mjs --project-id="$PROJECT_ID"
 
-      - name: Resolve the candidate duration (single timeline source, from the placed edit plan)
+      - name: Resolve the candidate duration from the placed edit plan
         run: |
           set -euo pipefail
           node -e "
             const p = require('./projects/$PROJECT_ID/direction/edit_plan.json');
-            const motionHook = require('./projects/$PROJECT_ID/direction/motion_hook.json');
-            const hookDuration = motionHook.shots.reduce((s, x) => s + x.duration, 0);
             console.log('CANDIDATE_DURATION_SECONDS=' + (p.duration_frames / p.fps));
-            console.log('HOOK_DURATION_SECONDS=' + hookDuration);
           " | tee -a "$GITHUB_ENV"
 
-      # No derive-configs, no build-project: the render_ready_project
-      # directory placed above IS the validated bundle's own copy.
       - name: Install Remotion dependencies and type-check (no source regeneration)
         working-directory: projects/${{ env.PROJECT_ID }}/remotion/render_ready_project
         run: |
@@ -171,26 +132,19 @@ jobs:
           echo "FACTFORGE_REMOTION_BROWSER_EXECUTABLE=$BROWSER" >> "$GITHUB_ENV"
           "$BROWSER" --version
 
-      # ---- render the FULL film at review profile ----
-      # No --frames flag: the entire candidate renders, every time. --scale
-      # only changes output pixel dimensions (1920*0.6667 ~= 1280x720); it
-      # does not touch the composition's timeline data, captions, or any
-      # creative content. No watermark, no "proof" text overlay. No
-      # post-render brightness "repair" step -- see docs/canonical-candidate-audit.md
-      # for why an asymmetric review-only post-process (applied here but
-      # never in the final encode workflow) would itself have broken review/
-      # final parity.
       - name: Render the full candidate at review quality
         working-directory: projects/${{ env.PROJECT_ID }}/remotion/render_ready_project
         run: |
           set +e
+          mkdir -p out
           npx remotion render src/index.ts FactForgeVideo out/orvyq_review.mp4 \
             --codec=h264 --scale="$REVIEW_SCALE" --video-bitrate="$REVIEW_BITRATE" --concurrency=1 --image-format=png \
             2>&1 | tee out/review_render_stdout.txt
           RENDER_EXIT=${PIPESTATUS[0]}
           set -e
           if [ "$RENDER_EXIT" -ne 0 ]; then
-            echo "::warning::remotion render exited $RENDER_EXIT; verifying the output file directly"
+            echo "::error::remotion render exited $RENDER_EXIT"
+            exit "$RENDER_EXIT"
           fi
           test -s out/orvyq_review.mp4
           DURATION="$(ffprobe -v error -show_entries format=duration -of default=nk=1:nw=1 out/orvyq_review.mp4)"
@@ -200,17 +154,13 @@ jobs:
           d = float('$DURATION')
           expected = float('$CANDIDATE_DURATION_SECONDS')
           sys.exit(0 if abs(d - expected) < 1.0 else 1)
-          " || { echo "::error::rendered duration ${DURATION}s is not within 1s of the full candidate duration ${CANDIDATE_DURATION_SECONDS}s -- a partial/short cut is not an acceptable review render"; exit 1; }
+          " || { echo "::error::rendered duration ${DURATION}s is not within 1s of ${CANDIDATE_DURATION_SECONDS}s"; exit 1; }
 
       - name: Compute review video sha256
         run: |
           set -euo pipefail
           echo "REVIEW_VIDEO_SHA256=$(sha256sum "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" | cut -d' ' -f1)" >> "$GITHUB_ENV"
 
-      # ---- write the review render manifest ----
-      # identity/encode/artifact schema -- `identity` must match the final
-      # encode's manifest exactly; `encode`/`artifact` are expected to
-      # differ and are never compared.
       - name: Write review render manifest (for review/final parity verification)
         run: |
           set -euo pipefail
@@ -246,40 +196,23 @@ jobs:
             console.log(JSON.stringify(manifest, null, 2));
           "
 
-      # The final encode-only workflow (orvyq-final-encode.yml) downloads
-      # THIS run's own render-bundle artifact by convention -- re-uploaded
-      # here unchanged (byte-for-byte the same files just placed above,
-      # this workflow never rebuilds them) so that convention keeps working
-      # without final-encode needing to know a validation run ID exists.
-      - name: Re-upload the validated bundle as this run's own render bundle (unchanged, never rebuilt)
+      - name: Re-upload the complete validated bundle as this run's render bundle
         uses: actions/upload-artifact@v4
         with:
           name: orvyq-render-bundle-${{ github.run_id }}
           retention-days: 90
-          # See the matching note in orvyq-candidate-validation.yml: without
-          # this, render_ready_project's real .gitignore is silently dropped
-          # from the artifact, and orvyq-final-encode.yml's late-stage hash
-          # re-verification (orvyq_verify_approval.mjs --stage=late) would
-          # fail against render_ready_source_hash for a file that was never
-          # actually different, just never shipped.
           include-hidden-files: true
           path: |
             projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
             projects/${{ env.PROJECT_ID }}/qa/review_render_manifest.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
-            projects/${{ env.PROJECT_ID }}/assets/asset_registry.json
-            projects/${{ env.PROJECT_ID }}/assets/audio/final_mix.mp3
-            projects/${{ env.PROJECT_ID }}/assets/audio/final_mix.metadata.json
-            projects/${{ env.PROJECT_ID }}/assets/music/approved_bed.mp3
-            projects/${{ env.PROJECT_ID }}/assets/music/approved_bed.provenance.json
-            projects/${{ env.PROJECT_ID }}/assets/sfx/*.wav
+            projects/${{ env.PROJECT_ID }}/assets/**
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/**
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/node_modules
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion
 
-      # ---- upload the review MP4 BEFORE post-render QA ----
       - name: Upload review render (before media QA -- must survive a media QA failure)
         if: always()
         uses: actions/upload-artifact@v4
@@ -289,9 +222,8 @@ jobs:
           path: |
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/orvyq_review.mp4
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/review_render_stdout.txt
-          if-no-files-found: error
+          if-no-files-found: warn
 
-      # ---- post-render QA ----
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -347,6 +279,7 @@ jobs:
             projects/${{ env.PROJECT_ID }}/qa/*.json
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/*.jpg
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/*.json
+            projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/review_render_stdout.txt
             projects/${{ env.PROJECT_ID }}/assets/audio/final_mix.metadata.json
             projects/${{ env.PROJECT_ID }}/assets/music/approved_bed.provenance.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
