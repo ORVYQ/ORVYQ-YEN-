@@ -14,9 +14,21 @@ name: ORVYQ Candidate Validation
 # Like orvyq-review.yml, this workflow never commits or pushes anything back
 # to the branch: every generated file lives only on this runner's
 # filesystem and in the artifacts uploaded at the end.
+#
+# Deliberately no `pull_request:` trigger: for pull_request-event runs,
+# actions/checkout@v4 checks out the synthetic PR merge commit and
+# $GITHUB_SHA is that merge commit's SHA, not this branch's real head --
+# even though the GitHub API's run.head_sha field (what orvyq-review.yml's
+# validation-run check reads) still reports the real head SHA. That split
+# let a pull_request-triggered run's validation-source-sha.txt silently
+# record the wrong commit while still passing orvyq-review.yml's "does
+# this run's head_sha match?" check, only to fail the bundle's own SHA
+# verification once downloaded. The push trigger below already validates
+# every commit on this exact branch with the real SHA, so pull_request
+# added a redundant, footgun-prone second run rather than any real
+# coverage.
 on:
   workflow_dispatch:
-  pull_request:
   push:
     branches:
       - "claude/orvyq-canonical-candidate-parity-bl7w0u"
