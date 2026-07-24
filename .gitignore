@@ -39,6 +39,13 @@ projects/*/remotion/scene_config.json
 projects/*/remotion/asset_map.json
 projects/*/remotion/captions.json
 
+# The template's generated outputs are also operational and must never be
+# treated as renderer source. These rules replace the redundant nested
+# templates/remotion/.gitignore, whose hidden-file transport caused frozen
+# bundle integrity drift in GitHub Actions artifacts.
+templates/remotion/out/
+*.corrupt-617mb
+
 # Binary project assets are not committed to this repo. .gitattributes
 # configures Git LFS tracking for when they are (footage *.mp4 + provenance,
 # assets/audio/final_voice.mp3), matching the golden repo's own convention of
