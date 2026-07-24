@@ -249,6 +249,13 @@ jobs:
         with:
           name: orvyq-render-bundle-${{ github.run_id }}
           retention-days: 90
+          # See the matching note in orvyq-candidate-validation.yml: without
+          # this, render_ready_project's real .gitignore is silently dropped
+          # from the artifact, and orvyq-final-encode.yml's late-stage hash
+          # re-verification (orvyq_verify_approval.mjs --stage=late) would
+          # fail against render_ready_source_hash for a file that was never
+          # actually different, just never shipped.
+          include-hidden-files: true
           path: |
             projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
             projects/${{ env.PROJECT_ID }}/qa/review_render_manifest.json
