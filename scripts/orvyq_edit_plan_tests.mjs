@@ -155,12 +155,15 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
       continue;
     }
     assert.equal(shot.asset_type, "footage");
-    if (isProof) {
-      const approvedHook = shot.hook_footage === true;
-      const approvedContext = plan.quality_policy?.cinematic_body_footage === true && shot.contextual_footage === true && shot.provenance_mode === "approved_contextual_footage";
-      assert.ok(approvedHook || approvedContext);
-      if (approvedContext) contextualFootageFrames += frames;
-    }
+    // buildFullPlan() (scripts/orvyq_edit_plan.mjs) runs unconditionally now
+    // -- proof and full mode share the exact same shots/duration_frames, so
+    // this hook/context provenance check (and the fraction it feeds below)
+    // applies regardless of plan.mode, not just to proof. isProof is still
+    // used elsewhere in this file for genuinely proof-only checks.
+    const approvedHook = shot.hook_footage === true;
+    const approvedContext = plan.quality_policy?.cinematic_body_footage === true && shot.contextual_footage === true && shot.provenance_mode === "approved_contextual_footage";
+    assert.ok(approvedHook || approvedContext);
+    if (approvedContext) contextualFootageFrames += frames;
     // A shot that continues the immediately preceding shot's own asset from
     // exactly where its trim left off (an editorial pause hold on the same
     // footage, split into two shots so neither exceeds max_shot_seconds --
