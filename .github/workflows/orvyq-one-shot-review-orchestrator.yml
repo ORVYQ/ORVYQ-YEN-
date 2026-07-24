@@ -1,0 +1,176 @@
+name: ORVYQ One-Shot Review Orchestrator
+
+# One-shot bridge for the currently approved review request. It validates the
+# exact canonical branch SHA, then starts the full-length review with the
+# resulting immutable bundle. It never starts Final Encode.
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-one-shot-review-orchestrator.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: orvyq-one-shot-review-orchestrator
+  cancel-in-progress: false
+
+jobs:
+  orchestrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Validate exact candidate and start full-length review
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const targetBranch = 'claude/orvyq-canonical-candidate-parity-bl7w0u';
+            const expectedSha = 'db60b73164ce4a82fcb1b4b230837a78e80da37e';
+            const validationWorkflow = 'orvyq-candidate-validation.yml';
+            const reviewWorkflow = 'orvyq-review.yml';
+            const prNumber = 1;
+            const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+            async function comment(body) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: prNumber,
+                body
+              });
+            }
+
+            async function listRuns(workflowId) {
+              const { data } = await github.rest.actions.listWorkflowRuns({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: workflowId,
+                branch: targetBranch,
+                per_page: 50
+              });
+              return data.workflow_runs
+                .filter((run) => run.head_sha === expectedSha)
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            }
+
+            async function hasValidatedBundle(runId) {
+              const { data } = await github.rest.actions.listWorkflowRunArtifacts({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: runId,
+                per_page: 100
+              });
+              return data.artifacts.some((a) => a.name === `orvyq-validated-candidate-bundle-${runId}` && !a.expired);
+            }
+
+            async function waitForCompletion(run, label, maxPolls, intervalMs) {
+              let current = run;
+              for (let i = 0; i < maxPolls; i++) {
+                const { data } = await github.rest.actions.getWorkflowRun({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: current.id
+                });
+                current = data;
+                core.info(`${label} ${current.id}: ${current.status}/${current.conclusion || 'pending'}`);
+                if (current.status === 'completed') return current;
+                await sleep(intervalMs);
+              }
+              throw new Error(`${label} ${current.id} did not finish within the orchestrator timeout window.`);
+            }
+
+            const { data: branch } = await github.rest.repos.getBranch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch: targetBranch
+            });
+            if (branch.commit.sha !== expectedSha) {
+              core.setFailed(`Safety stop: ${targetBranch} is now ${branch.commit.sha}, expected ${expectedSha}. No validation or review was started.`);
+              return;
+            }
+
+            let validationRuns = await listRuns(validationWorkflow);
+            let validation = null;
+
+            for (const run of validationRuns) {
+              if (run.status === 'completed' && run.conclusion === 'success' && await hasValidatedBundle(run.id)) {
+                validation = run;
+                core.info(`Reusing successful validation ${run.id} for exact SHA ${expectedSha}.`);
+                break;
+              }
+            }
+
+            if (!validation) {
+              validation = validationRuns.find((run) => run.status !== 'completed') || null;
+            }
+
+            if (!validation) {
+              const dispatchedAt = Date.now();
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: validationWorkflow,
+                ref: targetBranch
+              });
+              core.info('Candidate Validation dispatched.');
+
+              for (let i = 0; i < 60 && !validation; i++) {
+                await sleep(5000);
+                validationRuns = await listRuns(validationWorkflow);
+                validation = validationRuns.find((run) => new Date(run.created_at).getTime() >= dispatchedAt - 5000) || null;
+              }
+              if (!validation) throw new Error('Dispatched Candidate Validation run could not be located.');
+            }
+
+            validation = await waitForCompletion(validation, 'Candidate Validation', 180, 10000);
+            if (validation.conclusion !== 'success') {
+              await comment(`Automated Candidate Validation failed: ${validation.html_url}`);
+              core.setFailed(`Candidate Validation ${validation.id} concluded ${validation.conclusion}. Review was not started.`);
+              return;
+            }
+            if (!(await hasValidatedBundle(validation.id))) {
+              core.setFailed(`Candidate Validation ${validation.id} succeeded but its immutable bundle artifact is missing.`);
+              return;
+            }
+
+            let reviewRuns = await listRuns(reviewWorkflow);
+            let review = reviewRuns.find((run) => run.status !== 'completed') || null;
+            const successfulReview = reviewRuns.find((run) => run.status === 'completed' && run.conclusion === 'success');
+            if (successfulReview) {
+              await comment(`Full-length review already succeeded for the exact candidate: ${successfulReview.html_url}`);
+              return;
+            }
+
+            if (!review) {
+              const reviewDispatchedAt = Date.now();
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: reviewWorkflow,
+                ref: targetBranch,
+                inputs: { approved_validation_run_id: String(validation.id) }
+              });
+              core.info(`Full-length review dispatched with validation ${validation.id}.`);
+
+              for (let i = 0; i < 60 && !review; i++) {
+                await sleep(5000);
+                reviewRuns = await listRuns(reviewWorkflow);
+                review = reviewRuns.find((run) => new Date(run.created_at).getTime() >= reviewDispatchedAt - 5000) || null;
+              }
+              if (!review) throw new Error('Dispatched Full-Length Candidate Review run could not be located.');
+            }
+
+            await comment(`Automation started the full-length review from Candidate Validation ${validation.id}: ${review.html_url}\n\nFinal Encode was not started.`);
+            review = await waitForCompletion(review, 'Full-Length Candidate Review', 600, 30000);
+
+            if (review.conclusion === 'success') {
+              await comment(`Full-length review completed successfully: ${review.html_url}\n\nFinal Encode remains blocked pending explicit human approval.`);
+            } else {
+              await comment(`Full-length review ended with **${review.conclusion}**: ${review.html_url}\n\nFinal Encode was not started.`);
+              core.setFailed(`Full-Length Candidate Review ${review.id} concluded ${review.conclusion}.`);
+            }
