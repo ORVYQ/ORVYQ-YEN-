@@ -132,6 +132,18 @@ jobs:
           echo "FACTFORGE_REMOTION_BROWSER_EXECUTABLE=$BROWSER" >> "$GITHUB_ENV"
           "$BROWSER" --version
 
+      # The render step below calls ffprobe itself to verify the rendered
+      # duration, but ffmpeg was previously only installed later (in
+      # "Install media and speech tooling", for post-render QA) -- so the
+      # render's own duration check would hard-fail with "ffprobe: command
+      # not found" even on a fully successful render. Installed early here
+      # so it's available for both the render step and everything after it.
+      - name: Install ffmpeg (needed by the render step's own duration check)
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
       - name: Render the full candidate at review quality
         working-directory: projects/${{ env.PROJECT_ID }}/remotion/render_ready_project
         run: |
@@ -229,12 +241,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install media and speech tooling
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ffmpeg
-          python -m pip install --disable-pip-version-check faster-whisper==1.2.0 requests==2.32.5
+      - name: Install speech tooling (ffmpeg already installed above)
+        run: python -m pip install --disable-pip-version-check faster-whisper==1.2.0 requests==2.32.5
 
       - name: Verify speech in rendered review
         run: python scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" --media "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" --output-name speech_transcript.json
