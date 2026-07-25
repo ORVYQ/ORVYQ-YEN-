@@ -633,6 +633,66 @@ const PAUSE_ANCHOR_TOLERANCE_SECONDS = 0.75;
 const DUPLICATE_NEIGHBOR_PENALTY = 0.5;
 const DUPLICATE_NEIGHBOR_TOLERANCE_SECONDS = 1 / 30;
 
+// Mirrors scripts/orvyq_mobile_legibility_audit.mjs's own IMAGE_KINDS set
+// (duplicated there too, same as scripts/orvyq_edit_plan.mjs and
+// scripts/orvyq_real_asset_coverage_audit.mjs -- an established pattern in
+// this codebase rather than a shared import) and its ">= 4s" floor for any
+// shot of one of these kinds: real document/figure pages need enough
+// on-screen time to actually be read on a phone. Narration-boundary
+// placement above has no notion of this floor on its own -- it only
+// follows real speech structure -- so a claim's evidence_kind_overrides
+// slice can otherwise land under 4s purely because that's where the real
+// narration happened to divide.
+const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
+const MIN_IMAGE_EVIDENCE_SECONDS = 4;
+// A small buffer above the audit's own hard "< 4" cutoff: quantizeShotsToFrames
+// (later, once per-shot durations are finalized) rounds every shot to the
+// nearest frame, which could round a razor-thin 4.00s slice back under
+// 4.00s. 0.1s is a comfortable multiple of one frame (1/30s) either way.
+const IMAGE_EVIDENCE_FLOOR_SECONDS = MIN_IMAGE_EVIDENCE_SECONDS + 0.1;
+// The lowest a donor slice (one lending real seconds to an undersized
+// image-evidence slice next to it) is allowed to shrink to -- keeps a
+// donor from being squeezed down to an absurd sliver just to satisfy its
+// neighbor's floor. Comfortably below TARGET_SHOT_SECONDS (6s), well above
+// zero.
+const MIN_DONOR_SECONDS_AFTER_LENDING = 2;
+
+// Widens checkpointTimes[sliceIndex..sliceIndex+1] up to
+// IMAGE_EVIDENCE_FLOOR_SECONDS by moving ONLY that slice's own two
+// boundaries -- never a checkpoint further away -- so every other slice's
+// width is unaffected except whichever single immediate neighbor actually
+// lends time. A FIXED checkpoint (claim edge, frozen evidence-run edge, or
+// pause-pinned edge) is never moved, preserving every invariant those exist
+// for exactly as before; lending is capped so a donor never drops below
+// MIN_DONOR_SECONDS_AFTER_LENDING. Best-effort only -- does not throw on its
+// own: when a claim has more than one slice needing this floor, an earlier
+// slice's growth can borrow from a checkpoint a later slice also needs to
+// borrow from, undoing part of the earlier fix. The caller re-checks every
+// target slice's FINAL width once all of them have been processed and fails
+// loudly there instead, since only the end state (not any one slice in
+// isolation) can tell whether every slice's floor was really satisfied.
+// Mutates checkpointTimes in place.
+function growImageEvidenceSliceToFloor(checkpointTimes, sliceIndex, isFixedCheckpoint) {
+  const leftCheckpoint = sliceIndex;
+  const rightCheckpoint = sliceIndex + 1;
+  let deficit = IMAGE_EVIDENCE_FLOOR_SECONDS - (checkpointTimes[rightCheckpoint] - checkpointTimes[leftCheckpoint]);
+  if (deficit <= 0) return;
+
+  const leftFixed = isFixedCheckpoint(leftCheckpoint);
+  const rightFixed = isFixedCheckpoint(rightCheckpoint);
+  const rightDonorRoom = rightFixed ? 0 : Math.max(0, checkpointTimes[rightCheckpoint + 1] - checkpointTimes[rightCheckpoint] - MIN_DONOR_SECONDS_AFTER_LENDING);
+  const leftDonorRoom = leftFixed ? 0 : Math.max(0, checkpointTimes[leftCheckpoint] - checkpointTimes[leftCheckpoint - 1] - MIN_DONOR_SECONDS_AFTER_LENDING);
+
+  const fromRight = Math.min(deficit, rightDonorRoom);
+  checkpointTimes[rightCheckpoint] += fromRight;
+  deficit -= fromRight;
+
+  if (deficit > 0) {
+    const fromLeft = Math.min(deficit, leftDonorRoom);
+    checkpointTimes[leftCheckpoint] -= fromLeft;
+  }
+}
+
 // Picks the real word-end time closest to idealTime (the exact
 // equal-fraction split point) within [minTime, maxTime], softly preferring
 // one that is ALSO a real sentence ending, then a real clause/punctuation
@@ -945,6 +1005,29 @@ export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, to
   // whenever a slice's kind matches.
   const evidenceKindOverride = evidenceKindOverrides[claim.claim_id];
   const sliceKind = evidenceKindOverride?.kind || kindFor(claim.visual_treatment?.primary);
+
+  // Only slices that will actually KEEP sliceKind need the floor: a
+  // protected index (FOOTAGE_ASSIGNMENTS/GRAPHIC_BREAK_ASSIGNMENTS) gets
+  // converted to footage/graphic by buildFullProductionPlan's own later
+  // assignment pass and never uses sliceKind at all.
+  if (evidenceKindOverride && IMAGE_KINDS.has(sliceKind)) {
+    const imageFloorIndices = [];
+    for (let i = 0; i < sliceCount; i += 1) if (!protectedIndices.has(i)) imageFloorIndices.push(i);
+    for (const i of imageFloorIndices) growImageEvidenceSliceToFloor(checkpointTimes, i, isFixedCheckpoint);
+    // growImageEvidenceSliceToFloor is best-effort and local (see its own
+    // comment on why): re-verify every target slice's FINAL width once all
+    // of them have been processed, since an earlier slice's fix can be
+    // partially undone by a later slice borrowing back from the same
+    // shared checkpoint.
+    for (const i of imageFloorIndices) {
+      if (checkpointTimes[i + 1] - checkpointTimes[i] < MIN_IMAGE_EVIDENCE_SECONDS) {
+        throw new Error(
+          `${claim.claim_id}: cannot keep slice ${i} (kind "${sliceKind}") at or above the required ${MIN_IMAGE_EVIDENCE_SECONDS}s real-document minimum -- neighboring slices do not have enough spare real narration seconds to lend without violating other invariants; this claim's evidence_kind_overrides may need a different slice-count or assignment strategy`
+        );
+      }
+    }
+  }
+
   for (let i = 0; i < sliceCount; i += 1) slices.push({ start: checkpointTimes[i], end: checkpointTimes[i + 1], kind: sliceKind });
   return slices;
 }

@@ -171,6 +171,39 @@ test("sliceClaimWindow: a claim with no evidenceKindOverrides entry is unaffecte
   for (const slice of slices) assert.equal(slice.kind, "concept_map");
 });
 
+// Real regression: an evidence_kind_overrides slice landed at 2.17s (a real
+// narration-boundary snap), under orvyq_mobile_legibility_audit.mjs's own
+// ">= 4s" floor for any IMAGE_KINDS shot -- narration-boundary placement has
+// no notion of that floor on its own. A single real word token pins the free
+// interior boundary at 3.2s; growImageEvidenceSliceToFloor must then widen
+// slice 0 up to IMAGE_EVIDENCE_FLOOR_SECONDS (4.1s) by borrowing from its
+// only neighbor, without losing or inventing any total duration.
+test("sliceClaimWindow: an undersized evidenceKindOverrides IMAGE_KINDS slice is widened to the mobile-legibility floor by borrowing from its neighbor", () => {
+  const claim = { claim_id: "CLM_TEST_IMAGE_FLOOR", visual_treatment: { primary: "evidence_mosaic" } };
+  const overrides = { CLM_TEST_IMAGE_FLOOR: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
+  const tokens = [{ text: "frameworks.", start: 3.0, end: 3.2 }];
+  const slices = sliceClaimWindow(claim, 0, 10, 20, tokens, [], overrides);
+  assert.equal(slices.length, 2);
+  assert.equal(slices[0].start, 0);
+  assert.equal(slices[1].end, 10);
+  assert.ok(slices[0].end - slices[0].start >= 4, `slice 0 should be widened to at least 4s, got ${slices[0].end - slices[0].start}`);
+  assert.ok(slices[1].end - slices[1].start >= 2, "donor slice should not be squeezed below the safe minimum");
+  // Borrowing only ever moves the shared boundary -- never invents or drops time.
+  const totalDuration = slices.reduce((sum, slice) => sum + (slice.end - slice.start), 0);
+  assert.ok(Math.abs(totalDuration - 10) < 1e-9);
+});
+
+// When more than one slice of the same claim needs the floor, an earlier
+// slice's fix can be partially undone by a later slice borrowing back from
+// the same shared checkpoint (both are real neighbors of each other) --
+// sliceClaimWindow must fail loudly rather than silently ship a slice that
+// never actually reached the real mobile-legibility minimum.
+test("sliceClaimWindow: throws when multiple adjacent undersized IMAGE_KINDS slices cannot all independently reach the floor", () => {
+  const claim = { claim_id: "CLM_TEST_IMAGE_FLOOR_INFEASIBLE", visual_treatment: { primary: "evidence_mosaic" } };
+  const overrides = { CLM_TEST_IMAGE_FLOOR_INFEASIBLE: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
+  assert.throws(() => sliceClaimWindow(claim, 0, 11, 5, [], [], overrides), /CLM_TEST_IMAGE_FLOOR_INFEASIBLE.*4s real-document minimum/s);
+});
+
 // expandFootageAssignments -- the direct replacement for the removed
 // footageCandidateSlot/i%3 mechanism (task follow-up section 17): any slice
 // index is addressable, and a single real clip may span several contiguous
