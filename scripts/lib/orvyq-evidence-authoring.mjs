@@ -91,6 +91,22 @@ export function claimLimitation(claim, ownSources) {
   return null;
 }
 
+// Fact types that may ever reach a viewer, verbatim. "requirement_positive"
+// / "requirement_negative" (research/evidence_map.json's own
+// evidence_requirements[] -- real authored production instructions such as
+// "Do not imply all labs hold identical views.") are deliberately excluded:
+// confirmed in the rejected review, that exact sentence appeared on screen
+// because factItem()/factStep()/factText() used to place a requirement
+// fact's raw text straight into displayed body content. Requirement facts
+// stay in the pool buildFactPool returns (their presence/absence is still a
+// real editorial signal), but displayableFacts() is what every rendering
+// path below must read from -- never the raw pool.
+const DISPLAYABLE_FACT_TYPES = new Set(["source", "narration", "section", "rewrite"]);
+
+function displayableFacts(facts) {
+  return facts.filter((fact) => DISPLAYABLE_FACT_TYPES.has(fact.type));
+}
+
 function buildFactPool(claim, displaySources, section) {
   const facts = [];
   for (const source of displaySources) facts.push({ type: "source", source });
@@ -159,7 +175,15 @@ const ROLE_ROTATION_OFFSET = { evidence: 0, context: 1, metaphor: 2, archive: 0 
 
 export function buildEvidenceContent({ claim, kind, role, displaySources, ownSources, section, occurrence = 0 }) {
   const facts = buildFactPool(claim, displaySources, section);
-  const rotated = rotate(facts, occurrence + (ROLE_ROTATION_OFFSET[role] || 0));
+  // Every rendering path below reads displayFacts, never the raw pool:
+  // requirement_positive/requirement_negative entries stay in `facts` only
+  // so callers that genuinely need to know a claim HAS a documented
+  // boundary/establishing requirement can still check for that (none do,
+  // after this fix -- the comparison/boundary branch below now derives its
+  // right-hand side from claimLimitation() only), never so their raw text
+  // can reach a shot's eyebrow/title/items/steps/left/right.
+  const displayFacts = displayableFacts(facts);
+  const rotated = rotate(displayFacts, occurrence + (ROLE_ROTATION_OFFSET[role] || 0));
   const lead = rotated[0] || { type: "narration", text: claim.narration_excerpt };
 
   const roleLabel = ROLE_LABEL[role] || "EVIDENCE";
@@ -181,7 +205,7 @@ export function buildEvidenceContent({ claim, kind, role, displaySources, ownSou
       if (item.value && !items.some((existing) => existing.label === item.label && existing.value === item.value)) items.push(item);
     }
     if (items.length < 2) {
-      for (const fact of facts) {
+      for (const fact of displayFacts) {
         if (items.length >= 2) break;
         const item = factItem(fact);
         if (item.value && !items.some((existing) => existing.label === item.label && existing.value === item.value)) items.push(item);
@@ -196,7 +220,7 @@ export function buildEvidenceContent({ claim, kind, role, displaySources, ownSou
       if (step && !steps.includes(step)) steps.push(step);
     }
     if (steps.length < 3) {
-      for (const fact of facts) {
+      for (const fact of displayFacts) {
         if (steps.length >= 3) break;
         const step = factStep(fact);
         if (step && !steps.includes(step)) steps.push(step);
@@ -204,19 +228,24 @@ export function buildEvidenceContent({ claim, kind, role, displaySources, ownSou
     }
     body.steps = steps.slice(0, 5);
   } else if (kind === "comparison" || kind === "boundary") {
-    const positive = rotated.find((fact) => fact.type === "requirement_positive") || rotated.find((fact) => fact.type === "narration");
-    const negativeFact = rotated.find((fact) => fact.type === "requirement_negative" && fact !== positive);
+    // The left/meaning side is always real, displayable content -- the
+    // claim's own narration excerpt (or a displayable "rewrite" fact, if
+    // one leads) -- never a raw evidence_requirements[] instruction.
+    const positive = rotated.find((fact) => fact.type === "narration") || rotated.find((fact) => fact.type === "rewrite");
     // Rotates which cited source informs left_detail so a thin-content
-    // claim (one narration + one requirement, e.g. CLM_013) still varies
-    // something real across repeat comparison shots even when there is
-    // only one real positive/negative fact to put on the cards themselves.
+    // claim still varies something real across repeat comparison shots even
+    // when there is only one real fact to put on the cards themselves.
     const primarySource = (rotated.find((fact) => fact.type === "source") || { source: displaySources[0] }).source;
     body.left = truncateWords(positive ? factText(positive) : claim.narration_excerpt, 70);
     body.left_detail = primarySource ? truncateWords(`Per ${primarySource.publisher}, ${formatDate(primarySource.publication_date)}.`, 120) : "";
-    if (negativeFact) {
-      body.right = truncateWords(factText(negativeFact), 70);
-      body.right_detail = limitation ? truncateWords(limitation, 120) : "";
-    } else if (limitation) {
+    // The right/limit side comes ONLY from claimLimitation() -- a real,
+    // already-displayable structured field (a source's own .limitation, or
+    // one of the two narrow hand-authored synthetic strings claimLimitation
+    // itself returns) -- never from a requirement fact's raw text. This is
+    // the direct fix for the rejected review's confirmed leaked instruction
+    // ("Do not imply all labs hold identical views.") reaching this exact
+    // slot.
+    if (limitation) {
       body.right = truncateWords(limitation, 70);
       body.right_detail = "";
     } else {
