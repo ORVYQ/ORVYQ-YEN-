@@ -1,6 +1,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { kindFor, titleCase, locateClaimWindow, sliceClaimWindow, quantizeShotsToFrames, expandFootageAssignments, applyEvidenceHoldToNextWindow } from "./orvyq_full_production_plan.mjs";
+import {
+  kindFor,
+  titleCase,
+  locateClaimWindow,
+  sliceClaimWindow,
+  quantizeShotsToFrames,
+  expandFootageAssignments,
+  applyEvidenceHoldToNextWindow,
+  shrinkGraphicBreakSliceToMax
+} from "./orvyq_full_production_plan.mjs";
 import { tokenizeWords } from "./lib/orvyq-pause-resolver.mjs";
 
 // Mirrors buildCanonicalEditPlan's own cumulative frame assignment
@@ -382,4 +391,68 @@ test("quantizeShotsToFrames: leaves an already frame-exact duration and its foot
   quantizeShotsToFrames(shots, 30);
   assert.equal(shots[0].duration, 6);
   assert.equal(shots[0].trim_out_sec, 8);
+});
+
+test("shrinkGraphicBreakSliceToMax: leaves a slice already at or under maxSeconds untouched", () => {
+  const checkpointTimes = [0, 5, 10];
+  const isFixedCheckpoint = (cp) => cp === 0 || cp === 2;
+  shrinkGraphicBreakSliceToMax(checkpointTimes, 0, 5, isFixedCheckpoint, 8, "CLM_TEST");
+  assert.deepEqual(checkpointTimes, [0, 5, 10]);
+});
+
+test("shrinkGraphicBreakSliceToMax: shrinks by giving the saved time to a free right neighbor", () => {
+  const checkpointTimes = [0, 7, 14, 21];
+  const isFixedCheckpoint = (cp) => cp === 0 || cp === 3;
+  shrinkGraphicBreakSliceToMax(checkpointTimes, 0, 5, isFixedCheckpoint, 10, "CLM_TEST");
+  // excess = 7 - 5 = 2, absorbed by checkpoint 1 moving left: right neighbor
+  // width becomes 14-5=9, still <= maxShotSeconds (10).
+  assert.ok(Math.abs(checkpointTimes[1] - 5) < 1e-9);
+  assert.ok(Math.abs(checkpointTimes[2] - 14) < 1e-9);
+  assert.ok(Math.abs(checkpointTimes[1] - checkpointTimes[0] - 5) < 1e-9);
+});
+
+test("shrinkGraphicBreakSliceToMax: falls back to a free left neighbor when the right one is fixed", () => {
+  const checkpointTimes = [0, 7, 14, 21];
+  const isFixedCheckpoint = (cp) => cp === 0 || cp === 2;
+  shrinkGraphicBreakSliceToMax(checkpointTimes, 1, 5, isFixedCheckpoint, 10, "CLM_TEST");
+  // excess = 7 - 5 = 2, checkpoint 2 is fixed so checkpoint 1 must move
+  // right instead: left neighbor width becomes 7+2=9, still <= 10.
+  assert.ok(Math.abs(checkpointTimes[1] - 9) < 1e-9);
+  assert.ok(Math.abs(checkpointTimes[2] - 14) < 1e-9);
+  assert.ok(Math.abs(checkpointTimes[2] - checkpointTimes[1] - 5) < 1e-9);
+});
+
+test("shrinkGraphicBreakSliceToMax: throws when neither neighbor has spare room under the per-shot cap", () => {
+  const checkpointTimes = [0, 7, 14, 21];
+  const isFixedCheckpoint = (cp) => cp === 0 || cp === 3;
+  assert.throws(() => {
+    shrinkGraphicBreakSliceToMax(checkpointTimes, 0, 2, isFixedCheckpoint, 8, "CLM_TEST");
+  }, /cannot shrink its graphic recap slice/);
+});
+
+test("sliceClaimWindow: a real GRAPHIC_BREAK_ASSIGNMENTS maxSeconds cap shrinks that slice and grows its free neighbor, preserving total window duration", () => {
+  const claim = { claim_id: "CLM_006_NO_REAL_WORLD_INCIDENT", visual_treatment: { primary: "evidence_chain" } };
+  const coverStart = 0;
+  const coverEnd = 20;
+  const maxShotSeconds = 15;
+  const slices = sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, [], [], {});
+
+  assert.equal(slices.length, 3);
+  // Slice 1 is the real GRAPHIC_BREAK_ASSIGNMENTS[CLM_006...][1].maxSeconds
+  // (3.5s) cap -- it must land exactly on it, not the ~6.667s pure
+  // equal-fraction width it would otherwise get.
+  assert.ok(Math.abs(slices[1].end - slices[1].start - 3.5) < 1e-9);
+
+  // No gap, overlap, or drift anywhere in the window: each slice's start
+  // matches the previous slice's end, the first starts at coverStart, and
+  // the last ends exactly at coverEnd (total window duration unchanged).
+  assert.equal(slices[0].start, coverStart);
+  for (let i = 1; i < slices.length; i += 1) assert.ok(Math.abs(slices[i].start - slices[i - 1].end) < 1e-9);
+  assert.ok(Math.abs(slices.at(-1).end - coverEnd) < 1e-9);
+
+  // The saved time went to a real neighbor (here, the right one, since it
+  // was free and had room under maxShotSeconds) -- not discarded, and not
+  // pushed past the per-shot cap.
+  assert.ok(slices[2].end - slices[2].start <= maxShotSeconds + 1e-9);
+  assert.ok(slices[2].end - slices[2].start > slices[0].end - slices[0].start);
 });

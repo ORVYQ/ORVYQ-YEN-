@@ -109,16 +109,31 @@ export const FOOTAGE_ASSIGNMENTS = {
     // direction_plan.md's own scene_005 description is this exact claim:
     // "Depict the reported blackmail-style test case" / "the film's single
     // most sensitive reconstruction."
-    0: { asset: "assets/footage/scene_005_e98a421f0d9c432e4d2036fb.mp4", trimInRatio: 0.1, motion: "hold", role: "context" }
-    // Slice 2 is now a graphic recap card (see GRAPHIC_BREAK_ASSIGNMENTS
-    // below) instead of a second use of scene_012 -- recovers footage
-    // budget under scripts/orvyq_semantic_visual_audit.mjs's contextual
-    // body footage ceiling; this slice's own evidence run is still broken
-    // (a graphic resets the run counter identically to footage).
+    0: { asset: "assets/footage/scene_005_e98a421f0d9c432e4d2036fb.mp4", trimInRatio: 0.1, motion: "hold", role: "context" },
+    // Slice 2 was a graphic recap card (see GRAPHIC_BREAK_ASSIGNMENTS
+    // below) to recover footage budget under
+    // scripts/orvyq_semantic_visual_audit.mjs's contextual body footage
+    // ceiling -- moved back to footage once real CI (scripts/
+    // orvyq_generic_card_audit.mjs) found that ceiling had real spare room
+    // (~42% against a 45% cap) while SEC_02's own generic-card fraction did
+    // not (22.2% against a 12% cap). A later, real trim window of this same
+    // claim's own reconstruction footage still breaks this slice's evidence
+    // run exactly as the graphic version did.
+    2: {
+      asset: "assets/footage/scene_005_e98a421f0d9c432e4d2036fb.mp4",
+      trimInRatio: 0.25,
+      motion: "hold",
+      role: "context",
+      reuse_reason: "Second use at a different trim window within this same claim, closing its own recap beat with the same reconstruction footage it opened with."
+    }
   },
   CLM_006_NO_REAL_WORLD_INCIDENT: {
-    // Slice 2 is now a graphic recap card (see GRAPHIC_BREAK_ASSIGNMENTS
-    // below) instead of a footage break.
+    // Slice 1 (moved from slice 2, see GRAPHIC_BREAK_ASSIGNMENTS below) is
+    // a graphic recap card instead of a footage break -- slice 1, not 2,
+    // because slice 2 is this claim's own LAST slice, immediately followed
+    // by SEC_03's own title card: a graphic there left nothing real between
+    // the two (real CI: "shot_024 and shot_025 are two consecutive generic
+    // graphic cards"). Slice 2 now stays plain evidence, buffering the two.
   },
   CLM_007_MARKET_PRESSURE: {
     // slice 2's real narration window contains the "But a fire drill still
@@ -197,9 +212,14 @@ export const FOOTAGE_ASSIGNMENTS = {
     // CLM_021's opening slices exactly as the footage version did.
   },
   CLM_021_INFORMATION_INTEGRITY: {
-    // Slices 2 and 5 are now graphic recap cards instead of a second
-    // footage use of scene_015/scene_027 (see GRAPHIC_BREAK_ASSIGNMENTS
-    // below) -- still break their respective evidence runs.
+    // Slice 2 is a graphic recap card instead of a second footage use of
+    // scene_015 (see GRAPHIC_BREAK_ASSIGNMENTS below) -- still breaks its
+    // own evidence run. Slice 4 (moved from slice 5, same reason) is a
+    // second graphic recap card instead of a second footage use of
+    // scene_027 -- moved because slice 5 was this claim's own LAST slice,
+    // immediately followed by SEC_05's own title card with nothing real in
+    // between (real CI: "shot_061 and shot_062 are two consecutive generic
+    // graphic cards"). Slice 5 now stays plain evidence, buffering the two.
   },
   CLM_012_JOB_FORECAST_DIVERGENCE: {
     // This 2-slice claim's own footage assignment used to be keyed to an
@@ -225,12 +245,34 @@ export const FOOTAGE_ASSIGNMENTS = {
     8: { asset: "assets/footage/scene_019_bdc83a162db95b4b9eba43f9.mp4", trimInRatio: 0.12, motion: "drift_left", role: "context", reuse_reason: "Reused once more in the closing synthesis section (CLM_020), which explicitly recaps earlier evidence rather than introducing new claims." }
   },
   CLM_016_COMPLIANCE_INCUMBENCY: {
-    // Slice 2 is now a graphic recap card instead of a footage break (see
-    // GRAPHIC_BREAK_ASSIGNMENTS below).
+    // Slice 1 (moved from slice 2) is a graphic recap card instead of a
+    // footage break (see GRAPHIC_BREAK_ASSIGNMENTS below) -- moved because
+    // slice 2 was this claim's own LAST slice, immediately followed by
+    // SEC_07's own title card with nothing real in between (real CI:
+    // "shot_084 and shot_085 are two consecutive generic graphic cards").
+    // Slice 2 now stays plain evidence, buffering the two.
   },
   CLM_017_OPEN_CLOSED_TRADEOFF: {
-    // Slices 2 and 5 are now graphic recap cards instead of footage breaks
-    // (see GRAPHIC_BREAK_ASSIGNMENTS below).
+    // Slice 2 was a graphic recap card (see GRAPHIC_BREAK_ASSIGNMENTS
+    // below) -- moved to footage once real CI (scripts/
+    // orvyq_generic_card_audit.mjs) found SEC_07 (this claim's own
+    // section, and the ONLY claim in it) at 32.0% generic cards against a
+    // 12% ceiling, while scripts/orvyq_semantic_visual_audit.mjs's own
+    // contextual-footage ceiling still had real spare room. direction_plan.md's
+    // Group E (scene_022-025) is this film's own canonical open/closed
+    // footage, but every one of those clips is already at its 2-use cap;
+    // scene_018 (regulatory office, already used once by CLM_018 one
+    // section later) threads the same open/closed governance question
+    // forward instead. Slice 5 stays graphic (see GRAPHIC_BREAK_ASSIGNMENTS)
+    // with a duration cap -- it does not need moving, since this claim's
+    // own slice 6 already sits between it and SEC_08's title card.
+    2: {
+      asset: "assets/footage/scene_018_f681c3057e36f147005d2652.mp4",
+      trimInRatio: 0.5,
+      motion: "hold",
+      role: "context",
+      reuse_reason: "Second use at an earlier trim window than CLM_018's own use one section later -- the same regulatory-office footage threading SEC_07's open/closed governance question into SEC_08's safety-architecture answer."
+    }
   },
   CLM_018_INDEPENDENT_EVALUATIONS: {
     // Spans slices 1-2 with one continuous pass through the auditors
@@ -263,12 +305,15 @@ export const FOOTAGE_ASSIGNMENTS = {
     11: { asset: "assets/footage/scene_023_dbe758e1473aee29a155377a.mp4", trimInRatio: 0.6, motion: "cut", role: "context", reuse_reason: "Second use at a different trim window, within this claim's own coverage -- not a repeat of the same visual moment shown once already." }
   },
   CLM_019_INCIDENT_REPORTING: {
-    // This 2-slice claim's tail slice still needs a break -- otherwise
-    // CLM_018's own final (already-covered) slice plus this claim's
-    // evidence chains into one long uninterrupted run -- now a graphic
-    // recap card instead of a second footage use (see
-    // GRAPHIC_BREAK_ASSIGNMENTS below); a graphic resets the run counter
-    // identically to footage.
+    // This 2-slice claim still needs a break -- otherwise CLM_018's own
+    // final (already-covered) slice plus this claim's evidence chains into
+    // one long uninterrupted run -- now a graphic recap card instead of a
+    // second footage use (see GRAPHIC_BREAK_ASSIGNMENTS below); a graphic
+    // resets the run counter identically to footage. On slice 0 (moved
+    // from slice 1, this claim's own last slice): slice 1 was immediately
+    // followed by SEC_09's own title card with nothing real in between
+    // (real CI: "shot_109 and shot_110 are two consecutive generic graphic
+    // cards"). Slice 1 now stays plain evidence, buffering the two.
   },
   CLM_020_SYSTEMIC_INCENTIVE_FINAL: {
     // Every footage entry below spans 2-4 contiguous slices (one continuous
@@ -323,14 +368,33 @@ export const FOOTAGE_ASSIGNMENTS = {
 // pause can continue that slice's own asset) from its default evidence
 // kind to a graphic recap card instead, recovering footage-fraction budget
 // without reopening any of the run-length gaps FOOTAGE_ASSIGNMENTS closes.
+// Real CI (scripts/orvyq_generic_card_audit.mjs, confirmed via its own
+// per-shot diagnostic output) found two further, genuinely new problems
+// with the table below once it was finally reached for the first time:
+//
+// 1. Whole-film (10.3%, over 8%) and per-section (SEC_02 22.2%, SEC_07
+//    32.0%, both over 12%) generic-card ceilings. CLM_005's and
+//    CLM_017's-first-of-two entries moved to FOOTAGE_ASSIGNMENTS instead
+//    (still break the same runs, but no longer count as "generic" at all);
+//    CLM_006's and CLM_017's-second-of-two entries stay graphic but gained
+//    `maxSeconds` (see shrinkGraphicBreakSliceToMax) so their own natural
+//    ~7s narration-boundary width doesn't have to be what a full-screen
+//    title card actually occupies on screen.
+// 2. Four consecutive-generic-card pairs, all the exact same shape: a
+//    claim that is the LAST claim of its own section had its graphic break
+//    at what turned out to be that claim's own LAST slice too, immediately
+//    followed by the next section's own title card with nothing real in
+//    between. CLM_006/016/019/021's break moved one slice earlier within
+//    the SAME claim (never changing which run it breaks, just leaving one
+//    real evidence/footage slice as a buffer before the next section's
+//    title).
 export const GRAPHIC_BREAK_ASSIGNMENTS = {
-  CLM_005_BLACKMAIL_SCENARIO: { 2: { title: "A RECONSTRUCTION, NOT A RECORDING", subtitle: "Dramatized from the reported test case." } },
-  CLM_006_NO_REAL_WORLD_INCIDENT: { 2: { title: "DESIGNED TEST, NOT A REAL INCIDENT", subtitle: "No real-world harm was reported for this case." } },
+  CLM_006_NO_REAL_WORLD_INCIDENT: { 1: { title: "DESIGNED TEST, NOT A REAL INCIDENT", subtitle: "No real-world harm was reported for this case.", maxSeconds: 3.5 } },
   CLM_011_BIO_SAFEGUARD_THRESHOLD: { 7: { title: "SAME THRESHOLD, DIFFERENT DOMAIN", subtitle: "The bio-safeguard question recurs across every risk category." } },
-  CLM_016_COMPLIANCE_INCUMBENCY: { 2: { title: "COMPLIANCE COST, COMPETITIVE MOAT", subtitle: "The same rules can entrench whoever can already afford them." } },
-  CLM_017_OPEN_CLOSED_TRADEOFF: { 2: { title: "OPEN VS. CLOSED", subtitle: "Neither side of this trade-off is cost-free." }, 5: { title: "NO CONSENSUS ON THE TRADE-OFF", subtitle: "Researchers remain genuinely split." } },
-  CLM_019_INCIDENT_REPORTING: { 1: { title: "REPORTING GAPS, NOT JUST INCIDENT GAPS", subtitle: "What isn't disclosed can't be counted." } },
-  CLM_021_INFORMATION_INTEGRITY: { 2: { title: "AMBIGUITY BY DESIGN", subtitle: "Synthetic and real information increasingly blend together." }, 5: { title: "THE SAME ARCHITECTURE, REPEATED", subtitle: "Independent evaluation returns as a theme, not a one-off." } }
+  CLM_016_COMPLIANCE_INCUMBENCY: { 1: { title: "COMPLIANCE COST, COMPETITIVE MOAT", subtitle: "The same rules can entrench whoever can already afford them." } },
+  CLM_017_OPEN_CLOSED_TRADEOFF: { 5: { title: "NO CONSENSUS ON THE TRADE-OFF", subtitle: "Researchers remain genuinely split.", maxSeconds: 3.5 } },
+  CLM_019_INCIDENT_REPORTING: { 0: { title: "REPORTING GAPS, NOT JUST INCIDENT GAPS", subtitle: "What isn't disclosed can't be counted." } },
+  CLM_021_INFORMATION_INTEGRITY: { 2: { title: "AMBIGUITY BY DESIGN", subtitle: "Synthetic and real information increasingly blend together." }, 4: { title: "THE SAME ARCHITECTURE, REPEATED", subtitle: "Independent evaluation returns as a theme, not a one-off." } }
 };
 
 // The full catalog of licensed footage clips materialized by
@@ -693,6 +757,44 @@ function growImageEvidenceSliceToFloor(checkpointTimes, sliceIndex, isFixedCheck
   }
 }
 
+// direction/sequence_plan.json has no equivalent of this yet -- a
+// GRAPHIC_BREAK_ASSIGNMENTS entry's own optional `maxSeconds` caps that
+// specific claim_recap_card's on-screen duration, giving the saved time to
+// whichever immediate neighbor slice has room. A graphic recap card exists
+// purely to interrupt an evidence run under the cap (see
+// GRAPHIC_BREAK_ASSIGNMENTS' own header comment) -- its natural narration-
+// boundary width has no relationship to how long a full-screen title/
+// subtitle actually needs to stay legible, which is exactly the same real
+// premise scripts/orvyq_tension_card_audit.mjs's own 2.5-4.5s "typical"
+// band already established for the structurally similar pause-driven
+// emphasis card. Unlike growImageEvidenceSliceToFloor, this never leaves a
+// neighbor over maxShotSeconds -- it throws instead, since (unlike a
+// best-effort floor) silently skipping the cap would ship exactly the
+// generic-card-fraction overage this exists to fix. Mutates checkpointTimes
+// in place.
+export function shrinkGraphicBreakSliceToMax(checkpointTimes, sliceIndex, maxSeconds, isFixedCheckpoint, maxShotSeconds, claimId) {
+  const leftCheckpoint = sliceIndex;
+  const rightCheckpoint = sliceIndex + 1;
+  const width = checkpointTimes[rightCheckpoint] - checkpointTimes[leftCheckpoint];
+  const excess = width - maxSeconds;
+  if (excess <= 0) return;
+
+  const leftFixed = isFixedCheckpoint(leftCheckpoint);
+  const rightFixed = isFixedCheckpoint(rightCheckpoint);
+  const rightNeighborWidth = rightFixed ? Infinity : checkpointTimes[rightCheckpoint + 1] - checkpointTimes[rightCheckpoint];
+  const leftNeighborWidth = leftFixed ? Infinity : checkpointTimes[leftCheckpoint] - checkpointTimes[leftCheckpoint - 1];
+
+  if (!rightFixed && rightNeighborWidth + excess <= maxShotSeconds) {
+    checkpointTimes[rightCheckpoint] -= excess;
+  } else if (!leftFixed && leftNeighborWidth + excess <= maxShotSeconds) {
+    checkpointTimes[leftCheckpoint] += excess;
+  } else {
+    throw new Error(
+      `${claimId}: cannot shrink its graphic recap slice ${sliceIndex} to ${maxSeconds}s -- neither neighboring slice has enough spare room under the ${maxShotSeconds}s per-shot cap to absorb the saved time`
+    );
+  }
+}
+
 // Picks the real word-end time closest to idealTime (the exact
 // equal-fraction split point) within [minTime, maxTime], softly preferring
 // one that is ALSO a real sentence ending, then a real clause/punctuation
@@ -1045,6 +1147,19 @@ export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, to
       throw new Error(
         `${claim.claim_id}: cannot keep slice ${i} (kind "${sliceKind}") at or above the required ${MIN_IMAGE_EVIDENCE_SECONDS}s real-document minimum -- neighboring slices do not have enough spare real narration seconds to lend without violating other invariants; this claim's evidence_kind_overrides may need a different slice-count or assignment strategy`
       );
+    }
+  }
+
+  // GRAPHIC_BREAK_ASSIGNMENTS[claim_id][sliceIndex].maxSeconds -- see
+  // shrinkGraphicBreakSliceToMax's own comment. Only ever present on the
+  // small number of entries scripts/orvyq_generic_card_audit.mjs's real
+  // whole-film/per-section ceilings required capping; every other entry is
+  // untouched (natural narration-boundary width, exactly as before).
+  const graphicBreaksForClaim = GRAPHIC_BREAK_ASSIGNMENTS[claim.claim_id];
+  if (graphicBreaksForClaim) {
+    for (const [sliceIndexRaw, assignment] of Object.entries(graphicBreaksForClaim)) {
+      if (!Number.isFinite(assignment.maxSeconds)) continue;
+      shrinkGraphicBreakSliceToMax(checkpointTimes, Number(sliceIndexRaw), assignment.maxSeconds, isFixedCheckpoint, maxShotSeconds, claim.claim_id);
     }
   }
 
