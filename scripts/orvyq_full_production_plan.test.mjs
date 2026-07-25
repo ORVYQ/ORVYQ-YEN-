@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { kindFor, titleCase, locateClaimWindow, sliceClaimWindow, quantizeShotsToFrames, expandFootageAssignments } from "./orvyq_full_production_plan.mjs";
+import { kindFor, titleCase, locateClaimWindow, sliceClaimWindow, quantizeShotsToFrames, expandFootageAssignments, applyEvidenceHoldToNextWindow } from "./orvyq_full_production_plan.mjs";
 import { tokenizeWords } from "./lib/orvyq-pause-resolver.mjs";
 
 // Mirrors buildCanonicalEditPlan's own cumulative frame assignment
@@ -202,6 +202,92 @@ test("sliceClaimWindow: throws when multiple adjacent undersized IMAGE_KINDS sli
   const claim = { claim_id: "CLM_TEST_IMAGE_FLOOR_INFEASIBLE", visual_treatment: { primary: "evidence_mosaic" } };
   const overrides = { CLM_TEST_IMAGE_FLOOR_INFEASIBLE: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
   assert.throws(() => sliceClaimWindow(claim, 0, 11, 5, [], [], overrides), /CLM_TEST_IMAGE_FLOOR_INFEASIBLE.*4s real-document minimum/s);
+});
+
+// Real regression: CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS is a genuine
+// single-slice claim (its whole real narration window is one slice, both
+// edges the claim's own fixed boundary) -- growImageEvidenceSliceToFloor has
+// no sibling to borrow from at all. Confirmed against the real committed
+// voice/narration_alignment.json + research/evidence_map.json: CLM_001's raw
+// window is 4.66s, but SEC_01's own deferred title card (2.5s, taken off the
+// top of the section's first claim for every section, not special-cased for
+// SEC_01) shrinks it to 2.16s before slicing ever sees it -- not a mapping
+// bug, a genuine budget conflict between two real, intentional constraints
+// that both draw from the same claim's narration span.
+test("sliceClaimWindow: a single-slice claim (no sibling to borrow from) extends its own last slice past coverEnd instead of throwing", () => {
+  const claim = { claim_id: "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS", visual_treatment: { primary: "evidence_mosaic" } };
+  const overrides = { CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
+  const slices = sliceClaimWindow(claim, 0, 2.16, 8, [], [], overrides);
+  assert.equal(slices.length, 1);
+  assert.equal(slices[0].start, 0);
+  assert.ok(slices[0].end > 2.16, "the last (only) slice should extend past its own coverEnd");
+  assert.ok(slices[0].end - slices[0].start >= 4, `the extended slice should reach the real >=4s legibility minimum, got ${slices[0].end - slices[0].start}`);
+});
+
+// applyEvidenceHoldToNextWindow -- buildFullProductionPlan's own cross-claim
+// adjustment, extracted standalone so the real narration-budget arithmetic
+// (spanning two adjacent claims, no overlap/gap/drift, unchanged total
+// duration, evidence attribution untouched) is directly testable.
+test("applyEvidenceHoldToNextWindow: a document shot spanning two adjacent claims shrinks the next claim's window by exactly the hold, with no gap or overlap", () => {
+  const claimA = { claim_id: "CLM_A", visual_treatment: { primary: "evidence_mosaic" } };
+  const claimB = { claim_id: "CLM_B", visual_treatment: { primary: "evidence_mosaic" } };
+  const overrides = { CLM_A: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
+  const windows = [
+    { claim: claimA, coverStart: 0, coverEnd: 2.16 },
+    { claim: claimB, coverStart: 2.16, coverEnd: 20 }
+  ];
+  const originalTotalSpan = windows[0].coverEnd - windows[0].coverStart + (windows[1].coverEnd - windows[1].coverStart);
+
+  const slices = sliceClaimWindow(claimA, windows[0].coverStart, windows[0].coverEnd, 8, [], [], overrides);
+  const holdSeconds = applyEvidenceHoldToNextWindow(windows, 0, windows[0].coverEnd, slices);
+
+  assert.ok(holdSeconds > 0, "a hold should have been applied");
+  // No gap or overlap: the next claim's window starts EXACTLY where the
+  // held shot's own end lands -- not a moment earlier (overlap, duplicated
+  // real narration seconds) or later (a gap with no shot covering it).
+  assert.equal(windows[1].coverStart, slices.at(-1).end);
+  // Evidence attribution: the originating claim's own window is completely
+  // untouched -- only the FOLLOWING claim's coverStart moved.
+  assert.equal(windows[0].coverStart, 0);
+  assert.equal(windows[0].coverEnd, 2.16);
+  assert.equal(windows[0].claim.claim_id, "CLM_A");
+  // Total candidate duration preserved: claim A's own shot got wider by
+  // exactly what claim B's own window got narrower by -- nothing invented,
+  // nothing dropped.
+  const newTotalSpan = slices.at(-1).end - windows[0].coverStart + (windows[1].coverEnd - windows[1].coverStart);
+  assert.ok(Math.abs(newTotalSpan - originalTotalSpan) < 1e-9);
+});
+
+test("applyEvidenceHoldToNextWindow: a no-op (returns 0, mutates nothing) when the slice never needed to extend past coverEnd", () => {
+  const claimA = { claim_id: "CLM_A" };
+  const claimB = { claim_id: "CLM_B" };
+  const windows = [
+    { claim: claimA, coverStart: 0, coverEnd: 20 },
+    { claim: claimB, coverStart: 20, coverEnd: 30 }
+  ];
+  const slices = [{ start: 0, end: 20, kind: "concept_map" }];
+  const holdSeconds = applyEvidenceHoldToNextWindow(windows, 0, windows[0].coverEnd, slices);
+  assert.equal(holdSeconds, 0);
+  assert.equal(windows[1].coverStart, 20);
+});
+
+test("applyEvidenceHoldToNextWindow: throws when the claim needing a hold is the film's last claim (nothing to hold into)", () => {
+  const claimA = { claim_id: "CLM_LAST" };
+  const windows = [{ claim: claimA, coverStart: 0, coverEnd: 2.16 }];
+  const slices = [{ start: 0, end: 4.1, kind: "image_sequence" }];
+  assert.throws(() => applyEvidenceHoldToNextWindow(windows, 0, windows[0].coverEnd, slices), /CLM_LAST.*no following claim/s);
+});
+
+test("applyEvidenceHoldToNextWindow: throws rather than leaving the next claim with a non-positive window", () => {
+  const claimA = { claim_id: "CLM_A" };
+  const claimB = { claim_id: "CLM_B" };
+  const windows = [
+    { claim: claimA, coverStart: 0, coverEnd: 2.16 },
+    // CLM_B's own window is far too small to absorb a ~1.94s hold.
+    { claim: claimB, coverStart: 2.16, coverEnd: 2.5 }
+  ];
+  const slices = [{ start: 0, end: 4.1, kind: "image_sequence" }];
+  assert.throws(() => applyEvidenceHoldToNextWindow(windows, 0, windows[0].coverEnd, slices), /CLM_A.*CLM_B.*leaving it with none/s);
 });
 
 // expandFootageAssignments -- the direct replacement for the removed

@@ -1020,16 +1020,67 @@ export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, to
     // partially undone by a later slice borrowing back from the same
     // shared checkpoint.
     for (const i of imageFloorIndices) {
-      if (checkpointTimes[i + 1] - checkpointTimes[i] < MIN_IMAGE_EVIDENCE_SECONDS) {
-        throw new Error(
-          `${claim.claim_id}: cannot keep slice ${i} (kind "${sliceKind}") at or above the required ${MIN_IMAGE_EVIDENCE_SECONDS}s real-document minimum -- neighboring slices do not have enough spare real narration seconds to lend without violating other invariants; this claim's evidence_kind_overrides may need a different slice-count or assignment strategy`
-        );
+      const width = checkpointTimes[i + 1] - checkpointTimes[i];
+      if (width >= MIN_IMAGE_EVIDENCE_SECONDS) continue;
+      // The claim's LAST slice has no sibling further right to borrow
+      // from within this same claim (a single-slice claim has no sibling
+      // at all -- both its edges are the claim's own fixed boundary, so
+      // growImageEvidenceSliceToFloor above could not lend it anything).
+      // Rather than fail the whole candidate over a claim whose real
+      // narration is simply too short to host both this claim's other
+      // fixed obligations (e.g. a section's title card) AND a legible
+      // real-document hold, this shot is allowed to visually persist past
+      // this claim's own coverEnd, into the immediately following claim's
+      // narration -- a genuine "hold" (the evidence remains attributed to
+      // THIS claim; only the next claim's own coverStart is pushed later
+      // to compensate, by the caller, once it sees this slice's returned
+      // end exceeds the coverEnd it passed in). Only the true last slice
+      // is eligible: an interior slice short on both sides has no real
+      // narration direction left to extend into without also disturbing a
+      // LATER slice of this same claim, which is out of scope here.
+      if (i === sliceCount - 1) {
+        checkpointTimes[sliceCount] += IMAGE_EVIDENCE_FLOOR_SECONDS - width;
+        continue;
       }
+      throw new Error(
+        `${claim.claim_id}: cannot keep slice ${i} (kind "${sliceKind}") at or above the required ${MIN_IMAGE_EVIDENCE_SECONDS}s real-document minimum -- neighboring slices do not have enough spare real narration seconds to lend without violating other invariants; this claim's evidence_kind_overrides may need a different slice-count or assignment strategy`
+      );
     }
   }
 
   for (let i = 0; i < sliceCount; i += 1) slices.push({ start: checkpointTimes[i], end: checkpointTimes[i + 1], kind: sliceKind });
   return slices;
+}
+
+// sliceClaimWindow's own last slice can extend past the coverEnd it was
+// given (see its own comment on why) when a claim's real narration cannot,
+// on its own, host both that claim's other fixed obligations (e.g. a
+// section's title card) and a legible real-document evidence_kind_override
+// hold -- a genuine "visual hold" past that claim's own narration, into the
+// immediately following claim's. The evidence itself stays attributed to
+// the ORIGINATING claim (its shot's claim_id is built from `windows[windowIndex]`
+// regardless of this adjustment); only the next claim's own coverStart is
+// pushed forward here by the exact amount borrowed, so no real narration
+// second is ever double-counted (claimed by two claims' shots) or dropped
+// (claimed by neither) -- exported standalone (rather than inlined in
+// buildFullProductionPlan) so this real narration-budget arithmetic is
+// testable without the full disk-reading pipeline. Mutates windows[windowIndex + 1]
+// in place; returns the hold amount actually applied (0 if none was needed).
+export function applyEvidenceHoldToNextWindow(windows, windowIndex, coverEnd, slices) {
+  const holdSeconds = slices.length ? slices.at(-1).end - coverEnd : 0;
+  if (holdSeconds <= 1e-9) return 0;
+  const currentClaimId = windows[windowIndex].claim.claim_id;
+  const nextWindow = windows[windowIndex + 1];
+  if (!nextWindow)
+    throw new Error(
+      `${currentClaimId}: needs ${holdSeconds.toFixed(3)}s more than its own real narration window to reach the mobile-legibility floor, but it is the film's last claim -- there is no following claim to hold into`
+    );
+  nextWindow.coverStart += holdSeconds;
+  if (nextWindow.coverEnd <= nextWindow.coverStart)
+    throw new Error(
+      `${currentClaimId}'s real-document hold needs ${holdSeconds.toFixed(3)}s from ${nextWindow.claim.claim_id}'s own narration window, leaving it with none -- this pair of claims needs a different evidence_kind_overrides or slice-count strategy`
+    );
+  return holdSeconds;
 }
 
 // Snaps every shot's duration to an exact frame boundary, and footage
@@ -1177,7 +1228,7 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
   const rawShots = [];
   let currentSection = null;
   let isFirstWindowOverall = true;
-  for (const window of windows) {
+  for (const [windowIndex, window] of windows.entries()) {
     const isNewSection = window.claim.section_id !== currentSection;
     // The film's real opening is the licensed motion hook (see below), which
     // must dissolve directly into primary evidence -- auditMotionHook
@@ -1217,6 +1268,7 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
       window.coverStart += TITLE_CARD_SECONDS;
     }
     const slices = sliceClaimWindow(window.claim, window.coverStart, window.coverEnd, maxShotSeconds, tokens, pauseAnchorTimes, evidenceKindOverrides);
+    applyEvidenceHoldToNextWindow(windows, windowIndex, window.coverEnd, slices);
     const sliceDurations = slices.map((slice) => slice.end - slice.start);
     const footageBySlice = expandFootageAssignments(window.claim.claim_id, sliceDurations, assetDurationSeconds);
     const graphicBreaksForClaim = GRAPHIC_BREAK_ASSIGNMENTS[window.claim.claim_id];
