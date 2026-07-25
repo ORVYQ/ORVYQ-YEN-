@@ -805,7 +805,7 @@ function frozenRunEdgeBoundaries(protectedIndices, sliceCount) {
 // CLM_020's own table above were re-keyed by +1 to match).
 const SLICE_COUNT_OVERRIDES = { CLM_020_SYSTEMIC_INCENTIVE_FINAL: 18 };
 
-export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, tokens = [], pauseAnchorTimes = []) {
+export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, tokens = [], pauseAnchorTimes = [], evidenceKindOverrides = {}) {
   const duration = coverEnd - coverStart;
   const technicalMinimumSliceCount = Math.max(1, Math.ceil(duration / Math.min(maxShotSeconds, TARGET_SHOT_SECONDS + 2)));
   const sliceCount = Math.max(technicalMinimumSliceCount, SLICE_COUNT_OVERRIDES[claim.claim_id] || 0);
@@ -935,7 +935,17 @@ export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, to
   }
 
   const slices = [];
-  for (let i = 0; i < sliceCount; i += 1) slices.push({ start: checkpointTimes[i], end: checkpointTimes[i + 1], kind: kindFor(claim.visual_treatment?.primary) });
+  // direction/sequence_plan.json's evidence_kind_overrides[claim_id], when
+  // present, routes every otherwise-plain-evidence slice of this claim to a
+  // real materialized IMAGE_KINDS asset instead of kindFor()'s NATIVE_KINDS
+  // default -- the direct fix for the confirmed root cause of the rejected
+  // review's zero real evidence assets (kindFor() structurally never
+  // returns an IMAGE_KINDS value on its own). The final shot-assembly pass
+  // below attaches the override's real evidence_asset_ids/image_assets
+  // whenever a slice's kind matches.
+  const evidenceKindOverride = evidenceKindOverrides[claim.claim_id];
+  const sliceKind = evidenceKindOverride?.kind || kindFor(claim.visual_treatment?.primary);
+  for (let i = 0; i < sliceCount; i += 1) slices.push({ start: checkpointTimes[i], end: checkpointTimes[i + 1], kind: sliceKind });
   return slices;
 }
 
@@ -977,7 +987,7 @@ export function quantizeShotsToFrames(shots, fps = FPS) {
 
 export async function buildFullProductionPlan(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
-  const [blueprint, resolvedPausePlan, alignment, evidenceMap, motionHook] = await Promise.all([
+  const [blueprint, resolvedPausePlan, alignment, evidenceMap, motionHook, sequencePlan] = await Promise.all([
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
     // The candidate's real editorial pauses, resolved exactly once by
     // scripts/orvyq_resolve_pauses.mjs (run before this script in CI) --
@@ -987,8 +997,16 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
     readJson(path.join(dir, "direction", "resolved_pause_plan.json")),
     readJson(path.join(dir, "voice", "narration_alignment.json")),
     loadResolvedEvidenceMap(dir),
-    readJson(path.join(dir, "direction", "motion_hook.json"))
+    readJson(path.join(dir, "direction", "motion_hook.json")),
+    // direction/sequence_plan.json's evidence_kind_overrides -- the one
+    // genuinely new authoring table this file reads from JSON rather than
+    // a JS constant (see that schema's own description for why
+    // FOOTAGE_ASSIGNMENTS/GRAPHIC_BREAK_ASSIGNMENTS/SLICE_COUNT_OVERRIDES
+    // below stay as hand-authored code with their load-bearing rationale
+    // comments intact).
+    readJson(path.join(dir, "direction", "sequence_plan.json"))
   ]);
+  const evidenceKindOverrides = sequencePlan.evidence_kind_overrides || {};
 
   const maxShotSeconds = blueprint.global_rules.max_shot_seconds;
   const validSourceIds = new Set(evidenceMap.source_catalog.map((source) => source.source_id));
@@ -1115,7 +1133,7 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
       if (!deferTitleCard) rawShots.push(titleCardShot);
       window.coverStart += TITLE_CARD_SECONDS;
     }
-    const slices = sliceClaimWindow(window.claim, window.coverStart, window.coverEnd, maxShotSeconds, tokens, pauseAnchorTimes);
+    const slices = sliceClaimWindow(window.claim, window.coverStart, window.coverEnd, maxShotSeconds, tokens, pauseAnchorTimes, evidenceKindOverrides);
     const sliceDurations = slices.map((slice) => slice.end - slice.start);
     const footageBySlice = expandFootageAssignments(window.claim.claim_id, sliceDurations, assetDurationSeconds);
     const graphicBreaksForClaim = GRAPHIC_BREAK_ASSIGNMENTS[window.claim.claim_id];
@@ -1341,6 +1359,19 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
       section: sectionById.get(shot.section_id),
       occurrence
     });
+    // A real materialized evidence image, never a fabricated one: only
+    // attached when direction/sequence_plan.json's evidence_kind_overrides
+    // declared this exact claim+kind pair (sliceKind above already came
+    // from the same override, so this can only ever match a slice that
+    // override actually produced). scripts/orvyq_edit_plan.mjs's own
+    // IMAGE_KINDS validation (evidence_asset_ids resolve in
+    // research/evidence_asset_manifest.json with status "ready", the
+    // physical file exists) is the real, load-bearing gate downstream --
+    // this only threads the override's declared real asset references
+    // through, it does not itself verify readiness.
+    const kindOverride = evidenceKindOverrides[shot.claim_id];
+    const overrideAssets =
+      kindOverride && kindOverride.kind === shot.evidenceKind ? { evidence_asset_ids: kindOverride.evidence_asset_ids, image_assets: kindOverride.image_assets } : {};
     return {
       ...base,
       asset_type: "evidence",
@@ -1349,7 +1380,8 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
         source_ids: sourceIds,
         source_label: isRecap ? "Multiple verified sources (recap)" : evidenceMap.source_catalog.find((s) => s.source_id === ownSourceIds[0])?.publisher || "Source",
         font_px: DEFAULT_FONT_PX,
-        ...content
+        ...content,
+        ...overrideAssets
       }
     };
   });

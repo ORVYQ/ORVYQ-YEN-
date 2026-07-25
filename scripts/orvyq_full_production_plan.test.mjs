@@ -153,6 +153,24 @@ test("sliceClaimWindow ignores a real word end that is too far from the ideal sp
   assert.ok(slices.every((slice) => slice.end - slice.start <= 8 + 1e-9));
 });
 
+// evidenceKindOverrides -- direction/sequence_plan.json's mechanism for
+// routing a claim's evidence slices to a real materialized IMAGE_KINDS
+// asset instead of kindFor()'s NATIVE_KINDS-only default (the confirmed
+// structural cause of the rejected review's zero real evidence assets).
+test("sliceClaimWindow: an evidenceKindOverrides entry replaces kindFor()'s default for every slice of that claim", () => {
+  const claim = { claim_id: "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS", visual_treatment: { primary: "evidence_mosaic" } };
+  const overrides = { CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
+  const slices = sliceClaimWindow(claim, 0, 20, 8, [], [], overrides);
+  for (const slice of slices) assert.equal(slice.kind, "image_sequence");
+});
+
+test("sliceClaimWindow: a claim with no evidenceKindOverrides entry is unaffected (kindFor() default, matching pre-Phase-1 behavior)", () => {
+  const claim = { claim_id: "CLM_999_UNRELATED", visual_treatment: { primary: "evidence_mosaic" } };
+  const overrides = { CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS: { kind: "image_sequence", evidence_asset_ids: ["EVID_A"], image_assets: ["assets/evidence/a.png"] } };
+  const slices = sliceClaimWindow(claim, 0, 20, 8, [], [], overrides);
+  for (const slice of slices) assert.equal(slice.kind, "concept_map");
+});
+
 // expandFootageAssignments -- the direct replacement for the removed
 // footageCandidateSlot/i%3 mechanism (task follow-up section 17): any slice
 // index is addressable, and a single real clip may span several contiguous

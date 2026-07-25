@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "project_id": "001-the-ai-race-no-one-can-afford-to-win",
+  "evidence_kind_overrides": {
+    "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS": {
+      "kind": "image_sequence",
+      "evidence_asset_ids": ["EVID_RSP_COVER_CAPTURE", "EVID_RSP_SUMMARY_CAPTURE", "EVID_FSF_COVER_CAPTURE"],
+      "image_assets": ["assets/evidence/anthropic_rsp_cover.png", "assets/evidence/anthropic_rsp_summary.png", "assets/evidence/deepmind_fsf_cover.png"],
+      "editorial_rationale": "The film's opening claim ('Every major AI lab on Earth believes moving this fast might be dangerous... they publish safety frameworks') is directly, visibly substantiated by three real published document pages from two different labs (Anthropic's RSP cover + summary, Google DeepMind's Frontier Safety Framework cover) instead of a generic evidence card -- the first thing a viewer sees after the motion hook is the real documents, not a category label."
+    },
+    "CLM_004_AGENTIC_MISALIGNMENT_TEST": {
+      "kind": "official_figure",
+      "evidence_asset_ids": ["EVID_AGENTIC_FIG1"],
+      "image_assets": ["assets/evidence/anthropic_agentic_figure1.png"],
+      "editorial_rationale": "The claim describes a published controlled evaluation; showing the paper's own real Figure 1 (simulated blackmail rates across five models) is direct primary-source evidence of what was actually measured, in place of a source-derived recreation card."
+    }
+  }
+}

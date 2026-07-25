@@ -50,6 +50,13 @@ check(
   { kind: "real" }
 );
 
+check(
+  "direction/sequence_plan.json",
+  "sequence_plan.schema.json",
+  readJson(path.join(PROJECT_DIR, "direction/sequence_plan.json")),
+  { kind: "real" }
+);
+
 {
   const videoConfig = readJson(path.join(PROJECT_DIR, "config/video_config.json"));
   const projectConfig = readJson(path.join(PROJECT_DIR, "config/project_config.json"));

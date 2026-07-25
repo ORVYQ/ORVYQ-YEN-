@@ -9,6 +9,7 @@
     "validate:canonical": "node scripts/validate_canonical.mjs",
     "test": "node --test",
     "orvyq:fetch-evidence": "node scripts/orvyq_fetch_primary_evidence.mjs",
+    "orvyq:promote-evidence-assets": "node scripts/orvyq_promote_evidence_assets.mjs",
     "orvyq:fetch-music": "node scripts/orvyq_fetch_music.mjs",
     "orvyq:audio": "node scripts/orvyq_audio_mix.mjs",
     "orvyq:edit-plan": "node scripts/orvyq_edit_plan.mjs",
