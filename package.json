@@ -27,10 +27,13 @@
     "orvyq:build-render-project": "node scripts/remotion_build.mjs derive-configs --project-id=001-the-ai-race-no-one-can-afford-to-win && node scripts/remotion_build.mjs build-project --project-id=001-the-ai-race-no-one-can-afford-to-win",
     "orvyq:duplicate-footage-audit": "node scripts/orvyq_duplicate_footage_audit.mjs",
     "orvyq:tension-card-audit": "node scripts/orvyq_tension_card_audit.mjs",
+    "orvyq:generic-card-audit": "node scripts/orvyq_generic_card_audit.mjs",
+    "orvyq:leaked-instruction-audit": "node scripts/orvyq_leaked_instruction_audit.mjs",
+    "orvyq:real-asset-coverage-audit": "node scripts/orvyq_real_asset_coverage_audit.mjs",
     "orvyq:music-pause-rise-audit": "node scripts/orvyq_music_pause_rise_audit.mjs",
     "orvyq:duration-parity-audit": "node scripts/orvyq_duration_parity_audit.mjs",
     "orvyq:near-black-audit": "node scripts/orvyq_near_black_audit.mjs",
-    "orvyq:audits": "node scripts/orvyq_evidence_audit.mjs && node scripts/orvyq_evidence_spec_audit.mjs && node scripts/orvyq_evidence_asset_audit.mjs && node scripts/orvyq_semantic_visual_audit.mjs && node scripts/orvyq_pacing_audit.mjs && node scripts/orvyq_mobile_legibility_audit.mjs && node scripts/orvyq_music_cue_audit.mjs && node scripts/orvyq_duplicate_footage_audit.mjs && node scripts/orvyq_tension_card_audit.mjs",
+    "orvyq:audits": "node scripts/orvyq_evidence_audit.mjs && node scripts/orvyq_evidence_spec_audit.mjs && node scripts/orvyq_evidence_asset_audit.mjs && node scripts/orvyq_semantic_visual_audit.mjs && node scripts/orvyq_pacing_audit.mjs && node scripts/orvyq_mobile_legibility_audit.mjs && node scripts/orvyq_music_cue_audit.mjs && node scripts/orvyq_duplicate_footage_audit.mjs && node scripts/orvyq_tension_card_audit.mjs && node scripts/orvyq_generic_card_audit.mjs && node scripts/orvyq_leaked_instruction_audit.mjs && node scripts/orvyq_real_asset_coverage_audit.mjs",
     "orvyq:qa": "npm run orvyq:audits && node scripts/orvyq_edit_plan_tests.mjs && node scripts/orvyq_license_audit.mjs && node scripts/orvyq_alignment_score.mjs && node scripts/orvyq_parity_check.mjs && node scripts/orvyq_music_pause_rise_audit.mjs && node scripts/orvyq_duration_parity_audit.mjs"
   },
   "dependencies": { "ajv": "^8.17.1", "ajv-formats": "^3.0.1" }
