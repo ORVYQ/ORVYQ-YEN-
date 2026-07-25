@@ -1088,7 +1088,13 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
         claim_id: sectionFirstClaim.get(currentSection),
         start: window.coverStart,
         end: window.coverStart + TITLE_CARD_SECONDS,
-        graphic: { type: "section_title", title: titleCase(currentSection), subtitle: section?.visual_strategy || null },
+        // mode: "brand" routes this through OrvyqGraphic.tsx's clean,
+        // centered title layout explicitly -- without it, "section_title"
+        // is not in modeFor()'s spec.type whitelist and falls through to
+        // the "statement" mode's giant-label fallback (the exact,
+        // confirmed mechanism behind the rejected review's repeated giant
+        // "CONTEXT" cards).
+        graphic: { type: "section_title", mode: "brand", title: titleCase(currentSection), subtitle: section?.visual_strategy || null },
         role: "graphic"
       };
       // Whether pushed now or deferred until after the first evidence
@@ -1116,7 +1122,13 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
           start: slice.start,
           end: slice.end,
           role: "graphic",
-          graphic: { type: "claim_recap_card", title: graphicBreak.title, subtitle: graphicBreak.subtitle ?? null },
+          // mode: "brand" -- see the section_title graphic above for why
+          // this is now explicit rather than relying on modeFor()'s
+          // whitelist. A recap card that wants a real illustrative panel
+          // instead of a plain title layout gets that as an explicit
+          // graphicBreak.mode + labels (direction/sequence_plan.json's
+          // graphic_mode_directives), never inferred.
+          graphic: { type: "claim_recap_card", mode: graphicBreak.mode || "brand", ...(graphicBreak.labels ? { labels: graphicBreak.labels } : {}), title: graphicBreak.title, subtitle: graphicBreak.subtitle ?? null },
           dissolveIn: isFirstWindowOverall && sliceIndex === 0
         });
         if (deferTitleCard && sliceIndex === 0) rawShots.push(titleCardShot);
@@ -1427,7 +1439,7 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
     visual_role: "graphic",
     editorial_purpose: "Terminal end card: hold on the film's closing line before the picture fades to black.",
     asset_type: "graphic",
-    graphic: { type: "end_card", title: "It's still being decided… by people, right now.", subtitle: null },
+    graphic: { type: "end_card", mode: "brand", title: "It's still being decided… by people, right now.", subtitle: null },
     transition_in: "fade"
   };
 

@@ -9,6 +9,14 @@ export type OrvyqGraphicSpec = {
   subtitle?: string;
   labels?: string[];
   source?: string;
+  // Explicit, authored layout choice (direction/sequence_plan.json's
+  // graphic_mode_directives, or a direct assignment at the shot-generation
+  // site). Wins over modeFor()'s spec.type whitelist below, which is now a
+  // fallback only for specs that don't declare their own mode -- see the
+  // commit that introduced this field for why the whitelist alone let real
+  // generator output (section_title/claim_recap_card/end_card) fall through
+  // to "statement" unintentionally.
+  mode?: "brand" | "comparison" | "evidence" | "process" | "statement";
 };
 
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
@@ -85,12 +93,18 @@ const Process: React.FC<{ spec: OrvyqGraphicSpec; p: number }> = ({ spec, p }) =
 };
 
 const Statement: React.FC<{ spec: OrvyqGraphicSpec; p: number }> = ({ spec, p }) => {
-  const signal = spec.labels?.[0] || "CONTEXT";
+  // No invented placeholder word: a spec that reaches "statement" mode
+  // without a real, authored label renders the accent line alone rather
+  // than a giant internal fallback string -- this was the exact,
+  // deterministic source of every "giant CONTEXT card" in the rejected
+  // review (spec.labels was never set by the generator, so the old
+  // `spec.labels?.[0] || "CONTEXT"` fallback fired on every single one).
+  const signal = spec.labels?.[0];
   const reveal = interpolate(p, [0.06, 0.5], [0, 1], clamp);
   return (
     <div style={{ width: "100%", maxWidth: 1000, minHeight: 330, border: "1px solid rgba(245,240,231,.22)", background: "rgba(7,13,23,.5)", display: "grid", placeItems: "center", position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, opacity: 0.22, background: "radial-gradient(circle at center, rgba(134,169,204,.35), transparent 62%)" }} />
-      <div style={{ color: ink, fontSize: 138, lineHeight: 0.9, fontWeight: 760, letterSpacing: "-.055em", opacity: reveal, transform: `scale(${0.92 + reveal * 0.08})` }}>{signal}</div>
+      {signal ? <div style={{ color: ink, fontSize: 138, lineHeight: 0.9, fontWeight: 760, letterSpacing: "-.055em", opacity: reveal, transform: `scale(${0.92 + reveal * 0.08})` }}>{signal}</div> : null}
       <div style={{ position: "absolute", left: 50, right: 50, bottom: 38, height: 3, background: `linear-gradient(90deg,${blue},${accent})`, transform: `scaleX(${reveal})`, transformOrigin: "left" }} />
     </div>
   );
@@ -101,7 +115,7 @@ export const OrvyqGraphic: React.FC<{ spec: OrvyqGraphicSpec; durationInFrames: 
   const { fps } = useVideoConfig();
   const p = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [0, 1], clamp);
   const reveal = spring({ frame, fps, config: { damping: 20, stiffness: 105, mass: 0.9 }, durationInFrames: Math.min(durationInFrames, 34) });
-  const mode = modeFor(spec);
+  const mode = spec.mode || modeFor(spec);
 
   if (mode === "brand") {
     return <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 42%,#263C53 0%,#0B121D 44%,#05070C 100%)", color: ink }}><Brand spec={spec} reveal={reveal} /></AbsoluteFill>;
