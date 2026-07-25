@@ -90,6 +90,16 @@ jobs:
       - name: Run the unit test suite
         run: npm test
 
+      # direction/resolved_pause_plan.json (gitignored build output) -- the
+      # single canonical pause resolution both the shot planner below and
+      # the audio mix later read, instead of each independently calling
+      # resolveFullFilmPauses() against the same inputs. Only needs the
+      # already-committed direction/editorial_pause_map.json +
+      # voice/narration_alignment.json, so it can run before footage/
+      # evidence materialization.
+      - name: Resolve the canonical editorial pause plan
+        run: node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
+
       # ---- 1. build the canonical shot plan (never committed back) ----
       - name: Build the canonical full production shot list from real data
         run: node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
@@ -99,6 +109,16 @@ jobs:
 
       - name: Fetch and verify official primary evidence
         run: node scripts/orvyq_fetch_primary_evidence.mjs
+
+      # research/evidence_asset_manifest.json entries only ever move from
+      # spec_ready_asset_pending to ready here, after the fetch step above
+      # has actually verified the backing file (never on declaration alone)
+      # -- see scripts/orvyq_promote_evidence_assets.mjs. Must run before
+      # the edit-plan build below, which hard-requires status=ready for any
+      # shot referencing a real IMAGE_KINDS asset
+      # (direction/sequence_plan.json's evidence_kind_overrides).
+      - name: Promote verified evidence assets to ready
+        run: node scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID"
 
       # Real per-clip durations from the actually-materialized footage's own
       # provenance -- uploaded even if a later step fails, so a footage-trim
