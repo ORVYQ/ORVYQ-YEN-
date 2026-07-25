@@ -97,12 +97,6 @@
       "sound_cue": "tonal_bloom"
     },
     {
-      "anchor_text": "That work hasn't been done yet.",
-      "purpose": "Create a reflective release before the final line",
-      "planned_seconds": 5,
-      "sound_cue": "tonal_bloom"
-    },
-    {
       "anchor_text": "It's still being decided... by people, right now.",
       "purpose": "Final human-agency landing and music decay",
       "planned_seconds": 6,

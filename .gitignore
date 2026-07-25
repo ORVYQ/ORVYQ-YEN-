@@ -35,6 +35,7 @@ projects/*/qa/*
 # byte-identical to a fresh `build-project` run instead.
 projects/*/remotion/render_ready_project/
 projects/*/direction/edit_plan.json
+projects/*/direction/resolved_pause_plan.json
 projects/*/remotion/scene_config.json
 projects/*/remotion/asset_map.json
 projects/*/remotion/captions.json

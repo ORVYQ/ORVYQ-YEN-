@@ -250,6 +250,23 @@ check("fixture proof_approval", "proof_approval.schema.json", fixtureProofApprov
   }
 }
 
+{
+  const resolvedPausePlanPath = path.join(PROJECT_DIR, "direction", "resolved_pause_plan.json");
+  if (fs.existsSync(resolvedPausePlanPath)) {
+    check("direction/resolved_pause_plan.json (real, produced by orvyq_resolve_pauses.mjs)", "resolved_pause_plan.schema.json", readJson(resolvedPausePlanPath), { kind: "real" });
+  } else {
+    const fixtureResolvedPausePlan = {
+      schema_version: "1.0-resolved-pause-plan",
+      project_id: PROJECT_ID,
+      source_pause_map: "direction/editorial_pause_map.json",
+      source_alignment: "voice/narration_alignment.json",
+      narration_end_seconds: 804.29,
+      pauses: [{ pause_id: "PAUSE_FULL_01_e32168dd", anchor_text: "Not someday. Right now.", purpose: "Present-tense turn", sound_cue: "tonal_bloom", source_time_seconds: 51.39, duration_seconds: 4 }]
+    };
+    check("fixture resolved_pause_plan (not yet produced in this checkout)", "resolved_pause_plan.schema.json", fixtureResolvedPausePlan, { kind: "fixture" });
+  }
+}
+
 // ---- Report ----
 
 let failed = 0;

@@ -35,7 +35,7 @@
 import path from "node:path";
 import { projectDir, readJson, readJsonSafe, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
-import { resolveFullFilmPauses, tokenizeWords, tokenizeAnchorText, findAnchorMatch, endsAtSentenceBoundary, endsAtClauseBoundary } from "./lib/orvyq-pause-resolver.mjs";
+import { tokenizeWords, tokenizeAnchorText, findAnchorMatch, endsAtSentenceBoundary, endsAtClauseBoundary } from "./lib/orvyq-pause-resolver.mjs";
 import { buildEvidenceContent } from "./lib/orvyq-evidence-authoring.mjs";
 import { FPS, END_CARD_SECONDS } from "./lib/orvyq-timeline.mjs";
 
@@ -977,9 +977,14 @@ export function quantizeShotsToFrames(shots, fps = FPS) {
 
 export async function buildFullProductionPlan(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
-  const [blueprint, pauseMap, alignment, evidenceMap, motionHook] = await Promise.all([
+  const [blueprint, resolvedPausePlan, alignment, evidenceMap, motionHook] = await Promise.all([
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
-    readJson(path.join(dir, "direction", "editorial_pause_map.json")),
+    // The candidate's real editorial pauses, resolved exactly once by
+    // scripts/orvyq_resolve_pauses.mjs (run before this script in CI) --
+    // see that script's own header for why this and orvyq_audio_mix.mjs
+    // both read the same resolved artifact instead of each independently
+    // calling resolveFullFilmPauses().
+    readJson(path.join(dir, "direction", "resolved_pause_plan.json")),
     readJson(path.join(dir, "voice", "narration_alignment.json")),
     loadResolvedEvidenceMap(dir),
     readJson(path.join(dir, "direction", "motion_hook.json"))
@@ -1011,7 +1016,9 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
   const tokens = tokenizeWords(alignment.words);
   const narrationEnd = alignment.words.at(-1).end;
 
-  const { pauses } = resolveFullFilmPauses({ words: alignment.words, anchors: pauseMap.full_film_pause_anchors });
+  const { pauses } = resolvedPausePlan;
+  if (!Array.isArray(pauses) || !pauses.length)
+    throw new Error("direction/resolved_pause_plan.json has no pauses -- run scripts/orvyq_resolve_pauses.mjs first");
   // Real, already-resolved pause moments doubling as one of
   // sliceClaimWindow's real boundary-preference signals (see
   // pickRealBoundary) -- these are genuine editorial cut points, not

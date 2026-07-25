@@ -34,7 +34,6 @@
 import path from "node:path";
 import { promises as fs } from "node:fs";
 import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
-import { resolveFullFilmPauses } from "./lib/orvyq-pause-resolver.mjs";
 import { command, extractLoudnorm, measureLoudness, normalizeFilter, durationSecondsOf } from "./lib/orvyq-loudness.mjs";
 import { DEFAULT_PAUSE_RISE_DB, DEFAULT_PAUSE_RISE_RAMP_SECONDS, buildPauseRiseFfmpegExpr } from "./lib/orvyq-music-envelope.mjs";
 import { END_CARD_FADE_SECONDS } from "./lib/orvyq-timeline.mjs";
@@ -89,24 +88,26 @@ async function prepareEditorialNarration({ dir, audioDir, voice, availableDurati
     return { voice, sourceNarrationDuration, timelineNarrationDuration: sourceNarrationDuration, editorialPauseSeconds: 0, pauseWindows: [], pauseMap: null };
   }
 
-  const pauseMap = await readOptionalJson(path.join(dir, "direction", "editorial_pause_map.json"));
-  // There is only ONE real set of editorial pauses now: the candidate's own
-  // full_film_pause_anchors, resolved against the real per-word ASR
-  // timestamps in voice/narration_alignment.json (scripts/lib/orvyq-pause-
-  // resolver.mjs) -- the same resolver scripts/orvyq_full_production_plan.mjs
-  // uses to place pause shots in the edit plan, so the audio mix's pause
-  // timing and the video timeline's pause timing can never independently
-  // drift apart. `pauseMap.proof.pauses` (the old, separately-authored 150s
-  // cut's own 4 pauses) is historical/regression reference only -- see
+  // There is only ONE real set of editorial pauses now, resolved exactly
+  // once by scripts/orvyq_resolve_pauses.mjs into
+  // direction/resolved_pause_plan.json -- this and
+  // scripts/orvyq_full_production_plan.mjs both read that same artifact
+  // instead of each independently calling resolveFullFilmPauses() against
+  // direction/editorial_pause_map.json + voice/narration_alignment.json, so
+  // the audio mix's pause timing and the video timeline's pause timing can
+  // never independently drift apart. `editorial_pause_map.json`'s
+  // `proof.pauses` (the old, separately-authored 150s cut's own 4 pauses)
+  // is historical/regression reference only -- see
   // docs/canonical-candidate-audit.md -- and is never read by a live build:
   // there is no more separate proof creative content, per task section 2.
-  const alignment = await readJson(path.join(dir, "voice", "narration_alignment.json"));
-  const anchors = pauseMap?.full_film_pause_anchors || [];
-  if (!anchors.length) throw new Error("Editorial pause mode requires direction/editorial_pause_map.json full_film_pause_anchors");
-  const { pauses: resolved } = resolveFullFilmPauses({ words: alignment.words, anchors });
-  // Each full_film_pause_anchors entry carries its own authored sound_cue
-  // (direction/editorial_pause_map.json); its real, already-authored
-  // `purpose` text carries through as `emphasis` for the mix metadata.
+  const resolvedPausePlan = await readOptionalJson(path.join(dir, "direction", "resolved_pause_plan.json"));
+  const resolved = resolvedPausePlan?.pauses || [];
+  if (!resolved.length)
+    throw new Error("Editorial pause mode requires direction/resolved_pause_plan.json (run scripts/orvyq_resolve_pauses.mjs first)");
+  // Each resolved pause carries its own authored sound_cue and `purpose`
+  // text (threaded through from direction/editorial_pause_map.json by
+  // orvyq_resolve_pauses.mjs); `purpose` carries through as `emphasis` for
+  // the mix metadata.
   const configuredPauses = resolved.map((pause) => ({ ...pause, emphasis: pause.purpose }));
   if (!configuredPauses.length) throw new Error("Editorial pause mode requires direction/editorial_pause_map.json full_film_pause_anchors");
   const pauses = [...configuredPauses].sort((a, b) => Number(a.source_time_seconds) - Number(b.source_time_seconds));
@@ -139,7 +140,7 @@ async function prepareEditorialNarration({ dir, audioDir, voice, availableDurati
   const timelineNarrationDuration = sourceNarrationDuration + insertedSeconds;
   const editorialVoice = path.join(audioDir, "final_voice.editorial.wav");
   await command("ffmpeg", ["-hide_banner", "-nostats", "-y", "-i", voice, "-filter_complex", filters.join(";"), "-map", "[paused_voice]", "-t", String(timelineNarrationDuration), "-ac", "2", "-ar", "48000", "-c:a", "pcm_s16le", editorialVoice]);
-  return { voice: editorialVoice, sourceNarrationDuration, timelineNarrationDuration, editorialPauseSeconds: insertedSeconds, pauseWindows, pauseMap: "direction/editorial_pause_map.json" };
+  return { voice: editorialVoice, sourceNarrationDuration, timelineNarrationDuration, editorialPauseSeconds: insertedSeconds, pauseWindows, pauseMap: "direction/resolved_pause_plan.json" };
 }
 
 async function generateFallbackScore(musicDir, duration) {

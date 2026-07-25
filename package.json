@@ -16,6 +16,7 @@
     "orvyq:asset-registry": "node scripts/orvyq_asset_registry.mjs",
     "orvyq:frozen-candidate": "node scripts/orvyq_frozen_candidate.mjs",
     "orvyq:narration-alignment": "node scripts/orvyq_narration_alignment.mjs",
+    "orvyq:resolve-pauses": "node scripts/orvyq_resolve_pauses.mjs",
     "orvyq:full-production-plan": "node scripts/orvyq_full_production_plan.mjs",
     "orvyq:music-intake": "node scripts/orvyq_music_intake.mjs",
     "orvyq:music-resolve": "node scripts/orvyq_music_resolve.mjs",
