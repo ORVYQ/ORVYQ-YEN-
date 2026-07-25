@@ -66,11 +66,27 @@ export function auditGenericCards(shots, fps) {
     }
   }
 
+  // Every graphic shot's own identity, in film order -- lets a human (or a
+  // future editorial pass) see exactly which section_title/claim_recap_card/
+  // end_card shots make up the totals above, without needing the full
+  // edit_plan.json alongside this report.
+  const graphicShots = shots
+    .filter((shot) => shot.asset_type === "graphic")
+    .map((shot) => ({
+      shot_id: shot.shot_id,
+      claim_id: shot.claim_id,
+      section_id: shot.section_id,
+      duration_seconds: Math.round(shotDuration(shot, fps) * 1000) / 1000,
+      graphic_type: shot.graphic?.type || null,
+      title: shot.graphic?.title || null
+    }));
+
   return {
     total_seconds: Math.round(totalDuration * 1000) / 1000,
     generic_card_seconds: Math.round(genericTotal * 1000) / 1000,
     generic_card_fraction: Math.round(genericFraction * 1000) / 1000,
     sections: sectionReport,
+    graphic_shots: graphicShots,
     failures,
     warnings
   };
@@ -89,7 +105,16 @@ export async function runGenericCardAudit(projectId = PROJECT_ID) {
     pass: result.failures.length === 0
   };
   await writeJsonAtomic(path.join(dir, "qa", "generic_card_audit.json"), report);
-  if (!report.pass) throw new Error(`ORVYQ generic card audit failed: ${result.failures.join("; ")}`);
+  if (!report.pass) {
+    // The report (including the graphic_shots breakdown above) is already
+    // written to qa/generic_card_audit.json, but that file only reaches a
+    // human via the validation-reports artifact. Attaching it to the thrown
+    // error surfaces the same detail directly in this step's own CI log
+    // output -- no artifact download required to diagnose a real failure.
+    const error = new Error(`ORVYQ generic card audit failed: ${result.failures.join("; ")}`);
+    error.report = report;
+    throw error;
+  }
   return report;
 }
 
@@ -98,7 +123,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   runGenericCardAudit(args["project-id"] || PROJECT_ID)
     .then((report) => printJson({ ok: true, ...report }))
     .catch((error) => {
-      console.error(JSON.stringify({ ok: false, error: error.message }));
+      console.error(JSON.stringify({ ok: false, error: error.message, report: error.report || null }));
       process.exitCode = 1;
     });
 }
