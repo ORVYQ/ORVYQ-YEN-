@@ -30,15 +30,28 @@ jobs:
           find scripts -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
           python3 -m py_compile scripts/orvyq_speech_qa.py
 
+      - name: Block project-specific data in system runtime
+        run: |
+          set -euo pipefail
+          STATUS=0
+          for TOKEN in \
+            "001-the-ai-race-no-one-can-afford-to-win" \
+            "scene_024_6e6f4af26cad60cc78930d6d.mp4" \
+            "30200283806"; do
+            MATCHES="$(grep -RIlF "$TOKEN" .github scripts templates config package.json \
+              --exclude=orvyq_repository_independence.test.mjs || true)"
+            if [ -n "$MATCHES" ]; then
+              echo "::error::Project-specific token leaked into system runtime: $TOKEN"
+              echo "$MATCHES"
+              STATUS=1
+            fi
+          done
+          exit "$STATUS"
+
       - name: Validate canonical schemas and data contracts
         run: npm run validate:canonical
 
-      # scripts/orvyq_music_intake.test.mjs generates a real tiny audio
-      # fixture and probes it via ffprobe -- this step has been missing
-      # since the canonical music system landed (commit 33c8f3d), which is
-      # why this job has been failing on every push since then regardless
-      # of the actual change under test.
-      - name: Install ffmpeg (test fixture generation and duration/codec probing)
+      - name: Install ffmpeg
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
