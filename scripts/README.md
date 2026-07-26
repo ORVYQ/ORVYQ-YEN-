@@ -1,177 +1,158 @@
-# scripts/ — canonical pipeline
+# ORVYQ scripts — active production pipeline
 
-One generator per concern, each exporting a `buildCanonicalX()` function callable both
-programmatically and via CLI (`node scripts/orvyq_*.mjs [--flags]`). Every generator is
-parameterized by `mode` (`"proof"|"full"`) where relevant — there is no env-var-gated fork to a
-separate module the way the golden system had. See `docs/migration-plan.md` for the full
-architectural rationale.
+> Read [`../ORVYQ_SYSTEM.md`](../ORVYQ_SYSTEM.md) first. It is the authoritative system contract.
+>
+> Historical references to `proof`, `proof mode`, `proof approval` or a short preview are not active production instructions. Legacy file names or schema fields that still contain those terms are technical debt and must not be used to reintroduce a short-proof workflow.
 
-## Pipeline order
+## Active pipeline outcome
 
-```
-orvyq_fetch_primary_evidence.mjs   research/primary_evidence_manifest.json
-  → writes assets/evidence/primary_evidence.runtime.json
+The scripts must produce one canonical full-length timeline.
 
-orvyq_fetch_music.mjs              (proof mode; full mode needs real full-length music,
-  → writes assets/music/approved_bed.mp3 + .provenance.json    blocked on Phase 6)
+That same timeline is encoded twice only for delivery purposes:
 
-orvyq_audio_mix.mjs   buildCanonicalAudioMix(projectId, {mode, durationSeconds, ...})
-  reads   assets/audio/final_voice.mp3, voice/audio_repair.json? (optional
-          narrator-file repair, applied only when actually present -- do
-          not add one back without confirming the committed narration
-          currently has the defect it describes),
-          direction/editorial_pause_map.json (if editorialPauses),
-          assets/music/approved_bed.mp3 (if present)
-  writes  assets/audio/final_mix.mp3 + final_mix.metadata.json
+1. **Full-Length Review:** 1280×720, lighter H.264 encoding.
+2. **Final Encode:** 1920×1080, higher-quality encoding after explicit user approval.
 
-orvyq_speech_qa.py --project-id <id> [--media <path>] [--max-seconds N]
-  reads   assets/audio/final_mix.mp3 (or --media), voice/voice_script.txt,
-          direction/editorial_blueprint.json (canonical minimum_script_similarity)
-  writes  qa/speech_transcript.json
+The edit, footage, evidence, graphics, captions, music and timing must be identical between review and final.
 
-orvyq_caption_build.mjs   buildCanonicalCaptions(projectId, {frameEnd})
-  reads   direction/edit_plan.json, qa/speech_transcript.json,
-          voice/voice_script.txt, assets/audio/final_mix.metadata.json
-  writes  remotion/captions.json
+## Required execution order
 
-orvyq_edit_plan.mjs   buildCanonicalEditPlan(projectId, {mode, frameEnd})
-  mode=proof reads  direction/cinematic_proof_cut.json + proof_preview_cut.json +
-                     motion_hook.json + research/primary_evidence_manifest.json +
-                     assets/evidence/primary_evidence.runtime.json
-  mode=full  reads  direction/editorial_blueprint.json's full_production.shots +
-                     the resolved evidence map (research/evidence_map.json +
-                     evidence_resolutions.json)
-  writes  direction/edit_plan.json   (schema_version "1.0-canonical" in BOTH modes)
-
-  NOTE: captions must be built AFTER the edit plan in a real pipeline run --
-  the order above (captions before edit_plan) matches the golden repo's own
-  step order for historical-command fidelity, but orvyq_caption_build.mjs
-  reads the edit plan's frame_range, so run orvyq_edit_plan.mjs first.
-
-orvyq_asset_registry.mjs   buildCanonicalAssetRegistry(projectId)
-  reads   direction/edit_plan.json (which footage/evidence assets are actually used),
-          direction/editorial_blueprint.json (reuse limit),
-          research/primary_evidence_manifest.json, assets/audio/final_mix.metadata.json
-  writes  assets/asset_registry.json
-
-NOTE: GitHub scans the ENTIRE commit message body, not just a leading tag,
-for skip-ci markers -- a commit whose message merely *mentions* the literal
-text "skip ci" in brackets anywhere (even while describing another commit's
-message, as happened once during this rebuild) silently suppresses every
-push-triggered workflow for that commit, with no run and no error. Avoid
-writing that exact bracketed phrase in a commit message unless you actually
-intend to skip CI for it.
-
-orvyq_frozen_candidate.mjs   buildCanonicalFrozenCandidate(projectId)
-  reads   direction/edit_plan.json, remotion/captions.json,
-          assets/audio/final_mix.metadata.json, assets/asset_registry.json,
-          templates/remotion/package.json (renderer_version)
-  writes  qa/frozen_candidate.json   (schema_version-free; hashes of every
-          canonical input a render depends on -- see
-          schemas/frozen_candidate.schema.json. A qa/proof_approval.json
-          references this document by hashing it; full render is only
-          permitted from the exact frozen_candidate a human approved.)
-
-remotion_build.mjs derive-configs --project-id <id>
-  reads   direction/edit_plan.json, config/video_config.json
-  writes  remotion/scene_config.json, remotion/asset_map.json
-
-remotion_build.mjs build-project --project-id <id>
-  reads   templates/remotion/**, remotion/scene_config.json, remotion/asset_map.json,
-          remotion/captions.json, direction/edit_plan.json
-  writes  projects/<id>/remotion/render_ready_project/**  (always regenerated, never
-          hand-committed -- see docs/golden-renderer-map.md section 5)
+```text
+research and evidence map
+  → English voice_script.txt
+  → footage / image / document / music acquisition
+  → wait only for assets/audio/final_voice.mp3
+  → audio mix and speech alignment
+  → canonical full-length edit plan
+  → captions
+  → asset registry
+  → Candidate Validation and QA
+  → build Remotion project
+  → 720p Full-Length Review
+  → explicit user approval
+  → 1080p Final Encode
 ```
 
-Render itself is a Remotion CLI invocation against the assembled `render_ready_project`,
-selecting `direction/edit_plan.json`'s own `frame_range` (proof: `0..N`; full: `0..duration_frames`)
-— see `docs/migration-plan.md` §2 for why this is the one place proof/full genuinely differ.
+The pipeline must continue automatically between these stages whenever required inputs exist.
 
-## QA chain (Phase 4)
+## Acquisition scripts
 
-Pre-render gates, run after `orvyq_edit_plan.mjs` (`npm run orvyq:audits`):
-`orvyq_evidence_audit.mjs` → `qa/evidence_coverage.json`,
-`orvyq_evidence_asset_audit.mjs` → `qa/evidence_asset_audit.json`,
-`orvyq_semantic_visual_audit.mjs` → `qa/semantic_visual_audit.json`,
-`orvyq_pacing_audit.mjs` → `qa/pacing_audit.json`,
-`orvyq_mobile_legibility_audit.mjs` → `qa/mobile_legibility_audit.json`,
-`orvyq_music_cue_audit.mjs` → `qa/music_cue_audit.json`.
+### `orvyq_acquire_footage.mjs`
 
-Then (`npm run orvyq:qa` runs `orvyq:audits` plus these three):
-`orvyq_edit_plan_tests.mjs` (whole-pipeline smoke test over the plan + all of the above),
-`orvyq_license_audit.mjs` → `qa/license_audit.json`,
-`orvyq_alignment_score.mjs` → `qa/alignment_readiness.json` (pre-render readiness only, explicitly
-not the final human-reviewed Aperture alignment score).
+- searches authorised stock providers using project-authored queries
+- selects unique landscape footage
+- prefers compact edit-ready 720p/1080p renditions instead of unnecessary 4K masters
+- trims or transcodes to the required editorial duration
+- records source, licence, provider ID, creator, hashes and media metadata
+- must not use stock footage as factual evidence
 
-Post-render gates, run against the rendered MP4 (require `ffmpeg`, CI-only):
-`orvyq_media_qa.mjs --video <path>` → `qa/orvyq_preview_media_qa.json`,
-`orvyq_brightness_repair.mjs --video <path>` → `qa/orvyq_brightness_repair.json` (mutates the
-video in place if it finds and repairs isolated corrupted frames).
+### `orvyq_fetch_primary_evidence.mjs`
 
-Every QA script exits non-zero and sets `pass: false` in its written report on a blocking
-failure — verified for all 12 (see Phase 4 commit). One structural fix vs golden:
-`orvyq_license_audit.mjs` now accumulates into `{pass, failures[]}` like the other 11, instead of
-throwing at the first failed check with no `pass`/`failures` field in the written report (see
-`docs/source-audit.md` §3). Another: the `script_similarity >= 0.85` threshold, previously
-hardcoded independently in three places (`orvyq_speech_qa.py`'s own 0.55 default,
-`orvyq_edit_plan_tests.mjs`, `orvyq_media_qa.mjs`), now reads
-`editorial_blueprint.json.global_rules.minimum_script_similarity` in all three.
+- retrieves official documents, charts, maps and photographs
+- verifies allowed hosts, content type, byte size and SHA-256
+- records provenance and source authority
+- must fail when required primary evidence cannot be materialised
 
-## What changed vs the golden scripts (docs/source-audit.md section 7 / migration-plan.md section 1)
+### `orvyq_fetch_music.mjs`
 
-- `orvyq_edit_plan.mjs` now contains BOTH the proof and full generation logic in one file, one
-  function, parameterized by `mode` — replacing the golden `orvyq_preview_plan.mjs` +
-  `orvyq_edit_plan.mjs`'s full branch (two files, env-var dispatch, three different
-  `schema_version` strings).
-- `orvyq_audio_mix.mjs`'s music-arc ducking curve and SFX placement are now derived from the
-  same per-duration `musicSectionsForDuration()` output and from real `pauseWindows` data,
-  instead of literal 150-second-proof breakpoints hardcoded a second time. Verified: at 150s the
-  ducking curve reproduces the exact historical breakpoints; at other durations it rescales with
-  no leftover 150s-only literals (see commit history for the dry-run proof).
-- `scripts/lib/orvyq-motion-hook.mjs`'s `auditMotionHook()` no longer trivially passes for
-  `mode: "full"` — the opening hook is validated regardless of mode, since it's the cold open of
-  the canonical timeline either way.
-- `remotion_build.mjs` no longer reads `remotion/composition.json`. That file was a second,
-  independent scene-authoring surface (from an earlier general-purpose "factforge-motion"
-  workflow) that only needed to declare *some* duration long enough for `--frames` to be valid —
-  it did not describe what `Video.tsx` actually renders (that always came from
-  `direction/edit_plan.json`). `remotion/scene_config.json` (which really does drive
-  `Root.tsx`'s `<Composition>` dimensions) is now derived directly from the canonical edit plan's
-  own `fps`/`duration_frames` plus `config/video_config.json`'s `width`/`height` — one
-  authoring surface, not two that could silently disagree.
+- retrieves a real licensed music bed suitable for the complete film
+- records artist, licence, source and attribution
+- must support the full timeline; short historical preview music is not acceptable
 
-## Verified in Phase 3 (see commit for full detail)
+## Audio scripts
 
-Ran the full chain end-to-end against real recovered project data (`direction/`, `research/`,
-`voice/`, `config/`) plus locally-constructed stand-ins for the pieces that require network
-fetch or `ffmpeg`/ASR (not available in this sandbox — genuinely require CI, matching the golden
-system's own "render only happens on GitHub Actions" convention):
-`buildCanonicalEditPlan(mode: "proof")` → 30 shots, exactly 4500 frames (150s @ 30fps, matching
-the historical proof) → `buildCanonicalCaptions` → 61 caption chunks, correctly capped at the
-plan's `frame_range` → `buildCanonicalAssetRegistry` → 22 registered assets, all schema-valid →
-`derive-configs` + `build-project` → the assembled `render_ready_project` type-checks with zero
-errors and its `FactForgeVideo` composition resolves to exactly `30fps 1920x1080 4500 frames
-(150.00 sec)` in headless Chrome. `mode: "full"` correctly fails with the real, expected
-blocker (`full_production.status=blocked_until_research_and_assets_complete`) — this is genuine
-project state, not a bug.
+### `orvyq_audio_mix.mjs`
 
-Not yet run: `orvyq_audio_mix.mjs`'s actual `ffmpeg` execution (no `ffmpeg`/`ffprobe` in this
-sandbox — syntax-checked only) and any step requiring real fetched binary assets. Both require
-the CI environment and arrive with Phase 5.
+Reads:
 
-## Verified in Phase 4
+- `assets/audio/final_voice.mp3`
+- `voice/voice_script.txt`
+- editorial pauses and music cues
+- the approved music bed
 
-Ran the full pure-JS QA chain end-to-end against the real generated proof plan (real
-`direction/`/`research/`/`voice/` data, realistically-sized stub footage/evidence/audio
-binaries): `orvyq_evidence_audit` (weighted coverage 100%), `orvyq_evidence_asset_audit` (11
-official captures, all SHA-256/byte-size verified), `orvyq_semantic_visual_audit`
-(evidence_archive_fraction 0.579, contextual_body_footage_fraction 0.318, emphasis_beat_count 4,
-maximum_uninterrupted_evidence_seconds 12.73 — all real numbers computed from the actual
-generated shot plan, each correctly inside the required range), `orvyq_pacing_audit`,
-`orvyq_mobile_legibility_audit`, `orvyq_music_cue_audit` (continuous 5-state coverage, confirming
-the `start_seconds`/`end_seconds` field rename is consistent end to end), `orvyq_license_audit`,
-and `orvyq_alignment_score` (readiness 88.06, above the 82 minimum) — all PASS.
-`orvyq_edit_plan_tests.mjs` executed through every check up to the footage-duration
-cross-reference, which needs real `ffprobe` (unavailable in this sandbox — the only remaining
-blocker, not a logic gap). `orvyq_media_qa.mjs`/`orvyq_brightness_repair.mjs`/`orvyq_speech_qa.py`
-need a real rendered video / real ASR and are deferred to Phase 5's CI run.
+Writes:
+
+- `assets/audio/final_mix.mp3`
+- `assets/audio/final_mix.metadata.json`
+
+The mix must preserve audible music under narration and allow music to carry intentional pauses.
+
+### `orvyq_speech_qa.py`
+
+Verifies that the supplied narration matches `voice_script.txt` and writes `qa/speech_transcript.json`.
+
+## Canonical edit and captions
+
+### `orvyq_edit_plan.mjs`
+
+Must generate the complete full-length edit plan from project research, authored scene direction, resolved evidence and acquired assets.
+
+A review is not generated by shortening this plan. Review and final use the same complete frame range.
+
+### `orvyq_caption_build.mjs`
+
+Must run after the edit plan and build captions for the entire timeline.
+
+### `orvyq_asset_registry.mjs`
+
+Registers every asset actually used by the complete edit, including provenance, licence and integrity metadata.
+
+## Candidate Validation
+
+The shared QA chain must block review when any of the following fail:
+
+- evidence coverage or source authority
+- evidence-file integrity
+- semantic visual relevance
+- footage and music licensing
+- excessive clip reuse
+- pacing and scene timing
+- typography and mobile legibility
+- music continuity
+- narration similarity
+- caption alignment
+- placeholder or fallback detection
+- render configuration
+
+A failed QA report triggers repair; it is not a user-facing candidate.
+
+## Render project
+
+`remotion_build.mjs derive-configs` and `remotion_build.mjs build-project` regenerate the render-ready project from the canonical edit plan. Generated renderer output is never a second authoring surface.
+
+### Review encode
+
+- full duration
+- 1280×720
+- H.264, approximately 3–5 Mbps
+- identical frame rate and audio/visual timeline to final
+
+### Final encode
+
+- begins only after explicit user approval
+- full duration
+- 1920×1080
+- higher delivery quality
+- no creative changes from the approved review
+
+## Storage policy
+
+- Generated compact Project 002 footage may be committed as normal Git blobs when every individual file is safely below GitHub limits.
+- Git LFS must be used only when intentionally configured and operational; blanket LFS rules must not cause completed acquisition work to fail at push time.
+- Temporary large renders belong in workflow artifacts rather than the source tree.
+- A download/validation success followed by a commit or push failure is a blocking workflow defect.
+
+## Legacy compatibility warning
+
+Some existing scripts, schemas or workflow filenames may still contain historical terms such as:
+
+- `proof`
+- `preview`
+- `frozen_candidate`
+- `proof_approval`
+
+Their presence does not define the active workflow. When touched, they should be renamed or refactored toward the terminology and behaviour in `ORVYQ_SYSTEM.md`.
+
+## Documentation rule
+
+Any change to pipeline behaviour must update `ORVYQ_SYSTEM.md` in the same branch. Project 002 remains the live acceptance test until the user approves its full-length review and the final encode succeeds.
