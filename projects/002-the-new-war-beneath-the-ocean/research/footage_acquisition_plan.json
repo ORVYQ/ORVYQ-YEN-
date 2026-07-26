@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "status": "ready_for_acquisition",
+  "policy": {
+    "provider": "pexels",
+    "license_url": "https://www.pexels.com/license/",
+    "results_per_query": 30,
+    "minimum_resolution": "1280x720",
+    "preferred_resolution": "1920x1080_or_higher",
+    "orientation": "landscape",
+    "unique_provider_asset_required": true,
+    "contextual_footage_must_not_be_presented_as_location_specific_evidence": true
+  },
+  "assets": [
+    {
+      "scene_id": "scene_001",
+      "role": "human_context",
+      "queries": ["research vessel crew ocean", "ship crew at sea"],
+      "fallback_queries": ["ocean research ship", "cargo ship crew"],
+      "min_duration_seconds": 10,
+      "editorial_note": "Human-scale opening aboard a working vessel; never identify it as Chikyu unless the source is official JAMSTEC footage."
+    },
+    {
+      "scene_id": "scene_002",
+      "role": "context",
+      "queries": ["research vessel rough ocean", "large ship open ocean"],
+      "fallback_queries": ["ship at sea aerial", "vessel waves"],
+      "min_duration_seconds": 10,
+      "editorial_note": "Surface scale and isolation."
+    },
+    {
+      "scene_id": "scene_003",
+      "role": "context",
+      "queries": ["underwater robot deep sea", "submersible underwater darkness"],
+      "fallback_queries": ["underwater exploration lights", "ocean floor underwater"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Deep-ocean atmosphere only; do not label as the Clarion-Clipperton Zone."
+    },
+    {
+      "scene_id": "scene_004",
+      "role": "context",
+      "queries": ["industrial pipe ocean ship", "offshore pipe operation"],
+      "fallback_queries": ["offshore drilling equipment", "ship machinery"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Mechanical extraction context without claiming the depicted system is Japan's riser."
+    },
+    {
+      "scene_id": "scene_005",
+      "role": "context",
+      "queries": ["industrial control room operators", "ship control room"],
+      "fallback_queries": ["engineers control room", "operations control center"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Human monitoring and technical decision-making."
+    },
+    {
+      "scene_id": "scene_006",
+      "role": "context",
+      "queries": ["electric motor manufacturing", "industrial motor factory"],
+      "fallback_queries": ["robot factory assembly", "precision manufacturing"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Connect rare-earth magnets to physical technology."
+    },
+    {
+      "scene_id": "scene_007",
+      "role": "context",
+      "queries": ["magnet manufacturing factory", "metal components production"],
+      "fallback_queries": ["industrial components factory", "precision metal factory"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Magnet supply-chain context; source-derived graphics carry the factual percentages."
+    },
+    {
+      "scene_id": "scene_008",
+      "role": "context",
+      "queries": ["wind turbine maintenance", "wind turbine factory"],
+      "fallback_queries": ["wind turbines close up", "renewable energy machinery"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Rare-earth end-use context."
+    },
+    {
+      "scene_id": "scene_009",
+      "role": "context",
+      "queries": ["electric vehicle factory", "car motor assembly"],
+      "fallback_queries": ["automotive manufacturing robots", "electric car production"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Technology demand context without claiming all EVs use the same chemistry."
+    },
+    {
+      "scene_id": "scene_010",
+      "role": "context",
+      "queries": ["metal refinery industrial", "mineral processing factory"],
+      "fallback_queries": ["industrial chemical plant", "metal production facility"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Processing and refining chokepoint."
+    },
+    {
+      "scene_id": "scene_011",
+      "role": "context",
+      "queries": ["container port cranes", "global shipping port"],
+      "fallback_queries": ["cargo containers port", "shipping logistics"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Global supply-chain dependency and export disruption."
+    },
+    {
+      "scene_id": "scene_012",
+      "role": "context",
+      "queries": ["pacific island aerial", "remote ocean island"],
+      "fallback_queries": ["small island ocean aerial", "remote coastline"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Geographic isolation motif; never label as Minamitorishima without official imagery."
+    },
+    {
+      "scene_id": "scene_013",
+      "role": "context",
+      "queries": ["international conference delegates", "united nations meeting"],
+      "fallback_queries": ["government conference hall", "diplomatic meeting"],
+      "min_duration_seconds": 8,
+      "editorial_note": "International negotiation context; official documents provide the legal evidence."
+    },
+    {
+      "scene_id": "scene_014",
+      "role": "context",
+      "queries": ["law document signing", "government legal documents"],
+      "fallback_queries": ["official paperwork close up", "legal text desk"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Law and competing rulebooks."
+    },
+    {
+      "scene_id": "scene_015",
+      "role": "context",
+      "queries": ["underwater sediment ocean floor", "seabed sand underwater"],
+      "fallback_queries": ["deep ocean floor", "underwater sand particles"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Sediment and plume atmosphere; charts carry measured plume claims."
+    },
+    {
+      "scene_id": "scene_016",
+      "role": "context",
+      "queries": ["marine scientist laboratory", "ocean research laboratory"],
+      "fallback_queries": ["scientist microscope marine", "environmental science lab"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Ecological uncertainty and field science."
+    },
+    {
+      "scene_id": "scene_017",
+      "role": "context",
+      "queries": ["open pit mine aerial", "large mining trucks"],
+      "fallback_queries": ["terrestrial mining quarry", "industrial mine landscape"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Industry counterargument and land-mining trade-off; identify only as terrestrial mining context."
+    },
+    {
+      "scene_id": "scene_018",
+      "role": "context",
+      "queries": ["recycling metal factory", "industrial recycling facility"],
+      "fallback_queries": ["electronics recycling", "metal sorting factory"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Recycling as a partial supply response, not a complete near-term substitute."
+    },
+    {
+      "scene_id": "scene_019",
+      "role": "metaphor",
+      "queries": ["dark ocean waves night", "ocean at night aerial"],
+      "fallback_queries": ["stormy ocean night", "black sea waves"],
+      "min_duration_seconds": 10,
+      "editorial_note": "Restrained frontier metaphor and transition bed."
+    },
+    {
+      "scene_id": "scene_020",
+      "role": "human_context",
+      "queries": ["person looking at ocean horizon", "scientist ocean deck"],
+      "fallback_queries": ["ship crew horizon", "human ocean contemplation"],
+      "min_duration_seconds": 8,
+      "editorial_note": "Human-scale ending; avoid sentimental stock clichés where possible."
+    }
+  ]
+}
