@@ -62,42 +62,49 @@
   "full_film_pause_anchors": [
     {
       "anchor_text": "Not someday. Right now.",
+      "question": "If the danger is already here, why is everyone still accelerating?",
       "purpose": "Present-tense turn",
       "planned_seconds": 4,
       "sound_cue": "tonal_bloom"
     },
     {
       "anchor_text": "But a fire drill still tells you something about the building.",
+      "question": "What can a controlled warning reveal about the real world?",
       "purpose": "Separate the controlled-test limitation from the wider warning",
       "planned_seconds": 4,
       "sound_cue": "low_impact"
     },
     {
       "anchor_text": "Slowing down alone doesn't remove the risk. It just hands the frontier to whoever doesn't.",
+      "question": "What happens to the lab that slows down first?",
       "purpose": "Land the competitive incentive",
       "planned_seconds": 5,
       "sound_cue": "low_impact"
     },
     {
       "anchor_text": "And the risks aren't hypothetical anymore.",
+      "question": "What changes when misuse leaves the laboratory?",
       "purpose": "Pivot from strategic pressure to documented misuse",
       "planned_seconds": 4,
       "sound_cue": "low_impact"
     },
     {
       "anchor_text": "It's about who gets to decide.",
+      "question": "Who should control the systems everyone else depends on?",
       "purpose": "Shift from capability risk to concentrated power",
       "planned_seconds": 5,
       "sound_cue": "tonal_bloom"
     },
     {
       "anchor_text": "Choosing between them is choosing which kind of failure you're willing to risk.",
+      "question": "Which failure are we actually willing to risk?",
       "purpose": "Hold the open-versus-closed dilemma without declaring a winner",
       "planned_seconds": 5,
       "sound_cue": "tonal_bloom"
     },
     {
       "anchor_text": "It's still being decided... by people, right now.",
+      "question": "If people still decide the outcome, what will we choose?",
       "purpose": "Final human-agency landing and music decay",
       "planned_seconds": 6,
       "sound_cue": "tonal_bloom"
