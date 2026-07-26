@@ -9,7 +9,8 @@ import {
 export type EmphasisCardSpec = {
   eyebrow: string;
   title: string;
-  accent?: string;
+  accent?: string | null;
+  anchor_text?: string;
 };
 
 export const EmphasisCard: React.FC<{
@@ -39,32 +40,33 @@ export const EmphasisCard: React.FC<{
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
-  const accent = spec.accent || "#D95B53";
+  const accent = spec.accent || "#E06A63";
+  const titleSize = spec.title.length > 76 ? 62 : spec.title.length > 52 ? 70 : 82;
 
   return (
     <AbsoluteFill
       style={{
         justifyContent: "center",
-        padding: "0 156px",
+        padding: "0 138px",
         pointerEvents: "none",
         background:
-          "linear-gradient(90deg,rgba(3,7,12,.9) 0%,rgba(3,7,12,.62) 48%,rgba(3,7,12,.18) 100%)",
+          "linear-gradient(90deg,rgba(3,7,12,.91) 0%,rgba(3,7,12,.64) 52%,rgba(3,7,12,.16) 100%)",
       }}
     >
       <div
         style={{
           opacity,
           transform: `translateY(${translateY}px)`,
-          maxWidth: 1480,
+          maxWidth: 1510,
           fontFamily: "Arial, Helvetica, sans-serif",
-          textShadow: "0 6px 28px rgba(0,0,0,.72)",
+          textShadow: "0 6px 28px rgba(0,0,0,.76)",
         }}
       >
         <div
           style={{
             color: accent,
-            fontSize: 25,
-            fontWeight: 760,
+            fontSize: 24,
+            fontWeight: 820,
             letterSpacing: "0.22em",
             marginBottom: 22,
           }}
@@ -73,26 +75,26 @@ export const EmphasisCard: React.FC<{
         </div>
         <div
           style={{
-            color: "#F5F0E7",
-            fontSize: spec.title.length > 25 ? 82 : 94,
-            fontWeight: 820,
-            letterSpacing: "-0.025em",
+            color: "#F6F2E9",
+            fontSize: titleSize,
+            fontWeight: 830,
+            letterSpacing: "-0.03em",
             lineHeight: 1.02,
-            maxWidth: 1420,
+            maxWidth: 1450,
           }}
         >
           {spec.title}
         </div>
         <div
           style={{
-            marginTop: 34,
-            width: 210,
+            marginTop: 32,
+            width: 220,
             height: 5,
             borderRadius: 3,
-            backgroundColor: accent,
+            background: `linear-gradient(90deg,#8CB5DC,${accent})`,
             transform: `scaleX(${lineScale})`,
             transformOrigin: "left center",
-            boxShadow: `0 0 24px ${accent}66`,
+            boxShadow: `0 0 24px ${accent}55`,
           }}
         />
       </div>
