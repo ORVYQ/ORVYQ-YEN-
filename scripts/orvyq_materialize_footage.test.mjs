@@ -1,14 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { validateLocalManifest } from "./orvyq_materialize_footage.mjs";
+import { projectDir } from "./lib/fs-utils.mjs";
+import { firstReadyProjectId } from "./lib/test-ready-project.mjs";
 
-test("accepts the committed local footage manifest", async () => {
-  const manifest = JSON.parse(await readFile(
-    new URL("../projects/000-example-project/assets/local_assets.json", import.meta.url)
-  ));
+test("accepts a committed ready project's local footage manifest", async () => {
+  const projectId = firstReadyProjectId();
+  const manifest = JSON.parse(await readFile(path.join(projectDir(projectId), "assets", "local_assets.json"), "utf8"));
   assert.deepEqual(validateLocalManifest(manifest), []);
-  assert.equal(manifest.assets.length, 25);
+  assert.ok(manifest.assets.length > 0);
 });
 
 test("rejects unsafe, duplicate, and non-footage paths", () => {
