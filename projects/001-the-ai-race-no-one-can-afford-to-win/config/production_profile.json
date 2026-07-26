@@ -3,6 +3,23 @@
   "project_id": "001-the-ai-race-no-one-can-afford-to-win",
   "status": "ready",
   "creative_profile": "orvyq-aperture-cinematic",
+  "art_direction": {
+    "topic": "AI competition, safety frameworks, governance, and controlled agentic-misalignment evaluations",
+    "palette": {
+      "ink": "#F5F0E7",
+      "accent": "#D95B53",
+      "information": "#86A9CC",
+      "ground": "#07101A"
+    },
+    "source_treatment": "full-screen official captures and explicit source-derived graphics"
+  },
+  "end_card": {
+    "title": "It's still being decided… by people, right now.",
+    "subtitle": null
+  },
+  "proof": {
+    "boundary_anchor_text": "Slowing down alone doesn't remove the risk. It just hands the frontier to whoever doesn't."
+  },
   "hook": {
     "first_shot_role": "human_context",
     "first_shot_asset": "assets/footage/scene_024_6e6f4af26cad60cc78930d6d.mp4",
