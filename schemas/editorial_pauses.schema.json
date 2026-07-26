@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://orvyq.dev/schemas/editorial_pauses.schema.json",
   "title": "Editorial Pause Map",
-  "description": "Matches direction/editorial_pause_map.json's real shape. 'proof' holds the realized, timed pause set for the proof narration prefix; full_film_pause_anchors are narration-text-anchored placeholders for the eventual full film, not yet frame-timed.",
+  "description": "Matches direction/editorial_pause_map.json's real shape. 'proof' holds the realized, timed pause set for the proof narration prefix; full_film_pause_anchors are narration-text-anchored full-film beats with an authored retention question shown during each pause.",
   "type": "object",
   "required": ["schema_version", "project_id", "duration_policy", "proof"],
   "properties": {
@@ -57,9 +57,10 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["anchor_text", "purpose", "planned_seconds", "sound_cue"],
+        "required": ["anchor_text", "question", "purpose", "planned_seconds", "sound_cue"],
         "properties": {
           "anchor_text": { "type": "string" },
+          "question": { "type": "string", "pattern": "\\?$", "minLength": 18 },
           "purpose": { "type": "string" },
           "planned_seconds": { "type": "number", "exclusiveMinimum": 0 },
           "sound_cue": { "type": "string" }
