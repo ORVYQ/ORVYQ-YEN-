@@ -1,25 +1,16 @@
 name: ORVYQ Full-Length Candidate Review
 
-# Renders the ENTIRE canonical candidate (motion hook + full narration/pauses
-# + end card -- no truncation to any short cut) at a review encode profile.
-# There is no separate "proof" creative mode anymore: review and the later
-# final encode are the exact same candidate, differing only in resolution/
-# bitrate at render time -- see docs/canonical-candidate-audit.md.
-#
-# This workflow does NOT build the candidate. Every creative/build step
-# (materialize, shot plan, edit plan, music, audio mix, captions, asset
-# registry, render-ready build, typecheck, freeze) runs exactly once, in
-# "ORVYQ Candidate Validation" (.github/workflows/orvyq-candidate-validation.yml).
-# This workflow requires the run ID of an already-successful validation run
-# for THIS EXACT source commit as an input, verifies that claim for real
-# against the GitHub Actions API, downloads that run's complete immutable
-# candidate bundle, verifies every frozen asset and source hash, and renders
-# those exact bytes. No creative script or asset fetch runs here.
+# Manual only. Renders the immutable candidate bundle produced for one
+# explicitly selected project. It never rebuilds creative data.
 on:
   workflow_dispatch:
     inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
       approved_validation_run_id:
-        description: "Successful ORVYQ Candidate Validation run ID for this exact source commit"
+        description: "Successful Candidate Validation run ID for this project and exact source commit"
         type: string
         required: true
 
@@ -28,12 +19,11 @@ permissions:
   actions: read
 
 concurrency:
-  group: orvyq-review-${{ github.ref }}
+  group: orvyq-review-${{ inputs.project_id }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  PROJECT_ID: 001-the-ai-race-no-one-can-afford-to-win
-  # Exact 2/3 double: 1920x1080 -> 1280x720 with integer dimensions.
+  PROJECT_ID: ${{ inputs.project_id }}
   REVIEW_SCALE: "0.6666666666666666"
   REVIEW_BITRATE: "6M"
   REVIEW_WIDTH: "1280"
@@ -62,43 +52,47 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Verify the named Candidate Validation run is real, successful, and matches this exact commit
+      - name: Verify the named Candidate Validation run
         uses: actions/github-script@v7
         with:
           script: |
-            const runId = ${{ inputs.approved_validation_run_id }};
+            const runId = Number('${{ inputs.approved_validation_run_id }}');
             const { data: run } = await github.rest.actions.getWorkflowRun({ owner: context.repo.owner, repo: context.repo.repo, run_id: runId });
             const currentBranch = context.ref.replace(/^refs\/heads\//, "");
             const failures = [];
-            if (!run.path || !run.path.endsWith("orvyq-candidate-validation.yml")) failures.push(`run ${runId} is workflow "${run.path}", not orvyq-candidate-validation.yml`);
-            if (run.conclusion !== "success") failures.push(`run ${runId} conclusion is "${run.conclusion}", not "success"`);
-            if (run.head_branch !== currentBranch) failures.push(`run ${runId} ran on branch "${run.head_branch}", this workflow is running on "${currentBranch}"`);
-            if (run.head_sha !== context.sha) failures.push(`run ${runId} validated source commit ${run.head_sha}, this workflow is running at ${context.sha} -- re-validate before reviewing`);
+            if (!run.path || !run.path.endsWith("orvyq-candidate-validation.yml")) failures.push(`run ${runId} is not Candidate Validation`);
+            if (run.conclusion !== "success") failures.push(`run ${runId} conclusion is ${run.conclusion}`);
+            if (run.head_branch !== currentBranch) failures.push(`run ${runId} branch is ${run.head_branch}, expected ${currentBranch}`);
+            if (run.head_sha !== context.sha) failures.push(`run ${runId} validated ${run.head_sha}, expected ${context.sha}`);
             if (failures.length) core.setFailed(failures.join("; "));
-            else core.info(`Validation run ${runId} verified: path=${run.path}, conclusion=success, branch=${run.head_branch}, sha=${run.head_sha}`);
 
-      - name: Download the validated candidate bundle
+      - name: Download the selected project's validated candidate bundle
         uses: actions/download-artifact@v4
         with:
-          name: orvyq-validated-candidate-bundle-${{ inputs.approved_validation_run_id }}
+          name: orvyq-validated-candidate-${{ inputs.project_id }}-${{ inputs.approved_validation_run_id }}
           path: candidate-bundle
           run-id: ${{ inputs.approved_validation_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Verify the bundle's source SHA matches this exact commit
+      - name: Verify bundle source and project identity
         run: |
           set -euo pipefail
-          BUNDLE_SHA="$(cat candidate-bundle/validation-source-sha.txt)"
-          test "$BUNDLE_SHA" = "$GITHUB_SHA"
+          test "$(cat candidate-bundle/validation-source-sha.txt)" = "$GITHUB_SHA"
+          node -e "
+            const profile = require('./candidate-bundle/projects/$PROJECT_ID/config/production_profile.json');
+            if (profile.project_id !== process.env.PROJECT_ID) throw new Error('bundle project mismatch');
+            if (profile.status !== 'ready') throw new Error('bundle production profile is not ready');
+          "
 
-      - name: Place the complete immutable candidate bundle into the project tree
+      - name: Place the immutable candidate bundle into the selected project tree
         run: |
           set -euo pipefail
           SRC="candidate-bundle/projects/$PROJECT_ID"
           DEST="projects/$PROJECT_ID"
           test -d "$SRC/assets"
           test -d "$SRC/remotion/render_ready_project"
-          mkdir -p "$DEST/direction" "$DEST/remotion" "$DEST/qa"
+          mkdir -p "$DEST/config" "$DEST/direction" "$DEST/remotion" "$DEST/qa"
+          cp "$SRC/config/production_profile.json" "$DEST/config/production_profile.json"
           cp "$SRC/direction/edit_plan.json" "$DEST/direction/edit_plan.json"
           cp "$SRC/remotion/captions.json" "$DEST/remotion/captions.json"
           cp "$SRC/qa/frozen_candidate.json" "$DEST/qa/frozen_candidate.json"
@@ -107,10 +101,10 @@ jobs:
           rm -rf "$DEST/remotion/render_ready_project"
           cp -r "$SRC/remotion/render_ready_project" "$DEST/remotion/render_ready_project"
 
-      - name: Verify every downloaded source and binary asset against the frozen candidate
+      - name: Verify every downloaded source and binary asset
         run: node scripts/orvyq_verify_bundle_integrity.mjs --project-id="$PROJECT_ID"
 
-      - name: Resolve the candidate duration from the placed edit plan
+      - name: Resolve candidate duration
         run: |
           set -euo pipefail
           node -e "
@@ -118,7 +112,7 @@ jobs:
             console.log('CANDIDATE_DURATION_SECONDS=' + (p.duration_frames / p.fps));
           " | tee -a "$GITHUB_ENV"
 
-      - name: Install Remotion dependencies and type-check (no source regeneration)
+      - name: Install Remotion dependencies and type-check
         working-directory: projects/${{ env.PROJECT_ID }}/remotion/render_ready_project
         run: |
           npm ci --no-audit --no-fund
@@ -132,13 +126,7 @@ jobs:
           echo "FACTFORGE_REMOTION_BROWSER_EXECUTABLE=$BROWSER" >> "$GITHUB_ENV"
           "$BROWSER" --version
 
-      # The render step below calls ffprobe itself to verify the rendered
-      # duration, but ffmpeg was previously only installed later (in
-      # "Install media and speech tooling", for post-render QA) -- so the
-      # render's own duration check would hard-fail with "ffprobe: command
-      # not found" even on a fully successful render. Installed early here
-      # so it's available for both the render step and everything after it.
-      - name: Install ffmpeg (needed by the render step's own duration check)
+      - name: Install ffmpeg
         run: |
           set -euo pipefail
           sudo apt-get update
@@ -160,7 +148,6 @@ jobs:
           fi
           test -s out/orvyq_review.mp4
           DURATION="$(ffprobe -v error -show_entries format=duration -of default=nk=1:nw=1 out/orvyq_review.mp4)"
-          echo "Rendered duration: ${DURATION}s (expected full candidate duration: ${CANDIDATE_DURATION_SECONDS}s)"
           python3 -c "
           import sys
           d = float('$DURATION')
@@ -173,7 +160,7 @@ jobs:
           set -euo pipefail
           echo "REVIEW_VIDEO_SHA256=$(sha256sum "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" | cut -d' ' -f1)" >> "$GITHUB_ENV"
 
-      - name: Write review render manifest (for review/final parity verification)
+      - name: Write review render manifest
         run: |
           set -euo pipefail
           node -e "
@@ -181,7 +168,8 @@ jobs:
             const candidate = JSON.parse(fs.readFileSync('projects/$PROJECT_ID/qa/frozen_candidate.json', 'utf8'));
             const identity = candidate.canonical_candidate_identity;
             const manifest = {
-              schema_version: '2.0',
+              schema_version: '3.0',
+              project_id: process.env.PROJECT_ID,
               identity: {
                 candidate_hash: candidate.candidate_hash,
                 render_bundle_hash: candidate.render_bundle_hash,
@@ -205,18 +193,18 @@ jobs:
               }
             };
             fs.writeFileSync('projects/$PROJECT_ID/qa/review_render_manifest.json', JSON.stringify(manifest, null, 2));
-            console.log(JSON.stringify(manifest, null, 2));
           "
 
-      - name: Re-upload the complete validated bundle as this run's render bundle
+      - name: Upload immutable render bundle
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-render-bundle-${{ github.run_id }}
+          name: orvyq-render-bundle-${{ inputs.project_id }}-${{ github.run_id }}
           retention-days: 90
           include-hidden-files: true
           path: |
             projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
             projects/${{ env.PROJECT_ID }}/qa/review_render_manifest.json
+            projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
             projects/${{ env.PROJECT_ID }}/assets/**
@@ -225,11 +213,11 @@ jobs:
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion
 
-      - name: Upload review render (before media QA -- must survive a media QA failure)
+      - name: Upload review render before media QA
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-full-length-review-${{ github.run_id }}
+          name: orvyq-full-length-review-${{ inputs.project_id }}-${{ github.run_id }}
           retention-days: 30
           path: |
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/orvyq_review.mp4
@@ -241,13 +229,13 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install speech tooling (ffmpeg already installed above)
+      - name: Install speech tooling
         run: python -m pip install --disable-pip-version-check faster-whisper==1.2.0 requests==2.32.5
 
       - name: Verify speech in rendered review
         run: python scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" --media "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" --output-name speech_transcript.json
 
-      - name: Run post-render media QA with diagnostics
+      - name: Run post-render media QA
         run: |
           set +e
           node scripts/orvyq_media_qa.mjs --project-id "$PROJECT_ID" --video "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" --report "projects/$PROJECT_ID/qa/orvyq_review_media_qa.json" > media-qa.log 2>&1
@@ -255,7 +243,7 @@ jobs:
           cat media-qa.log
           exit 0
 
-      - name: Run near-black audit against the rendered review
+      - name: Run near-black audit
         run: |
           set +e
           node scripts/orvyq_near_black_audit.mjs --project-id "$PROJECT_ID" --video "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" > near-black.log 2>&1
@@ -277,11 +265,11 @@ jobs:
             ffprobe -v error -show_format -show_streams -print_format json "$VIDEO" > "$OUT/orvyq_quality_control_probe.json"
           fi
 
-      - name: Upload candidate manifest and QA reports (separate artifact)
+      - name: Upload candidate manifest and QA reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-review-qa-reports-${{ github.run_id }}
+          name: orvyq-review-qa-${{ inputs.project_id }}-${{ github.run_id }}
           retention-days: 30
           path: |
             projects/${{ env.PROJECT_ID }}/qa/*.json
@@ -298,7 +286,7 @@ jobs:
             near-black.status
           if-no-files-found: warn
 
-      - name: Stop when post-render media QA or near-black audit failed
+      - name: Stop when post-render QA failed
         run: |
           set -euo pipefail
           test "$(cat media-qa.status)" = "0"
