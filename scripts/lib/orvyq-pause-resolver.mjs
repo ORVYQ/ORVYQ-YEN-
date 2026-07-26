@@ -20,9 +20,6 @@ export function normalizeToken(text) {
   return String(text).toLowerCase().replace(/[^a-z0-9']+/g, "");
 }
 
-// Exported so scripts/orvyq_full_production_plan.mjs can locate a claim's
-// narration_excerpt in the same real word-alignment this resolver uses for
-// pause anchors -- one text-location algorithm, not two.
 export function tokenizeWords(words) {
   return words
     .map((word, index) => ({ index, norm: normalizeToken(word.text), start: word.start, end: word.end, raw: word.text }))
@@ -30,30 +27,16 @@ export function tokenizeWords(words) {
 }
 
 export function tokenizeAnchorText(text) {
-  // Splits on hyphens as well as whitespace: Whisper's real transcription
-  // consistently renders hyphenated compounds ("high-risk", "general-
-  // purpose", "incident-reporting") as separate space-separated words, not
-  // one joined token, so anchor/claim text needs the same split to match --
-  // otherwise normalizeToken's character-strip alone would turn "high-risk"
-  // into a single "highrisk" token that never matches the real transcript's
-  // separate "high" "risk" words.
   return String(text)
     .split(/[\s-]+/)
     .map(normalizeToken)
     .filter(Boolean);
 }
 
-// Exported so scripts/orvyq_full_production_plan.mjs's slice-boundary
-// picker can recognize the same real sentence endings this resolver
-// requires pause anchors to land on -- one punctuation-boundary definition,
-// not two independently-drifting regexes.
 export function endsAtSentenceBoundary(text) {
   return /[.!?]['")’]?\s*$/.test(String(text).trim());
 }
 
-// A softer real boundary than a full sentence end: a clause break (comma,
-// semicolon, colon, dash) still marks a place a real editor would
-// plausibly cut, just less strongly than a sentence end.
 export function endsAtClauseBoundary(text) {
   return /[,;:—–-]['")’]?\s*$/.test(String(text).trim());
 }
@@ -83,16 +66,6 @@ export function resolveFullFilmPauses({
   minPauseSeconds = DEFAULT_MIN_PAUSE_SECONDS,
   maxPauseSeconds = DEFAULT_MAX_PAUSE_SECONDS,
   minSecondsFromNarrationEnd = DEFAULT_MIN_SECONDS_FROM_NARRATION_END,
-  // The last anchor in a real full_film_pause_anchors list is conventionally
-  // the film's closing beat (e.g. "It's still being decided... by people,
-  // right now." -- purpose "Final human-agency landing and music decay"):
-  // it is SUPPOSED to resolve at or right up against the narration's true
-  // end, so the narration doesn't end, then only afterwards start a pause --
-  // the hold and the ending are the same moment. The near-end check exists
-  // to catch anchors that accidentally land too close to the end, not to
-  // forbid a deliberate final hold, so it only applies to the last anchor
-  // when there is more than one (a single-anchor list has no such
-  // convention to lean on).
   allowFinalAnchorAtNarrationEnd = true
 }) {
   if (!Array.isArray(words) || !words.length) throw new Error("resolveFullFilmPauses requires a non-empty words array (voice/narration_alignment.json)");
@@ -133,10 +106,15 @@ export function resolveFullFilmPauses({
     if (!anchor.sound_cue || typeof anchor.sound_cue !== "string")
       throw new Error(`Pause anchor ${anchorIndex} ("${anchor.anchor_text}") has no authored sound_cue`);
 
+    const question = typeof anchor.question === "string" && anchor.question.trim() ? anchor.question.trim() : anchor.anchor_text;
+    if (!question.endsWith("?"))
+      throw new Error(`Pause anchor ${anchorIndex} retention question must end with "?": "${question}"`);
+
     const pauseId = `PAUSE_FULL_${String(anchorIndex + 1).padStart(2, "0")}_${createHash("sha1").update(anchor.anchor_text).digest("hex").slice(0, 8)}`;
     pauses.push({
       pause_id: pauseId,
       anchor_text: anchor.anchor_text,
+      question,
       purpose: anchor.purpose || null,
       sound_cue: anchor.sound_cue,
       source_time_seconds: Math.round(sourceTimeSeconds * 1000) / 1000,
