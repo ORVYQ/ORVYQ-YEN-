@@ -5,6 +5,12 @@ name: ORVYQ System Generalization Migration
 # out of shared runtime code and removes silent project fallbacks. This workflow
 # is isolated from every render workflow.
 on:
+  pull_request:
+    branches:
+      - "claude/orvyq-assets-soundtrack-port-noz6bi"
+    paths:
+      - "scripts/migrations/generalize-system-runtime.mjs"
+      - ".github/workflows/orvyq-system-generalization.yml"
   push:
     branches:
       - "claude/orvyq-canonical-candidate-parity-bl7w0u"
@@ -17,17 +23,18 @@ permissions:
   contents: write
 
 concurrency:
-  group: orvyq-system-generalization-${{ github.ref }}
+  group: orvyq-system-generalization-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   migrate:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch
+      - name: Checkout writable source branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
       - name: Set up Node
@@ -56,4 +63,4 @@ jobs:
             exit 0
           fi
           git commit -m "Generalize ORVYQ runtime across projects"
-          git push origin "HEAD:${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.head_ref || github.ref_name }}"
