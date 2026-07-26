@@ -1,7 +1,6 @@
 import React from "react";
 import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
 import { CaptionLayer } from "./CaptionLayer";
-import { DocumentEvidenceSequence } from "./DocumentEvidenceSequence";
 import { EditorialOverlaySpec } from "./EditorialOverlay";
 import { OrvyqGraphicSpec } from "./OrvyqGraphic";
 import { PrimaryEvidenceSpec } from "./types/evidence";
@@ -11,8 +10,6 @@ import { HookQuestion, HookQuestionSpec } from "./HookQuestion";
 import assetMap from "./data/asset_map.json";
 import captionsData from "./data/captions.json";
 import editPlan from "./data/edit_plan.json";
-
-const OPENING_DOCUMENT_SECONDS_PER_PAGE = 4;
 
 type BaseShot = {
   shot_id: string;
@@ -65,20 +62,10 @@ export const FactForgeVideo: React.FC = () => {
   const plan = editPlan as unknown as EditPlan;
   const captions = captionsData as unknown as CaptionsFile;
   const audioSrc = plan.audio_mix_asset || assetMap.audio_asset;
-  const fps = plan.fps || 30;
   const hookQuestionShot = plan.shots.find((shot) => shot.hook_question);
   const hookEndFrame = plan.shots
     .filter((shot) => shot.hook_footage)
     .reduce((maximum, shot) => Math.max(maximum, shot.end_frame), 0);
-  const openingDocumentShot = plan.shots.find(
-    (shot): shot is EvidenceShot =>
-      shot.asset_type === "evidence" &&
-      shot.evidence.kind === "image_sequence" &&
-      (shot.evidence.image_assets?.length || 0) >= 3,
-  );
-  const openingDocumentCount = openingDocumentShot?.evidence.image_assets?.length || 0;
-  const openingDocumentDurationFrames =
-    openingDocumentCount * OPENING_DOCUMENT_SECONDS_PER_PAGE * fps;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#05070C" }}>
@@ -140,14 +127,6 @@ export const FactForgeVideo: React.FC = () => {
           <HookQuestion
             spec={hookQuestionShot.hook_question}
             durationInFrames={hookEndFrame}
-          />
-        </Sequence>
-      ) : null}
-      {openingDocumentShot && hookEndFrame > 0 && openingDocumentDurationFrames > 0 ? (
-        <Sequence from={hookEndFrame} durationInFrames={openingDocumentDurationFrames}>
-          <DocumentEvidenceSequence
-            spec={openingDocumentShot.evidence}
-            durationInFrames={openingDocumentDurationFrames}
           />
         </Sequence>
       ) : null}
