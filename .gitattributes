@@ -5,6 +5,11 @@
 *.jpg filter=lfs diff=lfs merge=lfs -text
 *.jpeg filter=lfs diff=lfs merge=lfs -text
 
+# Project 002 acquisition produces compact review-ready clips (each well below
+# GitHub's 100 MB per-file limit). Store them as normal Git blobs so the
+# acquisition workflow does not depend on Git LFS quota or LFS upload auth.
+projects/002-the-new-war-beneath-the-ocean/assets/footage/*.mp4 -filter -diff -merge -text
+
 # Committed as a plain blob (LFS push is blocked in the session that added
 # it -- see scripts/README.md / the commit that introduced this file), so the
 # general *.mp3 LFS rule above is explicitly unset for this one path. Without
