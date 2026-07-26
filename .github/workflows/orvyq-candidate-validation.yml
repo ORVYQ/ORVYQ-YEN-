@@ -68,7 +68,7 @@ jobs:
           node-version: "20"
           cache: npm
 
-      - name: Materialize real footage and evidence from the pinned source commit
+      - name: Validate repository-local footage and provenance
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
 
       - name: Verify narration was not overwritten by footage materialization

@@ -149,7 +149,7 @@ jobs:
             console.log('All downloaded creative file hashes match the frozen candidate.');
           "
 
-      - name: Materialize real footage from the pinned source commit (asset fetch only -- no creative selection)
+      - name: Validate repository-local footage and provenance
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
 
       - name: Set up Python

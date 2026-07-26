@@ -14,9 +14,9 @@
 // claim that just finished speaking rather than being left unplanned.
 //
 // Contextual footage IS referenced here: FOOTAGE_ASSIGNMENTS assigns real,
-// licensed clips (materialized via scripts/orvyq_materialize_footage.mjs
-// from projects/*/migration/external_assets.json, the same immutable source
-// commit the opening motion hook already uses) to specific (claim_id,
+// licensed clips (validated via scripts/orvyq_materialize_footage.mjs
+// from projects/*/assets/local_assets.json, the repository-owned source)
+// to specific (claim_id,
 // sliceIndex) pairs -- any slice of any claim's own coverage window is
 // directly addressable, not restricted to a fixed positional pattern (see
 // sliceClaimWindow/FOOTAGE_ASSIGNMENTS below). There is no automatic
@@ -49,7 +49,7 @@ export { END_CARD_SECONDS };
 // commit that introduced this table for the editorial rationale. Every
 // entry replaces ONE SPECIFIC, hand-chosen slice of a real claim's own
 // coverage window with one of the licensed contextual footage clips
-// materialized by scripts/orvyq_materialize_footage.mjs, trimmed to that
+// validated by scripts/orvyq_materialize_footage.mjs, trimmed to that
 // slice's exact real duration.
 //
 // Keyed by (claim_id, sliceIndex) -- sliceIndex is the claim's own slice's
@@ -397,7 +397,7 @@ export const GRAPHIC_BREAK_ASSIGNMENTS = {
   CLM_021_INFORMATION_INTEGRITY: { 2: { title: "AMBIGUITY BY DESIGN", subtitle: "Synthetic and real information increasingly blend together." }, 4: { title: "THE SAME ARCHITECTURE, REPEATED", subtitle: "Independent evaluation returns as a theme, not a one-off." } }
 };
 
-// The full catalog of licensed footage clips materialized by
+// The full catalog of repository-owned licensed footage clips validated by
 // scripts/orvyq_materialize_footage.mjs and inspected frame-by-frame before
 // any use (see the commit message). This is documentation of what is
 // licensed and available, used by scripts/orvyq_duplicate_footage_audit.mjs
@@ -1294,7 +1294,7 @@ export async function buildFullProductionPlan(projectId = PROJECT_ID) {
 
   // Real on-disk duration of every distinct footage clip FOOTAGE_ASSIGNMENTS
   // or FULL_FOOTAGE_POOL references, read from its own provenance companion
-  // (materialized by scripts/orvyq_materialize_footage.mjs) rather than
+  // (validated by scripts/orvyq_materialize_footage.mjs) rather than
   // hardcoded, so a trim window can never silently drift from the actual
   // licensed source file.
   const assignedAssets = new Set([...FULL_FOOTAGE_POOL, ...Object.values(FOOTAGE_ASSIGNMENTS).flatMap((byOccurrence) => Object.values(byOccurrence).map((entry) => entry.asset))]);

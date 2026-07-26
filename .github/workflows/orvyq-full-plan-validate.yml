@@ -51,12 +51,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Materializes the real, licensed footage set (motion hook + full
-      # contextual body footage) from the single immutable source commit
-      # pinned in projects/*/migration/external_assets.json -- the same
-      # mechanism orvyq-review.yml uses, with per-file Git LFS pointer
-      # verification. See scripts/orvyq_materialize_footage.mjs.
-      - name: Materialize real footage from the pinned source commit
+      # Validates repository-owned footage against each companion provenance
+      # record's SHA-256, byte size, and final-edit approval.
+      - name: Validate repository-local footage and provenance
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
 
       # scripts/orvyq_music_intake.test.mjs generates a real tiny audio
