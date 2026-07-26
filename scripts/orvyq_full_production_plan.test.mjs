@@ -8,9 +8,13 @@ import {
   quantizeShotsToFrames,
   expandFootageAssignments,
   applyEvidenceHoldToNextWindow,
-  shrinkGraphicBreakSliceToMax
+  shrinkGraphicBreakSliceToMax,
+  loadEditorialAssetPlan,
+  GRAPHIC_BREAK_ASSIGNMENTS,
+  SLICE_COUNT_OVERRIDES
 } from "./orvyq_full_production_plan.mjs";
 import { tokenizeWords } from "./lib/orvyq-pause-resolver.mjs";
+import { firstReadyProjectId } from "./lib/test-ready-project.mjs";
 
 // Mirrors buildCanonicalEditPlan's own cumulative frame assignment
 // (scripts/orvyq_edit_plan.mjs) exactly: a single running float cursor,
@@ -437,29 +441,37 @@ test("shrinkGraphicBreakSliceToMax: throws when neither neighbor has spare room 
   }, /cannot shrink its graphic recap slice/);
 });
 
-test("sliceClaimWindow: a real GRAPHIC_BREAK_ASSIGNMENTS maxSeconds cap shrinks that slice and grows its free neighbor, preserving total window duration", () => {
-  const claim = { claim_id: "CLM_006_NO_REAL_WORLD_INCIDENT", visual_treatment: { primary: "evidence_chain" } };
+test("sliceClaimWindow applies a selected project's declared graphic-break cap without losing timeline duration", async () => {
+  await loadEditorialAssetPlan(firstReadyProjectId());
+  const configured = Object.entries(GRAPHIC_BREAK_ASSIGNMENTS)
+    .flatMap(([claimId, assignments]) => Object.entries(assignments)
+      .filter(([, assignment]) => Number.isFinite(assignment.maxSeconds))
+      .map(([sliceIndex, assignment]) => ({
+        claimId,
+        sliceIndex: Number(sliceIndex),
+        maxSeconds: Number(assignment.maxSeconds),
+      })))
+    .find(({ claimId, sliceIndex }) => Number(SLICE_COUNT_OVERRIDES[claimId]) > sliceIndex + 1);
+  assert.ok(configured, "a ready project must expose at least one testable graphic-break duration cap");
+
+  const sliceCount = Number(SLICE_COUNT_OVERRIDES[configured.claimId]);
   const coverStart = 0;
-  const coverEnd = 20;
+  const coverEnd = sliceCount * 5;
   const maxShotSeconds = 15;
+  const claim = {
+    claim_id: configured.claimId,
+    visual_treatment: { primary: "evidence_chain" },
+  };
   const slices = sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, [], [], {});
 
-  assert.equal(slices.length, 4);
-  // Slice 1 is the real GRAPHIC_BREAK_ASSIGNMENTS[CLM_006...][1].maxSeconds
-  // (3.5s) cap -- it must land exactly on it, not the 5s pure
-  // equal-fraction width it would otherwise get.
-  assert.ok(Math.abs(slices[1].end - slices[1].start - 3.5) < 1e-9);
-
-  // No gap, overlap, or drift anywhere in the window: each slice's start
-  // matches the previous slice's end, the first starts at coverStart, and
-  // the last ends exactly at coverEnd (total window duration unchanged).
+  assert.equal(slices.length, sliceCount);
+  assert.ok(
+    Math.abs(slices[configured.sliceIndex].end - slices[configured.sliceIndex].start - configured.maxSeconds) < 1e-9,
+  );
   assert.equal(slices[0].start, coverStart);
-  for (let i = 1; i < slices.length; i += 1) assert.ok(Math.abs(slices[i].start - slices[i - 1].end) < 1e-9);
+  for (let index = 1; index < slices.length; index += 1) {
+    assert.ok(Math.abs(slices[index].start - slices[index - 1].end) < 1e-9);
+  }
   assert.ok(Math.abs(slices.at(-1).end - coverEnd) < 1e-9);
-
-  // The saved time went to a real neighbor (here, the right one, since it
-  // was free and had room under maxShotSeconds) -- not discarded, and not
-  // pushed past the per-shot cap.
-  assert.ok(slices[2].end - slices[2].start <= maxShotSeconds + 1e-9);
-  assert.ok([slices[0], slices[2]].some((slice) => slice.end - slice.start > 5));
+  assert.ok(slices.every((slice) => slice.end - slice.start <= maxShotSeconds + 1e-9));
 });
