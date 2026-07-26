@@ -5,6 +5,7 @@ import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./l
 const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
 const MIN_MOBILE_FONT_PX = 36;
 const MAX_USES_PER_SOURCE = 2;
+const BRIEF_ACCENT_MAX_SECONDS = 3;
 
 export const FOOTAGE_POLISH_REPLACEMENTS = {
   shot_010: {
@@ -175,27 +176,36 @@ async function applyRetentionQuestions(dir, plan) {
       .map((pause) => [pause.anchor_text, pause.question])
   );
   let pauseQuestionCount = 0;
+  let fullPauseCount = 0;
+  let briefAccentCount = 0;
   for (const shot of plan.shots) {
     if (!shot.emphasis_card) continue;
     const anchorText = shot.emphasis_card.anchor_text || shot.emphasis_card.title;
     const question = questionsByAnchor.get(anchorText);
     if (!question) throw new Error(`No authored retention question resolved for pause anchor: ${anchorText}`);
+    const isBriefAccent = durationSeconds(shot, plan.fps) <= BRIEF_ACCENT_MAX_SECONDS;
     shot.emphasis_card = {
       ...shot.emphasis_card,
-      eyebrow: "THE QUESTION",
+      eyebrow: isBriefAccent ? "CONSIDER" : "THE QUESTION",
       title: question,
       anchor_text: anchorText,
       accent: shot.emphasis_card.accent || "#E06A63"
     };
+    if (isBriefAccent) briefAccentCount += 1;
+    else fullPauseCount += 1;
     pauseQuestionCount += 1;
   }
   if (pauseQuestionCount !== questionsByAnchor.size)
     throw new Error(`Retention-question count mismatch: applied ${pauseQuestionCount}, resolved ${questionsByAnchor.size}`);
+  if (fullPauseCount !== 3 || briefAccentCount !== 4)
+    throw new Error(`Aperture pause profile mismatch: expected 3 full pauses + 4 brief accents, got ${fullPauseCount} + ${briefAccentCount}`);
 
   return {
     opening_question: hookShots[0].hook_question.question,
     opening_hook_frames: hookShots.reduce((sum, shot) => sum + shot.end_frame - shot.start_frame, 0),
-    pause_question_count: pauseQuestionCount
+    pause_question_count: pauseQuestionCount,
+    full_pause_count: fullPauseCount,
+    brief_accent_count: briefAccentCount
   };
 }
 
@@ -216,16 +226,19 @@ export async function polishCreativePlan(projectId = PROJECT_ID) {
   plan.quality_policy = {
     ...plan.quality_policy,
     minimum_overlay_font_px: MIN_MOBILE_FONT_PX,
-    creative_polish_profile: "aperture-cinematic-v2-retention",
+    creative_polish_profile: "aperture-cinematic-v3-human-first",
     maximum_contiguous_same_footage_seconds: afterMaximum,
     evidence_presentation_modes: presentationCounts,
     opening_retention_question_required: true,
+    opening_human_context_required: true,
+    opening_document_carousel_forbidden: true,
+    opening_split_documents_required: true,
     editorial_pause_questions_required: true,
-    document_sequence_must_be_full_frame: true
+    editorial_pause_profile: "3-full-4-brief"
   };
   if (afterMaximum >= beforeMaximum) throw new Error(`Creative polish did not reduce the maximum repeated-footage run (${beforeMaximum}s -> ${afterMaximum}s)`);
   const report = {
-    schema_version: "1.1",
+    schema_version: "2.0-aperture",
     project_id: projectId,
     source_review_run_id: 30200283806,
     replacement_count: replacements.length,
