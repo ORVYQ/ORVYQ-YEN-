@@ -30,7 +30,7 @@ jobs:
         with:
           script: |
             const targetBranch = 'claude/orvyq-canonical-candidate-parity-bl7w0u';
-            const expectedSha = 'b05a512f251ed99f1b6e25be11f55c1101120021';
+            const expectedSha = '3eface40d23db8c7cf1ed60cc61165f9a8bf53c2';
             const validationWorkflow = 'orvyq-candidate-validation.yml';
             const reviewWorkflow = 'orvyq-review.yml';
             const prNumber = 1;
