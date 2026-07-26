@@ -1,0 +1,58 @@
+name: ORVYQ System Generalization Migration
+
+# One-time deterministic source/data migration. It does not render video,
+# fetch media, or change creative output. It only moves existing project data
+# out of shared runtime code and removes silent project fallbacks.
+on:
+  push:
+    branches:
+      - "claude/orvyq-canonical-candidate-parity-bl7w0u"
+    paths:
+      - "scripts/migrations/generalize-system-runtime.mjs"
+      - ".github/workflows/orvyq-system-generalization.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: orvyq-system-generalization-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Move project data out of shared runtime code
+        run: node scripts/migrations/generalize-system-runtime.mjs
+
+      - name: Syntax-check migrated JavaScript
+        run: find scripts -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
+
+      - name: Commit deterministic migration
+        run: |
+          set -euo pipefail
+          git config user.name "orvyq-system-migration-bot"
+          git config user.email "orvyq-system-migration-bot@users.noreply.github.com"
+          git add scripts/ projects/*/config/editorial_asset_plan.json
+          if git diff --cached --quiet; then
+            echo "Migration already applied"
+            exit 0
+          fi
+          git commit -m "Generalize ORVYQ runtime across projects"
+          git push origin "HEAD:${{ github.ref_name }}"
