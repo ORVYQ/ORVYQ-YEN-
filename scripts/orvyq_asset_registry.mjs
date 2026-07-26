@@ -17,6 +17,7 @@ import path from "node:path";
 import { promises as fs } from "node:fs";
 import { createHash } from "node:crypto";
 import { projectDir, readJson, readJsonSafe, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
+import { runViewerTextSanitize } from "./orvyq_viewer_text_sanitize.mjs";
 
 const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
 
@@ -122,6 +123,11 @@ async function audioEntries(dir, mixMetadata) {
 
 export async function buildCanonicalAssetRegistry(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
+  // Canonicalize viewer-facing text before any downstream render-ready build,
+  // frozen-candidate hash, bundle upload, or instruction-leak audit consumes
+  // direction/edit_plan.json. This keeps internal editorial phrasing out of
+  // the immutable review candidate rather than merely suppressing the audit.
+  await runViewerTextSanitize(projectId);
   const [editPlan, blueprint, evidenceManifest, mixMetadata] = await Promise.all([
     readJson(path.join(dir, "direction", "edit_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
