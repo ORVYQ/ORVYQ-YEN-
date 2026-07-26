@@ -1,8 +1,9 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { fileURLToPath } from "node:url";
 
-export const REPO_ROOT = path.resolve(new URL("../../", import.meta.url).pathname);
+export const REPO_ROOT = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 export const PROJECTS_DIR = path.join(REPO_ROOT, "projects");
 export const TEMPLATES_DIR = path.join(REPO_ROOT, "templates");
 export const SCHEMAS_DIR = path.join(REPO_ROOT, "schemas");

@@ -13,7 +13,7 @@ import path from "node:path";
 import { promises as fs } from "node:fs";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const MAX_WORDS = 7;
 const MAX_CHARS = 52;
 const MAX_SPEECH_GAP_SECONDS = 0.8;
@@ -243,12 +243,14 @@ export async function buildCanonicalCaptions(projectId = PROJECT_ID, { frameEnd 
     let startFrame = Math.max(timestampStart, previousEndFrame);
     const rawEnd = Math.ceil((Number(chunk.at(-1).end) + 0.08) * editPlan.fps);
     let endFrame = Math.min(maxFrame, Math.max(startFrame + 4, rawEnd));
+    let insidePause = false;
     for (const pause of pauseFrames) {
       if (startFrame < pause.start && endFrame > pause.end) throw new Error(`Caption chunk spans editorial pause ${pause.id}`);
       if (startFrame < pause.start && endFrame > pause.start) endFrame = pause.start;
       else if (startFrame < pause.end && endFrame > pause.end) startFrame = pause.end;
+      else if (startFrame >= pause.start && endFrame <= pause.end) insidePause = true;
     }
-    if (startFrame >= maxFrame || endFrame <= startFrame) return;
+    if (insidePause || startFrame >= maxFrame || endFrame <= startFrame) return;
     captions.push({
       caption_id: `caption_${String(captions.length + 1).padStart(3, "0")}`,
       scene_id: null,

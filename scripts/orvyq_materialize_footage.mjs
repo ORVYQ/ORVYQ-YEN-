@@ -1,34 +1,20 @@
 #!/usr/bin/env node
-// materializeExternalFootage() -- ports ORVYQ's (brsctncnbrk-ops/ORVYQ,
-// src/lib/materialize.ts) materializeExternalAssets() mechanism into this
-// repo's canonical pipeline: fetch a pinned, immutable commit from an
-// external source repository over git + Git LFS, hash-verify every file
-// against its own LFS pointer's sha256/size before trusting it, and copy the
-// verified bytes into this project's assets/ tree. Both proof mode (via
-// direction/motion_hook.json) and full mode (via
-// direction/editorial_blueprint.json's full_production.shots) read footage
-// through the exact same assets/footage/<file> paths this writes -- there is
-// no mode argument here because there is nothing mode-specific left to
-// select; every footage file in the manifest is real, licensed, and used by
-// at least one of the two shared cuts.
-//
-// One deliberate fix over the ported original: the original ran a global
-// `git lfs fsck` after pulling only a subset of the source tree's LFS
-// pointers. `git lfs fsck` reports every OTHER LFS pointer in the checked-out
-// tree that was never pulled as a corrupt/missing object and exits non-zero
-// -- a false failure on any partial checkout, verified directly against this
-// exact source commit (git-lfs 3.4.1) before writing this script. The real
-// integrity check -- comparing each pulled file's actual sha256 and byte
-// size against its own LFS pointer -- already happens per-file below and is
-// sufficient; the redundant, broken global fsck call is not ported.
-import { cp, mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
+// Historical filename retained so existing workflows remain dispatchable.
+// This is now a network-free validator for footage committed to ORVYQ itself.
+import { readFile } from "node:fs/promises";
 import path from "node:path";
-import os from "node:os";
-import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
+import { fileURLToPath } from "node:url";
+import {
+  projectDir,
+  readJson,
+  writeJsonAtomic,
+  pathExists,
+  parseArgs,
+  printJson
+} from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 function safeRelative(value, label) {
   if (!value || typeof value !== "string" || path.isAbsolute(value) || value.includes("\\"))
@@ -39,87 +25,24 @@ function safeRelative(value, label) {
   return normalized;
 }
 
-export function validateExternalManifest(manifest) {
+export function validateLocalManifest(manifest) {
   const failures = [];
   if (manifest.schema_version !== 1) failures.push("schema_version must be 1");
-  if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(manifest.source_repository)) failures.push("source_repository must be owner/name");
-  if (!/^[a-f0-9]{40}$/.test(manifest.source_commit)) failures.push("source_commit must be a full 40-character SHA");
-  const targets = new Set();
-  const provenanceCompanionFor = new Set();
-  for (const [index, item] of (manifest.imports || []).entries()) {
-    try { safeRelative(item.source_path, `imports[${index}].source_path`); } catch (error) { failures.push(String(error.message || error)); }
-    try { safeRelative(item.target_path, `imports[${index}].target_path`); } catch (error) { failures.push(String(error.message || error)); }
-    if (!["footage", "narration", "provenance"].includes(item.kind)) failures.push(`imports[${index}].kind is invalid`);
-    if (targets.has(item.target_path)) failures.push(`duplicate target_path ${item.target_path}`);
-    targets.add(item.target_path);
-    if (item.kind === "provenance") {
-      if (!item.companion_for) failures.push(`imports[${index}] is a provenance file but declares no companion_for`);
-      else {
-        try { safeRelative(item.companion_for, `imports[${index}].companion_for`); provenanceCompanionFor.add(item.companion_for); }
-        catch (error) { failures.push(String(error.message || error)); }
-      }
-    } else if (item.companion_for) {
-      failures.push(`imports[${index}] is kind=${item.kind} but declares companion_for (only provenance entries may)`);
+  if (!Array.isArray(manifest.assets) || manifest.assets.length === 0)
+    failures.push("assets must be a non-empty array");
+  const paths = new Set();
+  for (const [index, item] of (manifest.assets || []).entries()) {
+    try {
+      const assetPath = safeRelative(item.path, `assets[${index}].path`);
+      if (!assetPath.startsWith("assets/footage/") || !assetPath.endsWith(".mp4"))
+        failures.push(`assets[${index}].path must be an MP4 under assets/footage`);
+      if (paths.has(assetPath)) failures.push(`duplicate asset path ${assetPath}`);
+      paths.add(assetPath);
+    } catch (error) {
+      failures.push(String(error.message || error));
     }
-  }
-  // Every footage (and narration) import must have exactly one provenance
-  // companion pointing back at it -- an asset materialized without its
-  // provenance record would let unlicensed/unapproved footage silently reach
-  // the edit plan.
-  for (const [index, item] of (manifest.imports || []).entries()) {
-    if ((item.kind === "footage" || item.kind === "narration") && !provenanceCompanionFor.has(item.target_path))
-      failures.push(`imports[${index}] (${item.target_path}) has no companion provenance entry`);
-  }
-  for (const companion of provenanceCompanionFor) {
-    if (!targets.has(companion)) failures.push(`a provenance entry's companion_for target does not exist in this manifest: ${companion}`);
   }
   return failures;
-}
-
-function run(command, args, cwd, env) {
-  const result = spawnSync(command, args, { cwd, env: { ...process.env, ...env }, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
-  if (result.status !== 0) throw new Error(`${command} ${args.join(" ")} failed (${result.status}):\n${result.stdout}\n${result.stderr}`);
-  return result.stdout;
-}
-
-const RETRYABLE_ATTEMPTS = 3;
-const RETRYABLE_BACKOFF_MS = 2000;
-
-function sleepSync(ms) {
-  // No async sleep is available at the point this is called (synchronous
-  // spawnSync retry loop) -- Atomics.wait on a scratch SharedArrayBuffer is
-  // the standard bounded, dependency-free way to block the event loop for a
-  // fixed backoff without pulling in a timer/promise mismatch.
-  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
-}
-
-// Bounded retry (3 attempts, linear backoff) for the two network-dependent
-// git operations only -- git init/checkout/lfs install are local and never
-// need it. A transient GitHub fetch/LFS-batch hiccup on a CI runner
-// shouldn't fail the whole materialization; a real, persistent error (bad
-// commit, revoked LFS object) still fails after the bound is exhausted.
-function runRetryable(command, args, cwd, env) {
-  let lastError;
-  for (let attempt = 1; attempt <= RETRYABLE_ATTEMPTS; attempt += 1) {
-    try {
-      return run(command, args, cwd, env);
-    } catch (error) {
-      lastError = error;
-      if (attempt < RETRYABLE_ATTEMPTS) {
-        console.warn(`Retryable command failed (attempt ${attempt}/${RETRYABLE_ATTEMPTS}): ${command} ${args.join(" ")}; retrying in ${RETRYABLE_BACKOFF_MS * attempt}ms`);
-        sleepSync(RETRYABLE_BACKOFF_MS * attempt);
-      }
-    }
-  }
-  throw lastError;
-}
-
-function parseLfsPointer(text) {
-  if (!text.startsWith("version https://git-lfs.github.com/spec/v1")) return null;
-  const oid = text.match(/oid sha256:([a-f0-9]{64})/)?.[1];
-  const size = Number(text.match(/size (\d+)/)?.[1]);
-  if (!oid || !Number.isFinite(size)) throw new Error("Malformed Git LFS pointer");
-  return { oid, size };
 }
 
 async function sha256File(absPath) {
@@ -127,83 +50,76 @@ async function sha256File(absPath) {
   return createHash("sha256").update(buffer).digest("hex");
 }
 
-export async function materializeExternalFootage(projectId = PROJECT_ID) {
+export async function validateLocalFootage(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
-  const manifestFile = path.join(dir, "migration", "external_assets.json");
-  if (!(await pathExists(manifestFile))) {
-    console.log("No external asset manifest; nothing to materialize");
-    return { materialized: 0 };
-  }
+  const manifestFile = path.join(dir, "assets", "local_assets.json");
+  if (!(await pathExists(manifestFile)))
+    throw new Error(`Local asset manifest is missing: ${manifestFile}`);
+
   const manifest = await readJson(manifestFile);
-  const failures = validateExternalManifest(manifest);
-  if (failures.length) throw new Error(`Invalid external asset manifest:\n- ${failures.join("\n- ")}`);
+  const manifestFailures = validateLocalManifest(manifest);
+  if (manifestFailures.length)
+    throw new Error(`Invalid local asset manifest:\n- ${manifestFailures.join("\n- ")}`);
 
-  const temp = await mkdtemp(path.join(os.tmpdir(), "orvyq-external-"));
-  const checkout = path.join(temp, "source");
   const records = [];
-  try {
-    await mkdir(checkout, { recursive: true });
-    run("git", ["init", "--quiet"], checkout);
-    run("git", ["remote", "add", "origin", `https://github.com/${manifest.source_repository}.git`], checkout);
-    runRetryable("git", ["fetch", "--depth=1", "origin", manifest.source_commit], checkout, { GIT_LFS_SKIP_SMUDGE: "1" });
-    run("git", ["checkout", "--detach", "FETCH_HEAD"], checkout, { GIT_LFS_SKIP_SMUDGE: "1" });
-    run("git", ["lfs", "install", "--local"], checkout);
-
-    const pointers = new Map();
-    for (const item of manifest.imports) {
-      const pointerText = run("git", ["show", `HEAD:${item.source_path}`], checkout);
-      pointers.set(item.source_path, parseLfsPointer(pointerText));
+  const failures = [];
+  for (const item of manifest.assets) {
+    const relativePath = safeRelative(item.path, "asset path");
+    const assetPath = path.join(dir, relativePath);
+    const provenancePath = `${assetPath}.provenance.json`;
+    if (!(await pathExists(assetPath))) {
+      failures.push(`${relativePath}: media file is missing`);
+      continue;
     }
-    const lfsPaths = [...new Set(manifest.imports.filter((item) => pointers.get(item.source_path)).map((item) => item.source_path))];
-    if (lfsPaths.length) {
-      runRetryable("git", ["lfs", "pull", "--include", lfsPaths.join(","), "--exclude", ""], checkout);
-      // Deliberately no `git lfs fsck` here -- see file header. Per-file
-      // sha256/size verification against each pulled file's own LFS pointer
-      // (below) is the real integrity check.
+    if (!(await pathExists(provenancePath))) {
+      failures.push(`${relativePath}: provenance file is missing`);
+      continue;
     }
 
-    for (const item of manifest.imports) {
-      const source = path.join(checkout, item.source_path);
-      const target = path.join(dir, safeRelative(item.target_path, "target_path"));
-      if (!(await pathExists(source))) throw new Error(`External source file is missing after checkout: ${item.source_path}`);
-      const pointer = pointers.get(item.source_path) ?? null;
-      const sourceBytes = await readFile(source);
-      if (pointer) {
-        if (sourceBytes.byteLength !== pointer.size) throw new Error(`${item.source_path} size ${sourceBytes.byteLength} != LFS pointer ${pointer.size}`);
-        const digest = await sha256File(source);
-        if (digest !== pointer.oid) throw new Error(`${item.source_path} SHA-256 ${digest} != LFS pointer ${pointer.oid}`);
-      }
-      await mkdir(path.dirname(target), { recursive: true });
-      await cp(source, target);
-      records.push({
-        source_repository: manifest.source_repository,
-        source_commit: manifest.source_commit,
-        source_path: item.source_path,
-        target_path: item.target_path,
-        kind: item.kind,
-        lfs_oid_sha256: pointer?.oid ?? null,
-        size_bytes: sourceBytes.byteLength,
-        materialized_sha256: await sha256File(target)
-      });
-    }
-    await writeJsonAtomic(path.join(dir, "qa", "external_assets.provenance.json"), {
-      schema_version: 1,
-      project_id: projectId,
-      source_repository: manifest.source_repository,
-      source_commit: manifest.source_commit,
-      generated_at: new Date().toISOString(),
-      records
+    const provenance = await readJson(provenancePath);
+    const bytes = (await readFile(assetPath)).byteLength;
+    const digest = await sha256File(assetPath);
+    const expectedHash = String(provenance.sha256 || provenance.actual_sha256 || "").toLowerCase();
+    const expectedBytes = Number(provenance.byte_size);
+    if (!/^[a-f0-9]{64}$/.test(expectedHash))
+      failures.push(`${relativePath}: provenance has no valid SHA-256`);
+    else if (digest !== expectedHash)
+      failures.push(`${relativePath}: SHA-256 ${digest} != provenance ${expectedHash}`);
+    if (!Number.isFinite(expectedBytes))
+      failures.push(`${relativePath}: provenance has no valid byte_size`);
+    else if (bytes !== expectedBytes)
+      failures.push(`${relativePath}: size ${bytes} != provenance ${expectedBytes}`);
+    if (provenance.approved_for_final_edit !== true)
+      failures.push(`${relativePath}: provenance is not approved_for_final_edit`);
+
+    records.push({
+      path: relativePath,
+      provenance_path: `${relativePath}.provenance.json`,
+      sha256: digest,
+      size_bytes: bytes,
+      provider: provenance.provider,
+      provider_asset_id: provenance.provider_asset_id,
+      approved_for_final_edit: provenance.approved_for_final_edit === true
     });
-    console.log(`Materialized ${records.length} external asset files from ${manifest.source_repository}@${manifest.source_commit}`);
-    return { materialized: records.length };
-  } finally {
-    await rm(temp, { recursive: true, force: true });
   }
+  if (failures.length)
+    throw new Error(`Local footage validation failed:\n- ${failures.join("\n- ")}`);
+
+  await writeJsonAtomic(path.join(dir, "qa", "local_assets.provenance.json"), {
+    schema_version: 1,
+    project_id: projectId,
+    generated_at: new Date().toISOString(),
+    records
+  });
+  console.log(`Validated ${records.length} local footage files with no external repository access`);
+  return { validated: records.length };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isMain = process.argv[1] &&
+  fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+if (isMain) {
   const args = parseArgs(process.argv.slice(2));
-  materializeExternalFootage(args["project-id"] || PROJECT_ID)
+  validateLocalFootage(args["project-id"] || PROJECT_ID)
     .then((result) => printJson({ ok: true, ...result }))
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));

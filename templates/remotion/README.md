@@ -1,6 +1,6 @@
 # templates/remotion — canonical renderer
 
-Recovered from the golden repository (`brsctncnbrk-ops/YouTube_pepline`, commit
+Recovered from the verified canonical renderer snapshot (commit
 `9affbd2494d8197a564c4a552b879fadb0e14a4a`) per `docs/golden-renderer-map.md`. This is a
 single Remotion app registering one composition, `FactForgeVideo`, whose
 `durationInFrames`/`fps`/`width`/`height` come entirely from `src/data/scene_config.json` —

@@ -1,36 +1,61 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { FULL_MUSIC_TRACKS, attributionFor } from "./orvyq_fetch_full_music.mjs";
+import {
+  attributionFor,
+  validateMusicAcquisitionPlan,
+} from "./orvyq_fetch_full_music.mjs";
 
-test("FULL_MUSIC_TRACKS declares exactly nine tracks, one per full_cues cue", () => {
-  assert.equal(FULL_MUSIC_TRACKS.length, 9);
-  const cueIds = FULL_MUSIC_TRACKS.map((track) => track.cueId);
-  assert.equal(new Set(cueIds).size, 9, "every track must map to a distinct cue");
+function plan(projectId = "002-sample-film") {
+  return {
+    schema_version: "1.0",
+    project_id: projectId,
+    status: "ready",
+    artist: "Example Artist",
+    license_name: "Example License",
+    license_url: "https://license.example/terms",
+    attribution_template: "{title} — {artist} — {license_name} — {license_url}",
+    tracks: [
+      {
+        cue_id: "CUE_OPEN",
+        track_id: "example_open",
+        title: "Opening Track",
+        source_page_url: "https://music.example/open",
+        download_url: "https://music.example/open.mp3",
+        approved_for_proof: true,
+        approved_for_full: true,
+      },
+      {
+        cue_id: "CUE_CLOSE",
+        track_id: "example_close",
+        title: "Closing Track",
+        source_page_url: "https://music.example/close",
+        download_url: "https://music.example/close.mp3",
+        approved_for_proof: false,
+        approved_for_full: true,
+      },
+    ],
+  };
+}
+
+test("music acquisition accepts an arbitrary project's licensed cue plan", () => {
+  const value = plan();
+  assert.equal(validateMusicAcquisitionPlan(value, "002-sample-film"), value);
+  assert.equal(new Set(value.tracks.map((track) => track.cue_id)).size, 2);
 });
 
-test("every track declares real scottbuckley.com.au URLs and complete metadata", () => {
-  for (const track of FULL_MUSIC_TRACKS) {
-    assert.match(track.sourcePageUrl, /^https:\/\/www\.scottbuckley\.com\.au\/library\//, `${track.trackId} source page`);
-    assert.match(track.downloadUrl, /^https:\/\/www\.scottbuckley\.com\.au\/library\/wp-content\/uploads\/.+\.mp3$/, `${track.trackId} download url`);
-    assert.ok(track.title?.length, `${track.trackId} needs a title`);
-    assert.match(track.trackId, /^[a-z0-9]+(?:_[a-z0-9]+)*$/, `${track.trackId} must match the registry track_id pattern`);
-  }
+test("music acquisition rejects project mismatch and duplicate cue mappings", () => {
+  assert.throws(
+    () => validateMusicAcquisitionPlan(plan(), "003-other-film"),
+    /does not match/,
+  );
+  const duplicate = plan();
+  duplicate.tracks[1].cue_id = duplicate.tracks[0].cue_id;
+  assert.throws(() => validateMusicAcquisitionPlan(duplicate), /Duplicate cue_id/);
 });
 
-test("CUE_06_REGULATION_PARADOX reuses the already-vendored sb_signal_to_noise track (real Full Mix file)", () => {
-  const cue06 = FULL_MUSIC_TRACKS.find((track) => track.cueId === "CUE_06_REGULATION_PARADOX");
-  assert.equal(cue06.trackId, "sb_signal_to_noise");
-  assert.equal(cue06.downloadUrl, "https://www.scottbuckley.com.au/library/wp-content/uploads/2020/04/sb_signaltonoise.mp3");
-});
-
-test("CUE_01 and CUE_02 use the No Piano Melody variants, distinct from CUE_06's Full Mix", () => {
-  const cue01 = FULL_MUSIC_TRACKS.find((track) => track.cueId === "CUE_01_RACE_PARADOX");
-  const cue02 = FULL_MUSIC_TRACKS.find((track) => track.cueId === "CUE_02_CONTROLLED_EVIDENCE");
-  assert.match(cue01.downloadUrl, /nomelody/);
-  assert.match(cue02.downloadUrl, /nomelody/);
-  assert.notEqual(cue02.trackId, "sb_signal_to_noise");
-});
-
-test("attributionFor produces the required CC BY 4.0 attribution format", () => {
-  assert.equal(attributionFor("Catalyst"), "'Catalyst' by Scott Buckley — released under CC-BY 4.0. www.scottbuckley.com.au");
+test("attribution is generated from the project's template and metadata", () => {
+  assert.equal(
+    attributionFor(plan(), "Opening Track"),
+    "Opening Track — Example Artist — Example License — https://license.example/terms",
+  );
 });

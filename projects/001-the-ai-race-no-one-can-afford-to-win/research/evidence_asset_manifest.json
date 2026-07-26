@@ -199,6 +199,58 @@
       "render_component": "EvidenceDiagram.evaluation_pipeline",
       "content": ["Pre-deployment evaluation", "Capability testing", "Safeguard assessment", "Limitations"],
       "limitation": "An evaluation is not a comprehensive safety certification."
+    },
+    {
+      "evidence_asset_id": "EVID_RSP_COVER_CAPTURE",
+      "claim_ids": ["CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS"],
+      "source_ids": ["SRC_ANTHROPIC_RSP_2024"],
+      "mode": "official_page_capture",
+      "status": "spec_ready_asset_pending",
+      "required_for_proof": false,
+      "required_for_full": true,
+      "render_component": "PrimaryEvidenceV2.image_sequence",
+      "content": ["Anthropic Responsible Scaling Policy cover page, effective October 15, 2024"],
+      "limitation": "A published policy commitment is evidence of documented governance, not proof of identical practice across every lab.",
+      "editorial_note": "Real PDF page capture -- research/primary_evidence_manifest.json's EVID_RSP_COVER_CAPTURE (assets/evidence/anthropic_rsp_cover.png). Promoted to status=ready only after scripts/orvyq_fetch_primary_evidence.mjs verifies the file in CI (scripts/orvyq_promote_evidence_assets.mjs)."
+    },
+    {
+      "evidence_asset_id": "EVID_RSP_SUMMARY_CAPTURE",
+      "claim_ids": ["CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS"],
+      "source_ids": ["SRC_ANTHROPIC_RSP_2024"],
+      "mode": "official_page_capture",
+      "status": "spec_ready_asset_pending",
+      "required_for_proof": false,
+      "required_for_full": true,
+      "render_component": "PrimaryEvidenceV2.image_sequence",
+      "content": ["Anthropic RSP executive summary page"],
+      "limitation": "A published policy commitment is evidence of documented governance, not proof of identical practice across every lab.",
+      "editorial_note": "Real PDF page capture -- research/primary_evidence_manifest.json's EVID_RSP_SUMMARY_CAPTURE (assets/evidence/anthropic_rsp_summary.png). Promoted to status=ready only after scripts/orvyq_fetch_primary_evidence.mjs verifies the file in CI (scripts/orvyq_promote_evidence_assets.mjs)."
+    },
+    {
+      "evidence_asset_id": "EVID_FSF_COVER_CAPTURE",
+      "claim_ids": ["CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS"],
+      "source_ids": ["SRC_DEEPMIND_FSF_2025"],
+      "mode": "official_page_capture",
+      "status": "spec_ready_asset_pending",
+      "required_for_proof": false,
+      "required_for_full": true,
+      "render_component": "PrimaryEvidenceV2.image_sequence",
+      "content": ["Google DeepMind Frontier Safety Framework 2.0 cover page, February 4, 2025"],
+      "limitation": "A published policy commitment is evidence of documented governance, not proof of identical practice across every lab.",
+      "editorial_note": "Real PDF page capture -- research/primary_evidence_manifest.json's EVID_FSF_COVER_CAPTURE (assets/evidence/deepmind_fsf_cover.png), a second, distinct publisher alongside the RSP captures above -- so this claim's real evidence directly shows more than one lab's own published framework, not just one. Promoted to status=ready only after scripts/orvyq_fetch_primary_evidence.mjs verifies the file in CI (scripts/orvyq_promote_evidence_assets.mjs)."
+    },
+    {
+      "evidence_asset_id": "EVID_AGENTIC_FIG1",
+      "claim_ids": ["CLM_004_AGENTIC_MISALIGNMENT_TEST"],
+      "source_ids": ["SRC_ANTHROPIC_AGENTIC_MISALIGNMENT_2025"],
+      "mode": "official_figure_capture",
+      "status": "spec_ready_asset_pending",
+      "required_for_proof": false,
+      "required_for_full": true,
+      "render_component": "PrimaryEvidenceV2.official_figure",
+      "content": ["Figure 1: simulated blackmail rates across five models, from the published paper"],
+      "limitation": "Controlled simulation, not a documented real-world incident.",
+      "editorial_note": "Real published figure capture -- research/primary_evidence_manifest.json's EVID_AGENTIC_FIG1 (assets/evidence/anthropic_agentic_figure1.png). Promoted to status=ready only after scripts/orvyq_fetch_primary_evidence.mjs verifies the file in CI (scripts/orvyq_promote_evidence_assets.mjs)."
     }
   ]
 }

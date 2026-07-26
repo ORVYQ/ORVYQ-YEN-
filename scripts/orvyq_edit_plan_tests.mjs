@@ -22,7 +22,7 @@ import { projectDir, readJson, pathExists } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 const run = promisify(execFile);
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const VALID_ROLES = new Set(["evidence", "archive", "context", "metaphor", "graphic"]);
 const VALID_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "source_timeline", "source_article", "concept_map", "boundary", "comparison", "recap", "evidence_chain"]);
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
@@ -155,12 +155,15 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
       continue;
     }
     assert.equal(shot.asset_type, "footage");
-    if (isProof) {
-      const approvedHook = shot.hook_footage === true;
-      const approvedContext = plan.quality_policy?.cinematic_body_footage === true && shot.contextual_footage === true && shot.provenance_mode === "approved_contextual_footage";
-      assert.ok(approvedHook || approvedContext);
-      if (approvedContext) contextualFootageFrames += frames;
-    }
+    // buildFullPlan() (scripts/orvyq_edit_plan.mjs) runs unconditionally now
+    // -- proof and full mode share the exact same shots/duration_frames, so
+    // this hook/context provenance check (and the fraction it feeds below)
+    // applies regardless of plan.mode, not just to proof. isProof is still
+    // used elsewhere in this file for genuinely proof-only checks.
+    const approvedHook = shot.hook_footage === true;
+    const approvedContext = plan.quality_policy?.cinematic_body_footage === true && shot.contextual_footage === true && shot.provenance_mode === "approved_contextual_footage";
+    assert.ok(approvedHook || approvedContext);
+    if (approvedContext) contextualFootageFrames += frames;
     // A shot that continues the immediately preceding shot's own asset from
     // exactly where its trim left off (an editorial pause hold on the same
     // footage, split into two shots so neither exceeds max_shot_seconds --
@@ -210,7 +213,24 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
   assert.equal(captions.style?.background, "none");
   if (plan.quality_policy?.cinematic_body_footage) assert.ok(captions.style?.max_speech_gap_seconds <= 0.8);
   assert.ok(captions.captions.length);
-  assert.ok(captions.captions[0].start_frame <= 3);
+  // The first caption must begin close to when the motion hook ends, not at
+  // frame 0 -- orvyq_speech_qa.py transcribes assets/audio/final_mix.mp3,
+  // which (per this session's head-silence fix) now has headSilenceSeconds
+  // of real leading silence for the hook baked in, so every real word
+  // timestamp -- and therefore every caption frame -- is hook-inclusive/
+  // absolute, matching pause_windows' own convention. Real narration onset
+  // naturally lands a little either side of the hook's own end frame
+  // (confirmed live: 6 frames early is real, correct ASR-timed speech, not
+  // a bug) -- a generous symmetric tolerance replaces this file's old
+  // frame-0-relative assumption from before that fix, while still catching
+  // an actual regression (captions starting near frame 0, as if the hook
+  // offset were dropped entirely -- ~330 frames off, far outside this
+  // window).
+  const hookEndFrame = Math.round(motionHook.duration_seconds * plan.fps);
+  assert.ok(
+    Math.abs(captions.captions[0].start_frame - hookEndFrame) <= plan.fps * 2,
+    `first caption (frame ${captions.captions[0].start_frame}) should land close to the motion hook's own end (frame ${hookEndFrame})`
+  );
   assert.match(captions.captions[0].text, /^Every major AI lab\b/i);
   let previousCaptionEnd = -1;
   for (const caption of captions.captions) {

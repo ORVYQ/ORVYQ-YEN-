@@ -15,6 +15,47 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Scan for project-specific data in system runtime
+        run: |
+          set -euo pipefail
+          PROJECT_TOKEN="001-"
+          PROJECT_TOKEN="${PROJECT_TOKEN}the-ai-race-no-one-can-afford-to-win"
+          ASSET_TOKEN="scene_024_"
+          ASSET_TOKEN="${ASSET_TOKEN}6e6f4af26cad60cc78930d6d.mp4"
+          RUN_TOKEN="3020"
+          RUN_TOKEN="${RUN_TOKEN}0283806"
+          : > system-independence-violations.txt
+          for TOKEN in "$PROJECT_TOKEN" "$ASSET_TOKEN" "$RUN_TOKEN"; do
+            MATCHES="$(grep -RIlF "$TOKEN" .github scripts templates config package.json \
+              --exclude=orvyq_repository_independence.test.mjs || true)"
+            if [ -n "$MATCHES" ]; then
+              {
+                echo "TOKEN: $TOKEN"
+                echo "$MATCHES"
+                echo
+              } >> system-independence-violations.txt
+            fi
+          done
+          if [ -s system-independence-violations.txt ]; then
+            echo "SYSTEM_INDEPENDENCE_STATUS=1" >> "$GITHUB_ENV"
+            cat system-independence-violations.txt
+          else
+            echo "SYSTEM_INDEPENDENCE_STATUS=0" >> "$GITHUB_ENV"
+            echo "No project-specific runtime leakage found."
+          fi
+
+      - name: Upload system-independence report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-system-independence-${{ github.run_id }}
+          retention-days: 7
+          path: system-independence-violations.txt
+          if-no-files-found: error
+
+      - name: Stop when project data leaked into system runtime
+        run: test "$SYSTEM_INDEPENDENCE_STATUS" = "0"
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -31,20 +72,51 @@ jobs:
           python3 -m py_compile scripts/orvyq_speech_qa.py
 
       - name: Validate canonical schemas and data contracts
-        run: npm run validate:canonical
+        run: |
+          set +e
+          npm run validate:canonical 2>&1 | tee schema-validation.log
+          echo ${PIPESTATUS[0]} > schema-validation.status
+          exit 0
 
-      # scripts/orvyq_music_intake.test.mjs generates a real tiny audio
-      # fixture and probes it via ffprobe -- this step has been missing
-      # since the canonical music system landed (commit 33c8f3d), which is
-      # why this job has been failing on every push since then regardless
-      # of the actual change under test.
-      - name: Install ffmpeg (test fixture generation and duration/codec probing)
+      - name: Upload schema validation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-schema-validation-${{ github.run_id }}
+          retention-days: 7
+          path: |
+            schema-validation.log
+            schema-validation.status
+          if-no-files-found: error
+
+      - name: Stop when schema validation failed
+        run: test "$(cat schema-validation.status)" = "0"
+
+      - name: Install ffmpeg
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
 
       - name: Run unit tests
-        run: npm test
+        run: |
+          set +e
+          npm test 2>&1 | tee unit-tests.log
+          echo ${PIPESTATUS[0]} > unit-tests.status
+          exit 0
+
+      - name: Upload unit test diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-unit-tests-${{ github.run_id }}
+          retention-days: 7
+          path: |
+            unit-tests.log
+            unit-tests.status
+          if-no-files-found: error
+
+      - name: Stop when unit tests failed
+        run: test "$(cat unit-tests.status)" = "0"
 
       - name: Check proof/full renderer parity and isolation
         run: npm run orvyq:parity-check

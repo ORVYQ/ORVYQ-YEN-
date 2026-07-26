@@ -7,7 +7,7 @@ import { promisify } from "node:util";
 import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-utils.mjs";
 
 const run = promisify(execFile);
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const sha256 = (buffer) => crypto.createHash("sha256").update(buffer).digest("hex");
 
 function assertMagic(buffer, mime, assetId) {

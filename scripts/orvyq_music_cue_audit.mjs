@@ -7,7 +7,7 @@
 import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 function contiguous(items, expectedEnd, tolerance = 0.01) {
   if (!items.length || Math.abs(Number(items[0].start) - 0) > tolerance) return false;

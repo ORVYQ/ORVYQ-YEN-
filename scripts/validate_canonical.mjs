@@ -1,29 +1,16 @@
-// Phase 2 canonical-schema validation.
+// Project-independent canonical schema validation.
 //
-// Two kinds of checks:
-//  (1) REAL DATA -- validates project files actually recovered into this repo
-//      (projects/<id>/direction/*.json, projects/<id>/config/*.json) against
-//      the schema that already matches their real shape.
-//  (2) FIXTURE -- the edit_plan/shot/timeline/captions/audio_mix/asset_registry/
-//      evidence_registry/frozen_candidate/proof_approval schemas describe
-//      canonical OUTPUTS that the Phase 3 pipeline will produce; no real
-//      instance of them exists in this repo yet. Each fixture here is a
-//      small hand-built representative example (fixture edit_plan/shot data
-//      is drawn from the real golden 109-shot edit_plan.json content, not
-//      invented) used to prove the schema is usable, not to claim the real
-//      pipeline output has been validated. Phase 3/5 must re-run this
-//      validator against the real generated files once they exist.
-//
-// Exits non-zero if any check fails, per the project's QA rule that a
-// validation script must never silently pass a blocking condition.
-
+// Real-data checks discover every projects/*/config/production_profile.json
+// whose status is "ready". Draft scaffolds are deliberately excluded from
+// production validation until their editorial/research inputs are complete.
+// Generic fixtures prove output-schema usability without importing claims,
+// assets, titles, or identifiers from any real film.
 import path from "node:path";
 import fs from "node:fs";
 import { loadCanonicalAjv, readJson } from "./lib/schema-validate.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
-const PROJECT_DIR = path.resolve("projects", PROJECT_ID);
-
+const PROJECTS_DIR = path.resolve("projects");
+const FIXTURE_PROJECT_ID = "000-example-project";
 const ajv = loadCanonicalAjv();
 const results = [];
 
@@ -34,217 +21,345 @@ function check(label, schemaFile, data, { kind }) {
   results.push({ label, schemaFile, kind, ok, errors: ok ? [] : validate.errors });
 }
 
-// ---- (1) REAL DATA ----
-
-check(
-  "direction/editorial_pause_map.json",
-  "editorial_pauses.schema.json",
-  readJson(path.join(PROJECT_DIR, "direction/editorial_pause_map.json")),
-  { kind: "real" }
-);
-
-check(
-  "direction/music_cue_sheet.json",
-  "music_cues.schema.json",
-  readJson(path.join(PROJECT_DIR, "direction/music_cue_sheet.json")),
-  { kind: "real" }
-);
-
-{
-  const videoConfig = readJson(path.join(PROJECT_DIR, "config/video_config.json"));
-  const projectConfig = readJson(path.join(PROJECT_DIR, "config/project_config.json"));
-  // duration_frames is derived from the real canonical timeline
-  // (buildFullProductionPlan's own narration + editorial-pause + motion-hook
-  // + end-card total, committed as direction/editorial_blueprint.json's
-  // full_production.generated_total_duration_seconds by
-  // scripts/orvyq_full_production_plan.mjs) rather than a hand-authored
-  // target -- config/video_config.json no longer carries an independent
-  // target_duration_sec to drift against it.
-  const blueprint = readJson(path.join(PROJECT_DIR, "direction/editorial_blueprint.json"));
-  const canonicalProject = {
-    schema_version: "1.0-canonical",
-    project_id: projectConfig.project_id,
-    title: projectConfig.project_name,
-    fps: videoConfig.fps,
-    width: videoConfig.width,
-    height: videoConfig.height,
-    duration_frames: Math.round(blueprint.full_production.generated_total_duration_seconds * videoConfig.fps),
-    brand: { name: "ORVYQ", tagline: "Beyond the Known", palette: { ink: "#F3ECDD", signal: "#D84B4B", ground: "#05070C" } },
-    created_at: projectConfig.created_at
-  };
-  check(
-    "config/{video_config,project_config}.json (assembled)",
-    "canonical_project.schema.json",
-    canonicalProject,
-    { kind: "real (assembled from multiple recovered files)" }
-  );
+function readJsonIfExists(file) {
+  return fs.existsSync(file) ? readJson(file) : null;
 }
 
-// ---- (2) FIXTURES (schema shape proof only, not real pipeline output) ----
+function readyProjects() {
+  if (!fs.existsSync(PROJECTS_DIR)) return [];
+  const discovered = [];
+  for (const entry of fs.readdirSync(PROJECTS_DIR, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.name.startsWith("_")) continue;
+    const directory = path.join(PROJECTS_DIR, entry.name);
+    const profilePath = path.join(directory, "config", "production_profile.json");
+    if (!fs.existsSync(profilePath)) continue;
+    const profile = readJson(profilePath);
+    if (profile.project_id !== entry.name) {
+      results.push({
+        label: `${entry.name}/config/production_profile.json`,
+        schemaFile: "project identity",
+        kind: "real",
+        ok: false,
+        errors: [{ message: `project_id ${profile.project_id} does not match directory ${entry.name}` }],
+      });
+      continue;
+    }
+    if (profile.status === "ready") discovered.push({ id: entry.name, directory, profile });
+  }
+  return discovered;
+}
 
+function requireRealJson(project, relativePath, schemaFile) {
+  const absolute = path.join(project.directory, relativePath);
+  if (!fs.existsSync(absolute)) {
+    results.push({
+      label: `${project.id}/${relativePath}`,
+      schemaFile,
+      kind: "real",
+      ok: false,
+      errors: [{ message: "required file is missing for a ready project" }],
+    });
+    return null;
+  }
+  const data = readJson(absolute);
+  check(`${project.id}/${relativePath}`, schemaFile, data, { kind: "real" });
+  return data;
+}
+
+function validateReadyProject(project) {
+  const pauseMap = requireRealJson(project, "direction/editorial_pause_map.json", "editorial_pauses.schema.json");
+  const musicCueSheet = requireRealJson(project, "direction/music_cue_sheet.json", "music_cues.schema.json");
+  const sequencePlan = requireRealJson(project, "direction/sequence_plan.json", "sequence_plan.schema.json");
+  void pauseMap;
+  void musicCueSheet;
+  void sequencePlan;
+
+  const videoConfig = readJsonIfExists(path.join(project.directory, "config", "video_config.json"));
+  const projectConfig = readJsonIfExists(path.join(project.directory, "config", "project_config.json"))
+    || readJsonIfExists(path.join(project.directory, "project.json"));
+  const blueprint = readJsonIfExists(path.join(project.directory, "direction", "editorial_blueprint.json"));
+  if (!videoConfig || !projectConfig || !blueprint?.full_production?.generated_total_duration_seconds) {
+    results.push({
+      label: `${project.id}/canonical project assembly`,
+      schemaFile: "canonical_project.schema.json",
+      kind: "real",
+      ok: false,
+      errors: [{ message: "ready project needs video config, project metadata, and generated full-production duration" }],
+    });
+  } else {
+    const canonicalProject = {
+      schema_version: "1.0-canonical",
+      project_id: project.id,
+      title: projectConfig.project_name || projectConfig.title,
+      fps: videoConfig.fps,
+      width: videoConfig.width,
+      height: videoConfig.height,
+      duration_frames: Math.round(blueprint.full_production.generated_total_duration_seconds * videoConfig.fps),
+      brand: {
+        name: "ORVYQ",
+        tagline: "Beyond the Known",
+        palette: { ink: "#F3ECDD", signal: "#D84B4B", ground: "#05070C" },
+      },
+      created_at: projectConfig.created_at,
+    };
+    check(`${project.id}/canonical project assembly`, "canonical_project.schema.json", canonicalProject, { kind: "real" });
+  }
+
+  const optionalGenerated = [
+    ["direction/edit_plan.json", "edit_plan.schema.json"],
+    ["remotion/captions.json", "captions.schema.json"],
+    ["assets/audio/final_mix.metadata.json", "audio_mix.schema.json"],
+    ["assets/asset_registry.json", "asset_registry.schema.json"],
+    ["qa/frozen_candidate.json", "frozen_candidate.schema.json"],
+    ["qa/proof_approval.json", "proof_approval.schema.json"],
+    ["voice/narration_alignment.json", "narration_alignment.schema.json"],
+    ["direction/resolved_pause_plan.json", "resolved_pause_plan.schema.json"],
+  ];
+  for (const [relativePath, schemaFile] of optionalGenerated) {
+    const absolute = path.join(project.directory, relativePath);
+    if (fs.existsSync(absolute)) {
+      check(`${project.id}/${relativePath}`, schemaFile, readJson(absolute), { kind: "real generated" });
+    }
+  }
+}
+
+for (const project of readyProjects()) validateReadyProject(project);
+
+// ---- Generic fixtures: schema shape proof only ----
 const fixtureFootageShot = {
-  shot_id: "shot_008", scene_id: "scene_002", start_frame: 1376, end_frame: 1546,
-  transition_in: "cut", transition_out: "cut", text_overlay: null, asset_type: "footage",
-  video_asset: "assets/footage/scene_003_d69cde76dfac1e29bd6f9946.mp4",
-  trim_in_sec: 9.949, trim_out_sec: 15.616
+  shot_id: "shot_002",
+  scene_id: "scene_001",
+  start_frame: 90,
+  end_frame: 270,
+  transition_in: "cut",
+  transition_out: "cut",
+  text_overlay: null,
+  asset_type: "footage",
+  video_asset: "assets/footage/context-a.mp4",
+  trim_in_sec: 1,
+  trim_out_sec: 7,
 };
-check("fixture footage shot (real golden shot content)", "shot.schema.json", fixtureFootageShot, { kind: "fixture" });
+check("generic fixture footage shot", "shot.schema.json", fixtureFootageShot, { kind: "fixture" });
 
 const fixtureGraphicShot = {
-  shot_id: "shot_001", scene_id: "scene_001", start_frame: 0, end_frame: 216,
-  transition_in: "fade", transition_out: "cut", text_overlay: null, asset_type: "graphic",
-  graphic: { type: "brand_open", kicker: "ORVYQ PRESENTS", title: "THE AI RACE", subtitle: "What happens when capability moves faster than control?" },
-  sound_cue: "pulse"
+  shot_id: "shot_001",
+  scene_id: "scene_001",
+  start_frame: 0,
+  end_frame: 90,
+  transition_in: "fade",
+  transition_out: "cut",
+  text_overlay: null,
+  asset_type: "graphic",
+  graphic: {
+    type: "brand_open",
+    kicker: "ORVYQ PRESENTS",
+    title: "AN UNRESOLVED QUESTION",
+    subtitle: "A source-led cinematic documentary",
+  },
+  sound_cue: "pulse",
 };
-check("fixture graphic shot (real golden shot content)", "shot.schema.json", fixtureGraphicShot, { kind: "fixture" });
+check("generic fixture graphic shot", "shot.schema.json", fixtureGraphicShot, { kind: "fixture" });
 
 const fixtureEditPlan = {
   schema_version: "1.0-canonical",
-  project_id: PROJECT_ID,
-  mode: "proof",
-  frame_range: { start_frame: 0, end_frame: 4500 },
+  project_id: FIXTURE_PROJECT_ID,
+  mode: "candidate",
+  frame_range: { start_frame: 0, end_frame: 1800 },
   fps: 30,
-  duration_frames: 21598,
+  duration_frames: 1800,
   audio_mix_asset: "assets/audio/final_mix.mp3",
-  brand: { name: "ORVYQ", tagline: "Beyond the Known", palette: { ink: "#F3ECDD", signal: "#D84B4B", ground: "#05070C" } },
+  brand: {
+    name: "ORVYQ",
+    tagline: "Beyond the Known",
+    palette: { ink: "#F3ECDD", signal: "#D84B4B", ground: "#05070C" },
+  },
   blacklisted_assets: [],
   shots: [fixtureGraphicShot, fixtureFootageShot],
-  quality_policy: {}
+  quality_policy: {},
 };
-check("fixture edit_plan (proof mode)", "edit_plan.schema.json", fixtureEditPlan, { kind: "fixture" });
-
-const fixtureTimeline = { fps: 30, duration_frames: 21598, blacklisted_assets: [], shots: [fixtureGraphicShot, fixtureFootageShot] };
-check("fixture timeline", "timeline.schema.json", fixtureTimeline, { kind: "fixture" });
+check("generic fixture edit plan", "edit_plan.schema.json", fixtureEditPlan, { kind: "fixture" });
+check(
+  "generic fixture timeline",
+  "timeline.schema.json",
+  { fps: 30, duration_frames: 1800, blacklisted_assets: [], shots: [fixtureGraphicShot, fixtureFootageShot] },
+  { kind: "fixture" },
+);
 
 const fixtureCaptions = {
   schema_version: "1.0-canonical",
-  style: { placement: "bottom_safe", line_count: 1, max_words: 7, max_chars: 52, font_size_px: 36, background: "none" },
-  alignment: { recognized_words: 812, aligned_script_words: 780, mapped_words: 780, score: 0.94 },
-  captions: [{ caption_id: "cap_001", scene_id: "scene_001", start_frame: 0, end_frame: 90, text: "Every major AI lab on Earth believes" }]
+  style: {
+    placement: "bottom_safe",
+    line_count: 1,
+    max_words: 7,
+    max_chars: 52,
+    font_size_px: 36,
+    background: "none",
+  },
+  alignment: { recognized_words: 120, aligned_script_words: 116, mapped_words: 116, score: 0.96 },
+  captions: [{
+    caption_id: "cap_001",
+    scene_id: "scene_001",
+    start_frame: 90,
+    end_frame: 180,
+    text: "The evidence begins with a simple question",
+  }],
 };
-check("fixture captions", "captions.schema.json", fixtureCaptions, { kind: "fixture" });
+check("generic fixture captions", "captions.schema.json", fixtureCaptions, { kind: "fixture" });
 
 const fixtureAudioMix = {
   schema_version: "1.0-canonical",
-  mode: "proof",
-  duration_seconds: 150,
-  narration_duration_seconds: 114.2,
-  pause_windows: [{ pause_id: "PAUSE_01_COMPETITION", start_seconds: 23.74, end_seconds: 28.74 }],
-  music_sections: [{ id: "controlled_tension", start_seconds: 0, end_seconds: 35 }],
-  sfx_placements: [{ sfx_id: "low_impact", at_seconds: 11 }],
+  mode: "candidate",
+  duration_seconds: 60,
+  narration_duration_seconds: 52,
+  pause_windows: [{ pause_id: "PAUSE_01", start_seconds: 24, end_seconds: 28 }],
+  music_sections: [{ id: "opening", start_seconds: 0, end_seconds: 60 }],
+  sfx_placements: [{ sfx_id: "tonal_bloom", at_seconds: 24 }],
   narration_ducking: { enabled: true },
-  licensing: "CC BY 4.0 -- Scott Buckley, 'Signal to Noise'",
-  measured: { integrated_lufs: -16.1, true_peak_dbtp: -1.6, loudness_range: 6.2 }
+  licensing: "Licensed or original audio, verified by provenance",
+  measured: { integrated_lufs: -16, true_peak_dbtp: -1.5, loudness_range: 6 },
 };
-check("fixture audio_mix metadata", "audio_mix.schema.json", fixtureAudioMix, { kind: "fixture" });
+check("generic fixture audio mix", "audio_mix.schema.json", fixtureAudioMix, { kind: "fixture" });
 
 const fixtureAssetRegistry = {
   schema_version: "1.0-canonical",
-  project_id: PROJECT_ID,
+  project_id: FIXTURE_PROJECT_ID,
   assets: [{
-    asset_id: "scene_003_d69cde76dfac1e29bd6f9946",
+    asset_id: "context_a",
     type: "footage",
-    path: "assets/footage/scene_003_d69cde76dfac1e29bd6f9946.mp4",
-    source: "pexels",
-    source_url: "https://www.pexels.com/video/women-talking-in-the-office-8170427/",
-    license: "https://www.pexels.com/license/",
+    path: "assets/footage/context-a.mp4",
+    source: "licensed-provider",
+    source_url: "https://example.com/source/context-a",
+    license: "https://example.com/license",
     attribution: "",
-    duration_seconds: 8.44,
-    width: 3840,
-    height: 2160,
-    sha256: "cedebce1559975377d66b75dfbb1fd84f7df3368f99fec547a525773f3dfb8cb",
-    semantic_keywords: ["office", "conversation", "corporate"],
+    duration_seconds: 12,
+    width: 1920,
+    height: 1080,
+    sha256: "a".repeat(64),
+    semantic_keywords: ["human", "context"],
     editorial_roles: ["context"],
-    allowed_reuse_count: 2
-  }]
+    allowed_reuse_count: 2,
+  }],
 };
-check("fixture asset_registry (real golden provenance content)", "asset_registry.schema.json", fixtureAssetRegistry, { kind: "fixture" });
+check("generic fixture asset registry", "asset_registry.schema.json", fixtureAssetRegistry, { kind: "fixture" });
 
 const fixtureEvidenceRegistry = {
   schema_version: "1.0-canonical",
-  project_id: PROJECT_ID,
+  project_id: FIXTURE_PROJECT_ID,
   sources: [{
-    source_id: "SRC_ANTHROPIC_RSP_2024", publisher: "Anthropic", title: "Anthropic Responsible Scaling Policy",
-    publication_date: "2024-10-15", url: "https://www-cdn.anthropic.com/616dee633636e5bd309cb73aed8622e80fe47839.pdf",
-    source_type: "primary_research", official: true
+    source_id: "SRC_PRIMARY_01",
+    publisher: "Example Institution",
+    title: "Primary Source Document",
+    publication_date: "2026-01-01",
+    url: "https://example.com/primary-source.pdf",
+    source_type: "primary_research",
+    official: true,
   }],
   claims: [{
-    claim_id: "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS", section_id: "SEC_01_RACE_PARADOX", importance: 5,
-    narration_excerpt: "Every major AI lab on Earth believes moving this fast might be dangerous.",
-    status: "verified", source_ids: ["SRC_ANTHROPIC_RSP_2024"]
+    claim_id: "CLM_001",
+    section_id: "SEC_01",
+    importance: 5,
+    narration_excerpt: "The primary source establishes the central documented fact.",
+    status: "verified",
+    source_ids: ["SRC_PRIMARY_01"],
   }],
   evidence_assets: [{
-    evidence_asset_id: "EVID_RSP_COVER_CAPTURE", claim_ids: ["CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS"],
-    source_ids: ["SRC_ANTHROPIC_RSP_2024"], mode: "official_primary_capture", status: "ready",
-    required_for_proof: true, required_for_full: true
-  }]
+    evidence_asset_id: "EVID_PRIMARY_01",
+    claim_ids: ["CLM_001"],
+    source_ids: ["SRC_PRIMARY_01"],
+    mode: "official_primary_capture",
+    status: "ready",
+    required_for_proof: true,
+    required_for_full: true,
+  }],
 };
-check("fixture evidence_registry (real golden claim/source content)", "evidence_registry.schema.json", fixtureEvidenceRegistry, { kind: "fixture" });
+check("generic fixture evidence registry", "evidence_registry.schema.json", fixtureEvidenceRegistry, { kind: "fixture" });
 
-const fixtureFrozenCandidate = {
-  project_id: PROJECT_ID,
-  source_commit_sha: "9affbd2494d8197a564c4a552b879fadb0e14a4a",
+const fixtureIdentity = {
+  project_id: FIXTURE_PROJECT_ID,
+  source_commit_sha: "0".repeat(40),
   renderer_version: "templates/remotion@1.0.0",
   timeline_hash: "0".repeat(64),
   edit_plan_hash: "0".repeat(64),
   caption_hash: "0".repeat(64),
-  audio_mix_hash: "0".repeat(64),
+  audio_mix_metadata_hash: "0".repeat(64),
   asset_registry_hash: "0".repeat(64),
-  selected_render_range: { start_frame: 0, end_frame: 4500 },
-  mode: "proof",
-  created_at: "2026-07-22T00:00:00Z"
+  render_bundle_hash: "2".repeat(64),
+  selected_render_range: { start_frame: 0, end_frame: 1800 },
+  fps: 30,
+  total_frames: 1800,
+  mode: "candidate",
 };
-check("fixture frozen_candidate", "frozen_candidate.schema.json", fixtureFrozenCandidate, { kind: "fixture" });
+const fixtureFrozenCandidate = {
+  project_id: FIXTURE_PROJECT_ID,
+  canonical_candidate_identity: fixtureIdentity,
+  candidate_hash: "1".repeat(64),
+  render_bundle_hash: "2".repeat(64),
+  operational_metadata: {
+    created_at: "2026-01-01T00:00:00Z",
+    approval_version: "4.0-candidate-identity-hardened",
+  },
+};
+check("generic fixture frozen candidate", "frozen_candidate.schema.json", fixtureFrozenCandidate, { kind: "fixture" });
 
-const fixtureProofApproval = {
+const fixtureApproval = {
   frozen_candidate_hash: "1".repeat(64),
+  candidate_hash: "1".repeat(64),
+  candidate_source_sha: "0".repeat(40),
+  render_bundle_hash: "2".repeat(64),
   approved: false,
   approved_by: "",
-  approved_at: "2026-07-22T00:00:00Z",
-  notes: "Not yet approved -- fixture only, exercises the schema.",
-  proof_artifact: { workflow_run_id: "29655003486", artifact_name: "orvyq-cinematic-proof-150s-29655003486", duration_seconds: 150, resolution: "1920x1080", fps: 30 }
+  approved_at: "2026-01-01T00:00:00Z",
+  notes: "Fixture only; no approval granted.",
+  review_run_id: "10000000000",
+  review_artifact_name: "orvyq-full-length-review-example",
+  review_total_frames: 1800,
+  review_duration_seconds: 60,
+  review_resolution: "1280x720",
+  review_video_sha256: "3".repeat(64),
 };
-check("fixture proof_approval", "proof_approval.schema.json", fixtureProofApproval, { kind: "fixture" });
+check("generic fixture approval", "proof_approval.schema.json", fixtureApproval, { kind: "fixture" });
 
-{
-  const alignmentPath = path.join(PROJECT_DIR, "voice", "narration_alignment.json");
-  if (fs.existsSync(alignmentPath)) {
-    check("voice/narration_alignment.json (real data, committed by CI)", "narration_alignment.schema.json", readJson(alignmentPath), { kind: "real" });
-  } else {
-    const fixtureAlignment = {
-      schema_version: "1.0-canonical",
-      project_id: PROJECT_ID,
-      source_audio_sha256: "0".repeat(64),
-      model: "tiny.en",
-      generated_at: "2026-07-22T00:00:00Z",
-      duration_seconds: 804.362,
-      script_similarity: 0.9818,
-      transcript: "Every major AI lab on Earth believes moving this fast might be dangerous.",
-      words: [{ text: "Every", start: 0, end: 0.48, probability: 0.78 }]
-    };
-    check("fixture narration_alignment (not yet produced by CI in this checkout)", "narration_alignment.schema.json", fixtureAlignment, { kind: "fixture" });
-  }
+const fixtureAlignment = {
+  schema_version: "1.0-canonical",
+  project_id: FIXTURE_PROJECT_ID,
+  source_audio_sha256: "0".repeat(64),
+  model: "tiny.en",
+  generated_at: "2026-01-01T00:00:00Z",
+  duration_seconds: 52,
+  script_similarity: 0.97,
+  transcript: "The evidence begins with a simple question.",
+  words: [{ text: "The", start: 0, end: 0.3, probability: 0.9 }],
+};
+check("generic fixture narration alignment", "narration_alignment.schema.json", fixtureAlignment, { kind: "fixture" });
+
+const fixtureResolvedPausePlan = {
+  schema_version: "1.0-resolved-pause-plan",
+  project_id: FIXTURE_PROJECT_ID,
+  source_pause_map: "direction/editorial_pause_map.json",
+  source_alignment: "voice/narration_alignment.json",
+  narration_end_seconds: 52,
+  pauses: [{
+    pause_id: "PAUSE_FULL_01_abcd1234",
+    anchor_text: "The evidence begins here.",
+    purpose: "Open the central question",
+    sound_cue: "tonal_bloom",
+    source_time_seconds: 20,
+    duration_seconds: 4,
+  }],
+};
+check("generic fixture resolved pause plan", "resolved_pause_plan.schema.json", fixtureResolvedPausePlan, { kind: "fixture" });
+
+const registryPath = path.resolve("music_library", "registry.json");
+if (fs.existsSync(registryPath)) {
+  check("shared music registry", "music_registry.schema.json", readJson(registryPath), { kind: "real shared" });
 }
-
-{
-  const registryPath = path.resolve("music_library", "registry.json");
-  if (fs.existsSync(registryPath)) {
-    check("music_library/registry.json (real canonical music registry)", "music_registry.schema.json", readJson(registryPath), { kind: "real" });
-  }
-}
-
-// ---- Report ----
 
 let failed = 0;
-for (const r of results) {
-  const status = r.ok ? "PASS" : "FAIL";
-  if (!r.ok) failed++;
-  console.log(`[${status}] (${r.kind}) ${r.label} -- ${r.schemaFile}`);
-  if (!r.ok) console.log(JSON.stringify(r.errors, null, 2));
+for (const result of results) {
+  const status = result.ok ? "PASS" : "FAIL";
+  if (!result.ok) failed += 1;
+  console.log(`[${status}] (${result.kind}) ${result.label} -- ${result.schemaFile}`);
+  if (!result.ok) console.log(JSON.stringify(result.errors, null, 2));
 }
-
-console.log(`\n${results.length - failed}/${results.length} checks passed.`);
-
-if (failed > 0) {
-  process.exitCode = 1;
-}
+console.log(`\n${results.length - failed}/${results.length} checks passed across ${readyProjects().length} ready project(s).`);
+if (failed > 0) process.exitCode = 1;

@@ -9,13 +9,16 @@ export type OrvyqGraphicSpec = {
   subtitle?: string;
   labels?: string[];
   source?: string;
+  mode?: "brand" | "comparison" | "evidence" | "process" | "statement";
+  presentation?: "cinematic";
+  mobile_font_px?: number;
 };
 
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
-const ink = "#F5F0E7";
-const muted = "#B8B4AC";
-const accent = "#D95B53";
-const blue = "#86A9CC";
+const INK = "#F6F2E9";
+const MUTED = "#C5CBD2";
+const RED = "#E06A63";
+const BLUE = "#8CB5DC";
 
 const modeFor = (spec: OrvyqGraphicSpec) => {
   if (["brand_open", "brand_close"].includes(spec.type)) return "brand";
@@ -25,101 +28,37 @@ const modeFor = (spec: OrvyqGraphicSpec) => {
   return "statement";
 };
 
-const Mark = () => (
-  <div style={{ display: "flex", alignItems: "center", gap: 12, fontFamily: "Arial", letterSpacing: ".28em", fontSize: 19, color: ink }}>
-    <span style={{ width: 9, height: 9, borderRadius: 99, background: accent }} />ORVYQ
-  </div>
-);
+const Mark: React.FC = () => <div style={{ position: "absolute", left: 68, top: 52, display: "flex", alignItems: "center", gap: 12, color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 22, fontWeight: 850, letterSpacing: ".24em" }}><span style={{ width: 9, height: 9, borderRadius: 99, background: RED, boxShadow: "0 0 0 6px rgba(224,106,99,.12)" }} />ORVYQ</div>;
 
-const Brand: React.FC<{ spec: OrvyqGraphicSpec; reveal: number }> = ({ spec, reveal }) => (
-  <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", textAlign: "center", padding: "7%" }}>
-    <div style={{ opacity: reveal, transform: `translateY(${(1 - reveal) * 24}px)` }}>
-      <div style={{ color: blue, letterSpacing: ".3em", fontSize: 20, marginBottom: 28 }}>{spec.kicker}</div>
-      <div style={{ color: ink, fontSize: spec.type === "brand_close" ? 82 : 94, lineHeight: 1, fontWeight: 760, letterSpacing: "-.04em" }}>{spec.title}</div>
-      {spec.subtitle ? <div style={{ color: muted, fontSize: 29, lineHeight: 1.35, marginTop: 28, maxWidth: 1080 }}>{spec.subtitle}</div> : null}
-    </div>
-  </AbsoluteFill>
-);
+const Brand: React.FC<{ spec: OrvyqGraphicSpec; reveal: number }> = ({ spec, reveal }) => <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", textAlign: "center", padding: "7%", background: "radial-gradient(circle at 50% 42%,#2A425A 0%,#0B1521 44%,#04070C 100%)" }}><div style={{ opacity: reveal, transform: `translateY(${(1 - reveal) * 28}px)`, maxWidth: 1500 }}><div style={{ color: BLUE, letterSpacing: ".3em", fontSize: 24, fontWeight: 850, marginBottom: 30 }}>{spec.kicker}</div><div style={{ color: INK, fontSize: spec.type === "brand_close" ? 90 : 102, lineHeight: .98, fontWeight: 820, letterSpacing: "-.045em" }}>{spec.title}</div>{spec.subtitle ? <div style={{ color: MUTED, fontSize: 34, lineHeight: 1.34, marginTop: 30 }}>{spec.subtitle}</div> : null}<div style={{ width: 240, height: 4, margin: "42px auto 0", background: `linear-gradient(90deg,${BLUE},${RED})`, transform: `scaleX(${reveal})` }} /></div></AbsoluteFill>;
 
-const Comparison: React.FC<{ spec: OrvyqGraphicSpec; p: number }> = ({ spec, p }) => {
+const Comparison: React.FC<{ spec: OrvyqGraphicSpec; progress: number }> = ({ spec, progress }) => {
   const labels = spec.labels?.length === 2 ? spec.labels : ["WHAT THE TEST SHOWS", "WHAT IT DOES NOT PROVE"];
-  return (
-    <div style={{ width: "100%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-      {labels.map((label, index) => {
-        const show = interpolate(p, [0.08 + index * 0.12, 0.42 + index * 0.12], [0, 1], clamp);
-        return (
-          <div key={label} style={{ minHeight: 260, border: `1px solid ${index ? "rgba(245,240,231,.42)" : blue}`, background: "rgba(7,13,23,.62)", padding: 34, opacity: show, transform: `translateY(${(1 - show) * 20}px)` }}>
-            <div style={{ color: index ? muted : blue, fontSize: 18, letterSpacing: ".18em", marginBottom: 26 }}>{index ? "LIMIT" : "MEANING"}</div>
-            <div style={{ color: ink, fontSize: 34, lineHeight: 1.2, fontWeight: 680 }}>{label}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 60, width: "100%", paddingTop: 12 }}>{labels.map((label, index) => { const show = interpolate(progress, [.06 + index * .14, .46 + index * .14], [0, 1], clamp); const color = index ? RED : BLUE; return <div key={label} style={{ opacity: show, transform: `translateY(${(1 - show) * 24}px)`, borderTop: `5px solid ${color}`, paddingTop: 28 }}><div style={{ color, fontSize: 23, letterSpacing: ".14em", fontWeight: 900 }}>{index ? "LIMIT" : "MEANING"}</div><div style={{ color: INK, fontSize: 45, lineHeight: 1.08, fontWeight: 830, marginTop: 20 }}>{label}</div></div>; })}</div>;
 };
 
-const Evidence: React.FC<{ spec: OrvyqGraphicSpec; p: number }> = ({ spec, p }) => {
-  const rows = spec.labels?.length ? spec.labels : ["Published source", "Claim under discussion", "Context and limitation"];
-  return (
-    <div style={{ width: "100%", maxWidth: 1120, border: "1px solid rgba(245,240,231,.34)", background: "rgba(248,246,240,.055)", padding: 38 }}>
-      <div style={{ color: blue, letterSpacing: ".2em", fontSize: 18, marginBottom: 28 }}>SOURCE CONTEXT</div>
-      {rows.map((row, index) => {
-        const show = interpolate(p, [0.08 + index * 0.1, 0.38 + index * 0.1], [0, 1], clamp);
-        return <div key={row} style={{ display: "grid", gridTemplateColumns: "46px 1fr", gap: 20, padding: "18px 0", borderTop: "1px solid rgba(245,240,231,.12)", opacity: show }}><span style={{ color: accent, fontSize: 20 }}>{String(index + 1).padStart(2, "0")}</span><span style={{ color: ink, fontSize: 29, lineHeight: 1.2 }}>{row}</span></div>;
-      })}
-      {spec.source ? <div style={{ marginTop: 26, color: muted, fontSize: 19 }}>Source: {spec.source}</div> : null}
-    </div>
-  );
+const Evidence: React.FC<{ spec: OrvyqGraphicSpec; progress: number }> = ({ spec, progress }) => {
+  const rows = (spec.labels?.length ? spec.labels : ["Published source", "Claim under discussion", "Context and limitation"]).slice(0, 3);
+  return <div style={{ width: "100%", display: "flex", flexDirection: "column", justifyContent: "center" }}>{rows.map((row, index) => { const show = interpolate(progress, [.06 + index * .11, .4 + index * .11], [0, 1], clamp); return <div key={row} style={{ display: "grid", gridTemplateColumns: "64px 1fr", gap: 22, alignItems: "center", padding: "22px 0", borderTop: "1px solid rgba(246,242,233,.2)", opacity: show }}><span style={{ color: index === rows.length - 1 ? RED : BLUE, fontSize: 24, fontWeight: 900 }}>{String(index + 1).padStart(2, "0")}</span><span style={{ color: INK, fontSize: 38, lineHeight: 1.16, fontWeight: 760 }}>{row}</span></div>; })}{spec.source ? <div style={{ color: MUTED, fontSize: 24, lineHeight: 1.2, marginTop: 28 }}>Source: {spec.source}</div> : null}</div>;
 };
 
-const Process: React.FC<{ spec: OrvyqGraphicSpec; p: number }> = ({ spec, p }) => {
-  const labels = spec.labels?.length ? spec.labels : ["CONSTRAIN", "AUDIT", "REPORT", "VERIFY"];
-  return (
-    <div style={{ width: "100%", display: "grid", gridTemplateColumns: `repeat(${labels.length}, 1fr)`, gap: 14, alignItems: "stretch" }}>
-      {labels.map((label, index) => {
-        const show = interpolate(p, [0.06 + index * 0.1, 0.34 + index * 0.1], [0, 1], clamp);
-        return <div key={label} style={{ position: "relative", minHeight: 210, border: "1px solid rgba(245,240,231,.28)", padding: 26, display: "flex", alignItems: "flex-end", background: index % 2 ? "rgba(134,169,204,.09)" : "rgba(217,91,83,.07)", opacity: show }}><span style={{ position: "absolute", top: 20, left: 22, color: index % 2 ? blue : accent, fontSize: 18 }}>0{index + 1}</span><span style={{ color: ink, fontSize: 25, lineHeight: 1.15, letterSpacing: ".06em" }}>{label}</span></div>;
-      })}
-    </div>
-  );
+const Process: React.FC<{ spec: OrvyqGraphicSpec; progress: number }> = ({ spec, progress }) => {
+  const labels = (spec.labels?.length ? spec.labels : ["CONSTRAIN", "AUDIT", "REPORT", "VERIFY"]).slice(0, 4);
+  return <div style={{ width: "100%", display: "flex", alignItems: "center", gap: 18 }}>{labels.map((label, index) => { const show = interpolate(progress, [.05 + index * .11, .34 + index * .11], [0, 1], clamp); return <React.Fragment key={label}><div style={{ flex: 1, opacity: show, borderTop: `5px solid ${index === labels.length - 1 ? RED : BLUE}`, paddingTop: 24 }}><div style={{ color: index === labels.length - 1 ? RED : BLUE, fontSize: 23, fontWeight: 900, letterSpacing: ".12em" }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontSize: 34, lineHeight: 1.12, fontWeight: 800, marginTop: 16 }}>{label}</div></div>{index < labels.length - 1 ? <div style={{ color: BLUE, fontSize: 38, opacity: show }}>→</div> : null}</React.Fragment>; })}</div>;
 };
 
-const Statement: React.FC<{ spec: OrvyqGraphicSpec; p: number }> = ({ spec, p }) => {
-  const signal = spec.labels?.[0] || "CONTEXT";
-  const reveal = interpolate(p, [0.06, 0.5], [0, 1], clamp);
-  return (
-    <div style={{ width: "100%", maxWidth: 1000, minHeight: 330, border: "1px solid rgba(245,240,231,.22)", background: "rgba(7,13,23,.5)", display: "grid", placeItems: "center", position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", inset: 0, opacity: 0.22, background: "radial-gradient(circle at center, rgba(134,169,204,.35), transparent 62%)" }} />
-      <div style={{ color: ink, fontSize: 138, lineHeight: 0.9, fontWeight: 760, letterSpacing: "-.055em", opacity: reveal, transform: `scale(${0.92 + reveal * 0.08})` }}>{signal}</div>
-      <div style={{ position: "absolute", left: 50, right: 50, bottom: 38, height: 3, background: `linear-gradient(90deg,${blue},${accent})`, transform: `scaleX(${reveal})`, transformOrigin: "left" }} />
-    </div>
-  );
+const Statement: React.FC<{ spec: OrvyqGraphicSpec; progress: number }> = ({ spec, progress }) => {
+  const signal = spec.labels?.[0];
+  const reveal = interpolate(progress, [.05, .5], [0, 1], clamp);
+  return <div style={{ width: "100%", minHeight: 330, display: "flex", flexDirection: "column", justifyContent: "center", position: "relative" }}>{signal ? <div style={{ color: INK, fontSize: 126, lineHeight: .9, fontWeight: 840, letterSpacing: "-.055em", opacity: reveal, transform: `translateX(${(1 - reveal) * 24}px)` }}>{signal}</div> : <div style={{ color: INK, fontSize: 58, lineHeight: 1.05, fontWeight: 820, opacity: reveal }}>{spec.title}</div>}<div style={{ width: "70%", height: 4, background: `linear-gradient(90deg,${BLUE},${RED})`, marginTop: 40, transform: `scaleX(${reveal})`, transformOrigin: "left" }} /></div>;
 };
 
 export const OrvyqGraphic: React.FC<{ spec: OrvyqGraphicSpec; durationInFrames: number }> = ({ spec, durationInFrames }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const p = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [0, 1], clamp);
-  const reveal = spring({ frame, fps, config: { damping: 20, stiffness: 105, mass: 0.9 }, durationInFrames: Math.min(durationInFrames, 34) });
-  const mode = modeFor(spec);
-
-  if (mode === "brand") {
-    return <AbsoluteFill style={{ background: "radial-gradient(circle at 50% 42%,#263C53 0%,#0B121D 44%,#05070C 100%)", color: ink }}><Brand spec={spec} reveal={reveal} /></AbsoluteFill>;
-  }
-
-  return (
-    <AbsoluteFill style={{ background: "linear-gradient(135deg,#101A27 0%,#0C1320 48%,#151C23 100%)", color: ink, padding: "5.2% 6.4%", justifyContent: "space-between" }}>
-      <Mark />
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(430px,.78fr) minmax(700px,1.22fr)", gap: 64, alignItems: "center", flex: 1 }}>
-        <div style={{ opacity: reveal, transform: `translateX(${(1 - reveal) * -28}px)` }}>
-          <div style={{ color: blue, letterSpacing: ".2em", fontSize: 18, marginBottom: 22 }}>{spec.kicker || "EDITORIAL CONTEXT"}</div>
-          <div style={{ color: ink, fontSize: 52, lineHeight: 1.06, fontWeight: 720, letterSpacing: "-.025em" }}>{spec.title}</div>
-          {spec.subtitle ? <div style={{ color: muted, fontSize: 26, lineHeight: 1.38, marginTop: 24 }}>{spec.subtitle}</div> : null}
-        </div>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          {mode === "comparison" ? <Comparison spec={spec} p={p} /> : mode === "evidence" ? <Evidence spec={spec} p={p} /> : mode === "process" ? <Process spec={spec} p={p} /> : <Statement spec={spec} p={p} />}
-        </div>
-      </div>
-    </AbsoluteFill>
-  );
+  const progress = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [0, 1], clamp);
+  const reveal = spring({ frame, fps, config: { damping: 21, stiffness: 102, mass: .9 }, durationInFrames: Math.min(durationInFrames, 36) });
+  const mode = spec.mode || modeFor(spec);
+  if (mode === "brand") return <Brand spec={spec} reveal={reveal} />;
+  return <AbsoluteFill style={{ color: INK, padding: "5.4% 6.4%", background: `radial-gradient(circle at ${20 + progress * 15}% 22%,rgba(140,181,220,.17),transparent 34%),linear-gradient(140deg,#111D2B 0%,#08111C 58%,#060A10 100%)`, overflow: "hidden", fontFamily: "Arial, Helvetica, sans-serif" }}><AbsoluteFill style={{ opacity: .1, backgroundImage: "linear-gradient(rgba(140,181,220,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(140,181,220,.12) 1px,transparent 1px)", backgroundSize: "104px 104px", transform: `translate(${progress * -12}px,${progress * -8}px)` }} /><Mark /><div style={{ display: "grid", gridTemplateColumns: "minmax(430px,.72fr) minmax(700px,1.28fr)", gap: 72, alignItems: "center", flex: 1, paddingTop: 60, zIndex: 2 }}><div style={{ opacity: reveal, transform: `translateX(${(1 - reveal) * -28}px)` }}><div style={{ color: BLUE, letterSpacing: ".18em", fontSize: 23, fontWeight: 900, marginBottom: 22 }}>{spec.kicker || "EDITORIAL CONTEXT"}</div><div style={{ color: INK, fontSize: 62, lineHeight: 1.03, fontWeight: 840, letterSpacing: "-.035em" }}>{spec.title}</div>{spec.subtitle ? <div style={{ color: MUTED, fontSize: 31, lineHeight: 1.35, marginTop: 26 }}>{spec.subtitle}</div> : null}</div><div style={{ display: "flex", alignItems: "center", minHeight: 420 }}>{mode === "comparison" ? <Comparison spec={spec} progress={progress} /> : mode === "evidence" ? <Evidence spec={spec} progress={progress} /> : mode === "process" ? <Process spec={spec} progress={progress} /> : <Statement spec={spec} progress={progress} />}</div></div></AbsoluteFill>;
 };

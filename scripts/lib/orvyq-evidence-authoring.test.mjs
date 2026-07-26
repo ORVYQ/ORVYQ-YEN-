@@ -114,6 +114,35 @@ test("claimLimitation: the shared controlled-simulation source is always flagged
   assert.equal(claimLimitation(c, [source]), "Controlled simulation, not a documented real-world incident.");
 });
 
+// Regression fixture: research/evidence_map.json's real
+// CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS.evidence_requirements contains the
+// exact sentence "Do not imply all labs hold identical views." -- confirmed
+// present verbatim in the rejected review (run 30132412035). Before this
+// fix, a requirement fact this negative could become `lead` (the rotation's
+// leading fact) or a comparison card's `right` side, printing this internal
+// production instruction directly on screen. This asserts no field
+// buildEvidenceContent returns, for any kind/role/occurrence, ever contains
+// a raw evidence_requirements[] string.
+test("leaked-instruction regression: no returned field ever contains a raw evidence_requirements string", () => {
+  const LEAKED_NEGATIVE = "Do not imply all labs hold identical views.";
+  const LEAKED_POSITIVE = "State controlled simulations.";
+  const c = claim({
+    claim_id: "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS",
+    evidence_requirements: [LEAKED_NEGATIVE, LEAKED_POSITIVE, "Show official article title/date.", "no decorative stock ticker"]
+  });
+  for (const kind of ["source_timeline", "source_article", "concept_map", "evidence_chain", "comparison", "boundary"]) {
+    for (const role of ["evidence", "context", "metaphor", "archive"]) {
+      for (let occurrence = 0; occurrence < 4; occurrence += 1) {
+        const result = buildEvidenceContent({ claim: c, kind, role, displaySources: [SOURCE_A, SOURCE_B], ownSources: [SOURCE_A, SOURCE_B], section: SECTION, occurrence });
+        const serialized = JSON.stringify(result);
+        for (const requirement of c.evidence_requirements) {
+          assert.ok(!serialized.includes(requirement), `${kind}/${role}/occurrence ${occurrence} leaked a raw evidence_requirements string: "${requirement}"\nfull output: ${serialized}`);
+        }
+      }
+    }
+  }
+});
+
 test("a recap claim with no own source_ids still gets non-empty, non-recap-biased limitation handling", () => {
   const recapClaim = claim({ claim_id: "CLM_020_RECAP", source_ids: [], status: "attributed_commentary", evidence_requirements: ["Treat as the film's synthesis."] });
   const manySources = [SOURCE_A, SOURCE_B];

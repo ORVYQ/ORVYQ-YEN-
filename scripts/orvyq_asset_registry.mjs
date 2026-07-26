@@ -17,8 +17,11 @@ import path from "node:path";
 import { promises as fs } from "node:fs";
 import { createHash } from "node:crypto";
 import { projectDir, readJson, readJsonSafe, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
+import { runViewerTextSanitize } from "./orvyq_viewer_text_sanitize.mjs";
+import { polishCreativePlan } from "./orvyq_creative_polish.mjs";
+import { buildDynamicRemix } from "./orvyq_dynamic_remix.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 async function sha256OfFile(absPath) {
   const buffer = await fs.readFile(absPath);
@@ -108,7 +111,7 @@ async function audioEntries(dir, mixMetadata) {
       asset_id: "final_mix",
       type: "narration",
       path: mixMetadata.mix_asset,
-      source: "ElevenLabs narration + buildCanonicalAudioMix",
+      source: "ElevenLabs narration + canonical dynamic ORVYQ mix",
       license: "original -- project-owned narration",
       attribution: "",
       duration_seconds: mixMetadata.duration_seconds,
@@ -122,6 +125,17 @@ async function audioEntries(dir, mixMetadata) {
 
 export async function buildCanonicalAssetRegistry(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
+  // These two review-derived fixes are intentionally enforced at the final
+  // pre-freeze registry boundary as well as exposed as standalone commands.
+  // Candidate Validation always calls this script after building the edit
+  // plan, captions and base audio mix, so no validated bundle can omit them.
+  await polishCreativePlan(projectId);
+  await buildDynamicRemix(projectId);
+  // Canonicalize viewer-facing text before any downstream render-ready build,
+  // frozen-candidate hash, bundle upload, or instruction-leak audit consumes
+  // direction/edit_plan.json. This keeps internal editorial phrasing out of
+  // the immutable review candidate rather than merely suppressing the audit.
+  await runViewerTextSanitize(projectId);
   const [editPlan, blueprint, evidenceManifest, mixMetadata] = await Promise.all([
     readJson(path.join(dir, "direction", "edit_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),

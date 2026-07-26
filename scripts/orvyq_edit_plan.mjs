@@ -22,8 +22,8 @@ import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
+import { loadProductionPolicy, resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
 const FPS = 30;
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
 const NATIVE_KINDS = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
@@ -71,9 +71,9 @@ function fractionSummary(shots, totalFrames) {
 // text below, chosen because it closes a complete narrative arc (the race
 // paradox through the competitive-incentive reflection) on a strong,
 // self-contained line, rather than an arbitrary duration cutoff.
-const PROOF_BOUNDARY_ANCHOR_TEXT = "Slowing down alone doesn't remove the risk. It just hands the frontier to whoever doesn't.";
 
-export function resolveProofBoundaryFrame(shots, anchorText = PROOF_BOUNDARY_ANCHOR_TEXT) {
+export function resolveProofBoundaryFrame(shots, anchorText) {
+  if (!anchorText) throw new Error("resolveProofBoundaryFrame requires an explicit project-authored anchorText");
   const match = shots.find((shot) => shot.emphasis_card?.title === anchorText);
   if (!match) throw new Error(`Proof boundary anchor not found among built shots: "${anchorText}"`);
   return match.end_frame;
@@ -226,7 +226,10 @@ async function buildFullPlan(dir, projectId, blueprint) {
     const trimIn = Number(spec.trim_in_sec || 0);
     const trimOut = Number(spec.trim_out_sec || trimIn + duration);
     if (!Number.isFinite(sourceDuration) || trimIn < 0 || trimOut <= trimIn || trimOut > sourceDuration + 0.02)
-      throw new Error(`${common.shot_id} has an invalid footage trim`);
+      throw new Error(
+        `${common.shot_id} has an invalid footage trim on ${spec.asset}: trim_in=${trimIn}, trim_out=${trimOut}, ` +
+          `real source duration=${sourceDuration} -- ${trimOut > sourceDuration + 0.02 ? "trim_out overruns the clip's own real duration" : "trim_in/trim_out are not a valid non-empty range"}`
+      );
     if (Math.abs(trimOut - trimIn - duration) > 0.02) throw new Error(`full_production.shots[${index}] trim does not match timeline duration`);
     // A shot that continues the immediately preceding shot's own asset from
     // exactly where its trim left off (an editorial pause hold on the same
@@ -247,7 +250,13 @@ async function buildFullPlan(dir, projectId, blueprint) {
       motion_variant: spec.motion || "hold",
       hook_footage: isHookFootage,
       contextual_footage: isContextualFootage,
-      provenance_mode: isHookFootage ? "approved_motion_hook" : "approved_contextual_footage"
+      provenance_mode: isHookFootage ? "approved_motion_hook" : "approved_contextual_footage",
+      // scripts/orvyq_full_production_plan.mjs only sets this when a
+      // FOOTAGE_ASSIGNMENTS entry declares a real reuse_reason (a second
+      // use of an already-used clip) -- scripts/orvyq_duplicate_footage_
+      // audit.mjs's own hard-use-limit check reads it straight off this
+      // same shot object, so it must survive this conversion.
+      ...(spec.reuse_reason ? { reuse_reason: spec.reuse_reason } : {})
     });
   }
 
@@ -264,35 +273,33 @@ async function buildFullPlan(dir, projectId, blueprint) {
 
 // ---- shared assembly ----
 
-export async function buildCanonicalEditPlan(projectId = PROJECT_ID, { mode = "proof", frameEnd = null } = {}) {
-  if (mode !== "proof" && mode !== "full") throw new Error(`mode must be "proof" or "full", got "${mode}"`);
+export async function buildCanonicalEditPlan(projectId, { mode = "candidate", frameEnd = null } = {}) {
+  const policy = await loadProductionPolicy(projectId);
+  if (!["candidate", "proof", "full"].includes(mode)) throw new Error(`mode must be "candidate" (or the legacy "proof"/"full" labels), got "${mode}"`);
   const dir = projectDir(projectId);
   const blueprint = await readJson(path.join(dir, "direction", "editorial_blueprint.json"));
 
-  // Both modes now build from the exact same full data model: proof is a
-  // frame-prefix of the full candidate, not a separately-authored cut (see
-  // the "proof boundary resolution" section above). The only thing `mode`
-  // still changes here is `frame_range.end_frame` (via frameEnd, below) and
-  // the label written into plan.mode itself.
+  // There is only ONE candidate now: buildFullPlan's shots/duration_frames,
+  // rendered start to finish, always. The short-proof-as-frame-prefix
+  // mechanism (mode: "proof" truncating frame_range via
+  // resolveProofBoundaryFrame, below) is retired from the live pipeline per
+  // task section 2 -- "Kısa proof ... artık kabul edilmeyecektir" -- and is
+  // kept in this file only as historical/regression reference
+  // (resolveProofBoundaryFrame is no longer called here). `frameEnd` remains
+  // as an explicit escape hatch for genuinely one-off diagnostic renders
+  // (e.g. rendering just the first N frames to sanity-check the opening),
+  // never as a substitute for the full-length review render.
   const built = await buildFullPlan(dir, projectId, blueprint);
   const { shots, durationFrames, productionMode, strategy, sourceUsage, evidenceIdUsage, quality_policy_overrides } = built;
 
   const hookAudit = auditMotionHook({
     fps: FPS,
     shots,
-    // cinematic_body_footage is a shared editorial policy now, not a
-    // mode-dependent one: both proof and full consume licensed contextual
-    // footage through the same data model, so both are allowed to use it.
     quality_policy: { motion_hook_min_seconds: quality_policy_overrides.motion_hook_min_seconds || 10, motion_hook_max_seconds: quality_policy_overrides.motion_hook_max_seconds || 14, cinematic_body_footage: true }
   });
   if (!hookAudit.pass) throw new Error(`Motion hook failed: ${hookAudit.failures.join("; ")}`);
 
-  // For proof, an explicit --frame-end always wins; otherwise the boundary
-  // is resolved automatically from the real, current shot list (never a
-  // stale hardcoded frame number) so it can never silently drift out of
-  // sync with upstream edits to footage/narration/pause timing.
-  const resolvedFrameEnd = Number.isFinite(frameEnd) && frameEnd > 0 ? frameEnd : mode === "proof" ? resolveProofBoundaryFrame(shots) : null;
-  const selectedEnd = Number.isFinite(resolvedFrameEnd) && resolvedFrameEnd > 0 ? Math.min(resolvedFrameEnd, durationFrames) : durationFrames;
+  const selectedEnd = Number.isFinite(frameEnd) && frameEnd > 0 ? Math.min(frameEnd, durationFrames) : durationFrames;
 
   const plan = {
     schema_version: "1.0-canonical",
@@ -306,12 +313,7 @@ export async function buildCanonicalEditPlan(projectId = PROJECT_ID, { mode = "p
     production_mode: productionMode,
     strategy,
     render_source_sha: process.env.GITHUB_SHA || null,
-    art_direction: {
-      principle: strategy,
-      topic: "AI competition, safety frameworks, governance, and controlled agentic-misalignment evaluations",
-      palette: { ink: "#F5F0E7", accent: "#D95B53", information: "#86A9CC", ground: "#07101A" },
-      source_treatment: "full-screen official captures and explicit source-derived graphics"
-    },
+    art_direction: { principle: strategy, ...policy.project.art_direction },
     quality_policy: {
       ...blueprint.global_rules,
       keyword_only_visual_matching_forbidden: true,
@@ -346,23 +348,32 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const args = parseArgs(process.argv.slice(2));
   const mode = args.mode || "proof";
   const frameEnd = args["frame-end"] ? Number.parseInt(args["frame-end"], 10) : null;
-  buildCanonicalEditPlan(args["project-id"] || PROJECT_ID, { mode, frameEnd })
-    .then((plan) =>
-      printJson({
-        ok: true,
-        mode: plan.mode,
-        shot_count: plan.shots.length,
-        footage_count: plan.shots.filter((shot) => shot.asset_type === "footage").length,
-        evidence_count: plan.shots.filter((shot) => shot.asset_type === "evidence").length,
-        frame_range: plan.frame_range,
-        duration_frames: plan.duration_frames,
-        source_usage: plan.source_usage,
-        primary_evidence_fraction: plan.quality_policy.actual_primary_evidence_fraction,
-        output: "direction/edit_plan.json"
-      })
-    )
-    .catch((error) => {
-      console.error(JSON.stringify({ ok: false, error: error.message }));
-      process.exitCode = 1;
-    });
+  let projectId;
+  try {
+    projectId = resolveProjectId(args);
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exitCode = 1;
+  }
+  if (projectId) {
+    buildCanonicalEditPlan(projectId, { mode, frameEnd })
+      .then((plan) =>
+        printJson({
+          ok: true,
+          mode: plan.mode,
+          shot_count: plan.shots.length,
+          footage_count: plan.shots.filter((shot) => shot.asset_type === "footage").length,
+          evidence_count: plan.shots.filter((shot) => shot.asset_type === "evidence").length,
+          frame_range: plan.frame_range,
+          duration_frames: plan.duration_frames,
+          source_usage: plan.source_usage,
+          primary_evidence_fraction: plan.quality_policy.actual_primary_evidence_fraction,
+          output: "direction/edit_plan.json",
+        })
+      )
+      .catch((error) => {
+        console.error(JSON.stringify({ ok: false, error: error.message }));
+        process.exitCode = 1;
+      });
+  }
 }

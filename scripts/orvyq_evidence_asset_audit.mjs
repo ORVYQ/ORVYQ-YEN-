@@ -8,7 +8,7 @@ import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-util
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const OFFICIAL_CAPTURE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
 const SOURCE_DERIVED_KINDS = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
 const unique = (values) => [...new Set(values.filter(Boolean))];
