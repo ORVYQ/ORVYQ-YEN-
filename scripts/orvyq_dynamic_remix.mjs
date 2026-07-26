@@ -5,7 +5,7 @@ import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./l
 import { command, extractLoudnorm, measureLoudness, normalizeFilter } from "./lib/orvyq-loudness.mjs";
 import { DEFAULT_PAUSE_RISE_DB, DEFAULT_PAUSE_RISE_RAMP_SECONDS, buildPauseRiseFfmpegExpr } from "./lib/orvyq-music-envelope.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const MINIMUM_ACCEPTABLE_LRA = 4.5;
 const TARGET_LRA = 7;
 const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));

@@ -26,7 +26,7 @@ import path from "node:path";
 import { projectDir, readJson, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { computeCanonicalFrozenCandidate } from "./orvyq_frozen_candidate.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 // Stage 1 (cheap, runs before any build step): confirms the approval on file
 // still names the candidate actually committed at HEAD, for the right mode.

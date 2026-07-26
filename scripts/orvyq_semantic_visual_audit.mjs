@@ -6,7 +6,7 @@ import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const VALID_ROLES = new Set(["evidence", "archive", "context", "metaphor", "graphic"]);
 const OFFICIAL = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
 const DERIVED = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);

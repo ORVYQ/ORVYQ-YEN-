@@ -16,7 +16,7 @@ import { promises as fs } from "node:fs";
 import { projectDir, readJson, parseArgs, printJson, pathExists } from "./lib/fs-utils.mjs";
 import { sha256OfFile, sha256OfDirectoryTree } from "./orvyq_frozen_candidate.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 export async function verifyBundleIntegrity(projectId = PROJECT_ID, { renderReadyDir } = {}) {
   const dir = projectDir(projectId);

@@ -14,7 +14,7 @@ import {
   printJson
 } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 function safeRelative(value, label) {
   if (!value || typeof value !== "string" || path.isAbsolute(value) || value.includes("\\"))

@@ -7,7 +7,7 @@ import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const ALLOWED_STATUSES = new Set(["verified", "attributed_commentary"]);
 const unique = (values) => [...new Set(values.filter(Boolean))];
 const sourceIdsFor = (shot) =>

@@ -38,7 +38,7 @@ import { command, extractLoudnorm, measureLoudness, normalizeFilter, durationSec
 import { DEFAULT_PAUSE_RISE_DB, DEFAULT_PAUSE_RISE_RAMP_SECONDS, buildPauseRiseFfmpegExpr } from "./lib/orvyq-music-envelope.mjs";
 import { END_CARD_FADE_SECONDS } from "./lib/orvyq-timeline.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const PROOF_SECONDS = 150;
 const UNDER_SPEECH_GAIN_DEFAULT = 0.7;
 const FIRST_EVIDENCE_BEAT_PROOF_SECONDS = 11;

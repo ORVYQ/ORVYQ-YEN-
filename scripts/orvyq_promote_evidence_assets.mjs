@@ -21,7 +21,7 @@
 import path from "node:path";
 import { projectDir, readJson, readJsonSafe, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 export async function promoteEvidenceAssets(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);

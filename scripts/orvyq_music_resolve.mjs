@@ -35,7 +35,7 @@ import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./l
 import { resolveCanonicalTrack, resolveCanonicalTrackToPath, loadMusicRegistry } from "./lib/orvyq-music-registry.mjs";
 import { command, durationSecondsOf } from "./lib/orvyq-loudness.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 // Real overlapping crossfade duration (ffmpeg `acrossfade`), used both (a)
 // between adjacent cue segments in the final concatenated bed, and (b) at

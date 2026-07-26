@@ -24,7 +24,7 @@ import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 // Imperative production-instruction phrasing (task section 8.2's own list).
 // Case-insensitive, matched anywhere in a visible string, not just at its

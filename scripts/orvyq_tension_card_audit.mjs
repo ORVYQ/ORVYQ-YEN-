@@ -6,7 +6,7 @@
 import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const MAX_TOTAL_EMPHASIS_SECONDS = 50;
 const TYPICAL_MIN_SECONDS = 2.5;
 const TYPICAL_MAX_SECONDS = 4.5;

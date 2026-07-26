@@ -11,7 +11,7 @@ import path from "node:path";
 import { projectDir, readJson, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { FOOTAGE_ASSIGNMENTS, FULL_FOOTAGE_POOL, HOOK_PRELOADED_USAGE } from "./orvyq_full_production_plan.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 export async function buildFootageDurationReport(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);

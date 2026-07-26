@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { resolveCanonicalPausePlan } from "./orvyq_resolve_pauses.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = "000-example-project";
 
 // Integration test against the real, committed project data (direction/
 // editorial_pause_map.json + voice/narration_alignment.json are both

@@ -28,7 +28,7 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 export async function sha256OfFile(absPath) {
   const buffer = await fs.readFile(absPath);

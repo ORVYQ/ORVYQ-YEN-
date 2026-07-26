@@ -4,7 +4,7 @@ import path from "node:path";
 import { promoteEvidenceAssets } from "./orvyq_promote_evidence_assets.mjs";
 import { projectDir, readJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = "000-example-project";
 
 // Integration test against the real, committed manifest -- no
 // assets/evidence/primary_evidence.runtime.json exists in a fresh checkout

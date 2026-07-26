@@ -5,7 +5,7 @@ import { validateLocalManifest } from "./orvyq_materialize_footage.mjs";
 
 test("accepts the committed local footage manifest", async () => {
   const manifest = JSON.parse(await readFile(
-    new URL("../projects/001-the-ai-race-no-one-can-afford-to-win/assets/local_assets.json", import.meta.url)
+    new URL("../projects/000-example-project/assets/local_assets.json", import.meta.url)
   ));
   assert.deepEqual(validateLocalManifest(manifest), []);
   assert.equal(manifest.assets.length, 25);

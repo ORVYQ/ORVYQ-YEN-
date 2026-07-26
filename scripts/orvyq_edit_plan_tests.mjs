@@ -22,7 +22,7 @@ import { projectDir, readJson, pathExists } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 const run = promisify(execFile);
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const VALID_ROLES = new Set(["evidence", "archive", "context", "metaphor", "graphic"]);
 const VALID_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "source_timeline", "source_article", "concept_map", "boundary", "comparison", "recap", "evidence_chain"]);
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);

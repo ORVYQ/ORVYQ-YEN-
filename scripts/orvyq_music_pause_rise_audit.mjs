@@ -10,7 +10,7 @@ import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { pauseGainMultiplierAt, dbToLinear } from "./lib/orvyq-music-envelope.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const MIN_RISE_DB = 2;
 const MAX_RISE_DB = 4;
 const MIN_END_CARD_FADE_SECONDS = 4;

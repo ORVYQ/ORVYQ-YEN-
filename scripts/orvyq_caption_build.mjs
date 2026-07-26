@@ -13,7 +13,7 @@ import path from "node:path";
 import { promises as fs } from "node:fs";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const MAX_WORDS = 7;
 const MAX_CHARS = 52;
 const MAX_SPEECH_GAP_SECONDS = 0.8;

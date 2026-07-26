@@ -10,7 +10,7 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { projectDir, pathExists, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const MAX_NONTERMINAL_SECONDS = 1.0;
 const TERMINAL_WINDOW_SECONDS = 1.5; // matches orvyq_media_qa.mjs's own terminal-fade exemption window
 

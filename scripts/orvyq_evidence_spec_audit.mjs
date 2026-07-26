@@ -15,7 +15,7 @@ import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { claimLimitation } from "./lib/orvyq-evidence-authoring.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const TIMELINE_KINDS = new Set(["source_timeline", "source_article"]);
 const CHAIN_KINDS = new Set(["concept_map", "evidence_chain"]);
 const CONTRAST_KINDS = new Set(["comparison", "boundary"]);

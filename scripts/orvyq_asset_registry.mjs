@@ -21,7 +21,7 @@ import { runViewerTextSanitize } from "./orvyq_viewer_text_sanitize.mjs";
 import { polishCreativePlan } from "./orvyq_creative_polish.mjs";
 import { buildDynamicRemix } from "./orvyq_dynamic_remix.mjs";
 
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
 async function sha256OfFile(absPath) {
   const buffer = await fs.readFile(absPath);

@@ -22,7 +22,7 @@ import { promisify } from "node:util";
 import { projectDir, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
 
 const exec = promisify(execFile);
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const DEFAULT_MIN_DURATION_SECONDS = 150;
 const SOURCE_PAGE = "https://www.scottbuckley.com.au/library/signal-to-noise/";
 const DOWNLOAD_URL = "https://www.scottbuckley.com.au/library/wp-content/uploads/2020/04/sb_signaltonoise.mp3";

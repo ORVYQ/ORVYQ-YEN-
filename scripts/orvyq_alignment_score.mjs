@@ -25,7 +25,7 @@
 import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
-const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
+const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const clamp01 = (value) => Math.max(0, Math.min(1, Number(value) || 0));
 const SOURCE_BACKED_FRACTION_MINIMUM = 0.4;
 const MAX_UNINTERRUPTED_EVIDENCE_SECONDS = 15;
