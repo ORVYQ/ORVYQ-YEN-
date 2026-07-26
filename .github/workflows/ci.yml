@@ -9,10 +9,10 @@ on:
 permissions:
   contents: read
   actions: read
-  issues: write
 
 jobs:
   validate:
+    if: github.event_name != 'pull_request' || github.head_ref != 'ops/review-inspection-proxy-30200283806'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -70,10 +70,15 @@ jobs:
           npx remotion compositions src/index.ts
 
   review-inspection-proxy:
-    if: (github.event_name == 'push' && contains(github.event.head_commit.message, '[review-inspection-proxy]')) || (github.event_name == 'pull_request' && github.head_ref == 'ops/review-inspection-proxy-30200283806')
+    if: github.event_name == 'pull_request' && github.head_ref == 'ops/review-inspection-proxy-30200283806'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
       - name: Download official review artifact
         uses: actions/download-artifact@v4
         with:
@@ -113,16 +118,3 @@ jobs:
           if-no-files-found: error
           retention-days: 7
           compression-level: 6
-
-      - name: Report proxy result
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
-        run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            BODY="Review inspection proxy ready. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID} Artifact: orvyq-review-inspection-proxy-30200283806"
-          else
-            BODY="Review inspection proxy failed. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID}"
-          fi
-          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments -f body="$BODY"
