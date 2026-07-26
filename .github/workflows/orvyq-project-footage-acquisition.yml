@@ -123,4 +123,4 @@ jobs:
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`."
 
-# Triggered after PEXELS_API_KEY was added on 2026-07-27.
+# Retry 2: compact 1080p edit clips after the first 4K set exceeded practical LFS size.
