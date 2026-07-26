@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "status": "research_complete",
+  "status": "assets_and_narration_pending",
   "creative_profile": "orvyq-aperture-cinematic",
   "art_direction": {
     "topic": "Deep-sea mining, critical-mineral geopolitics, and the race to control the ocean floor",
@@ -26,11 +26,11 @@
     ]
   },
   "end_card": {
-    "title": "THE OCEAN HAS NO BORDER",
-    "subtitle": "BUT THE RACE FOR IT HAS ALREADY BEGUN"
+    "title": "WHAT WE CAN EXTRACT",
+    "subtitle": "AND WHAT WE AGREE NOT TO DESTROY"
   },
   "proof": {
-    "boundary_anchor_text": "The moment the seabed stops being a scientific frontier and becomes a geopolitical claim."
+    "boundary_anchor_text": null
   },
   "hook": {
     "first_shot_role": "human_context",
@@ -41,13 +41,13 @@
     "question_maximum_characters": 100
   },
   "editorial_rhythm": {
-    "full_pause_target": 4,
-    "brief_accent_target": 5,
+    "full_pause_target": 3,
+    "brief_accent_target": 4,
     "brief_accent_minimum_seconds": 1.5,
     "brief_accent_maximum_seconds": 3
   },
   "opening_evidence": {
-    "kind": "official_expedition_record",
+    "kind": "official_figure",
     "target_asset_count": 2
   },
   "creative_polish": {
