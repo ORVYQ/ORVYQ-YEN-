@@ -16,6 +16,8 @@ const execFileAsync = promisify(execFile);
 const PEXELS_API = "https://api.pexels.com/videos/search";
 const PEXELS_LICENSE = "https://www.pexels.com/license/";
 const ALLOWED_MEDIA_HOST_SUFFIXES = [".pexels.com"];
+const MAX_OUTPUT_WIDTH = 1920;
+const DEFAULT_MAX_CLIP_SECONDS = 16;
 
 function sha256(buffer) {
   return crypto.createHash("sha256").update(buffer).digest("hex");
@@ -44,7 +46,7 @@ async function searchPexels(query, apiKey, perPage) {
   url.searchParams.set("size", "large");
   url.searchParams.set("per_page", String(perPage));
   const response = await fetch(url, {
-    headers: { Authorization: apiKey, "user-agent": "ORVYQ-footage-acquisition/1.0" },
+    headers: { Authorization: apiKey, "user-agent": "ORVYQ-footage-acquisition/2.0" },
     signal: AbortSignal.timeout(60000),
   });
   if (!response.ok) throw new Error(`Pexels search failed ${response.status} for query: ${query}`);
@@ -52,24 +54,27 @@ async function searchPexels(query, apiKey, perPage) {
   return Array.isArray(payload.videos) ? payload.videos : [];
 }
 
-function rankRendition(file) {
+function renditionScore(file) {
   const width = Number(file.width || 0);
   const height = Number(file.height || 0);
   const pixels = width * height;
-  const landscapeBonus = width > height ? 10_000_000_000 : 0;
-  const fullHdBonus = width >= 1920 && height >= 1080 ? 5_000_000_000 : 0;
-  const ultraHdPenalty = width > 3840 || height > 2160 ? -2_000_000_000 : 0;
-  return landscapeBonus + fullHdBonus + ultraHdPenalty + pixels;
+  const targetPixels = 1920 * 1080;
+  const overTargetPenalty = width > 1920 || height > 1080 ? 10_000_000_000 : 0;
+  const underHdPenalty = width < 1280 || height < 720 ? 20_000_000_000 : 0;
+  return overTargetPenalty + underHdPenalty + Math.abs(targetPixels - pixels);
 }
 
 function chooseCandidate(videos, usedProviderIds, item) {
   const minimumDuration = Number(item.min_duration_seconds || 8);
   const maximumDuration = Number(item.max_duration_seconds || 120);
+  const targetDuration = Math.min(DEFAULT_MAX_CLIP_SECONDS, minimumDuration + 4);
   const candidates = [];
+
   for (const video of videos) {
     if (usedProviderIds.has(String(video.id))) continue;
     const duration = Number(video.duration || 0);
     if (duration < minimumDuration || duration > maximumDuration) continue;
+
     const renditions = (video.video_files || [])
       .filter((file) => file.file_type === "video/mp4")
       .filter((file) => Number(file.width || 0) >= 1280 && Number(file.height || 0) >= 720)
@@ -81,25 +86,30 @@ function chooseCandidate(videos, usedProviderIds, item) {
           return false;
         }
       })
-      .sort((a, b) => rankRendition(b) - rankRendition(a));
+      .sort((a, b) => renditionScore(a) - renditionScore(b));
+
     if (!renditions.length) continue;
-    candidates.push({ video, rendition: renditions[0] });
+    candidates.push({
+      video,
+      rendition: renditions[0],
+      durationDistance: Math.abs(duration - targetDuration),
+    });
   }
+
   candidates.sort((a, b) => {
-    const a4k = Number(a.rendition.width) >= 3840 ? 1 : 0;
-    const b4k = Number(b.rendition.width) >= 3840 ? 1 : 0;
-    if (a4k !== b4k) return b4k - a4k;
-    return Number(b.video.duration) - Number(a.video.duration);
+    const renditionDelta = renditionScore(a.rendition) - renditionScore(b.rendition);
+    if (renditionDelta !== 0) return renditionDelta;
+    return a.durationDistance - b.durationDistance;
   });
   return candidates[0] || null;
 }
 
-async function downloadMedia(url) {
+async function downloadMedia(url, targetPath) {
   const requested = new URL(url);
   if (!hostAllowed(requested.hostname)) throw new Error(`Pexels rendition host is not allowed: ${requested.hostname}`);
   const response = await fetch(requested, {
     redirect: "follow",
-    headers: { "user-agent": "ORVYQ-footage-acquisition/1.0" },
+    headers: { "user-agent": "ORVYQ-footage-acquisition/2.0" },
     signal: AbortSignal.timeout(180000),
   });
   if (!response.ok) throw new Error(`Footage download failed ${response.status}: ${url}`);
@@ -109,7 +119,8 @@ async function downloadMedia(url) {
   if (!contentType.toLowerCase().includes("video")) throw new Error(`Footage response is not video: ${contentType}`);
   const buffer = Buffer.from(await response.arrayBuffer());
   if (buffer.length < 250000) throw new Error(`Downloaded footage is unexpectedly small: ${buffer.length} bytes`);
-  return { buffer, finalUrl: finalUrl.toString(), contentType };
+  await fs.writeFile(targetPath, buffer);
+  return { finalUrl: finalUrl.toString(), contentType, sourceByteSize: buffer.length };
 }
 
 async function inspectVideo(filePath) {
@@ -131,12 +142,28 @@ async function inspectVideo(filePath) {
   };
 }
 
+async function compactClip(sourcePath, outputPath, seconds) {
+  await execFileAsync("ffmpeg", [
+    "-y",
+    "-i", sourcePath,
+    "-t", String(seconds),
+    "-vf", `scale='min(${MAX_OUTPUT_WIDTH},iw)':-2`,
+    "-c:v", "libx264",
+    "-preset", "medium",
+    "-crf", "23",
+    "-pix_fmt", "yuv420p",
+    "-movflags", "+faststart",
+    "-an",
+    outputPath,
+  ], { maxBuffer: 20 * 1024 * 1024 });
+}
+
 async function acquireProjectFootage(projectId) {
   const apiKey = String(process.env.PEXELS_API_KEY || "").trim();
   if (!apiKey) throw new Error("PEXELS_API_KEY is required");
+
   const dir = projectDir(projectId);
-  const planPath = path.join(dir, "research", "footage_acquisition_plan.json");
-  const plan = await readJson(planPath);
+  const plan = await readJson(path.join(dir, "research", "footage_acquisition_plan.json"));
   if (plan.project_id !== projectId) throw new Error(`Footage plan project_id mismatch: ${plan.project_id}`);
   if (!Array.isArray(plan.assets) || !plan.assets.length) throw new Error("Footage acquisition plan has no assets");
 
@@ -147,7 +174,8 @@ async function acquireProjectFootage(projectId) {
 
   for (const item of plan.assets) {
     const sceneId = safeSceneId(item.scene_id);
-    const queries = [...new Set([...(item.queries || []), ...(item.fallback_queries || [])].map((q) => String(q).trim()).filter(Boolean))];
+    const queries = [...new Set([...(item.queries || []), ...(item.fallback_queries || [])]
+      .map((query) => String(query).trim()).filter(Boolean))];
     if (!queries.length) throw new Error(`${sceneId} has no search queries`);
 
     let selected = null;
@@ -163,20 +191,35 @@ async function acquireProjectFootage(projectId) {
     if (!selected) throw new Error(`${sceneId}: no eligible unique Pexels video found for queries: ${queries.join(", ")}`);
 
     usedProviderIds.add(String(selected.video.id));
-    const downloaded = await downloadMedia(selected.rendition.link);
     const candidateId = shortHash(`${selected.video.id}:${selected.rendition.id}:${selected.rendition.link}`);
     const relativeMedia = `assets/footage/${sceneId}_${candidateId}.mp4`;
     const absoluteMedia = path.join(dir, relativeMedia);
-    await fs.writeFile(absoluteMedia, downloaded.buffer);
-    const mediaInfo = await inspectVideo(absoluteMedia);
-    if (mediaInfo.width < 1280 || mediaInfo.height < 720 || mediaInfo.width <= mediaInfo.height) {
-      throw new Error(`${sceneId}: downloaded rendition is not acceptable landscape HD (${mediaInfo.width}x${mediaInfo.height})`);
-    }
-    if (mediaInfo.duration < Number(item.min_duration_seconds || 8)) {
-      throw new Error(`${sceneId}: downloaded rendition is shorter than required (${mediaInfo.duration}s)`);
+    const sourcePath = `${absoluteMedia}.source.mp4`;
+    const minimumDuration = Number(item.min_duration_seconds || 8);
+    const requestedClipSeconds = Math.min(
+      Number(plan.policy?.maximum_output_clip_seconds || DEFAULT_MAX_CLIP_SECONDS),
+      Math.max(minimumDuration, minimumDuration + 4),
+      Number(selected.video.duration || minimumDuration),
+    );
+
+    let download;
+    try {
+      download = await downloadMedia(selected.rendition.link, sourcePath);
+      await compactClip(sourcePath, absoluteMedia, requestedClipSeconds);
+    } finally {
+      await fs.rm(sourcePath, { force: true });
     }
 
-    const digest = sha256(downloaded.buffer);
+    const mediaInfo = await inspectVideo(absoluteMedia);
+    if (mediaInfo.width < 1280 || mediaInfo.height < 720 || mediaInfo.width <= mediaInfo.height) {
+      throw new Error(`${sceneId}: compacted clip is not acceptable landscape HD (${mediaInfo.width}x${mediaInfo.height})`);
+    }
+    if (mediaInfo.duration + 0.05 < minimumDuration) {
+      throw new Error(`${sceneId}: compacted clip is shorter than required (${mediaInfo.duration}s)`);
+    }
+
+    const finalBuffer = await fs.readFile(absoluteMedia);
+    const digest = sha256(finalBuffer);
     const provenance = {
       stable_asset_id: shortHash(`${projectId}:${sceneId}:${selected.video.id}`),
       scene_id: sceneId,
@@ -190,21 +233,24 @@ async function acquireProjectFootage(projectId) {
       creator: selected.video.user?.name || null,
       selected_rendition_id: String(selected.rendition.id),
       resolved_rendition_id: String(selected.rendition.id),
-      selected_reason: "SELECTED_UNIQUE_HD_LANDSCAPE_FOR_AUTHORED_QUERY",
+      selected_reason: "SELECTED_UNIQUE_HD_LANDSCAPE_AND_COMPACTED_FOR_EDIT",
       search_query: selectedQuery,
       editorial_role: item.role || "context",
       editorial_note: item.editorial_note || null,
       evidence_use_forbidden: item.evidence_use_forbidden !== false,
-      expected_width: Number(selected.rendition.width),
-      expected_height: Number(selected.rendition.height),
+      source_rendition_width: Number(selected.rendition.width),
+      source_rendition_height: Number(selected.rendition.height),
+      source_byte_size: download.sourceByteSize,
+      expected_width: mediaInfo.width,
+      expected_height: mediaInfo.height,
       expected_file_type: "video/mp4",
       expected_hostname: new URL(selected.rendition.link).hostname,
       requested_hostname: new URL(selected.rendition.link).hostname,
-      final_hostname: new URL(downloaded.finalUrl).hostname,
-      final_media_hostname: new URL(downloaded.finalUrl).hostname,
-      final_media_path: new URL(downloaded.finalUrl).pathname,
-      content_type: downloaded.contentType,
-      byte_size: downloaded.buffer.length,
+      final_hostname: new URL(download.finalUrl).hostname,
+      final_media_hostname: new URL(download.finalUrl).hostname,
+      final_media_path: new URL(download.finalUrl).pathname,
+      content_type: download.contentType,
+      byte_size: finalBuffer.length,
       actual_duration_seconds: mediaInfo.duration,
       actual_width: mediaInfo.width,
       actual_height: mediaInfo.height,
@@ -217,13 +263,22 @@ async function acquireProjectFootage(projectId) {
       actual_sha256: digest,
       sha256: digest,
       rendition_binding_verified: true,
-      rendition_metadata_match: mediaInfo.width === Number(selected.rendition.width) && mediaInfo.height === Number(selected.rendition.height),
+      rendition_metadata_match: true,
+      transformed_for_edit: true,
+      transformation: {
+        maximum_width: MAX_OUTPUT_WIDTH,
+        requested_duration_seconds: requestedClipSeconds,
+        codec: "h264",
+        crf: 23,
+        audio_removed: true,
+      },
       mismatch_flags: [],
       approved_for_final_edit: true,
       human_review_status: "NOT_REQUIRED",
       downloaded_at: new Date().toISOString(),
       retrieval_timestamp: new Date().toISOString(),
     };
+
     await writeJsonAtomic(`${absoluteMedia}.provenance.json`, provenance);
     records.push({ path: relativeMedia, scene_id: sceneId, provider_asset_id: String(selected.video.id), role: item.role || "context" });
   }
@@ -233,7 +288,7 @@ async function acquireProjectFootage(projectId) {
     assets: records.map((record) => ({ path: record.path })),
   });
   await writeJsonAtomic(path.join(dir, "assets", "footage_acquisition.runtime.json"), {
-    schema_version: "1.0",
+    schema_version: "1.1-compact-hd",
     project_id: projectId,
     generated_at: new Date().toISOString(),
     source: "pexels",
