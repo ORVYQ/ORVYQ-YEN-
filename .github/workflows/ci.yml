@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   validate:
@@ -84,18 +83,15 @@ jobs:
           set +e
           npm ci --no-audit --no-fund >/dev/null 2>&1
           npx tsc --noEmit > /tmp/orvyq-tsc.log 2>&1
-          STATUS=$?
-          {
-            echo 'Renderer TypeScript diagnostic:'
-            echo '```text'
-            tail -n 120 /tmp/orvyq-tsc.log
-            echo '```'
-          } > /tmp/orvyq-tsc-comment.md
-          echo "$STATUS" > /tmp/orvyq-tsc.status
+          echo $? > /tmp/orvyq-tsc.status
           exit 0
-      - name: Post diagnostic to PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments -f body="$(cat /tmp/orvyq-tsc-comment.md)"
+      - name: Upload diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: renderer-typecheck-diagnostic-${{ github.run_id }}
+          path: /tmp/orvyq-tsc.log
+          retention-days: 2
+          if-no-files-found: error
       - name: Preserve failure state
         run: test "$(cat /tmp/orvyq-tsc.status)" = "0"
