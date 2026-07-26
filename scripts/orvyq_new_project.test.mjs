@@ -14,7 +14,7 @@ test("new project scaffold contains only generic, isolated intake data", () => {
   const serialized = JSON.stringify(manifest).toLowerCase();
   assert.ok(serialized.includes("002-deep-ocean"));
   assert.ok(serialized.includes("the world beneath the light"));
-  for (const forbidden of ["scene_024_", "anthropic", "deepmind", "ai race", "30200283806"]) {
+  for (const forbidden of ["scene_024_", "anthropic", "deepmind", "ai race", "source_review_run_id\":302"]) {
     assert.ok(!serialized.includes(forbidden), `scaffold leaked ${forbidden}`);
   }
 
