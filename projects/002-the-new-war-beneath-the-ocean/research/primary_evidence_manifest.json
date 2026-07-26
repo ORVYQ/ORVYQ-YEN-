@@ -1,0 +1,122 @@
+{
+  "schema_version": "2.1",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "policy": {
+    "allowed_hosts": [
+      "www.jamstec.go.jp",
+      "isa.org.jm"
+    ],
+    "required_provenance_mode": "official_primary_capture",
+    "runtime_manifest": "assets/evidence/primary_evidence.runtime.json"
+  },
+  "assets": [
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_FIRST_MUD_SAMPLE",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image03.jpg",
+      "download_asset": "assets/evidence/jamstec_first_mud_sample.jpg",
+      "local_asset": "assets/evidence/jamstec_first_mud_sample.jpg",
+      "mime": "image/jpeg",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — first rare-earth-mud sampling aboard Chikyu, 1 February 2026"
+    },
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image04.png",
+      "download_asset": "assets/evidence/jamstec_mining_system_diagram.png",
+      "local_asset": "assets/evidence/jamstec_mining_system_diagram.png",
+      "mime": "image/png",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — closed-loop rare-earth-mud mining-system concept"
+    },
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_CHIKYU_DEPARTURE",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image05.jpg",
+      "download_asset": "assets/evidence/jamstec_chikyu_departure.jpg",
+      "local_asset": "assets/evidence/jamstec_chikyu_departure.jpg",
+      "mime": "image/jpeg",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — Chikyu departing Shimizu Port for the 2026 test"
+    },
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_MINING_MACHINE",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image06.jpg",
+      "download_asset": "assets/evidence/jamstec_mining_machine.jpg",
+      "local_asset": "assets/evidence/jamstec_mining_machine.jpg",
+      "mime": "image/jpeg",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — rare-earth-mud mining machine used in the 2026 test"
+    },
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_MACHINE_ON_SEAFLOOR",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image07.jpg",
+      "download_asset": "assets/evidence/jamstec_machine_on_seafloor.jpg",
+      "local_asset": "assets/evidence/jamstec_machine_on_seafloor.jpg",
+      "mime": "image/jpeg",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — mining machine on the seabed during the Minamitorishima test"
+    },
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_SEAFLOOR_HOLE",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image08.jpg",
+      "download_asset": "assets/evidence/jamstec_seafloor_hole.jpg",
+      "local_asset": "assets/evidence/jamstec_seafloor_hole.jpg",
+      "mime": "image/jpeg",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — borehole visible after removal of the mining machine"
+    },
+    {
+      "evidence_asset_id": "EVID_JAMSTEC_2027_TRIAL_DIAGRAM",
+      "source_ids": ["SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"],
+      "source_url": "https://www.jamstec.go.jp/j/about/press_release/20260724/img/image10.png",
+      "download_asset": "assets/evidence/jamstec_2027_trial_diagram.png",
+      "local_asset": "assets/evidence/jamstec_2027_trial_diagram.png",
+      "mime": "image/png",
+      "min_bytes": 30000,
+      "local_min_bytes": 30000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "JAMSTEC — concept for the planned 2027 integrated mining and processing trial"
+    },
+    {
+      "evidence_asset_id": "EVID_ISA_REV3_COVER",
+      "source_ids": ["SRC_ISA_COUNCIL_JULY_2026"],
+      "source_url": "https://isa.org.jm/wp-content/uploads/2026/06/Further-Revised-Consolidated-Text-Rev.3-ISBA-31-C-CRP.1-Rev.3.pdf",
+      "download_asset": "assets/evidence/raw/isa_exploitation_regulations_rev3.pdf",
+      "local_asset": "assets/evidence/isa_exploitation_regulations_rev3_cover.png",
+      "mime": "application/pdf",
+      "page_number": 1,
+      "min_bytes": 100000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "International Seabed Authority — Further Revised Consolidated Text, Revision 3, June 2026"
+    },
+    {
+      "evidence_asset_id": "EVID_ISA_OUTSTANDING_ISSUES_COVER",
+      "source_ids": ["SRC_ISA_COUNCIL_JULY_2026"],
+      "source_url": "https://isa.org.jm/wp-content/uploads/2026/07/ISBA-31-C-CRP.7-Updated-draft-indicative-list-of-outstanding-issues.pdf",
+      "download_asset": "assets/evidence/raw/isa_outstanding_issues_july_2026.pdf",
+      "local_asset": "assets/evidence/isa_outstanding_issues_cover.png",
+      "mime": "application/pdf",
+      "page_number": 1,
+      "min_bytes": 50000,
+      "provenance_mode": "official_primary_capture",
+      "caption": "International Seabed Authority — updated list of outstanding exploitation-code issues, July 2026"
+    }
+  ]
+}
