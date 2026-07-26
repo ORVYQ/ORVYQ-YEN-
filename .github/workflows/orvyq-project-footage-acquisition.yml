@@ -85,10 +85,10 @@ jobs:
           FIRST_MEDIA="$(find "projects/$PROJECT_ID/assets/footage" -maxdepth 1 -type f -name '*.mp4' | head -n 1)"
           test -n "$FIRST_MEDIA"
           git check-attr filter -- "$FIRST_MEDIA" | tee /tmp/footage-attribute.txt
-          grep -q 'filter: unspecified' /tmp/footage-attribute.txt || {
+          if grep -q 'filter: lfs' /tmp/footage-attribute.txt; then
             echo "::error::Compact project footage is still configured for Git LFS."
             exit 1
-          }
+          fi
           git add \
             "projects/$PROJECT_ID/assets/footage" \
             "projects/$PROJECT_ID/assets/local_assets.json" \
@@ -128,4 +128,4 @@ jobs:
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`."
 
-# Retry 3: compact clips are plain Git blobs; Project 001 LFS assets remain unchanged.
+# Retry 4: accept both Git attribute states that disable LFS; reject only an active lfs filter.
