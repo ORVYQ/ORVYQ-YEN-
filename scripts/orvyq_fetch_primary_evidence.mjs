@@ -13,12 +13,21 @@ const sha256 = (buffer) => crypto.createHash("sha256").update(buffer).digest("he
 function assertMagic(buffer, mime, assetId) {
   if (mime === "application/pdf" && buffer.subarray(0, 4).toString("ascii") !== "%PDF") throw new Error(`${assetId} did not download as a PDF`);
   if (mime === "image/png" && buffer.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a") throw new Error(`${assetId} did not download as a PNG`);
+  if ((mime === "image/jpeg" || mime === "image/jpg") && buffer.subarray(0, 3).toString("hex") !== "ffd8ff") throw new Error(`${assetId} did not download as a JPEG`);
+}
+
+function outputMime(asset) {
+  if (asset.mime === "application/pdf") return "image/png";
+  const extension = path.extname(asset.local_asset || "").toLowerCase();
+  if (extension === ".png") return "image/png";
+  if (extension === ".jpg" || extension === ".jpeg") return "image/jpeg";
+  return asset.mime;
 }
 
 async function fetchBuffer(url, allowedHosts) {
   const parsed = new URL(url);
   if (!allowedHosts.includes(parsed.hostname)) throw new Error(`Evidence host is not allowlisted: ${parsed.hostname}`);
-  const response = await fetch(parsed, { redirect: "follow", headers: { "user-agent": "ORVYQ-primary-evidence-fetch/2.0" }, signal: AbortSignal.timeout(90000) });
+  const response = await fetch(parsed, { redirect: "follow", headers: { "user-agent": "ORVYQ-primary-evidence-fetch/2.1" }, signal: AbortSignal.timeout(90000) });
   if (!response.ok) throw new Error(`Evidence download failed ${response.status}: ${url}`);
   const finalUrl = new URL(response.url);
   if (!allowedHosts.includes(finalUrl.hostname)) throw new Error(`Evidence redirect escaped allowlist: ${finalUrl.hostname}`);
@@ -58,12 +67,25 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
     }
     if (!(await pathExists(localPath))) throw new Error(`Primary evidence output missing: ${asset.local_asset}`);
     const localBuffer = await fs.readFile(localPath);
-    if (localBuffer.length < 30000) throw new Error(`Primary evidence output is unexpectedly small: ${asset.local_asset}`);
-    assertMagic(localBuffer, "image/png", asset.evidence_asset_id);
-    runtimeAssets.push({ evidence_asset_id: asset.evidence_asset_id, source_ids: asset.source_ids, source_url: asset.source_url, final_url: downloadRecords.get(asset.download_asset)?.final_url || asset.source_url, local_asset: asset.local_asset, download_asset: asset.download_asset, page_number: asset.page_number || null, provenance_mode: asset.provenance_mode, caption: asset.caption, bytes: localBuffer.length, sha256: sha256(localBuffer) });
+    if (localBuffer.length < Number(asset.local_min_bytes || 30000)) throw new Error(`Primary evidence output is unexpectedly small: ${asset.local_asset}`);
+    assertMagic(localBuffer, outputMime(asset), asset.evidence_asset_id);
+    runtimeAssets.push({
+      evidence_asset_id: asset.evidence_asset_id,
+      source_ids: asset.source_ids,
+      source_url: asset.source_url,
+      final_url: downloadRecords.get(asset.download_asset)?.final_url || asset.source_url,
+      local_asset: asset.local_asset,
+      download_asset: asset.download_asset,
+      page_number: asset.page_number || null,
+      provenance_mode: asset.provenance_mode,
+      caption: asset.caption,
+      mime: outputMime(asset),
+      bytes: localBuffer.length,
+      sha256: sha256(localBuffer),
+    });
   }
 
-  const runtime = { schema_version: "2.0", project_id: projectId, generated_at: new Date().toISOString(), policy: manifest.policy, downloads: Object.fromEntries(downloadRecords), assets: runtimeAssets, pass: runtimeAssets.length === (manifest.assets || []).length };
+  const runtime = { schema_version: "2.1", project_id: projectId, generated_at: new Date().toISOString(), policy: manifest.policy, downloads: Object.fromEntries(downloadRecords), assets: runtimeAssets, pass: runtimeAssets.length === (manifest.assets || []).length };
   await writeJsonAtomic(path.join(dir, manifest.policy.runtime_manifest), runtime);
   return runtime;
 }
