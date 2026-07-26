@@ -18,13 +18,25 @@
     "visual_role": { "enum": ["evidence", "archive", "context", "metaphor", "graphic"] },
     "editorial_purpose": { "type": "string", "minLength": 18 },
     "editorial_overlay": { "type": ["object", "null"] },
+    "hook_question": {
+      "type": ["object", "null"],
+      "required": ["eyebrow", "question"],
+      "properties": {
+        "eyebrow": { "type": "string", "minLength": 1 },
+        "question": { "type": "string", "pattern": "\\?$" },
+        "deck": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
     "emphasis_card": {
       "type": ["object", "null"],
       "properties": {
         "eyebrow": { "type": "string" },
         "title": { "type": "string" },
-        "accent": { "type": "string" }
-      }
+        "accent": { "type": ["string", "null"] },
+        "anchor_text": { "type": "string" }
+      },
+      "additionalProperties": false
     },
     "sound_cue": { "type": ["string", "null"] },
     "video_asset": { "type": "string" },
@@ -38,7 +50,8 @@
     "hook_footage": { "type": "boolean" },
     "contextual_footage": { "type": "boolean" },
     "provenance_mode": { "type": "string" },
-    "motif": { "type": "string" }
+    "motif": { "type": "string" },
+    "reuse_reason": { "type": "string" }
   },
   "allOf": [
     {
