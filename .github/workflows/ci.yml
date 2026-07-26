@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: read
-  actions: read
-  issues: write
 
 jobs:
   validate:
@@ -35,6 +33,11 @@ jobs:
       - name: Validate canonical schemas and data contracts
         run: npm run validate:canonical
 
+      # scripts/orvyq_music_intake.test.mjs generates a real tiny audio
+      # fixture and probes it via ffprobe -- this step has been missing
+      # since the canonical music system landed (commit 33c8f3d), which is
+      # why this job has been failing on every push since then regardless
+      # of the actual change under test.
       - name: Install ffmpeg (test fixture generation and duration/codec probing)
         run: |
           sudo apt-get update
@@ -67,61 +70,3 @@ jobs:
           fi
           export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
           npx remotion compositions src/index.ts
-
-  review-inspection-proxy:
-    if: github.event_name == 'push' && contains(github.event.head_commit.message, '[review-inspection-proxy]')
-    runs-on: ubuntu-latest
-    timeout-minutes: 45
-    steps:
-      - name: Download official review artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: orvyq-full-length-review-30200283806
-          path: source-review
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ORVYQ/ORVYQ-YEN-
-          run-id: 30200283806
-
-      - name: Build lightweight inspection package
-        shell: bash
-        run: |
-          set -euo pipefail
-          VIDEO="$(find source-review -type f -iname '*.mp4' -print -quit)"
-          test -n "$VIDEO"
-          mkdir -p inspection/frames inspection/sheets
-          ffprobe -v error -show_entries format=filename,duration,size:stream=codec_name,width,height,r_frame_rate -of json "$VIDEO" > inspection/source_probe.json
-          ffmpeg -hide_banner -y -i "$VIDEO" \
-            -vf "scale=854:-2:flags=lanczos" \
-            -c:v libx264 -preset veryfast -crf 33 -maxrate 650k -bufsize 1300k \
-            -c:a aac -b:a 80k -movflags +faststart \
-            inspection/orvyq_review_proxy_480p.mp4
-          ffmpeg -hide_banner -y -i "$VIDEO" \
-            -vf "fps=1/10,scale=640:-2:flags=lanczos" \
-            -q:v 3 inspection/frames/frame_%04d.jpg
-          ffmpeg -hide_banner -y -pattern_type glob -i 'inspection/frames/*.jpg' \
-            -vf "tile=5x5:padding=6:margin=6" \
-            -frames:v 4 inspection/sheets/contact_sheet_%02d.jpg
-          ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of json inspection/orvyq_review_proxy_480p.mp4 > inspection/proxy_probe.json
-          sha256sum inspection/orvyq_review_proxy_480p.mp4 > inspection/proxy_sha256.txt
-
-      - name: Upload inspection proxy
-        uses: actions/upload-artifact@v4
-        with:
-          name: orvyq-review-inspection-proxy-30200283806
-          path: inspection
-          if-no-files-found: error
-          retention-days: 7
-          compression-level: 6
-
-      - name: Report proxy result
-        if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
-        run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            BODY="Review inspection proxy ready. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID} Artifact: orvyq-review-inspection-proxy-30200283806"
-          else
-            BODY="Review inspection proxy failed. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID}"
-          fi
-          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments -f body="$BODY"
