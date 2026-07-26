@@ -42,15 +42,15 @@ function withoutProjectId(argv) {
   return output;
 }
 
-function runNode(script, projectId, extraArgs = []) {
-  const result = spawnSync(
-    process.execPath,
-    [script, `--project-id=${projectId}`, ...extraArgs],
-    {
-      stdio: "inherit",
-      env: { ...process.env, ORVYQ_PROJECT_ID: projectId },
-    },
-  );
+function runNode(script, projectId, extraArgs = [], { positionalFirst = false } = {}) {
+  const projectArg = `--project-id=${projectId}`;
+  const argv = positionalFirst
+    ? [script, ...extraArgs, projectArg]
+    : [script, projectArg, ...extraArgs];
+  const result = spawnSync(process.execPath, argv, {
+    stdio: "inherit",
+    env: { ...process.env, ORVYQ_PROJECT_ID: projectId },
+  });
   if (result.error) throw result.error;
   if (result.status !== 0) {
     throw new Error(`${script} failed with exit code ${result.status}`);
@@ -75,8 +75,8 @@ export function commandScripts(command) {
 export async function runPipelineCommand(command, projectId, extraArgs = []) {
   await loadProductionPolicy(projectId);
   if (command === "build-render-project") {
-    runNode("scripts/remotion_build.mjs", projectId, ["derive-configs"]);
-    runNode("scripts/remotion_build.mjs", projectId, ["build-project"]);
+    runNode("scripts/remotion_build.mjs", projectId, ["derive-configs"], { positionalFirst: true });
+    runNode("scripts/remotion_build.mjs", projectId, ["build-project"], { positionalFirst: true });
   } else {
     const scripts = commandScripts(command);
     if (!scripts.length) {
