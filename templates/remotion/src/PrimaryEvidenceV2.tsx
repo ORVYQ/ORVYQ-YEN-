@@ -1,191 +1,113 @@
 import React from "react";
 import { AbsoluteFill, Img, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig } from "remotion";
-import type { PrimaryEvidenceSpec, EvidenceFocus, EvidenceItem } from "./types/evidence";
+import type { EvidenceFocus, EvidenceItem, PrimaryEvidenceSpec } from "./types/evidence";
 
 const INK = "#F6F2E9";
-const MUTED = "#BBC4CE";
-const BLUE = "#88ADD1";
-const RED = "#D86760";
-const GROUND = "#07101A";
+const MUTED = "#C7CED6";
+const BLUE = "#8CB5DC";
+const RED = "#E06A63";
+const GROUND = "#060D16";
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
-const Surface: React.FC<{ children: React.ReactNode; style?: React.CSSProperties }> = ({ children, style }) => (
-  <div style={{ background: "linear-gradient(145deg,rgba(18,29,43,.97),rgba(7,14,23,.96))", border: "1px solid rgba(246,242,233,.17)", borderRadius: 12, boxShadow: "0 28px 90px rgba(0,0,0,.46)", overflow: "hidden", ...style }}>{children}</div>
+const FrameMark: React.FC = () => (
+  <div style={{ position: "absolute", left: 68, top: 48, display: "flex", alignItems: "center", gap: 12, color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 22, fontWeight: 850, letterSpacing: ".24em", zIndex: 20 }}>
+    <span style={{ width: 9, height: 9, borderRadius: 99, background: RED, boxShadow: "0 0 0 6px rgba(224,106,99,.12)" }} />ORVYQ
+  </div>
+);
+
+const Header: React.FC<{ spec: PrimaryEvidenceSpec; compact?: boolean }> = ({ spec, compact = false }) => (
+  <div style={{ position: "absolute", left: 68, right: 68, top: compact ? 91 : 92, zIndex: 12, fontFamily: "Arial, Helvetica, sans-serif" }}>
+    <div style={{ color: BLUE, fontSize: 22, lineHeight: 1.08, letterSpacing: ".16em", fontWeight: 900 }}>{spec.eyebrow}</div>
+    <div style={{ color: INK, fontSize: Math.max(44, (spec.font_px || 36) + 10), lineHeight: 1.01, letterSpacing: "-.034em", fontWeight: 860, marginTop: 11, maxWidth: compact ? 1160 : 1680 }}>{spec.title}</div>
+    {spec.subtitle ? <div style={{ color: MUTED, fontSize: 28, lineHeight: 1.22, fontWeight: 570, marginTop: 12, maxWidth: 1460 }}>{spec.subtitle}</div> : null}
+  </div>
 );
 
 const SourceFooter: React.FC<{ spec: PrimaryEvidenceSpec }> = ({ spec }) => (
-  <div style={{ position: "absolute", left: 68, right: 68, bottom: 139, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 24, color: MUTED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 17, lineHeight: 1.15, letterSpacing: ".075em", textTransform: "uppercase", fontWeight: 760 }}>
-    <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-      <span style={{ width: 8, height: 8, borderRadius: 99, background: BLUE, flex: "0 0 auto", boxShadow: "0 0 0 5px rgba(136,173,209,.10)" }} />
-      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{spec.source_label}</span>
-    </div>
-    <span style={{ color: "rgba(246,242,233,.43)", whiteSpace: "nowrap" }}>OFFICIAL SOURCE / SOURCE-DERIVED</span>
+  <div style={{ position: "absolute", left: 68, right: 68, bottom: 126, zIndex: 18, display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 24, lineHeight: 1.15, fontWeight: 800, letterSpacing: ".04em", color: MUTED }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}><span style={{ width: 9, height: 9, borderRadius: 99, background: BLUE, flex: "0 0 auto" }} /><span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{spec.source_label}</span></div>
+    <span style={{ color: "rgba(246,242,233,.55)", whiteSpace: "nowrap" }}>SOURCE-DERIVED</span>
   </div>
 );
 
 const Limitation: React.FC<{ text?: string }> = ({ text }) => text ? (
-  <div style={{ position: "absolute", left: 68, right: 68, bottom: 176, borderLeft: `4px solid ${RED}`, background: "rgba(216,103,96,.13)", color: INK, padding: "10px 15px 11px", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 20, lineHeight: 1.18, fontWeight: 720, boxShadow: "0 12px 34px rgba(0,0,0,.24)" }}>{text}</div>
+  <div style={{ position: "absolute", left: 68, right: 68, bottom: 166, zIndex: 18, borderLeft: `5px solid ${RED}`, background: "linear-gradient(90deg,rgba(224,106,99,.22),rgba(7,14,23,.78) 72%,rgba(7,14,23,.18))", color: INK, padding: "13px 18px 14px", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 25, lineHeight: 1.2, fontWeight: 730, boxShadow: "0 18px 48px rgba(0,0,0,.28)" }}>{text}</div>
 ) : null;
 
-const Header: React.FC<{ spec: PrimaryEvidenceSpec }> = ({ spec }) => (
-  <div style={{ position: "absolute", left: 68, right: 68, top: 43, zIndex: 8, fontFamily: "Arial, Helvetica, sans-serif" }}>
-    <div style={{ color: BLUE, fontSize: 18, lineHeight: 1.1, letterSpacing: ".16em", fontWeight: 850 }}>{spec.eyebrow}</div>
-    <div style={{ color: INK, fontSize: Math.max(38, (spec.font_px || 31) + 8), lineHeight: 1.01, letterSpacing: "-.033em", fontWeight: 860, marginTop: 11, maxWidth: 1680 }}>{spec.title}</div>
-    {spec.subtitle ? <div style={{ color: MUTED, fontSize: 24, lineHeight: 1.2, fontWeight: 560, marginTop: 10, maxWidth: 1480 }}>{spec.subtitle}</div> : null}
-  </div>
+const BackgroundImage: React.FC<{ src: string; progress: number }> = ({ src, progress }) => (
+  <AbsoluteFill>
+    <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${interpolate(progress, [0, 1], [1.05, 1.12], clamp)})`, filter: "blur(22px) brightness(.27) saturate(.72) contrast(1.08)" }} />
+    <AbsoluteFill style={{ background: "linear-gradient(90deg,rgba(4,9,15,.84),rgba(4,9,15,.36) 58%,rgba(4,9,15,.72)),linear-gradient(180deg,rgba(4,9,15,.2),rgba(4,9,15,.68))" }} />
+  </AbsoluteFill>
 );
 
 const EvidenceImage: React.FC<{ src: string; progress: number; focus?: EvidenceFocus; contain?: boolean; style?: React.CSSProperties }> = ({ src, progress, focus, contain = true, style }) => {
-  const scale = interpolate(progress, [0, 1], [1, focus?.scale ?? (contain ? 1.055 : 1.08)], clamp);
+  const scale = interpolate(progress, [0, 1], [1, focus?.scale ?? (contain ? 1.045 : 1.08)], clamp);
   const x = interpolate(progress, [0, 1], [0, focus?.x ?? 0], clamp);
   const y = interpolate(progress, [0, 1], [0, focus?.y ?? 0], clamp);
+  return <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", background: contain ? "#E9E7E1" : "#101720", border: "1px solid rgba(246,242,233,.24)", boxShadow: "0 30px 100px rgba(0,0,0,.58)", ...style }}><Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: contain ? "contain" : "cover", objectPosition: "center", transform: `translate(${x}%,${y}%) scale(${scale})`, filter: "contrast(1.04) saturate(.95)" }} /></div>;
+};
+
+const ImageEvidenceStage: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => {
+  const images = spec.image_assets || [];
+  const main = images[0];
+  if (!main) return null;
+  if (spec.kind === "split_documents") return (
+    <>
+      <BackgroundImage src={main} progress={progress} />
+      <Header spec={spec} compact />
+      <div style={{ position: "absolute", left: 610, right: 70, top: 196, bottom: spec.limitation ? 235 : 172, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, zIndex: 6 }}>
+        {images.slice(0, 2).map((asset, index) => <EvidenceImage key={asset} src={asset} progress={progress} focus={{ scale: 1.045, x: index ? -.4 : .4, y: -1 }} contain style={{ borderRadius: 8, transform: `translateY(${index ? 12 : 0}px)` }} />)}
+      </div>
+    </>
+  );
+  if (spec.kind === "image_sequence" || spec.kind === "recap") return (
+    <>
+      <BackgroundImage src={main} progress={progress} />
+      <Header spec={spec} compact />
+      <div style={{ position: "absolute", left: 600, right: 68, top: 204, bottom: spec.limitation ? 236 : 174, display: "grid", gridTemplateColumns: images.length > 2 ? "1fr 1fr" : "1fr", gap: 14, zIndex: 6 }}>
+        {images.slice(0, 4).map((asset, index) => <EvidenceImage key={asset} src={asset} progress={progress} contain={spec.kind !== "image_sequence"} style={{ borderRadius: 7, transform: `translateY(${index % 2 ? 8 : 0}px)` }} />)}
+      </div>
+    </>
+  );
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", border: "1px solid rgba(246,242,233,.19)", background: contain ? "#EEECE6" : "#101720", boxShadow: "0 26px 86px rgba(0,0,0,.52)", ...style }}>
-      <Img src={staticFile(src)} style={{ width: "100%", height: "100%", objectFit: contain ? "contain" : "cover", objectPosition: "center", transform: `translate(${x}%,${y}%) scale(${scale})`, filter: "contrast(1.035) saturate(.96)" }} />
-    </div>
+    <>
+      <BackgroundImage src={main} progress={progress} />
+      <Header spec={spec} compact />
+      <div style={{ position: "absolute", left: spec.callout ? 620 : 520, right: 68, top: 198, bottom: spec.limitation ? 236 : 174, zIndex: 6 }}>
+        <EvidenceImage src={main} progress={progress} focus={spec.focus || { scale: spec.kind === "official_document" ? 1.12 : 1.045, x: 0, y: spec.kind === "official_document" ? -2 : 0 }} contain style={{ borderRadius: 8 }} />
+      </div>
+      {spec.callout ? <div style={{ position: "absolute", left: 68, width: 500, top: 438, zIndex: 8, color: INK, borderLeft: `5px solid ${BLUE}`, paddingLeft: 22, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 31, lineHeight: 1.22, fontWeight: 730 }}>{spec.callout}</div> : null}
+    </>
   );
 };
 
-const DocumentStage: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => {
-  const src = (spec.image_assets || [])[0];
-  const focus = spec.focus || { scale: 1.13, x: 0, y: -3 };
-  return (
-    <div style={{ position: "absolute", left: 68, right: 68, top: 178, bottom: spec.limitation ? 244 : 184, display: "grid", gridTemplateColumns: spec.callout ? "1.6fr .72fr" : "1fr", gap: 24 }}>
-      <div style={{ position: "relative", overflow: "hidden", borderRadius: 11 }}>
-        <Img src={staticFile(src)} style={{ position: "absolute", inset: -50, width: "calc(100% + 100px)", height: "calc(100% + 100px)", objectFit: "cover", filter: "blur(25px) brightness(.28) saturate(.65)", transform: "scale(1.12)" }} />
-        <div style={{ position: "absolute", inset: 18 }}><EvidenceImage src={src} progress={progress} focus={focus} contain style={{ borderRadius: 8 }} /></div>
-      </div>
-      {spec.callout ? (
-        <Surface style={{ display: "flex", alignItems: "center", padding: "34px 30px" }}>
-          <div>
-            <div style={{ color: BLUE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 17, letterSpacing: ".14em", fontWeight: 850 }}>WHY THIS PAGE MATTERS</div>
-            <div style={{ color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 30, lineHeight: 1.22, fontWeight: 730, marginTop: 18 }}>{spec.callout}</div>
-          </div>
-        </Surface>
-      ) : null}
-    </div>
-  );
+const ItemLine: React.FC<{ item: EvidenceItem; index: number; reveal: number; align: "left" | "right" }> = ({ item, index, reveal, align }) => {
+  const local = interpolate(reveal, [Math.min(.72, index * .11), Math.min(1, .38 + index * .11)], [0, 1], clamp);
+  return <div style={{ opacity: local, transform: `translateY(${(1 - local) * 22}px)`, borderTop: "1px solid rgba(246,242,233,.17)", padding: "20px 0 18px", textAlign: align, fontFamily: "Arial, Helvetica, sans-serif" }}><div style={{ color: index % 2 ? RED : BLUE, fontSize: 22, letterSpacing: ".12em", fontWeight: 900 }}>{item.label}</div><div style={{ color: INK, fontSize: 38, lineHeight: 1.06, fontWeight: 830, marginTop: 9 }}>{item.value}</div>{item.detail ? <div style={{ color: MUTED, fontSize: 26, lineHeight: 1.23, fontWeight: 560, marginTop: 11 }}>{item.detail}</div> : null}</div>;
 };
 
-const SplitDocuments: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => (
-  <div style={{ position: "absolute", left: 88, right: 88, top: 190, bottom: spec.limitation ? 244 : 184 }}>
-    <div style={{ position: "absolute", left: 50, top: 4, width: "47%", height: "96%", transform: `rotate(-1.5deg) translateY(${interpolate(progress, [0, 1], [12, 0], clamp)}px)` }}><EvidenceImage src={(spec.image_assets || [])[0]} progress={progress} focus={{ scale: 1.055, x: .3, y: -1.2 }} contain style={{ borderRadius: 9 }} /></div>
-    <div style={{ position: "absolute", right: 50, top: 4, width: "47%", height: "96%", transform: `rotate(1.5deg) translateY(${interpolate(progress, [0, 1], [18, 0], clamp)}px)` }}><EvidenceImage src={(spec.image_assets || [])[1]} progress={progress} focus={{ scale: 1.065, x: -.3, y: -1.2 }} contain style={{ borderRadius: 9 }} /></div>
-  </div>
-);
-
-const FigureStage: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => (
-  <div style={{ position: "absolute", left: 68, right: 68, top: 174, bottom: spec.limitation ? 244 : 184 }}>
-    <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 50% 50%,rgba(136,173,209,.12),transparent 62%)" }} />
-    <div style={{ position: "absolute", inset: 10 }}><EvidenceImage src={(spec.image_assets || [])[0]} progress={progress} focus={spec.focus} contain style={{ borderRadius: 10 }} /></div>
-    {spec.callout ? <div style={{ position: "absolute", right: 34, bottom: 34, maxWidth: 620, background: "rgba(5,10,17,.91)", border: "1px solid rgba(246,242,233,.23)", borderLeft: `5px solid ${BLUE}`, color: INK, padding: "18px 21px", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 23, lineHeight: 1.22, fontWeight: 690 }}>{spec.callout}</div> : null}
-  </div>
-);
-
-const ScreenStage: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => (
-  <div style={{ position: "absolute", left: 68, right: 68, top: 174, bottom: spec.limitation ? 244 : 184, background: "#E7E5DF", borderRadius: 10, overflow: "hidden", boxShadow: "0 28px 90px rgba(0,0,0,.54)" }}>
-    <EvidenceImage src={(spec.image_assets || [])[0]} progress={progress} focus={spec.focus || { scale: 1.035, x: 0, y: 0 }} contain style={{ borderRadius: 10 }} />
-  </div>
-);
-
-const ImageSequence: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => (
-  <div style={{ position: "absolute", left: 68, right: 68, top: 187, bottom: spec.limitation ? 244 : 184, display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: 14 }}>
-    {(spec.image_assets || []).slice(0, 4).map((asset, index) => (
-      <div key={asset} style={{ position: "relative", overflow: "hidden", border: "1px solid rgba(246,242,233,.18)", borderRadius: 9, boxShadow: "0 20px 55px rgba(0,0,0,.35)" }}>
-        <Img src={staticFile(asset)} style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${interpolate(progress, [0, 1], [1.015, 1.045], clamp)})`, filter: "contrast(1.035) saturate(.94)" }} />
-        <div style={{ position: "absolute", left: 12, top: 10, width: 31, height: 31, borderRadius: 99, display: "grid", placeItems: "center", background: "rgba(7,16,26,.94)", border: `1px solid ${BLUE}`, color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 16, fontWeight: 850 }}>{index + 1}</div>
-      </div>
-    ))}
-  </div>
-);
-
-const Cards: React.FC<{ items: EvidenceItem[]; reveal: number }> = ({ items, reveal }) => (
-  <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.max(1, items.length)},1fr)`, gap: 18, width: "100%", height: "100%" }}>
-    {items.map((item, index) => {
-      const local = interpolate(reveal, [index / Math.max(1, items.length), Math.min(1, (index + 1.15) / Math.max(1, items.length))], [0, 1], clamp);
-      return <Surface key={`${item.label}-${item.value}`} style={{ opacity: local, transform: `translateY(${(1 - local) * 24}px)`, padding: "25px 23px", display: "flex", flexDirection: "column" }}><div style={{ color: BLUE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 18, letterSpacing: ".12em", fontWeight: 850 }}>{item.label}</div><div style={{ color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 30, lineHeight: 1.06, fontWeight: 820, marginTop: 17 }}>{item.value}</div>{item.detail ? <div style={{ color: MUTED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 22, lineHeight: 1.22, marginTop: 15 }}>{item.detail}</div> : null}<div style={{ height: 3, background: index === items.length - 1 ? RED : BLUE, marginTop: "auto" }} /></Surface>;
-    })}
-  </div>
-);
-
-const TimelineStage: React.FC<{ spec: PrimaryEvidenceSpec; reveal: number }> = ({ spec, reveal }) => <div style={{ position: "absolute", left: 82, right: 82, top: 226, bottom: spec.limitation ? 264 : 204 }}><Cards items={spec.items || []} reveal={reveal} /></div>;
-
-// The left headline card and the right supporting-card grid are both driven
-// entirely by spec.items (this shot's own authored evidence content) -- the
-// left card is simply that array's own first entry rendered larger, not a
-// second, separately-authored field. This used to hardcode one claim's real
-// figure ("16 leading models stress-tested") as a permanent fixture of the
-// source_article layout, which silently relabelled every OTHER claim's
-// source_article shot with that same unrelated number; see the evidence-spec
-// generator (scripts/lib/orvyq-evidence-authoring.mjs) for where spec.items
-// is actually authored per shot.
-const ArticleStage: React.FC<{ spec: PrimaryEvidenceSpec; reveal: number }> = ({ spec, reveal }) => {
+const NativeEvidenceStage: React.FC<{ spec: PrimaryEvidenceSpec; reveal: number; progress: number }> = ({ spec, reveal, progress }) => {
+  const presentation = spec.presentation || "cinematic_field";
+  const align: "left" | "right" = presentation === "cinematic_split" ? "right" : "left";
   const items = spec.items || [];
-  const [headline, ...rest] = items;
-  return (
-    <div style={{ position: "absolute", left: 88, right: 88, top: 210, bottom: spec.limitation ? 270 : 206, display: "grid", gridTemplateColumns: ".85fr 1.55fr", gap: 23 }}>
-      <Surface style={{ padding: "34px 31px", display: "flex", alignItems: "center" }}>
-        <div>
-          <div style={{ color: RED, fontSize: 18, letterSpacing: ".14em", fontWeight: 900 }}>OFFICIAL RESEARCH ARTICLE</div>
-          {headline ? (
-            <>
-              <div style={{ color: BLUE, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 20, letterSpacing: ".1em", fontWeight: 800, marginTop: 25 }}>{headline.label}</div>
-              <div style={{ color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 34, lineHeight: 1.1, fontWeight: 830, marginTop: 10 }}>{headline.value}</div>
-              {headline.detail ? <div style={{ color: MUTED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 22, lineHeight: 1.27, marginTop: 20 }}>{headline.detail}</div> : null}
-            </>
-          ) : null}
-        </div>
-      </Surface>
-      <div><Cards items={rest} reveal={reveal} /></div>
-    </div>
-  );
+  const steps = spec.steps || [];
+  if (["boundary", "comparison"].includes(spec.kind)) {
+    const columns = [
+      { label: "SUPPORTS", title: spec.left || "", detail: spec.left_detail || "", color: BLUE },
+      { label: "DOES NOT ESTABLISH", title: spec.right || "", detail: spec.right_detail || "", color: RED }
+    ];
+    return <div style={{ position: "absolute", left: 72, right: 72, top: 286, bottom: spec.limitation ? 250 : 184, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 54 }}>{columns.map((column, index) => <div key={column.label} style={{ opacity: interpolate(reveal, [index * .13, .48 + index * .13], [0, 1], clamp), borderTop: `5px solid ${column.color}`, paddingTop: 28 }}><div style={{ color: column.color, fontSize: 23, fontWeight: 900, letterSpacing: ".13em" }}>{column.label}</div><div style={{ color: INK, fontSize: 48, lineHeight: 1.04, fontWeight: 850, marginTop: 20 }}>{column.title}</div><div style={{ color: MUTED, fontSize: 29, lineHeight: 1.28, marginTop: 22 }}>{column.detail}</div></div>)}</div>;
+  }
+  if (steps.length) return <div style={{ position: "absolute", left: 80, right: 80, top: 300, bottom: spec.limitation ? 250 : 184, display: "flex", alignItems: "center", gap: 18 }}>{steps.map((step, index) => { const local = interpolate(reveal, [index / Math.max(1, steps.length), Math.min(1, (index + 1.15) / Math.max(1, steps.length))], [0, 1], clamp); return <React.Fragment key={step}><div style={{ flex: 1, opacity: local, borderTop: `5px solid ${index === steps.length - 1 ? RED : BLUE}`, paddingTop: 24 }}><div style={{ color: index === steps.length - 1 ? RED : BLUE, fontSize: 22, fontWeight: 900, letterSpacing: ".12em" }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontSize: 35, lineHeight: 1.12, fontWeight: 800, marginTop: 16 }}>{step}</div></div>{index < steps.length - 1 ? <div style={{ color: BLUE, fontSize: 38, opacity: local }}>→</div> : null}</React.Fragment>; })}</div>;
+  const visibleItems = items.slice(0, spec.density === "reduced" ? 3 : 4);
+  return <div style={{ position: "absolute", left: presentation === "cinematic_split" ? 760 : 82, right: presentation === "cinematic_split" ? 82 : 600, top: 275, bottom: spec.limitation ? 242 : 178, display: "flex", flexDirection: "column", justifyContent: "center" }}>{visibleItems.map((item, index) => <ItemLine key={`${item.label}-${item.value}`} item={item} index={index} reveal={reveal} align={align} />)}<div style={{ position: "absolute", top: "10%", bottom: "10%", [presentation === "cinematic_split" ? "left" : "right"]: -110, width: 3, background: `linear-gradient(${BLUE},${RED})`, transform: `scaleY(${interpolate(progress, [0, 1], [.15, 1], clamp)})`, transformOrigin: "top" }} /></div>;
 };
-
-const FlowStage: React.FC<{ spec: PrimaryEvidenceSpec; reveal: number }> = ({ spec, reveal }) => (
-  <div style={{ position: "absolute", left: 98, right: 98, top: 245, bottom: spec.limitation ? 278 : 216, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-    {(spec.steps || []).map((step, index) => {
-      const local = interpolate(reveal, [index / Math.max(1, (spec.steps || []).length), Math.min(1, (index + 1.2) / Math.max(1, (spec.steps || []).length))], [0, 1], clamp);
-      return <React.Fragment key={step}><Surface style={{ width: 315, minHeight: 182, opacity: local, transform: `scale(${.94 + local * .06})`, padding: "27px 24px", display: "flex", alignItems: "center" }}><div><div style={{ color: index === (spec.steps || []).length - 1 ? RED : BLUE, fontSize: 18, fontWeight: 900, letterSpacing: ".12em" }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 29, lineHeight: 1.12, fontWeight: 780, marginTop: 14 }}>{step}</div></div></Surface>{index < (spec.steps || []).length - 1 ? <div style={{ color: BLUE, fontSize: 36, opacity: local }}>→</div> : null}</React.Fragment>;
-    })}
-  </div>
-);
-
-const ComparisonStage: React.FC<{ spec: PrimaryEvidenceSpec; reveal: number }> = ({ spec, reveal }) => (
-  <div style={{ position: "absolute", left: 88, right: 88, top: 238, bottom: spec.limitation ? 276 : 212, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 22 }}>
-    {[{ title: spec.left || "", detail: spec.left_detail || "", color: BLUE, label: "SUPPORTS" }, { title: spec.right || "", detail: spec.right_detail || "", color: RED, label: "DOES NOT ESTABLISH" }].map((item, index) => <Surface key={item.title} style={{ padding: "34px 33px", opacity: interpolate(reveal, [index * .16, .56 + index * .16], [0, 1], clamp), transform: `translateX(${(index ? 1 : -1) * (1 - reveal) * 18}px)`, display: "flex", alignItems: "center" }}><div><div style={{ color: item.color, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 18, letterSpacing: ".13em", fontWeight: 900 }}>{item.label}</div><div style={{ color: INK, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 34, lineHeight: 1.08, fontWeight: 830, marginTop: 18 }}>{item.title}</div><div style={{ color: MUTED, fontFamily: "Arial, Helvetica, sans-serif", fontSize: 24, lineHeight: 1.27, fontWeight: 560, marginTop: 18 }}>{item.detail}</div></div></Surface>)}
-  </div>
-);
-
-const RecapStage: React.FC<{ spec: PrimaryEvidenceSpec; progress: number }> = ({ spec, progress }) => (
-  <div style={{ position: "absolute", left: 82, right: 82, top: 205, bottom: 198, display: "grid", gridTemplateColumns: "1fr 1fr 1.35fr", gap: 17 }}>
-    {(spec.image_assets || []).slice(0, 3).map((asset, index) => <EvidenceImage key={asset} src={asset} progress={progress} focus={{ scale: 1.035 + index * .012, x: 0, y: 0 }} contain style={{ borderRadius: 9, transform: `translateY(${index === 1 ? 12 : 0}px)` }} />)}
-  </div>
-);
 
 export const PrimaryEvidenceV2: React.FC<{ spec: PrimaryEvidenceSpec; durationInFrames: number }> = ({ spec, durationInFrames }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const reveal = spring({ frame, fps, config: { damping: 24, stiffness: 96, mass: .9 }, durationInFrames: Math.min(38, durationInFrames) });
   const progress = interpolate(frame, [0, Math.max(1, durationInFrames - 1)], [0, 1], clamp);
-  let body: React.ReactNode;
-  if (spec.kind === "split_documents") body = <SplitDocuments spec={spec} progress={progress} />;
-  else if (spec.kind === "official_document") body = <DocumentStage spec={spec} progress={progress} />;
-  else if (spec.kind === "official_figure") body = <FigureStage spec={spec} progress={progress} />;
-  else if (spec.kind === "official_screen") body = <ScreenStage spec={spec} progress={progress} />;
-  else if (spec.kind === "image_sequence") body = <ImageSequence spec={spec} progress={progress} />;
-  else if (spec.kind === "source_timeline") body = <TimelineStage spec={spec} reveal={reveal} />;
-  else if (spec.kind === "source_article") body = <ArticleStage spec={spec} reveal={reveal} />;
-  else if (["boundary", "comparison"].includes(spec.kind)) body = <ComparisonStage spec={spec} reveal={reveal} />;
-  else if (spec.kind === "recap") body = <RecapStage spec={spec} progress={progress} />;
-  else body = <FlowStage spec={spec} reveal={reveal} />;
-
-  return (
-    <AbsoluteFill style={{ opacity: reveal, background: `radial-gradient(circle at ${24 + progress * 10}% 18%,rgba(136,173,209,.15),transparent 35%),linear-gradient(145deg,#0B1521 0%,${GROUND} 58%,#050A11 100%)`, overflow: "hidden" }}>
-      <AbsoluteFill style={{ opacity: .18, backgroundImage: "linear-gradient(rgba(136,173,209,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(136,173,209,.10) 1px,transparent 1px)", backgroundSize: "72px 72px", transform: `translate(${progress * -10}px,${progress * -6}px)` }} />
-      <Header spec={spec} />
-      {body}
-      <Limitation text={spec.limitation} />
-      <SourceFooter spec={spec} />
-    </AbsoluteFill>
-  );
-};
+  const isImageEvidence = ["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"].includes(spec.kind);
+  return <AbsoluteFill style={{ opacity: reveal, background: `radial-gradient(circle at ${22 + progress * 12}% 20%,rgba(140,181,220,.16),transparent 34%),linear-gradient(145deg,#0B1521 0%,${GROUND} 62%,#04080E 100%)`, overflow: "hidden", fontFamily: "Arial, Helvetica, sans-serif" }}><AbsoluteFill style={{ opacity: .12, backgroundImage: "linear-gradient(rgba(140,181,220,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(140,181,220,.12) 1px,transparent 1px)", backgroundSize: "96px 96px", transform: `translate(${progress * -12}px,${progress * -8}px)` }} /><FrameMark />{isImageEvidence ? <ImageEvidenceStage spec={spec} progress={progress} /> : <><Header spec={spec} /><NativeEvidenceStage spec={spec} reveal={reveal} progress={progress} /></>}<Limitation text={spec.limitation} /><SourceFooter spec={spec} /></AbsoluteFill>;
