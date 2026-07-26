@@ -106,15 +106,15 @@ export function resolveFullFilmPauses({
     if (!anchor.sound_cue || typeof anchor.sound_cue !== "string")
       throw new Error(`Pause anchor ${anchorIndex} ("${anchor.anchor_text}") has no authored sound_cue`);
 
-    const question = typeof anchor.question === "string" && anchor.question.trim() ? anchor.question.trim() : anchor.anchor_text;
-    if (!question.endsWith("?"))
-      throw new Error(`Pause anchor ${anchorIndex} retention question must end with "?": "${question}"`);
+    const authoredQuestion = typeof anchor.question === "string" && anchor.question.trim() ? anchor.question.trim() : null;
+    if (authoredQuestion && !authoredQuestion.endsWith("?"))
+      throw new Error(`Pause anchor ${anchorIndex} retention question must end with "?": "${authoredQuestion}"`);
 
     const pauseId = `PAUSE_FULL_${String(anchorIndex + 1).padStart(2, "0")}_${createHash("sha1").update(anchor.anchor_text).digest("hex").slice(0, 8)}`;
     pauses.push({
       pause_id: pauseId,
       anchor_text: anchor.anchor_text,
-      question,
+      question: authoredQuestion,
       purpose: anchor.purpose || null,
       sound_cue: anchor.sound_cue,
       source_time_seconds: Math.round(sourceTimeSeconds * 1000) / 1000,
