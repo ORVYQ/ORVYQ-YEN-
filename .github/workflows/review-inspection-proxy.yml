@@ -10,6 +10,7 @@ on:
 permissions:
   contents: read
   actions: read
+  issues: write
 
 jobs:
   build-review-proxy:
@@ -64,3 +65,19 @@ jobs:
           if-no-files-found: error
           retention-days: 7
           compression-level: 6
+
+      - name: Report successful inspection proxy
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments \
+            -f body="Review inspection proxy ready. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID} Artifact: orvyq-review-inspection-proxy-30200283806"
+
+      - name: Report failed inspection proxy
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments \
+            -f body="Review inspection proxy failed. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID}"
