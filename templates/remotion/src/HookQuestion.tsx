@@ -22,63 +22,53 @@ export const HookQuestion: React.FC<{
   durationInFrames: number;
 }> = ({ spec, durationInFrames }) => {
   const frame = useCurrentFrame();
-  const enter = interpolate(frame, [4, 28], [0, 1], {
+  const enter = interpolate(frame, [8, 34], [0, 1], {
     ...clamp,
     easing: Easing.bezier(0.22, 1, 0.36, 1),
   });
-  const secondBeat = interpolate(
+  const deckReveal = interpolate(
     frame,
-    [Math.round(durationInFrames * 0.28), Math.round(durationInFrames * 0.52)],
+    [Math.round(durationInFrames * 0.48), Math.round(durationInFrames * 0.67)],
     [0, 1],
     {
       ...clamp,
       easing: Easing.bezier(0.22, 1, 0.36, 1),
     },
   );
-  const deckReveal = interpolate(
-    frame,
-    [Math.round(durationInFrames * 0.58), Math.round(durationInFrames * 0.76)],
-    [0, 1],
-    clamp,
-  );
   const exit = interpolate(
     frame,
-    [Math.max(0, durationInFrames - 22), durationInFrames],
+    [Math.max(0, durationInFrames - 20), durationInFrames],
     [1, 0],
     clamp,
   );
   const opacity = enter * exit;
-  const splitAt = Math.max(4, Math.floor(spec.question.length * 0.5));
-  const splitSpace = spec.question.indexOf(" ", splitAt);
-  const first = spec.question.slice(0, splitSpace > 0 ? splitSpace : splitAt);
-  const second = spec.question.slice(splitSpace > 0 ? splitSpace + 1 : splitAt);
 
   return (
     <AbsoluteFill
       style={{
         pointerEvents: "none",
         justifyContent: "center",
-        padding: "0 132px",
+        padding: "0 150px",
         background:
-          "linear-gradient(90deg,rgba(3,7,12,.86) 0%,rgba(3,7,12,.52) 50%,rgba(3,7,12,.12) 100%),linear-gradient(180deg,rgba(3,7,12,.12),rgba(3,7,12,.42))",
+          "linear-gradient(90deg,rgba(3,7,12,.77) 0%,rgba(3,7,12,.43) 48%,rgba(3,7,12,.06) 100%),linear-gradient(180deg,rgba(3,7,12,.05),rgba(3,7,12,.32))",
       }}
     >
       <div
         style={{
           opacity,
-          transform: `translateY(${(1 - enter) * 26}px)`,
-          maxWidth: 1510,
+          transform: `translateY(${(1 - enter) * 18}px)`,
+          maxWidth: 1160,
           fontFamily: "Arial, Helvetica, sans-serif",
-          textShadow: "0 8px 36px rgba(0,0,0,.82)",
+          textShadow: "0 7px 30px rgba(0,0,0,.82)",
         }}
       >
         <div
           style={{
-            color: "#8CB5DC",
-            fontSize: 24,
-            fontWeight: 880,
-            letterSpacing: ".22em",
-            marginBottom: 24,
+            color: "#9CB9D4",
+            fontSize: 20,
+            fontWeight: 800,
+            letterSpacing: ".2em",
+            marginBottom: 22,
           }}
         >
           {spec.eyebrow}
@@ -86,44 +76,35 @@ export const HookQuestion: React.FC<{
         <div
           style={{
             color: "#F6F2E9",
-            fontSize: 76,
-            lineHeight: 1.01,
-            fontWeight: 850,
-            letterSpacing: "-.038em",
+            fontSize: 64,
+            lineHeight: 1.06,
+            fontWeight: 760,
+            letterSpacing: "-.032em",
+            maxWidth: 1120,
           }}
         >
-          <span>{first}</span>
-          <br />
-          <span
-            style={{
-              display: "inline-block",
-              opacity: secondBeat,
-              transform: `translateY(${(1 - secondBeat) * 20}px)`,
-            }}
-          >
-            {second}
-          </span>
+          {spec.question}
         </div>
         <div
           style={{
-            width: 230,
-            height: 5,
-            marginTop: 32,
-            background: "linear-gradient(90deg,#8CB5DC,#E06A63)",
-            transform: `scaleX(${secondBeat})`,
+            width: 118,
+            height: 2,
+            marginTop: 28,
+            background: "rgba(224,106,99,.92)",
+            transform: `scaleX(${enter})`,
             transformOrigin: "left center",
           }}
         />
         {spec.deck ? (
           <div
             style={{
-              color: "#D1D6DB",
-              fontSize: 29,
-              lineHeight: 1.28,
-              fontWeight: 620,
-              marginTop: 24,
+              color: "#D2D7DC",
+              fontSize: 25,
+              lineHeight: 1.32,
+              fontWeight: 520,
+              marginTop: 22,
               opacity: deckReveal,
-              maxWidth: 1050,
+              maxWidth: 850,
             }}
           >
             {spec.deck}
