@@ -2,7 +2,8 @@ name: ORVYQ System Generalization Migration
 
 # One-time deterministic source/data migration. It does not render video,
 # fetch media, or change creative output. It only moves existing project data
-# out of shared runtime code and removes silent project fallbacks.
+# out of shared runtime code and removes silent project fallbacks. This workflow
+# is isolated from every render workflow.
 on:
   push:
     branches:
