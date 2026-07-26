@@ -39,6 +39,13 @@ export function buildScaffoldManifest({ projectId, title, durationMinutes = 12 }
       created_at: createdAt,
       target_duration_minutes: Number(durationMinutes),
     },
+    "config/project_config.json": {
+      schema_version: "1.0",
+      project_id: projectId,
+      project_name: title,
+      created_at: createdAt,
+      status: "intake",
+    },
     "config/video_config.json": {
       fps: 30,
       width: 1920,
@@ -49,6 +56,23 @@ export function buildScaffoldManifest({ projectId, title, durationMinutes = 12 }
       project_id: projectId,
       status: "needs_editorial_input",
       creative_profile: "orvyq-aperture-cinematic",
+      art_direction: {
+        topic: null,
+        palette: {
+          ink: "#F5F0E7",
+          accent: "#D95B53",
+          information: "#86A9CC",
+          ground: "#07101A",
+        },
+        source_treatment: "full-screen primary evidence and explicitly source-derived graphics",
+      },
+      end_card: {
+        title: null,
+        subtitle: null,
+      },
+      proof: {
+        boundary_anchor_text: null,
+      },
       hook: {
         first_shot_role: "human_context",
         first_shot_asset: null,
@@ -67,6 +91,26 @@ export function buildScaffoldManifest({ projectId, title, durationMinutes = 12 }
         source_review_run_id: null,
         footage_replacements: [],
       },
+    },
+    "config/editorial_asset_plan.json": {
+      schema_version: "1.0",
+      project_id: projectId,
+      status: "needs_editorial_input",
+      footage_assignments: {},
+      graphic_break_assignments: {},
+      full_footage_pool: [],
+      hook_preloaded_usage: {},
+      slice_count_overrides: {},
+    },
+    "config/music_acquisition.json": {
+      schema_version: "1.0",
+      project_id: projectId,
+      status: "needs_music_selection",
+      artist: null,
+      license_name: null,
+      license_url: null,
+      attribution_template: null,
+      tracks: [],
     },
     "direction/project_brief.json": {
       schema_version: "1.0",
@@ -90,9 +134,8 @@ export function buildScaffoldManifest({ projectId, title, durationMinutes = 12 }
 
 export async function createNewProject({ projectId, title, durationMinutes = 12 }) {
   const dir = projectDir(projectId);
-  if (await pathExists(dir)) {
-    throw new Error(`Project already exists: ${projectId}`);
-  }
+  if (await pathExists(dir)) throw new Error(`Project already exists: ${projectId}`);
+
   const manifest = buildScaffoldManifest({ projectId, title, durationMinutes });
   for (const [relativePath, contents] of Object.entries(manifest)) {
     await writeJsonAtomic(path.join(dir, relativePath), contents);
@@ -102,8 +145,11 @@ export async function createNewProject({ projectId, title, durationMinutes = 12 
     "assets/evidence",
     "assets/footage",
     "assets/music",
+    "assets/sfx",
+    "direction",
     "qa",
     "remotion",
+    "research",
     "voice",
   ]) {
     const target = path.join(dir, relativeDir);
@@ -116,6 +162,14 @@ export async function createNewProject({ projectId, title, durationMinutes = 12 
     project_directory: path.relative(process.cwd(), dir),
     status: "needs_editorial_input",
     created_files: Object.keys(manifest),
+    next_required_inputs: [
+      "research/research_brief.json",
+      "direction/project_brief.json",
+      "config/production_profile.json",
+      "config/editorial_asset_plan.json",
+      "config/music_acquisition.json",
+      "voice/voice_script.txt",
+    ],
   };
 }
 
