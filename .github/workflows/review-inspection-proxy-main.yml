@@ -1,0 +1,83 @@
+name: ORVYQ Review Inspection Proxy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/review-inspection-proxy-main.yml
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+jobs:
+  build-review-proxy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Download official review artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: orvyq-full-length-review-30200283806
+          path: source-review
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ORVYQ/ORVYQ-YEN-
+          run-id: 30200283806
+
+      - name: Locate review MP4
+        id: locate
+        shell: bash
+        run: |
+          set -euo pipefail
+          VIDEO="$(find source-review -type f -iname '*.mp4' -print -quit)"
+          test -n "$VIDEO"
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+          ffprobe -v error -show_entries format=filename,duration,size -of json "$VIDEO"
+
+      - name: Build lightweight visual-review proxy and timeline sheets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p inspection/frames inspection/sheets
+          VIDEO='${{ steps.locate.outputs.video }}'
+          ffmpeg -hide_banner -y -i "$VIDEO" \
+            -vf "scale=854:-2:flags=lanczos" \
+            -c:v libx264 -preset veryfast -crf 31 -maxrate 800k -bufsize 1600k \
+            -c:a aac -b:a 96k -movflags +faststart \
+            inspection/orvyq_review_proxy_480p.mp4
+          ffmpeg -hide_banner -y -i "$VIDEO" \
+            -vf "fps=1/15,scale=640:-2:flags=lanczos" \
+            -q:v 3 inspection/frames/frame_%04d.jpg
+          ffmpeg -hide_banner -y -pattern_type glob -i 'inspection/frames/*.jpg' \
+            -vf "tile=4x4:padding=8:margin=8" \
+            -frames:v 4 inspection/sheets/contact_sheet_%02d.jpg
+          ffprobe -v error -show_entries format=duration,size:stream=codec_name,width,height,r_frame_rate -of json \
+            inspection/orvyq_review_proxy_480p.mp4 > inspection/proxy_probe.json
+          sha256sum inspection/orvyq_review_proxy_480p.mp4 > inspection/proxy_sha256.txt
+
+      - name: Upload inspection proxy
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-review-inspection-proxy-30200283806
+          path: inspection
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 6
+
+      - name: Report successful inspection proxy
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments \
+            -f body="Review inspection proxy ready. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID} Artifact: orvyq-review-inspection-proxy-30200283806"
+
+      - name: Report failed inspection proxy
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments \
+            -f body="Review inspection proxy failed. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${GITHUB_RUN_ID}"
