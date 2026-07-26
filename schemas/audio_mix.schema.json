@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://orvyq.dev/schemas/audio_mix.schema.json",
   "title": "Canonical Audio Mix Metadata",
-  "description": "Written by buildCanonicalAudioMix() alongside the mixed audio file. All timing fields (pause_windows, music_sections, sfx_placements) are seconds RELATIVE TO duration_seconds -- the schema forces the mix builder to compute these from the actual output duration rather than hardcoding literal 150-second-proof breakpoints, which is the concrete bug this replaces (see docs/source-audit.md section 7: orvyq_audio_mix.mjs's musicVolumeExpression()/sfxPlacements did not rescale for non-150s durations).",
+  "description": "Written by buildCanonicalAudioMix() alongside the mixed audio file. All timing fields are seconds relative to duration_seconds. candidate is the live canonical mode; proof/full remain accepted only for historical compatibility.",
   "type": "object",
   "required": [
     "schema_version", "mode", "duration_seconds", "narration_duration_seconds",
@@ -10,7 +10,7 @@
   ],
   "properties": {
     "schema_version": { "const": "1.0-canonical" },
-    "mode": { "enum": ["proof", "full"] },
+    "mode": { "enum": ["candidate", "proof", "full"] },
     "duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
     "narration_duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
     "pause_windows": {
