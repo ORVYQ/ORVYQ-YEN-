@@ -122,3 +122,5 @@ jobs:
           set -euo pipefail
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`."
+
+# Triggered after PEXELS_API_KEY was added on 2026-07-27.
