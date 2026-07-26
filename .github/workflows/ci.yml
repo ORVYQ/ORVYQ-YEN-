@@ -15,6 +15,44 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Scan for project-specific data in system runtime
+        run: |
+          set -euo pipefail
+          : > system-independence-violations.txt
+          for TOKEN in \
+            "001-the-ai-race-no-one-can-afford-to-win" \
+            "scene_024_6e6f4af26cad60cc78930d6d.mp4" \
+            "30200283806"; do
+            MATCHES="$(grep -RIlF "$TOKEN" .github scripts templates config package.json \
+              --exclude=orvyq_repository_independence.test.mjs || true)"
+            if [ -n "$MATCHES" ]; then
+              {
+                echo "TOKEN: $TOKEN"
+                echo "$MATCHES"
+                echo
+              } >> system-independence-violations.txt
+            fi
+          done
+          if [ -s system-independence-violations.txt ]; then
+            echo "SYSTEM_INDEPENDENCE_STATUS=1" >> "$GITHUB_ENV"
+            cat system-independence-violations.txt
+          else
+            echo "SYSTEM_INDEPENDENCE_STATUS=0" >> "$GITHUB_ENV"
+            echo "No project-specific runtime leakage found."
+          fi
+
+      - name: Upload system-independence report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-system-independence-${{ github.run_id }}
+          retention-days: 7
+          path: system-independence-violations.txt
+          if-no-files-found: error
+
+      - name: Stop when project data leaked into system runtime
+        run: test "$SYSTEM_INDEPENDENCE_STATUS" = "0"
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -29,24 +67,6 @@ jobs:
           set -euo pipefail
           find scripts -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
           python3 -m py_compile scripts/orvyq_speech_qa.py
-
-      - name: Block project-specific data in system runtime
-        run: |
-          set -euo pipefail
-          STATUS=0
-          for TOKEN in \
-            "001-the-ai-race-no-one-can-afford-to-win" \
-            "scene_024_6e6f4af26cad60cc78930d6d.mp4" \
-            "30200283806"; do
-            MATCHES="$(grep -RIlF "$TOKEN" .github scripts templates config package.json \
-              --exclude=orvyq_repository_independence.test.mjs || true)"
-            if [ -n "$MATCHES" ]; then
-              echo "::error::Project-specific token leaked into system runtime: $TOKEN"
-              echo "$MATCHES"
-              STATUS=1
-            fi
-          done
-          exit "$STATUS"
 
       - name: Validate canonical schemas and data contracts
         run: npm run validate:canonical
