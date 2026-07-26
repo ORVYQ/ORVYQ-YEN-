@@ -1,0 +1,120 @@
+name: ORVYQ Footage Acquisition
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+  push:
+    branches:
+      - "agent/**"
+      - "claude/**"
+    paths:
+      - ".github/workflows/orvyq-footage-acquisition.yml"
+      - "scripts/orvyq_acquire_footage.mjs"
+      - "projects/*/research/footage_acquisition_plan.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: orvyq-footage-acquisition-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 2
+
+      - name: Resolve selected project
+        id: project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PROJECT_ID="${{ inputs.project_id }}"
+          else
+            CHANGED_PLAN="$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^projects/[^/]+/research/footage_acquisition_plan\.json$' | head -n 1 || true)"
+            if [ -n "$CHANGED_PLAN" ]; then
+              PROJECT_ID="$(jq -r '.project_id' "$CHANGED_PLAN")"
+            else
+              mapfile -t CANDIDATES < <(find projects -path '*/research/footage_acquisition_plan.json' -type f -print0 | xargs -0 -r -n1 sh -c 'f="$0"; p="${f%/research/footage_acquisition_plan.json}"; test ! -f "$p/assets/footage_acquisition.runtime.json" && jq -r ".project_id" "$f"' | sort -u)
+              if [ "${#CANDIDATES[@]}" -ne 1 ]; then
+                echo "::error::Could not resolve exactly one pending footage acquisition project; found ${#CANDIDATES[@]}."
+                exit 1
+              fi
+              PROJECT_ID="${CANDIDATES[0]}"
+            fi
+          fi
+          test -f "projects/$PROJECT_ID/research/footage_acquisition_plan.json"
+          echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+          echo "Resolved project: $PROJECT_ID"
+
+      - name: Verify Pexels credential exists
+        run: |
+          set -euo pipefail
+          test -n "$PEXELS_API_KEY" || { echo "::error::Repository secret PEXELS_API_KEY is missing."; exit 1; }
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies and media probe
+        run: |
+          set -euo pipefail
+          npm ci
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Acquire licensed contextual footage
+        run: node scripts/orvyq_acquire_footage.mjs --project-id="$PROJECT_ID"
+
+      - name: Validate every acquired clip and provenance record
+        run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
+
+      - name: Store footage with Git LFS
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs track "projects/$PROJECT_ID/assets/footage/*.mp4"
+          git add .gitattributes \
+            "projects/$PROJECT_ID/assets/footage" \
+            "projects/$PROJECT_ID/assets/local_assets.json" \
+            "projects/$PROJECT_ID/assets/footage_acquisition.runtime.json" \
+            "projects/$PROJECT_ID/qa/local_assets.provenance.json"
+          git config user.name "orvyq-footage-bot"
+          git config user.email "orvyq-footage-bot@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "Footage set unchanged; nothing to commit."
+            exit 0
+          fi
+          git commit -m "Acquire licensed footage for $PROJECT_ID [skip ci]"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+      - name: Upload acquisition diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-footage-acquisition-${{ steps.project.outputs.project_id }}-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
+            projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
+            projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
+            projects/${{ steps.project.outputs.project_id }}/assets/footage/*.provenance.json
+            projects/${{ steps.project.outputs.project_id }}/qa/local_assets.provenance.json
+          if-no-files-found: warn
