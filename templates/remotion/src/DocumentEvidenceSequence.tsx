@@ -38,6 +38,7 @@ export const DocumentEvidenceSequence: React.FC<{
     "ANTHROPIC — EXECUTIVE SUMMARY",
     "GOOGLE DEEPMIND — FRONTIER SAFETY FRAMEWORK",
   ];
+  const activeSourceName = sourceNames[activeIndex] || spec.source_label;
 
   return (
     <AbsoluteFill
@@ -133,7 +134,7 @@ export const DocumentEvidenceSequence: React.FC<{
             marginTop: 20,
           }}
         >
-          {sourceNames[activeIndex] || spec.source_label}
+          {activeSourceName}
         </div>
         <div
           style={{
@@ -194,7 +195,7 @@ export const DocumentEvidenceSequence: React.FC<{
           letterSpacing: ".035em",
         }}
       >
-        <span>{spec.source_label}</span>
+        <span>{activeSourceName}</span>
         <span style={{ color: "rgba(246,242,233,.6)" }}>REAL PDF PAGE CAPTURE</span>
       </div>
     </AbsoluteFill>
