@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  issues: write
 
 jobs:
   validate:
@@ -33,11 +34,6 @@ jobs:
       - name: Validate canonical schemas and data contracts
         run: npm run validate:canonical
 
-      # scripts/orvyq_music_intake.test.mjs generates a real tiny audio
-      # fixture and probes it via ffprobe -- this step has been missing
-      # since the canonical music system landed (commit 33c8f3d), which is
-      # why this job has been failing on every push since then regardless
-      # of the actual change under test.
       - name: Install ffmpeg (test fixture generation and duration/codec probing)
         run: |
           sudo apt-get update
@@ -70,3 +66,36 @@ jobs:
           fi
           export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
           npx remotion compositions src/index.ts
+
+  renderer-typecheck-diagnostic:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Capture renderer error
+        working-directory: templates/remotion
+        shell: bash
+        run: |
+          set +e
+          npm ci --no-audit --no-fund >/dev/null 2>&1
+          npx tsc --noEmit > /tmp/orvyq-tsc.log 2>&1
+          STATUS=$?
+          {
+            echo 'Renderer TypeScript diagnostic:'
+            echo '```text'
+            tail -n 120 /tmp/orvyq-tsc.log
+            echo '```'
+          } > /tmp/orvyq-tsc-comment.md
+          echo "$STATUS" > /tmp/orvyq-tsc.status
+          exit 0
+      - name: Post diagnostic to PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments -f body="$(cat /tmp/orvyq-tsc-comment.md)"
+      - name: Preserve failure state
+        run: test "$(cat /tmp/orvyq-tsc.status)" = "0"
