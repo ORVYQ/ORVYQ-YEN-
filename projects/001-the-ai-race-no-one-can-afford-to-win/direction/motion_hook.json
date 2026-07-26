@@ -1,11 +1,14 @@
 {
   "schema_version": "1.0",
   "project_id": "001-the-ai-race-no-one-can-afford-to-win",
-  "purpose": "Open with an 11-second cinematic motion-video hook, then dissolve into primary evidence.",
+  "purpose": "Open with an 11-second cinematic motion-video hook carrying one uninterrupted retention question, then dissolve into visibly legible primary documents.",
   "minimum_seconds": 10,
   "maximum_seconds": 14,
   "duration_seconds": 11,
   "replace_opening_shot_count": 4,
+  "question_eyebrow": "THE QUESTION",
+  "question": "What happens when the race to build the most powerful machine moves faster than our ability to control it?",
+  "question_deck": "Every major lab sees the danger. None can afford to slow down.",
   "evidence_bridge": [
     { "source_shot_index": 1, "duration": 5, "transition_in": "dissolve" },
     { "source_shot_index": 3, "duration": 4, "transition_in": "cut" }
@@ -22,7 +25,7 @@
       "claim_id": "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS",
       "visual_role": "metaphor",
       "generic_stock": true,
-      "editorial_purpose": "Begin inside a moving computational network so the film opens on capability rather than a static title card."
+      "editorial_purpose": "Begin inside a moving computational network while the film's central question starts to reveal."
     },
     {
       "duration": 3,
@@ -35,7 +38,7 @@
       "claim_id": "CLM_001_LABS_PUBLISH_SAFETY_FRAMEWORKS",
       "visual_role": "context",
       "generic_stock": true,
-      "editorial_purpose": "Expand from the system to institutional scale without presenting the location as a named AI laboratory."
+      "editorial_purpose": "Expand from the system to institutional scale while completing the first half of the central question."
     },
     {
       "duration": 2.5,
@@ -48,7 +51,7 @@
       "claim_id": "CLM_002_COMPETITIVE_INCENTIVE",
       "visual_role": "metaphor",
       "generic_stock": true,
-      "editorial_purpose": "Use accelerated night traffic as a restrained visual metaphor for competitive momentum."
+      "editorial_purpose": "Use accelerated night traffic as the question turns from capability to the speed of the race."
     },
     {
       "duration": 3,
@@ -61,7 +64,7 @@
       "claim_id": "CLM_003_GOVERNANCE_LAG",
       "visual_role": "context",
       "generic_stock": true,
-      "editorial_purpose": "End the hook on human monitoring and oversight before the film presents the written safety evidence."
+      "editorial_purpose": "Land the completed question on human monitoring and oversight, then dissolve directly into the published safety documents."
     }
   ]
 }
