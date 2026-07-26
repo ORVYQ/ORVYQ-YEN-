@@ -6,11 +6,6 @@ const PROJECT_ID = "001-the-ai-race-no-one-can-afford-to-win";
 const MIN_MOBILE_FONT_PX = 36;
 const MAX_USES_PER_SOURCE = 2;
 
-// Explicit editorial replacements derived from the human review of official
-// review run 30200283806. They break the four visibly repetitive continuous
-// footage passages without changing timing, narration, claims or evidence.
-// Every replacement is a repository-owned, licensed clip already present in
-// local_assets.json; no automatic stock fallback or network fetch is allowed.
 export const FOOTAGE_POLISH_REPLACEMENTS = {
   shot_010: {
     asset: "assets/footage/scene_008_42946788405d61ee3a28fa31.mp4",
@@ -158,6 +153,52 @@ function applyEvidenceAndGraphicPolish(plan) {
   return presentationCounts;
 }
 
+async function applyRetentionQuestions(dir, plan) {
+  const [motionHook, resolvedPausePlan] = await Promise.all([
+    readJson(path.join(dir, "direction", "motion_hook.json")),
+    readJson(path.join(dir, "direction", "resolved_pause_plan.json"))
+  ]);
+
+  const hookShots = plan.shots.filter((shot) => shot.hook_footage === true);
+  if (!hookShots.length) throw new Error("Creative polish could not find the opening motion-hook shots");
+  if (!motionHook.question || !String(motionHook.question).trim().endsWith("?"))
+    throw new Error("direction/motion_hook.json requires a retention question ending with '?'");
+  hookShots[0].hook_question = {
+    eyebrow: motionHook.question_eyebrow || "THE QUESTION",
+    question: String(motionHook.question).trim(),
+    deck: motionHook.question_deck || null
+  };
+
+  const questionsByAnchor = new Map(
+    (resolvedPausePlan.pauses || [])
+      .filter((pause) => pause.question)
+      .map((pause) => [pause.anchor_text, pause.question])
+  );
+  let pauseQuestionCount = 0;
+  for (const shot of plan.shots) {
+    if (!shot.emphasis_card) continue;
+    const anchorText = shot.emphasis_card.anchor_text || shot.emphasis_card.title;
+    const question = questionsByAnchor.get(anchorText);
+    if (!question) throw new Error(`No authored retention question resolved for pause anchor: ${anchorText}`);
+    shot.emphasis_card = {
+      ...shot.emphasis_card,
+      eyebrow: "THE QUESTION",
+      title: question,
+      anchor_text: anchorText,
+      accent: shot.emphasis_card.accent || "#E06A63"
+    };
+    pauseQuestionCount += 1;
+  }
+  if (pauseQuestionCount !== questionsByAnchor.size)
+    throw new Error(`Retention-question count mismatch: applied ${pauseQuestionCount}, resolved ${questionsByAnchor.size}`);
+
+  return {
+    opening_question: hookShots[0].hook_question.question,
+    opening_hook_frames: hookShots.reduce((sum, shot) => sum + shot.end_frame - shot.start_frame, 0),
+    pause_question_count: pauseQuestionCount
+  };
+}
+
 export async function polishCreativePlan(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
   const editPlanPath = path.join(dir, "direction", "edit_plan.json");
@@ -166,6 +207,7 @@ export async function polishCreativePlan(projectId = PROJECT_ID) {
   const beforeMaximum = maximumContiguousSameFootageSeconds(plan.shots, plan.fps);
   const replacements = await applyFootageReplacements(dir, plan);
   const presentationCounts = applyEvidenceAndGraphicPolish(plan);
+  const retention = await applyRetentionQuestions(dir, plan);
   const usage = sourceUsageFor(plan.shots);
   const overused = [...usage.entries()].filter(([, count]) => count > MAX_USES_PER_SOURCE);
   if (overused.length) throw new Error(`Creative polish exceeds source-use limits: ${overused.map(([asset, count]) => `${asset}=${count}`).join(", ")}`);
@@ -174,13 +216,16 @@ export async function polishCreativePlan(projectId = PROJECT_ID) {
   plan.quality_policy = {
     ...plan.quality_policy,
     minimum_overlay_font_px: MIN_MOBILE_FONT_PX,
-    creative_polish_profile: "aperture-cinematic-v1",
+    creative_polish_profile: "aperture-cinematic-v2-retention",
     maximum_contiguous_same_footage_seconds: afterMaximum,
-    evidence_presentation_modes: presentationCounts
+    evidence_presentation_modes: presentationCounts,
+    opening_retention_question_required: true,
+    editorial_pause_questions_required: true,
+    document_sequence_must_be_full_frame: true
   };
   if (afterMaximum >= beforeMaximum) throw new Error(`Creative polish did not reduce the maximum repeated-footage run (${beforeMaximum}s -> ${afterMaximum}s)`);
   const report = {
-    schema_version: "1.0",
+    schema_version: "1.1",
     project_id: projectId,
     source_review_run_id: 30200283806,
     replacement_count: replacements.length,
@@ -189,6 +234,7 @@ export async function polishCreativePlan(projectId = PROJECT_ID) {
     maximum_contiguous_same_footage_seconds_after: afterMaximum,
     minimum_mobile_font_px: MIN_MOBILE_FONT_PX,
     evidence_presentation_modes: presentationCounts,
+    retention,
     final_source_usage: plan.source_usage
   };
   await writeJsonAtomic(editPlanPath, plan);
