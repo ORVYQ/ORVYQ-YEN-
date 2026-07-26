@@ -1,3 +1,4 @@
+# Trigger one-shot wiring after workflow registration
 name: ORVYQ Apply Fundamental Fixes
 
 on:
