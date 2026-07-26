@@ -1,0 +1,112 @@
+name: ORVYQ Project Footage Acquisition
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+      target_branch:
+        description: "Branch containing the project and acquisition plan"
+        type: string
+        required: true
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-project-footage-acquisition.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: orvyq-project-footage-acquisition
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+    steps:
+      - name: Resolve request
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PROJECT_ID="${{ inputs.project_id }}"
+            TARGET_BRANCH="${{ inputs.target_branch }}"
+          else
+            PROJECT_ID="002-the-new-war-beneath-the-ocean"
+            TARGET_BRANCH="agent/002-deep-sea-cold-war"
+          fi
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+          echo "TARGET_BRANCH=$TARGET_BRANCH" >> "$GITHUB_ENV"
+
+      - name: Checkout target project branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_BRANCH }}
+          lfs: true
+          fetch-depth: 2
+
+      - name: Verify request and Pexels credential
+        run: |
+          set -euo pipefail
+          test -n "$PEXELS_API_KEY" || { echo "::error::Repository secret PEXELS_API_KEY is missing."; exit 1; }
+          test -f "projects/$PROJECT_ID/research/footage_acquisition_plan.json"
+          test -f "scripts/orvyq_acquire_footage.mjs"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies and media tools
+        run: |
+          set -euo pipefail
+          npm ci
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Acquire licensed contextual footage
+        run: node scripts/orvyq_acquire_footage.mjs --project-id="$PROJECT_ID"
+
+      - name: Validate downloaded clips and provenance
+        run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
+
+      - name: Commit the verified footage set to the target branch
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs track "projects/$PROJECT_ID/assets/footage/*.mp4"
+          git add .gitattributes \
+            "projects/$PROJECT_ID/assets/footage" \
+            "projects/$PROJECT_ID/assets/local_assets.json" \
+            "projects/$PROJECT_ID/assets/footage_acquisition.runtime.json" \
+            "projects/$PROJECT_ID/qa/local_assets.provenance.json"
+          git config user.name "orvyq-footage-bot"
+          git config user.email "orvyq-footage-bot@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "Footage set unchanged; nothing to commit."
+            exit 0
+          fi
+          git commit -m "Acquire licensed footage for $PROJECT_ID [skip ci]"
+          git pull --rebase origin "$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
+
+      - name: Upload acquisition diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-footage-acquisition-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            projects/${{ env.PROJECT_ID }}/research/footage_acquisition_plan.json
+            projects/${{ env.PROJECT_ID }}/assets/footage_acquisition.runtime.json
+            projects/${{ env.PROJECT_ID }}/assets/local_assets.json
+            projects/${{ env.PROJECT_ID }}/assets/footage/*.provenance.json
+            projects/${{ env.PROJECT_ID }}/qa/local_assets.provenance.json
+          if-no-files-found: warn
