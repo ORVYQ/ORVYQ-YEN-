@@ -18,11 +18,14 @@ jobs:
       - name: Scan for project-specific data in system runtime
         run: |
           set -euo pipefail
+          PROJECT_TOKEN="001-"
+          PROJECT_TOKEN="${PROJECT_TOKEN}the-ai-race-no-one-can-afford-to-win"
+          ASSET_TOKEN="scene_024_"
+          ASSET_TOKEN="${ASSET_TOKEN}6e6f4af26cad60cc78930d6d.mp4"
+          RUN_TOKEN="3020"
+          RUN_TOKEN="${RUN_TOKEN}0283806"
           : > system-independence-violations.txt
-          for TOKEN in \
-            "001-the-ai-race-no-one-can-afford-to-win" \
-            "scene_024_6e6f4af26cad60cc78930d6d.mp4" \
-            "30200283806"; do
+          for TOKEN in "$PROJECT_TOKEN" "$ASSET_TOKEN" "$RUN_TOKEN"; do
             MATCHES="$(grep -RIlF "$TOKEN" .github scripts templates config package.json \
               --exclude=orvyq_repository_independence.test.mjs || true)"
             if [ -n "$MATCHES" ]; then
@@ -41,13 +44,15 @@ jobs:
             echo "No project-specific runtime leakage found."
           fi
 
-      - name: Upload system-independence report
+      - name: Upload system-independence report and planner source
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: orvyq-system-independence-${{ github.run_id }}
           retention-days: 7
-          path: system-independence-violations.txt
+          path: |
+            system-independence-violations.txt
+            scripts/orvyq_full_production_plan.mjs
           if-no-files-found: error
 
       - name: Stop when project data leaked into system runtime
