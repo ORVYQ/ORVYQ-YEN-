@@ -1,0 +1,27 @@
+name: ORVYQ Fundamental Fix Validation Tracker
+
+on:
+  workflow_run:
+    workflows:
+      - ORVYQ Candidate Validation
+    types:
+      - completed
+
+permissions:
+  actions: read
+  issues: write
+
+jobs:
+  report:
+    if: github.event.workflow_run.head_branch == 'claude/orvyq-canonical-candidate-parity-bl7w0u'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report exact Candidate Validation result
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          gh api repos/ORVYQ/ORVYQ-YEN-/issues/1/comments \
+            -f body="Fundamental-fix Candidate Validation completed: **${RUN_CONCLUSION}**. Run: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/${RUN_ID} Head: \`${RUN_SHA}\`. No review or Final Encode was started by this tracker."
