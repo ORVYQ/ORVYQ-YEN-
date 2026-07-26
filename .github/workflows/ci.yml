@@ -1,3 +1,4 @@
+# Temporary isolated inspection workflow; never merge.
 name: ORVYQ CI
 
 on:
