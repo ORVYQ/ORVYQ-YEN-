@@ -2,18 +2,11 @@ name: ORVYQ System Generalization Migration
 
 # One-time deterministic source/data migration. It does not render video,
 # fetch media, or change creative output. It only moves existing project data
-# out of shared runtime code and removes silent project fallbacks. This workflow
-# is isolated from every render workflow.
+# out of shared runtime code and removes silent project fallbacks.
 on:
   pull_request:
     branches:
       - "claude/orvyq-assets-soundtrack-port-noz6bi"
-    paths:
-      - "scripts/migrations/generalize-system-runtime.mjs"
-      - ".github/workflows/orvyq-system-generalization.yml"
-  push:
-    branches:
-      - "claude/orvyq-canonical-candidate-parity-bl7w0u"
     paths:
       - "scripts/migrations/generalize-system-runtime.mjs"
       - ".github/workflows/orvyq-system-generalization.yml"
@@ -23,8 +16,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: orvyq-system-generalization-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  group: orvyq-system-generalization-pr-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: false
 
 jobs:
   migrate:
@@ -47,10 +40,41 @@ jobs:
         run: npm ci
 
       - name: Move project data out of shared runtime code
-        run: node scripts/migrations/generalize-system-runtime.mjs
+        run: |
+          set +e
+          node scripts/migrations/generalize-system-runtime.mjs 2>&1 | tee migration.log
+          echo ${PIPESTATUS[0]} > migration.status
+          exit 0
 
       - name: Syntax-check migrated JavaScript
-        run: find scripts -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check
+        if: always()
+        run: |
+          set +e
+          find scripts -type f -name '*.mjs' -print0 | xargs -0 -n1 node --check 2>&1 | tee syntax.log
+          echo ${PIPESTATUS[0]} > syntax.status
+          exit 0
+
+      - name: Upload migration diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-system-generalization-${{ github.run_id }}
+          retention-days: 7
+          path: |
+            migration.log
+            migration.status
+            syntax.log
+            syntax.status
+            scripts/orvyq_full_production_plan.mjs
+            scripts/orvyq_edit_plan.mjs
+            projects/*/config/editorial_asset_plan.json
+          if-no-files-found: warn
+
+      - name: Stop on migration or syntax failure
+        run: |
+          set -euo pipefail
+          test "$(cat migration.status)" = "0"
+          test "$(cat syntax.status)" = "0"
 
       - name: Commit deterministic migration
         run: |
