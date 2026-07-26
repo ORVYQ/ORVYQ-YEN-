@@ -422,6 +422,13 @@ test("shrinkGraphicBreakSliceToMax: falls back to a free left neighbor when the 
   assert.ok(Math.abs(checkpointTimes[2] - checkpointTimes[1] - 5) < 1e-9);
 });
 
+test("shrinkGraphicBreakSliceToMax: splits saved time across both neighbors when neither can absorb it alone", () => {
+  const checkpointTimes = [0, 7, 14, 21];
+  const isFixedCheckpoint = (cp) => cp === 0 || cp === 3;
+  shrinkGraphicBreakSliceToMax(checkpointTimes, 1, 3, isFixedCheckpoint, 9, "CLM_TEST");
+  assert.deepEqual(checkpointTimes, [0, 9, 12, 21]);
+});
+
 test("shrinkGraphicBreakSliceToMax: throws when neither neighbor has spare room under the per-shot cap", () => {
   const checkpointTimes = [0, 7, 14, 21];
   const isFixedCheckpoint = (cp) => cp === 0 || cp === 3;
@@ -437,9 +444,9 @@ test("sliceClaimWindow: a real GRAPHIC_BREAK_ASSIGNMENTS maxSeconds cap shrinks 
   const maxShotSeconds = 15;
   const slices = sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, [], [], {});
 
-  assert.equal(slices.length, 3);
+  assert.equal(slices.length, 4);
   // Slice 1 is the real GRAPHIC_BREAK_ASSIGNMENTS[CLM_006...][1].maxSeconds
-  // (3.5s) cap -- it must land exactly on it, not the ~6.667s pure
+  // (3.5s) cap -- it must land exactly on it, not the 5s pure
   // equal-fraction width it would otherwise get.
   assert.ok(Math.abs(slices[1].end - slices[1].start - 3.5) < 1e-9);
 
@@ -454,5 +461,5 @@ test("sliceClaimWindow: a real GRAPHIC_BREAK_ASSIGNMENTS maxSeconds cap shrinks 
   // was free and had room under maxShotSeconds) -- not discarded, and not
   // pushed past the per-shot cap.
   assert.ok(slices[2].end - slices[2].start <= maxShotSeconds + 1e-9);
-  assert.ok(slices[2].end - slices[2].start > slices[0].end - slices[0].start);
+  assert.ok([slices[0], slices[2]].some((slice) => slice.end - slice.start > 5));
 });

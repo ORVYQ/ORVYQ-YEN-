@@ -128,12 +128,10 @@ export const FOOTAGE_ASSIGNMENTS = {
     }
   },
   CLM_006_NO_REAL_WORLD_INCIDENT: {
-    // Slice 1 (moved from slice 2, see GRAPHIC_BREAK_ASSIGNMENTS below) is
-    // a graphic recap card instead of a footage break -- slice 1, not 2,
-    // because slice 2 is this claim's own LAST slice, immediately followed
-    // by SEC_03's own title card: a graphic there left nothing real between
-    // the two (real CI: "shot_024 and shot_025 are two consecutive generic
-    // graphic cards"). Slice 2 now stays plain evidence, buffering the two.
+    // Slice 1 is a capped graphic recap card instead of a footage break.
+    // CLM_006 has a four-slice override below: the extra slice gives the
+    // recap's saved time enough neighboring capacity under the 8s shot cap
+    // while leaving two real evidence slices before SEC_03's title card.
   },
   CLM_007_MARKET_PRESSURE: {
     // slice 2's real narration window contains the "But a fire drill still
@@ -263,15 +261,23 @@ export const FOOTAGE_ASSIGNMENTS = {
     // footage, but every one of those clips is already at its 2-use cap;
     // scene_018 (regulatory office, already used once by CLM_018 one
     // section later) threads the same open/closed governance question
-    // forward instead. Slice 5 stays graphic (see GRAPHIC_BREAK_ASSIGNMENTS)
-    // with a duration cap -- it does not need moving, since this claim's
-    // own slice 6 already sits between it and SEC_08's title card.
+    // forward instead. Slice 3 stays graphic (see GRAPHIC_BREAK_ASSIGNMENTS)
+    // with a duration cap, immediately after the footage break. The
+    // nine-slice override leaves multiple evidence slices between it and
+    // SEC_08's title card.
     2: {
       asset: "assets/footage/scene_018_f681c3057e36f147005d2652.mp4",
       trimInRatio: 0.5,
       motion: "hold",
       role: "context",
       reuse_reason: "Second use at an earlier trim window than CLM_018's own use one section later -- the same regulatory-office footage threading SEC_07's open/closed governance question into SEC_08's safety-architecture answer."
+    },
+    6: {
+      asset: "assets/footage/scene_003_d69cde76dfac1e29bd6f9946.mp4",
+      trimInRatio: 0.55,
+      motion: "hold",
+      role: "context",
+      reuse_reason: "Earlier, distinct trim window of the blueprint-review footage reused by CLM_018; here it breaks the open/closed trade-off's final evidence run with the film's established independent-review visual."
     }
   },
   CLM_018_INDEPENDENT_EVALUATIONS: {
@@ -392,7 +398,7 @@ export const GRAPHIC_BREAK_ASSIGNMENTS = {
   CLM_006_NO_REAL_WORLD_INCIDENT: { 1: { title: "DESIGNED TEST, NOT A REAL INCIDENT", subtitle: "No real-world harm was reported for this case.", maxSeconds: 3.5 } },
   CLM_011_BIO_SAFEGUARD_THRESHOLD: { 7: { title: "SAME THRESHOLD, DIFFERENT DOMAIN", subtitle: "The bio-safeguard question recurs across every risk category." } },
   CLM_016_COMPLIANCE_INCUMBENCY: { 1: { title: "COMPLIANCE COST, COMPETITIVE MOAT", subtitle: "The same rules can entrench whoever can already afford them." } },
-  CLM_017_OPEN_CLOSED_TRADEOFF: { 5: { title: "NO CONSENSUS ON THE TRADE-OFF", subtitle: "Researchers remain genuinely split.", maxSeconds: 3.5 } },
+  CLM_017_OPEN_CLOSED_TRADEOFF: { 3: { title: "NO CONSENSUS ON THE TRADE-OFF", subtitle: "Researchers remain genuinely split.", maxSeconds: 3.5 } },
   CLM_019_INCIDENT_REPORTING: { 0: { title: "REPORTING GAPS, NOT JUST INCIDENT GAPS", subtitle: "What isn't disclosed can't be counted." } },
   CLM_021_INFORMATION_INTEGRITY: { 2: { title: "AMBIGUITY BY DESIGN", subtitle: "Synthetic and real information increasingly blend together." }, 4: { title: "THE SAME ARCHITECTURE, REPEATED", subtitle: "Independent evaluation returns as a theme, not a one-off." } }
 };
@@ -783,16 +789,17 @@ export function shrinkGraphicBreakSliceToMax(checkpointTimes, sliceIndex, maxSec
   const rightFixed = isFixedCheckpoint(rightCheckpoint);
   const rightNeighborWidth = rightFixed ? Infinity : checkpointTimes[rightCheckpoint + 1] - checkpointTimes[rightCheckpoint];
   const leftNeighborWidth = leftFixed ? Infinity : checkpointTimes[leftCheckpoint] - checkpointTimes[leftCheckpoint - 1];
+  const rightRoom = rightFixed ? 0 : Math.max(0, maxShotSeconds - rightNeighborWidth);
+  const leftRoom = leftFixed ? 0 : Math.max(0, maxShotSeconds - leftNeighborWidth);
 
-  if (!rightFixed && rightNeighborWidth + excess <= maxShotSeconds) {
-    checkpointTimes[rightCheckpoint] -= excess;
-  } else if (!leftFixed && leftNeighborWidth + excess <= maxShotSeconds) {
-    checkpointTimes[leftCheckpoint] += excess;
-  } else {
+  if (rightRoom + leftRoom + 1e-9 < excess) {
     throw new Error(
-      `${claimId}: cannot shrink its graphic recap slice ${sliceIndex} to ${maxSeconds}s -- neither neighboring slice has enough spare room under the ${maxShotSeconds}s per-shot cap to absorb the saved time`
+      `${claimId}: cannot shrink its graphic recap slice ${sliceIndex} to ${maxSeconds}s -- neighboring capacity ${rightRoom + leftRoom}s is below the required ${excess}s under the ${maxShotSeconds}s per-shot cap (leftFixed=${leftFixed}, rightFixed=${rightFixed})`
     );
   }
+  const toRight = Math.min(excess, rightRoom);
+  checkpointTimes[rightCheckpoint] -= toRight;
+  checkpointTimes[leftCheckpoint] += excess - toRight;
 }
 
 // Picks the real word-end time closest to idealTime (the exact
@@ -965,7 +972,11 @@ function frozenRunEdgeBoundaries(protectedIndices, sliceCount) {
 // headroom, without changing which asset/trim/motion/role any existing
 // FOOTAGE_ASSIGNMENTS entry declares (only the two highest slice indices in
 // CLM_020's own table above were re-keyed by +1 to match).
-const SLICE_COUNT_OVERRIDES = { CLM_020_SYSTEMIC_INCENTIVE_FINAL: 18 };
+const SLICE_COUNT_OVERRIDES = {
+  CLM_006_NO_REAL_WORLD_INCIDENT: 4,
+  CLM_017_OPEN_CLOSED_TRADEOFF: 9,
+  CLM_020_SYSTEMIC_INCENTIVE_FINAL: 18
+};
 
 export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, tokens = [], pauseAnchorTimes = [], evidenceKindOverrides = {}) {
   const duration = coverEnd - coverStart;
