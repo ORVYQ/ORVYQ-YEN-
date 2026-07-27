@@ -10,7 +10,8 @@
 import path from "node:path";
 import { projectDir, readJson, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
-import { tokenizeWords, locateClaimWindow, sliceClaimWindow, applyEvidenceHoldToNextWindow } from "./orvyq_full_production_plan.mjs";
+import { tokenizeWords } from "./lib/orvyq-pause-resolver.mjs";
+import { locateClaimWindow, sliceClaimWindow, applyEvidenceHoldToNextWindow } from "./orvyq_full_production_plan.mjs";
 import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 
 const TITLE_CARD_SECONDS = 2.5;
