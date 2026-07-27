@@ -23,6 +23,11 @@ on:
     paths:
       - ".github/workflows/orvyq-music-acquisition.yml"
   workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory under projects/ whose config/music_acquisition.json should be fetched and vendored"
+        type: string
+        default: "001-the-ai-race-no-one-can-afford-to-win"
 
 permissions:
   contents: write
@@ -32,7 +37,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  PROJECT_ID: 001-the-ai-race-no-one-can-afford-to-win
+  PROJECT_ID: ${{ inputs.project_id || '001-the-ai-race-no-one-can-afford-to-win' }}
 
 jobs:
   acquire:
