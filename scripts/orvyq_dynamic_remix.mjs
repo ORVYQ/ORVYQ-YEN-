@@ -25,7 +25,16 @@ export function musicGainExpression(cues, outputDuration) {
     }))
     .filter((cue) => Number.isFinite(cue.start) && Number.isFinite(cue.end) && cue.end > cue.start);
   if (!normalized.length) return "0.68";
-  let expression = String(normalized.at(-1).gainEnd);
+  // Fallback for any t outside every cue window -- in practice this is only
+  // the pre-narration motion-hook silence before the first cue's own start
+  // (cues fully tile the runtime from there through outputDuration, so
+  // there is no analogous gap after the last cue's end). Holding at the
+  // FIRST cue's own opening gain is the correct envelope semantics (hold at
+  // a ramp's own starting value before it begins); using the LAST cue's
+  // closing gain here was a real defect -- it silently played the entire
+  // unducked opening hook at whatever gain the film's closing cue happened
+  // to end on, regardless of the hook's own intended energy.
+  let expression = String(normalized[0].gainStart);
   for (let index = normalized.length - 1; index >= 0; index -= 1) {
     const cue = normalized[index];
     const span = Math.max(0.001, cue.end - cue.start);
