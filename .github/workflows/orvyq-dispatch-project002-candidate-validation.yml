@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after fixing the final editorial pause anchor sentence boundary."
+            -f body="Project 002 Candidate Validation re-dispatched after authoring the missing 14-second, five-shot cinematic motion hook from verified local footage."
 
-# Trigger revision: final pause sentence-boundary fix applied on 2026-07-27.
+# Trigger revision: Project 002 cinematic motion hook authored on 2026-07-27.
