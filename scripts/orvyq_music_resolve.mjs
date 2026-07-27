@@ -28,7 +28,7 @@
 // in scripts/orvyq_edit_plan.mjs, no workflow invokes this path anymore:
 // proof shares the full candidate's music like everything else it renders.
 import path from "node:path";
-import { mkdtemp, rm, writeFile, readFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile, readFile } from "node:fs/promises";
 import os from "node:os";
 import { createHash } from "node:crypto";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
@@ -356,6 +356,14 @@ export async function resolveProjectMusic(projectId = PROJECT_ID, { mode, target
   const cueSheet = await readJson(path.join(dir, "direction", "music_cue_sheet.json"));
   const registry = await loadMusicRegistry();
   const destination = path.join(dir, "assets", "music", "approved_bed.mp3");
+  // ffmpeg will not create its own output directory -- a project whose
+  // assets/music/ has never been populated before (no prior music
+  // acquisition run committed anything there) has no such directory in a
+  // fresh checkout, so ffmpeg's destination write fails with a bare
+  // "No such file or directory" (real CI failure against Project 002,
+  // whose music was authored directly from the shared registry and never
+  // ran through a music-acquisition workflow first).
+  await mkdir(path.dirname(destination), { recursive: true });
 
   if (mode === "proof") {
     const trackId = extractRequiredTrackId(cueSheet, mode);
