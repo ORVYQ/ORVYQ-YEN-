@@ -32,4 +32,4 @@ jobs:
               end')"
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
 
-# Trigger revision: inspect latest validation/review state on 2026-07-27.
+# Trigger revision: inspect after exact terminal pause correction.
