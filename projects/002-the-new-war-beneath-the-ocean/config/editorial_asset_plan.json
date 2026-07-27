@@ -601,6 +601,16 @@
       }
     },
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
+      "3": {
+        "mode": "illustrative",
+        "title": "5,569 METRES BELOW THE PACIFIC",
+        "subtitle": "The Chikyu-operated system lifted rare-earth mud continuously through a pipe reaching that depth in Japan's Minamitorishima zone.",
+        "labels": [
+          "5,569 METRES",
+          "CONTINUOUS LIFT",
+          "CHIKYU SYSTEM"
+        ]
+      },
       "6": {
         "mode": "illustrative",
         "title": "A TECHNICAL RESULT, NOT A MINE",
