@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched on the latest Project 002 branch after the reusable narration-dynamics fix."
+            -f body="Project 002 Candidate Validation re-dispatched on branch head a5f033f after the full safe pure-graphics-ratio recovery. Quality gates remain unchanged."
 
-# Trigger revision: automation retry 2026-07-27T21:08+03:00; branch fix a48d6d423d8f8e6168491944e44e134dc82c5732.
+# Trigger revision: 2026-07-28T00:13+03:00; branch head a5f033f1a3b8415e27cb019e6567e1365d7a81c1.
