@@ -73,7 +73,7 @@ jobs:
         run: npm run validate:canonical
 
       - name: Fetch and verify official primary evidence
-        run: node scripts/orvyq_fetch_primary_evidence.mjs
+        run: node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID"
 
       - name: Report real footage clip durations
         if: always()
