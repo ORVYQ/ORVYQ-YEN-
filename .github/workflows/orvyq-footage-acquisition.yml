@@ -16,6 +16,7 @@ on:
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
       - "projects/*/research/footage_acquisition_plan.json"
+      - "projects/*/research/footage_semantic_constraints.json"
 
 permissions:
   contents: write
@@ -23,7 +24,7 @@ permissions:
 
 concurrency:
   group: orvyq-footage-acquisition-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   acquire:
