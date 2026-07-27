@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after authoring the missing sequence plan with real JAMSTEC and ISA primary-evidence placements."
+            -f body="Project 002 Candidate Validation re-dispatched after reusable schema alignment fixes for the active no-short-proof workflow."
 
-# Trigger revision: real-evidence sequence plan authored on 2026-07-27.
+# Trigger revision: schema alignment fixes committed at 84986006a167ae36ced6fa902d2e95aae5b86c40 on 2026-07-27.
