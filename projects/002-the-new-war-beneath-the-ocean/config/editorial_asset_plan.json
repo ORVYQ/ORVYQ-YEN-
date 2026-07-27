@@ -270,8 +270,7 @@
           "EXPORT CONTROL",
           "SHIPMENTS DOWN",
           "PREMIUM PRICING"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
@@ -283,8 +282,7 @@
           "JAMSTEC TEST",
           "INTEGRATED TRIAL",
           "COMMERCIAL CHAIN"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
@@ -345,8 +343,7 @@
           "MINE",
           "REFINERY",
           "MAGNET"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -390,8 +387,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
