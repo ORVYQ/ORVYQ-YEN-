@@ -1,0 +1,168 @@
+name: ORVYQ Project Evidence Acquisition
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+      target_branch:
+        description: "Branch containing the project evidence manifest"
+        type: string
+        required: true
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-project-evidence-acquisition.yml"
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: orvyq-project-evidence-acquisition
+  cancel-in-progress: false
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Resolve request
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PROJECT_ID="${{ inputs.project_id }}"
+            TARGET_BRANCH="${{ inputs.target_branch }}"
+          else
+            PROJECT_ID="002-the-new-war-beneath-the-ocean"
+            TARGET_BRANCH="agent/002-deep-sea-cold-war"
+          fi
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+          echo "TARGET_BRANCH=$TARGET_BRANCH" >> "$GITHUB_ENV"
+
+      - name: Checkout target project branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_BRANCH }}
+          lfs: false
+          fetch-depth: 20
+
+      - name: Verify evidence request
+        run: |
+          set -euo pipefail
+          test -f "projects/$PROJECT_ID/research/primary_evidence_manifest.json"
+          test -f "projects/$PROJECT_ID/research/evidence_asset_manifest.json"
+          test -f scripts/orvyq_fetch_primary_evidence.mjs
+          test -f scripts/orvyq_promote_evidence_assets.mjs
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies and PDF tools
+        run: |
+          set -euo pipefail
+          npm ci
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+
+      - name: Download and verify official primary evidence
+        run: |
+          set -euo pipefail
+          ORVYQ_PROJECT_ID="$PROJECT_ID" node scripts/orvyq_fetch_primary_evidence.mjs | tee evidence-fetch-result.json
+
+      - name: Promote verified evidence assets
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID" | tee evidence-promotion-result.json
+
+      - name: Validate complete evidence materialisation
+        run: |
+          set -euo pipefail
+          node --input-type=module - <<'NODE'
+          import fs from 'node:fs';
+          const project = process.env.PROJECT_ID;
+          const runtime = JSON.parse(fs.readFileSync(`projects/${project}/assets/evidence/primary_evidence.runtime.json`, 'utf8'));
+          const promotion = JSON.parse(fs.readFileSync('evidence-promotion-result.json', 'utf8'));
+          if (runtime.pass !== true) throw new Error('primary evidence runtime manifest did not pass');
+          if (!Array.isArray(runtime.assets) || runtime.assets.length !== 9) throw new Error(`expected 9 evidence assets, found ${runtime.assets?.length ?? 0}`);
+          if (!promotion.ok || promotion.stillPending?.length) throw new Error(`evidence promotion left pending assets: ${JSON.stringify(promotion.stillPending || [])}`);
+          console.log(JSON.stringify({ pass: true, asset_count: runtime.assets.length, promoted: promotion.promoted }, null, 2));
+          NODE
+
+      - name: Commit verified evidence to target branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          LOG_FILE="$GITHUB_WORKSPACE/evidence-commit.log"
+          exec > >(tee -a "$LOG_FILE") 2>&1
+
+          EVIDENCE_DIR="projects/$PROJECT_ID/assets/evidence"
+          test -f "$EVIDENCE_DIR/primary_evidence.runtime.json"
+
+          while IFS= read -r IMAGE; do
+            git check-attr filter -- "$IMAGE"
+            if git check-attr filter -- "$IMAGE" | grep -q 'filter: lfs'; then
+              echo "::error::Compact Project 002 evidence is still configured for Git LFS: $IMAGE"
+              exit 1
+            fi
+          done < <(find "$EVIDENCE_DIR" -maxdepth 1 -type f \( -name '*.png' -o -name '*.jpg' -o -name '*.jpeg' \) | sort)
+
+          git config user.name "orvyq-evidence-bot"
+          git config user.email "orvyq-evidence-bot@users.noreply.github.com"
+
+          git add -f "$EVIDENCE_DIR"
+          git add -f "projects/$PROJECT_ID/research/evidence_asset_manifest.json"
+
+          if git diff --cached --quiet; then
+            echo "Evidence set unchanged; nothing to commit."
+            exit 0
+          fi
+
+          git commit -m "Materialize verified official evidence for $PROJECT_ID [skip ci]"
+
+          for attempt in 1 2 3; do
+            if git push origin "HEAD:$TARGET_BRANCH"; then
+              echo "Verified evidence pushed successfully."
+              exit 0
+            fi
+            echo "Push attempt $attempt failed; synchronising and retrying."
+            git fetch origin "$TARGET_BRANCH"
+            git rebase "origin/$TARGET_BRANCH"
+            sleep $((attempt * 5))
+          done
+
+          echo "::error::Unable to push verified evidence after three attempts."
+          exit 1
+
+      - name: Upload evidence diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-evidence-acquisition-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            evidence-fetch-result.json
+            evidence-promotion-result.json
+            evidence-commit.log
+            projects/${{ env.PROJECT_ID }}/research/primary_evidence_manifest.json
+            projects/${{ env.PROJECT_ID }}/research/evidence_asset_manifest.json
+            projects/${{ env.PROJECT_ID }}/assets/evidence/primary_evidence.runtime.json
+            projects/${{ env.PROJECT_ID }}/assets/evidence/**
+          if-no-files-found: warn
+
+      - name: Report evidence result to Project 002 PR
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          gh api repos/${{ github.repository }}/issues/3/comments \
+            -f body="Project 002 official-evidence acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`."
