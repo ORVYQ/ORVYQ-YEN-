@@ -1,0 +1,70 @@
+name: Fix Project 002 scene 004 trim overrun
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-fix-project002-scene004-trim.yml"
+
+permissions:
+  actions: write
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/002-deep-sea-cold-war
+          lfs: true
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: npm ci
+      - name: Set conservative real-source trim windows
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json')
+          data=json.loads(p.read_text())
+          a=data['footage_assignments']
+          # scene_004 is a 12.012s industrial/JAMSTEC-context clip. The prior
+          # calculated trim reached 9.607s and a 4s pause-holding slice overran
+          # the real source. Keep both semantically authored placements but use
+          # two safe, distinct real windows rather than stretching the clip.
+          a['CLM_001_JAPAN_TECHNICAL_MILESTONE']['4']['trimInRatio']=0.0
+          a['CLM_004_JAPAN_INDUSTRIAL_TIMELINE']['0']['trimInRatio']=0.08
+          p.write_text(json.dumps(data, indent=2)+'\n')
+          PY
+      - name: Restore alignment and validate through edit-plan build
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/validation-artifact
+          mkdir -p /tmp/validation-artifact
+          gh run download 30273988416 --repo "${{ github.repository }}" --name orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30273988416 --dir /tmp/validation-artifact
+          cp /tmp/validation-artifact/projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json
+          node scripts/orvyq_resolve_pauses.mjs --project-id=002-the-new-war-beneath-the-ocean
+          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean
+          node scripts/orvyq_edit_plan.mjs --project-id=002-the-new-war-beneath-the-ocean --mode=full
+      - name: Commit validated authored trim fix
+        run: |
+          git config user.name "orvyq-automation-editor"
+          git config user.email "orvyq-automation-editor@users.noreply.github.com"
+          git add projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
+          git commit -m "Keep Project 002 scene 004 trims within real source duration"
+          git pull --rebase origin agent/002-deep-sea-cold-war
+          git push origin HEAD:agent/002-deep-sea-cold-war
+      - name: Re-dispatch Candidate Validation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run orvyq-candidate-validation.yml --repo "${{ github.repository }}" --ref agent/002-deep-sea-cold-war -f project_id=002-the-new-war-beneath-the-ocean
+          gh api repos/${{ github.repository }}/issues/3/comments -f body="Project 002 Candidate Validation re-dispatched after keeping the semantically authored scene_004 placements inside the clip's verified 12.012-second source duration without stretching or weakening quality gates."
