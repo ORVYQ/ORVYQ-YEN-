@@ -14,20 +14,20 @@
       },
       "4": {
         "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "push",
         "role": "context"
       },
       "2": {
         "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
-        "trimInRatio": 0.08,
+        "trimInRatio": 0.02,
         "motion": "drift_right",
         "role": "human_context",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       },
       "6": {
         "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
-        "trimInRatio": 0.53,
+        "trimInRatio": 0.15,
         "motion": "pull",
         "role": "context"
       }
@@ -41,13 +41,13 @@
       },
       "2": {
         "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.1,
         "motion": "hold",
         "role": "context"
       },
       "4": {
         "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "push",
         "role": "context"
       }
@@ -69,19 +69,19 @@
       },
       "2": {
         "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.1,
         "motion": "drift_left",
         "role": "context"
       },
       "4": {
         "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "drift_left",
         "role": "human_context"
       },
       "6": {
         "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.12,
         "motion": "drift_right",
         "role": "context",
         "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
@@ -97,20 +97,20 @@
       },
       "2": {
         "asset": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "pull",
         "role": "context"
       },
       "4": {
         "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
-        "trimInRatio": 0.08,
+        "trimInRatio": 0.02,
         "motion": "hold",
         "role": "context",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       },
       "6": {
         "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.12,
         "motion": "push",
         "role": "context",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
@@ -134,13 +134,13 @@
       },
       "2": {
         "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "drift_left",
         "role": "context"
       },
       "5": {
         "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.12,
         "motion": "drift_right",
         "role": "context",
         "reuse_reason": "The recycling facility returns at a distinct trim window: first as a partial supply response, later as the repeated industrial operation implied by 'accumulation' rather than a single test."
@@ -163,14 +163,14 @@
       },
       "3": {
         "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
-        "trimInRatio": 0.08,
+        "trimInRatio": 0.02,
         "motion": "drift_right",
         "role": "context",
         "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
       },
       "2": {
         "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.12,
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
@@ -202,7 +202,7 @@
       },
       "3": {
         "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
-        "trimInRatio": 0.08,
+        "trimInRatio": 0.02,
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
@@ -218,7 +218,7 @@
       },
       "2": {
         "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "hold",
         "role": "context"
       }
@@ -240,21 +240,21 @@
       },
       "2": {
         "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
-        "trimInRatio": 0.08,
+        "trimInRatio": 0.02,
         "motion": "push",
         "role": "context",
         "reuse_reason": "The recycling facility returns at a distinct trim window: first as a partial supply response, later as the repeated industrial operation implied by 'accumulation' rather than a single test."
       },
       "43": {
         "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
-        "trimInRatio": 0.45,
+        "trimInRatio": 0.12,
         "motion": "drift_left",
         "role": "human_context",
         "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
       },
       "4": {
         "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
-        "trimInRatio": 0.6,
+        "trimInRatio": 0.15,
         "motion": "hold",
         "role": "context"
       }
