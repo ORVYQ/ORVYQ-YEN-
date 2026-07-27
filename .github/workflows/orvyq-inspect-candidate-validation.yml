@@ -31,3 +31,5 @@ jobs:
           git add diagnostics/latest-orvyq-runs.txt
           git commit -m "Record latest ORVYQ run status [skip ci]" || exit 0
           git push origin HEAD:main
+
+# Trigger revision: inspect terminal-pause retry.
