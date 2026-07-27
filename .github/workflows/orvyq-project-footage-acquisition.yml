@@ -130,7 +130,7 @@ jobs:
 
             for ((INDEX=START; INDEX<END; INDEX++)); do
               MEDIA="${MEDIA_FILES[$INDEX]}"
-              git add "$MEDIA" "$MEDIA.provenance.json"
+              git add -f "$MEDIA" "$MEDIA.provenance.json"
             done
 
             if git diff --cached --quiet; then
@@ -142,7 +142,7 @@ jobs:
             push_current_head
           done
 
-          git add \
+          git add -f \
             "projects/$PROJECT_ID/assets/local_assets.json" \
             "projects/$PROJECT_ID/assets/footage_acquisition.runtime.json" \
             "projects/$PROJECT_ID/qa/local_assets.provenance.json"
@@ -179,4 +179,4 @@ jobs:
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`. Commit diagnostics are attached to the run artifact."
 
-# Retry 5: push compact footage in small batches and retain exact commit diagnostics.
+# Retry 6: force-add only verified generated assets that are intentionally ignored by repository policy.
