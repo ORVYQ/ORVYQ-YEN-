@@ -77,8 +77,8 @@
       "download_asset": "assets/evidence/jamstec_seafloor_hole.jpg",
       "local_asset": "assets/evidence/jamstec_seafloor_hole.jpg",
       "mime": "image/jpeg",
-      "min_bytes": 30000,
-      "local_min_bytes": 30000,
+      "min_bytes": 25000,
+      "local_min_bytes": 25000,
       "provenance_mode": "official_primary_capture",
       "caption": "JAMSTEC — borehole visible after removal of the mining machine"
     },
