@@ -32,20 +32,23 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          keys=('Validate selected project and production profile','Error','ERROR','failed','Invalid','missing','ENOENT','creative_profile','status')
-          idx=[i for i,l in enumerate(lines) if any(k.lower() in l.lower() for k in keys)]
-          if idx:
-              start=max(0, idx[-1]-30)
-              selected=lines[start:min(len(lines), idx[-1]+20)]
+          target='Validate selected project and production profile'
+          hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
+          if hits:
+              start=hits[-1]
+              selected=lines[start:min(len(lines), start+140)]
           else:
-              selected=lines[-100:]
+              err=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or 'error:' in l.lower()]
+              start=max(0,(err[-1] if err else len(lines)-100)-40)
+              selected=lines[start:min(len(lines), start+140)]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
-              cleaned.append(line[:500])
-          text='\n'.join(cleaned)
-          Path('excerpt.txt').write_text(text[-6000:])
+              cleaned.append(line[:800])
+          Path('excerpt.txt').write_text('\n'.join(cleaned)[:10000])
           PY
           excerpt="$(cat excerpt.txt)"
-          body=$(printf 'Candidate Validation failure diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
+          body=$(printf 'Exact Candidate Validation failing-step diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
           gh api "repos/$repo/issues/3/comments" -f body="$body"
+
+# Trigger revision: exact failing-step extraction.
