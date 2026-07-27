@@ -55,13 +55,14 @@ jobs:
                   while IFS= read -r -d '' plan; do
                     root="${plan%/research/footage_acquisition_plan.json}"
                     runtime="$root/assets/footage_acquisition.runtime.json"
+                    semantic="$root/research/footage_semantic_constraints.json"
                     planned="$(jq '.assets | length' "$plan")"
                     actual="$(test -f "$runtime" && jq '.records | length' "$runtime" || echo 0)"
-                    if [ "$actual" -lt "$planned" ]; then jq -r '.project_id' "$plan"; fi
+                    if [ "$actual" -lt "$planned" ] || [ -f "$semantic" ]; then jq -r '.project_id' "$plan"; fi
                   done | sort -u
               )
               if [ "${#CANDIDATES[@]}" -ne 1 ]; then
-                echo "::error::Could not resolve exactly one incomplete footage acquisition project; found ${#CANDIDATES[@]}."
+                echo "::error::Could not resolve exactly one project needing footage acquisition or semantic revalidation; found ${#CANDIDATES[@]}."
                 exit 1
               fi
               PROJECT_ID="${CANDIDATES[0]}"
