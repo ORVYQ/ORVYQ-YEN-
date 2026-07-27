@@ -1,84 +1,114 @@
-run_id=30254157668
-job_id=89938785533
+run_id=30257567458
+job_id=89949640812
 
+ok 213 - regression: the old full render's ~19 cards / ~141s total fails the new cap
+---
+duration_ms: 0.411314
+...
+# Subtest: a repeated card title fails even if durations are otherwise compliant
+ok 214 - a repeated card title fails even if durations are otherwise compliant
+---
+duration_ms: 0.246227
+...
+# Subtest: a card over the 6s exception threshold fails
+ok 215 - a card over the 6s exception threshold fails
+---
+duration_ms: 0.267046
+...
+# Subtest: section_title and end_card graphics are structural, not counted against the emphasis budget
+ok 216 - section_title and end_card graphics are structural, not counted against the emphasis budget
+---
+duration_ms: 0.203999
+...
+# Subtest: 1. candidate produced, then ONLY an approval-record commit is added afterward -> PASS (no HEAD-SHA dependency)
+ok 217 - 1. candidate produced, then ONLY an approval-record commit is added afterward -> PASS (no HEAD-SHA dependency)
+---
+duration_ms: 45.55606
+...
+# Subtest: 2. edit plan changes after approval -> FAIL
+ok 218 - 2. edit plan changes after approval -> FAIL
+---
+duration_ms: 50.965022
+...
+# Subtest: 3. final mix changes after approval -> FAIL
 ok 219 - 3. final mix changes after approval -> FAIL
 ---
-duration_ms: 149.201247
+duration_ms: 45.462099
 ...
 # Subtest: 4. an asset (registry) changes after approval -> FAIL
 ok 220 - 4. an asset (registry) changes after approval -> FAIL
 ---
-duration_ms: 16.675333
+duration_ms: 31.846292
 ...
 # Subtest: 5. review run ID mismatch (final workflow input vs approval record) -> FAIL
 ok 221 - 5. review run ID mismatch (final workflow input vs approval record) -> FAIL
 ---
-duration_ms: 8.96611
+duration_ms: 18.650546
 ...
 # Subtest: 6. review artifact SHA mismatch -> FAIL
 ok 222 - 6. review artifact SHA mismatch -> FAIL
 ---
-duration_ms: 7.346433
+duration_ms: 17.002654
 ...
 # Subtest: 7. a DIFFERENT candidate's approval record is used -> FAIL
 ok 223 - 7. a DIFFERENT candidate's approval record is used -> FAIL
 ---
-duration_ms: 8.36293
+duration_ms: 20.788369
 ...
 # Subtest: approving before candidate-identity hardening (no canonical_candidate_identity) fails clearly rather than crashing
 ok 224 - approving before candidate-identity hardening (no canonical_candidate_identity) fails clearly rather than crashing
 ---
-duration_ms: 2.305378
+duration_ms: 5.070953
 ...
 # Subtest: wrong mode fails
 ok 225 - wrong mode fails
 ---
-duration_ms: 8.270519
+duration_ms: 18.481322
 ...
 # Subtest: a partial-duration review (review_total_frames < candidate total_frames) fails
 ok 226 - a partial-duration review (review_total_frames < candidate total_frames) fails
 ---
-duration_ms: 8.099167
+duration_ms: 20.61868
 ...
 # Subtest: verifyBundleIntegrity passes when every placed file matches the bundle's own frozen_candidate.json
 ok 227 - verifyBundleIntegrity passes when every placed file matches the bundle's own frozen_candidate.json
 ---
-duration_ms: 34.677943
+duration_ms: 46.382708
 ...
 # Subtest: verifyBundleIntegrity fails when a placed file was altered after freezing (corruption/tamper in transit)
 ok 228 - verifyBundleIntegrity fails when a placed file was altered after freezing (corruption/tamper in transit)
 ---
-duration_ms: 22.129054
+duration_ms: 32.976036
 ...
 # Subtest: verifyBundleIntegrity fails when the render_ready_project directory was altered
 ok 229 - verifyBundleIntegrity fails when the render_ready_project directory was altered
 ---
-duration_ms: 17.419408
+duration_ms: 29.332796
 ...
 # Subtest: verifyBundleIntegrity throws clearly on a pre-hardening candidate with no canonical_candidate_identity
 ok 230 - verifyBundleIntegrity throws clearly on a pre-hardening candidate with no canonical_candidate_identity
 ---
-duration_ms: 2.699068
+duration_ms: 7.796187
 ...
 # Subtest: deriveConfigs derives scene_config.json identically for proof and full mode edit plans (same function, no mode branch)
 ok 231 - deriveConfigs derives scene_config.json identically for proof and full mode edit plans (same function, no mode branch)
 ---
-duration_ms: 19.487082
+duration_ms: 20.414094
 ...
 # Subtest: deriveConfigs throws before writing anything if direction/edit_plan.json is missing (fails closed, does not silently fall back)
 ok 232 - deriveConfigs throws before writing anything if direction/edit_plan.json is missing (fails closed, does not silently fall back)
 ---
-duration_ms: 5.038975
+duration_ms: 4.920162
 ...
 # Subtest: assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
 ok 233 - assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
 ---
-duration_ms: 0.572861
+duration_ms: 0.595146
 ...
 # Subtest: assertSafeBundleOutput accepts a properly separated public/output/source layout
 ok 234 - assertSafeBundleOutput accepts a properly separated public/output/source layout
 ---
-duration_ms: 0.210409
+duration_ms: 0.384665
 ...
 1..234
 # tests 234
@@ -88,7 +118,7 @@ duration_ms: 0.210409
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 12681.968768
+# duration_ms 14625.20211
 ##[group]Run node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
 [36;1mnode scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"[0m
 shell: /usr/bin/bash -e {0}
@@ -104,7 +134,7 @@ LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
 {
 "ok": true,
 "pause_count": 7,
-"narration_end_seconds": 994.62,
+"narration_end_seconds": 994.68,
 "total_pause_seconds": 25,
 "output": "direction/resolved_pause_plan.json"
 }
@@ -120,7 +150,7 @@ Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
 ##[endgroup]
-{"ok":false,"error":"ENOENT: no such file or directory, open '/home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-/projects/002-the-new-war-beneath-the-ocean/direction/sequence_plan.json'"}
+{"ok":false,"error":"Full production plan has 54 unresolved creative-coverage gap(s):\n- Uninterrupted evidence run of 15.7s (> 15s cap) from CLM_001_JAPAN_TECHNICAL_MILESTONE to CLM_001_JAPAN_TECHNICAL_MILESTONE (claims CLM_001_JAPAN_TECHNICAL_MILESTONE) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 15.6s (> 15s cap) from CLM_001_JAPAN_TECHNICAL_MILESTONE to CLM_001_JAPAN_TECHNICAL_MILESTONE (claims CLM_001_JAPAN_TECHNICAL_MILESTONE) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 19.6s (> 15s cap) from CLM_001_JAPAN_TECHNICAL_MILESTONE to CLM_001_JAPAN_TECHNICAL_MILESTONE (claims CLM_001_JAPAN_TECHNICAL_MILESTONE) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 21.9s (> 15s cap) from CLM_002_CHINA_RARE_EARTH_CHOKEPOINT to CLM_002_CHINA_RARE_EARTH_CHOKEPOINT (claims CLM_002_CHINA_RARE_EARTH_CHOKEPOINT) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 15.9s (> 15s cap) from CLM_002_CHINA_RARE_EARTH_CHOKEPOINT to CLM_0
 ##[error]Process completed with exit code 1.
 ##[group]Run node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
 [36;1mnode scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"[0m
@@ -143,7 +173,7 @@ LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ##[group]Run actions/upload-artifact@v4
 with:
-name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30254157668
+name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458
 retention-days: 30
 path: validation-source-sha.txt
 alignment-speech-qa.log
@@ -174,7 +204,7 @@ Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
 ##[endgroup]
-(node:264169) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:4815) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 Multiple search paths detected. Calculating the least common ancestor of all paths
 The least common ancestor is /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-. This will be the root directory of the artifact
@@ -182,19 +212,19 @@ With the provided path, there will be 8 files uploaded
 Artifact name is valid!
 Root directory input is valid!
 Beginning upload of artifact content to blob storage
-(node:264169) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
-Uploaded bytes 78603
+(node:4815) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Uploaded bytes 78778
 Finished uploading artifact content to blob storage!
-SHA256 digest of uploaded artifact zip is 4565549b7838f5a90d4b5dda51bc7be8dd376d75017b31f64a7d43813b26213a
+SHA256 digest of uploaded artifact zip is 775d89c70e4f0db2a8f2aaeeb9ab489f95bef2bbf4782fa2ac8312a8f4bf57e6
 Finalizing artifact upload
-Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30254157668.zip successfully finalized. Artifact ID 8648251515
-Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30254157668 has been successfully uploaded! Final size is 78603 bytes. Artifact ID is 8648251515
-Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30254157668/artifacts/8648251515
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458.zip successfully finalized. Artifact ID 8649577478
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458 has been successfully uploaded! Final size is 78778 bytes. Artifact ID is 8649577478
+Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30257567458/artifacts/8649577478
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 Post job cleanup.
 [command]/usr/bin/git version
 git version 2.54.0
-Temporarily overriding HOME='/home/runner/work/_temp/91ea8ef1-4512-42d8-9f55-39401004bd78' before making global git config changes
+Temporarily overriding HOME='/home/runner/work/_temp/79e82eb0-937c-472d-85b6-21dc24fef161' before making global git config changes
 Adding repository directory to the temporary git global config as a safe directory
 [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
 [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
