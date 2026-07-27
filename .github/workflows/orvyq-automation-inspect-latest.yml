@@ -23,9 +23,9 @@ jobs:
           set -euo pipefail
           runs="$(gh api "repos/${{ github.repository }}/actions/runs?per_page=100")"
           body="$(printf '%s' "$runs" | jq -r '
-            [ .workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or .name == "ORVYQ Full-Length Review" or .name == "ORVYQ Full Length Review") ][0:10]
+            [ .workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or .name == "ORVYQ Full-Length Review" or .name == "ORVYQ Full Length Review") ][0:12]
             | if length == 0 then "No validation or review runs found."
               else map("- " + .name + " run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, head_sha=`" + .head_sha + "`, url=" + .html_url) | "Latest ORVYQ validation/review runs:\n" + join("\n") end')"
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
 
-# trigger 2026-07-27T08:15+03:00
+# trigger 2026-07-27T14:12+03:00
