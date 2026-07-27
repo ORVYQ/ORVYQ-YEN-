@@ -27,3 +27,5 @@ jobs:
             | if length == 0 then "No validation or review runs found."
               else map("- " + .name + " run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, head_sha=`" + .head_sha + "`, url=" + .html_url) | "Latest ORVYQ validation/review runs:\n" + join("\n") end')"
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
+
+# trigger
