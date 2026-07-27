@@ -1,0 +1,51 @@
+name: Inspect ORVYQ Candidate Validation Error
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-inspect-candidate-validation-error.yml"
+
+permissions:
+  actions: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  inspect-error:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract latest validation failure
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          repo="${{ github.repository }}"
+          run_json="$(gh api "repos/$repo/actions/runs?per_page=30")"
+          run_id="$(printf '%s' "$run_json" | jq -r '[.workflow_runs[] | select(.name == "ORVYQ Candidate Validation")][0].id')"
+          test "$run_id" != "null"
+          jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
+          job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
+          gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          lines=Path('job.log').read_text(errors='replace').splitlines()
+          keys=('Validate selected project and production profile','Error','ERROR','failed','Invalid','missing','ENOENT','creative_profile','status')
+          idx=[i for i,l in enumerate(lines) if any(k.lower() in l.lower() for k in keys)]
+          if idx:
+              start=max(0, idx[-1]-30)
+              selected=lines[start:min(len(lines), idx[-1]+20)]
+          else:
+              selected=lines[-100:]
+          cleaned=[]
+          for line in selected:
+              line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
+              cleaned.append(line[:500])
+          text='\n'.join(cleaned)
+          Path('excerpt.txt').write_text(text[-6000:])
+          PY
+          excerpt="$(cat excerpt.txt)"
+          body=$(printf 'Candidate Validation failure diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
+          gh api "repos/$repo/issues/3/comments" -f body="$body"
