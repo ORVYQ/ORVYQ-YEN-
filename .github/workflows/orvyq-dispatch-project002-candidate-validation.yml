@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched on branch head a5f033f after the full safe pure-graphics-ratio recovery. Quality gates remain unchanged."
+            -f body="Project 002 Candidate Validation re-dispatched on current branch head \`1385eb97\`. Quality gates remain unchanged."
 
-# Trigger revision: 2026-07-28T00:13+03:00; branch head a5f033f1a3b8415e27cb019e6567e1365d7a81c1.
+# Trigger revision: 2026-07-28T02:20+03:00; branch head 1385eb97e77c3217b53e2af065b44bb7b86e022c.
