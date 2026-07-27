@@ -78,6 +78,23 @@ jobs:
           sudo apt-get install -y --no-install-recommends ffmpeg poppler-utils
           python -m pip install --disable-pip-version-check faster-whisper==1.2.0 requests==2.32.5
 
+      - name: Run full-duration narration QA for canonical alignment
+        run: |
+          set +e
+          python scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" \
+            --media "projects/$PROJECT_ID/assets/audio/final_voice.mp3" \
+            --output-name full_narration_speech_qa.json \
+            --model tiny.en > alignment-speech-qa.log 2>&1
+          echo $? > alignment-speech-qa.status
+          cat alignment-speech-qa.log
+          exit 0
+
+      - name: Stop when canonical narration QA failed
+        run: test "$(cat alignment-speech-qa.status)" = "0"
+
+      - name: Build canonical narration alignment
+        run: node scripts/orvyq_narration_alignment.mjs --project-id="$PROJECT_ID"
+
       - name: Run the unit test suite
         run: npm test
 
@@ -123,7 +140,7 @@ jobs:
       - name: Build the full candidate narration and music mix
         run: node scripts/orvyq_audio_mix.mjs --project-id="$PROJECT_ID" --mode=candidate --duration-seconds="$CANDIDATE_DURATION_SECONDS" --head-silence-seconds="$HOOK_DURATION_SECONDS"
 
-      - name: Verify narration and capture diagnostics
+      - name: Verify mixed narration and capture diagnostics
         run: |
           set +e
           python scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" > narration-qa.log 2>&1
@@ -131,7 +148,7 @@ jobs:
           cat narration-qa.log
           exit 0
 
-      - name: Stop when narration verification failed
+      - name: Stop when mixed narration verification failed
         run: test "$(cat narration-qa.status)" = "0"
 
       - name: Build canonical captions
@@ -163,6 +180,8 @@ jobs:
           path: |
             validation-source-sha.txt
             projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
+            projects/${{ env.PROJECT_ID }}/qa/full_narration_speech_qa.json
+            projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
             projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
@@ -188,11 +207,14 @@ jobs:
           retention-days: 30
           path: |
             validation-source-sha.txt
+            alignment-speech-qa.log
+            alignment-speech-qa.status
             narration-qa.log
             narration-qa.status
             qa-chain.log
             qa-chain.status
             projects/${{ env.PROJECT_ID }}/qa/*.json
+            projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
             projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
