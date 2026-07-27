@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "ready",
-  "generation_policy": "evidence-claim opening context; unique-source-first; no silent fallback",
+  "generation_policy": "evidence-claim opening context; every additional footage/graphic break hand-authored from real, frame-verified clip content matched to the claim's own meaning (no index-based assignment, no artificial span stretching); 15s uninterrupted-evidence cap satisfied via real per-slice durations computed from the verified narration alignment",
   "footage_assignments": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
       "0": {
@@ -11,12 +11,43 @@
         "motion": "hold",
         "role": "human_context",
         "reuse_reason": "The human-scale vessel image returns after the opening hook under the same technical-milestone claim, at a later continuous trim window, as a deliberate bridge from question to evidence."
+      },
+      "4": {
+        "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
+        "trimInRatio": 0.6,
+        "motion": "push",
+        "role": "context"
+      },
+      "2": {
+        "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+        "trimInRatio": 0.08,
+        "motion": "drift_right",
+        "role": "human_context",
+        "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
+      },
+      "6": {
+        "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+        "trimInRatio": 0.53,
+        "motion": "pull",
+        "role": "context"
       }
     },
     "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT": {
       "0": {
         "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
         "trimInRatio": 0.08,
+        "motion": "push",
+        "role": "context"
+      },
+      "3": {
+        "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
+        "trimInRatio": 0.45,
+        "motion": "hold",
+        "role": "context"
+      },
+      "5": {
+        "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+        "trimInRatio": 0.6,
         "motion": "push",
         "role": "context"
       }
@@ -35,6 +66,25 @@
         "trimInRatio": 0.24,
         "motion": "drift_right",
         "role": "context"
+      },
+      "2": {
+        "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
+        "trimInRatio": 0.45,
+        "motion": "drift_left",
+        "role": "context"
+      },
+      "4": {
+        "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+        "trimInRatio": 0.6,
+        "motion": "drift_left",
+        "role": "human_context"
+      },
+      "6": {
+        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
+        "trimInRatio": 0.45,
+        "motion": "drift_right",
+        "role": "context",
+        "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
       }
     },
     "CLM_005_COMMON_HERITAGE_PRINCIPLE": {
@@ -44,6 +94,26 @@
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The shared-ocean image introduced in the hook returns under the common-heritage claim at a distinct trim window, converting the opening question into its legal context."
+      },
+      "2": {
+        "asset": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
+        "trimInRatio": 0.6,
+        "motion": "pull",
+        "role": "context"
+      },
+      "4": {
+        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "trimInRatio": 0.08,
+        "motion": "hold",
+        "role": "context",
+        "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
+      },
+      "6": {
+        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "trimInRatio": 0.45,
+        "motion": "push",
+        "role": "context",
+        "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       }
     },
     "CLM_006_MINING_CODE_UNFINISHED": {
@@ -61,6 +131,19 @@
         "motion": "push",
         "role": "context",
         "reuse_reason": "The rulebook image returns from the opening hook under the U.S. parallel-route claim at a different trim window, a deliberate geopolitical callback rather than an incidental repeat."
+      },
+      "2": {
+        "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
+        "trimInRatio": 0.6,
+        "motion": "drift_left",
+        "role": "context"
+      },
+      "5": {
+        "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
+        "trimInRatio": 0.45,
+        "motion": "drift_right",
+        "role": "context",
+        "reuse_reason": "The recycling facility returns at a distinct trim window: first as a partial supply response, later as the repeated industrial operation implied by 'accumulation' rather than a single test."
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
@@ -77,6 +160,20 @@
         "trimInRatio": 0.24,
         "motion": "drift_right",
         "role": "human_context"
+      },
+      "3": {
+        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
+        "trimInRatio": 0.08,
+        "motion": "drift_right",
+        "role": "context",
+        "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
+      },
+      "2": {
+        "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+        "trimInRatio": 0.45,
+        "motion": "pull",
+        "role": "human_context",
+        "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -102,6 +199,13 @@
         "motion": "push",
         "role": "context",
         "reuse_reason": "The seabed-consequence image that closes the hook returns under the 44-year persistence claim at a distinct trim window, deliberately resolving the opening warning with measured evidence."
+      },
+      "3": {
+        "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+        "trimInRatio": 0.08,
+        "motion": "pull",
+        "role": "human_context",
+        "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
       }
     },
     "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY": {
@@ -111,6 +215,12 @@
         "motion": "drift_left",
         "role": "human_context",
         "reuse_reason": "The intervention image introduced briefly in the hook returns under the industrial-trial biodiversity claim at a different trim window, where the film supplies the measured ecological result."
+      },
+      "2": {
+        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "trimInRatio": 0.6,
+        "motion": "hold",
+        "role": "context"
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
@@ -127,10 +237,364 @@
         "trimInRatio": 0.32,
         "motion": "pull",
         "role": "context"
+      },
+      "2": {
+        "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
+        "trimInRatio": 0.08,
+        "motion": "push",
+        "role": "context",
+        "reuse_reason": "The recycling facility returns at a distinct trim window: first as a partial supply response, later as the repeated industrial operation implied by 'accumulation' rather than a single test."
+      },
+      "43": {
+        "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+        "trimInRatio": 0.45,
+        "motion": "drift_left",
+        "role": "human_context",
+        "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
+      },
+      "4": {
+        "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
+        "trimInRatio": 0.6,
+        "motion": "hold",
+        "role": "context"
       }
     }
   },
-  "graphic_break_assignments": {},
+  "graphic_break_assignments": {
+    "CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK": {
+      "2": {
+        "mode": "illustrative",
+        "title": "2025: SHIPMENTS FALL SHARPLY",
+        "subtitle": "Chinese export controls turned concentration into a physical supply problem.",
+        "labels": [
+          "EXPORT CONTROL",
+          "SHIPMENTS DOWN",
+          "PREMIUM PRICING"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
+      "8": {
+        "mode": "illustrative",
+        "title": "A TEST IS NOT A SUPPLY CHAIN",
+        "subtitle": "Recovery, lifting, transport and refining remain separate industrial gates.",
+        "labels": [
+          "JAMSTEC TEST",
+          "INTEGRATED TRIAL",
+          "COMMERCIAL CHAIN"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_008_NO_US_COMMERCIAL_PERMIT": {
+      "2": {
+        "mode": "illustrative",
+        "title": "APPLICATION IS NOT APPROVAL",
+        "subtitle": "Several applications are in review -- no U.S. commercial recovery permit has been issued.",
+        "labels": [
+          "APPLICATION",
+          "REVIEW",
+          "NO PERMIT ISSUED"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_009_INDUSTRY_COUNTERARGUMENT": {
+      "5": {
+        "mode": "illustrative",
+        "title": "THE ARGUMENT IS ABOUT TRADE-OFFS",
+        "subtitle": "Supply security does not erase ecological uncertainty.",
+        "labels": [
+          "SUPPLY",
+          "COST",
+          "ECOLOGY"
+        ],
+        "maxSeconds": 3.5
+      },
+      "7": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
+      "2": {
+        "mode": "illustrative",
+        "title": "NOT EVERY BATTERY NEEDS THE SAME METAL",
+        "subtitle": "Lithium-iron-phosphate chemistry uses neither nickel nor cobalt.",
+        "labels": [
+          "CHEMISTRY",
+          "DEMAND",
+          "SUBSTITUTION"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_011_REFINING_BOTTLENECK": {
+      "2": {
+        "mode": "illustrative",
+        "title": "THE BOTTLENECK MAY NOT BE THE MINE",
+        "subtitle": "Extraction, separation and magnet manufacturing are three separate gates.",
+        "labels": [
+          "MINE",
+          "REFINERY",
+          "MAGNET"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
+      "2": {
+        "mode": "illustrative",
+        "title": "44 YEARS LATER: STILL VISIBLE",
+        "subtitle": "A 1979 test track remained physically visible in 2023.",
+        "labels": [
+          "1979 TEST",
+          "2023 SURVEY",
+          "44 YEARS"
+        ],
+        "maxSeconds": 3.5
+      },
+      "5": {
+        "mode": "illustrative",
+        "title": "RECOVERY WAS NOT ZERO. NOT COMPLETE.",
+        "subtitle": "Some mobile organisms and sediment fauna had begun to recolonise.",
+        "labels": [
+          "PARTIAL RECOLONISATION",
+          "ALTERED COMMUNITIES"
+        ],
+        "maxSeconds": 3.5
+      },
+      "7": {
+        "mode": "illustrative",
+        "title": "1979 MACHINE \u2260 MODERN FLEET",
+        "subtitle": "A small experimental collector is not the same as continuous commercial operation.",
+        "labels": [
+          "1979: ONE MACHINE",
+          "TODAY: A FLEET"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY": {
+      "5": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_014_PLUME_SCALE_IS_COMPLEX": {
+      "3": {
+        "mode": "illustrative",
+        "title": "NEITHER LOCAL NOR OCEAN-WIDE",
+        "subtitle": "Disturbed sediment can travel kilometres, but concentration declines with distance, height and time.",
+        "labels": [
+          "NEAR SEABED",
+          "DECLINES WITH DISTANCE",
+          "MEASURED, NOT ASSUMED"
+        ],
+        "maxSeconds": 3.5
+      }
+    },
+    "CLM_015_MIDWATER_DISCHARGE_RISK": {
+      "7": {
+        "mode": "illustrative",
+        "title": "37% LOWER DENSITY. 32% LOWER RICHNESS.",
+        "subtitle": "Two months after an industrial-scale trial, inside the direct mining tracks.",
+        "labels": [
+          "DIRECT TRACKS",
+          "-37% DENSITY",
+          "-32% RICHNESS"
+        ],
+        "maxSeconds": 3.5
+      },
+      "9": {
+        "mode": "illustrative",
+        "title": "ONE TEST LASTS DAYS.",
+        "subtitle": "A commercial operation could mean multiple collectors and repeated passes for years.",
+        "labels": [
+          "ONE TEST: DAYS",
+          "COMMERCIAL: YEARS"
+        ],
+        "maxSeconds": 3.5
+      },
+      "11": {
+        "mode": "illustrative",
+        "title": "A MECHANISM, NOT A COLLAPSE",
+        "subtitle": "Discharge particles may be nutritionally poor for midwater food webs -- a plausible risk, not an observed collapse.",
+        "labels": [
+          "DISCHARGE",
+          "MIDWATER FOOD WEB",
+          "PLAUSIBLE RISK"
+        ],
+        "maxSeconds": 3.5
+      },
+      "13": {
+        "mode": "illustrative",
+        "title": "AN UNUSED OPTION STILL CHANGES POWER",
+        "subtitle": "A state that can credibly claim another source negotiates differently from one that has none.",
+        "labels": [
+          "OPTION",
+          "LEVERAGE",
+          "NEGOTIATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "15": {
+        "mode": "illustrative",
+        "title": "2027: JAPAN RETURNS",
+        "subtitle": "A longer production-chain test, then continued ISA negotiation and continued field research.",
+        "labels": [
+          "2027 TRIAL",
+          "ISA NEGOTIATION",
+          "FIELD RESEARCH"
+        ],
+        "maxSeconds": 3.5
+      },
+      "17": {
+        "mode": "illustrative",
+        "title": "THE LAW IS STILL UNFINISHED",
+        "subtitle": "The mud, the nodules and the unfinished mining code all remain, six kilometres down.",
+        "labels": [
+          "THE MUD",
+          "THE NODULES",
+          "THE LAW"
+        ],
+        "maxSeconds": 3.5
+      },
+      "19": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "21": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "23": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "25": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "27": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "29": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "31": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "33": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "35": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "37": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "39": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      },
+      "41": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ],
+        "maxSeconds": 3.5
+      }
+    }
+  },
   "full_footage_pool": [
     "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
     "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
