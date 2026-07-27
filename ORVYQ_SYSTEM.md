@@ -106,6 +106,12 @@ For each asset, retain as applicable:
 - Acquisition must prefer edit-ready 720p/1080p files rather than unnecessary 4K masters.
 - Acquired clips should be trimmed or transcoded to the required editorial window.
 
+### Semantic visual relevance rule
+
+Every visual, video, document, map, animation or graphic must directly explain, emphasise or meaningfully support the word, sentence, claim, event, object or emotion being narrated at that moment. General topic similarity alone is not sufficient visual fitness. Blind visual assignment by file order, asset index, keyword match or the need to fill a duration gap is forbidden. The real content of an asset must be inspected (frame-by-frame or by direct viewing, not filename or provider metadata alone) and its semantic relationship to the narration verified before assignment.
+
+If the existing asset pool has no semantically fitting visual, the correct response is not to reuse an unrelated asset to pass quality control. Acquire a new licensed asset with a search query built directly from the narrated sentence, event or object, or author an original source-derived map, diagram, comparison or evidence composition instead.
+
 ### Storage rules
 
 - No normal-Git media blob may exceed GitHub’s per-file limit.
