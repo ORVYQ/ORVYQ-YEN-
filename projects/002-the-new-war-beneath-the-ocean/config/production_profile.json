@@ -41,8 +41,8 @@
     "question_maximum_characters": 100
   },
   "editorial_rhythm": {
-    "full_pause_target": 3,
-    "brief_accent_target": 4,
+    "full_pause_target": 4,
+    "brief_accent_target": 3,
     "brief_accent_minimum_seconds": 1.5,
     "brief_accent_maximum_seconds": 3
   },
