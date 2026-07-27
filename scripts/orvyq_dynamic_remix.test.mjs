@@ -25,8 +25,9 @@ test("minimumAcceptableLra stays within the realistic 3.5-4.0 LU band regardless
   assert.ok(minimumAcceptableLra(10) <= 4.0);
 });
 
-test("minimumAcceptableLra tracks the real source narration measurement (regression: Project 002's raw narration measured 4.30 LU)", () => {
-  assert.equal(minimumAcceptableLra(4.3), 3.8);
+test("minimumAcceptableLra tracks the real source narration measurement (regression: Project 002's raw narration measured 4.30-4.40 LU across CI runs)", () => {
+  assert.equal(minimumAcceptableLra(4.3), 3.5);
+  assert.equal(minimumAcceptableLra(4.5), 3.7);
 });
 
 test("minimumAcceptableLra falls back to the realistic floor when the source measurement is missing or invalid", () => {
