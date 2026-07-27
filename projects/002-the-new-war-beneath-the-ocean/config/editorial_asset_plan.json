@@ -270,6 +270,26 @@
           "INTEGRATED TRIAL",
           "COMMERCIAL CHAIN"
         ]
+      },
+      "5": {
+        "mode": "illustrative",
+        "title": "CLOSED-LOOP, NOT PROVEN LEAK-FREE",
+        "subtitle": "The lifting system is designed to reduce leakage as material rises -- a design goal, not yet a verified result.",
+        "labels": [
+          "CLOSED LOOP",
+          "DESIGN GOAL",
+          "UNVERIFIED AT SCALE"
+        ]
+      },
+      "7": {
+        "mode": "illustrative",
+        "title": "2027 TRIAL, THEN ASSESSMENT",
+        "subtitle": "A larger production-chain trial precedes any technical and economic verdict.",
+        "labels": [
+          "2027 TRIAL",
+          "TECHNICAL REVIEW",
+          "ECONOMIC REVIEW"
+        ]
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
@@ -578,6 +598,26 @@
           "LIFTED",
           "NOT COMMERCIAL",
           "NOT A MINE"
+        ]
+      },
+      "5": {
+        "mode": "illustrative",
+        "title": "TESTED ONCE, NOT YET PROVEN AT SCALE",
+        "subtitle": "JAMSTEC's hardware performed in a single controlled test near Minamitorishima.",
+        "labels": [
+          "SINGLE TEST",
+          "CONTROLLED CONDITIONS",
+          "NOT COMMERCIAL SCALE"
+        ]
+      },
+      "7": {
+        "mode": "illustrative",
+        "title": "INSIDE JAPAN'S OWN WATERS",
+        "subtitle": "The Minamitorishima mud lies within Japan's exclusive economic zone, not the international seabed.",
+        "labels": [
+          "MINAMITORISHIMA",
+          "JAPAN EEZ",
+          "NOT THE HIGH SEAS"
         ]
       }
     },
