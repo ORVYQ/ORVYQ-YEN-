@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after widening the authored music-energy arc to clear the dynamic-remix LRA floor without flattening narration or weakening the audio quality gate."
+            -f body="Project 002 Candidate Validation re-dispatched after replacing the over-flattening narration compressor with light peak control, preserving the verified performance dynamics while retaining loudness and true-peak protection."
 
-# Trigger revision: music dynamics fix committed at 5e8a1c69dcf385d71207f0e7e9b9529217ec559b on 2026-07-27.
+# Trigger revision: reusable narration-dynamics fix committed at a48d6d423d8f8e6168491944e44e134dc82c5732 on 2026-07-27.
