@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "policy": "Explicit authored span-2 footage beats every four real narration slices; no audit cap is weakened.",
+  "claim_count": 15,
+  "recommended_total_body_uses": 37,
+  "existing_body_uses": 15,
+  "remaining_two-use_capacity": 20,
+  "estimated_additional_source_uses_required": 2,
+  "claims": [
+    {
+      "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+      "slice_count": 8,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4
+      ],
+      "recommended_use_count": 2
+    },
+    {
+      "claim_id": "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT",
+      "slice_count": 6,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4
+      ],
+      "recommended_use_count": 2
+    },
+    {
+      "claim_id": "CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK",
+      "slice_count": 3,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0
+      ],
+      "recommended_use_count": 1
+    },
+    {
+      "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+      "slice_count": 9,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4,
+        8
+      ],
+      "recommended_use_count": 3
+    },
+    {
+      "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+      "slice_count": 7,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4
+      ],
+      "recommended_use_count": 2
+    },
+    {
+      "claim_id": "CLM_006_MINING_CODE_UNFINISHED",
+      "slice_count": 3,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0
+      ],
+      "recommended_use_count": 1
+    },
+    {
+      "claim_id": "CLM_007_US_PARALLEL_ROUTE",
+      "slice_count": 7,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4
+      ],
+      "recommended_use_count": 2
+    },
+    {
+      "claim_id": "CLM_008_NO_US_COMMERCIAL_PERMIT",
+      "slice_count": 4,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0
+      ],
+      "recommended_use_count": 1
+    },
+    {
+      "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+      "slice_count": 9,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4,
+        8
+      ],
+      "recommended_use_count": 3
+    },
+    {
+      "claim_id": "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC",
+      "slice_count": 4,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0
+      ],
+      "recommended_use_count": 1
+    },
+    {
+      "claim_id": "CLM_011_REFINING_BOTTLENECK",
+      "slice_count": 3,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0
+      ],
+      "recommended_use_count": 1
+    },
+    {
+      "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+      "slice_count": 9,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4,
+        8
+      ],
+      "recommended_use_count": 3
+    },
+    {
+      "claim_id": "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY",
+      "slice_count": 6,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4
+      ],
+      "recommended_use_count": 2
+    },
+    {
+      "claim_id": "CLM_014_PLUME_SCALE_IS_COMPLEX",
+      "slice_count": 6,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4
+      ],
+      "recommended_use_count": 2
+    },
+    {
+      "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+      "slice_count": 44,
+      "existing_assignment_indices": [
+        0
+      ],
+      "recommended_span2_starts": [
+        0,
+        4,
+        8,
+        12,
+        16,
+        20,
+        24,
+        28,
+        32,
+        36,
+        40
+      ],
+      "recommended_use_count": 11
+    }
+  ],
+  "asset_usage_including_hook": {
+    "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4": 2,
+    "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4": 1,
+    "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4": 1,
+    "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4": 1,
+    "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4": 2,
+    "assets/footage/scene_006_c306e2e528d386a84596574e.mp4": 1,
+    "assets/footage/scene_007_7051fd0f969c083415562212.mp4": 2,
+    "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4": 1,
+    "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4": 1,
+    "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4": 1,
+    "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4": 1,
+    "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4": 2,
+    "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4": 2,
+    "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4": 1,
+    "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4": 1,
+    "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4": 0,
+    "assets/footage/scene_017_3be5f14070d93db018c32640.mp4": 0,
+    "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4": 0,
+    "assets/footage/scene_019_085a261a8973a21a0088d713.mp4": 0,
+    "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4": 0
+  }
+}
