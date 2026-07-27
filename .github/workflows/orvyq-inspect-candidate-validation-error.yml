@@ -22,7 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           repo="${{ github.repository }}"
-          run_id="30284117956"
+          run_id="30297777073"
           jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
           job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
           gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
@@ -30,20 +30,20 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          target='Build canonical asset registry'
+          target='Build the canonical candidate edit plan'
           hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
           if hits:
               start=hits[-1]
-              selected=lines[start:min(len(lines),start+320)]
+              selected=lines[start:min(len(lines),start+360)]
           else:
               errs=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
               idx=errs[-1] if errs else len(lines)-1
-              selected=lines[max(0,idx-150):min(len(lines),idx+150)]
+              selected=lines[max(0,idx-160):min(len(lines),idx+200)]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
               cleaned.append(line[:1600])
-          out=f'run_id=30284117956\njob_id={job_id if False else "90037612833"}\n\n'+'\n'.join(cleaned)
+          out='run_id=30297777073\njob_id=90082944374\n\n'+'\n'.join(cleaned)
           Path('diagnostics').mkdir(exist_ok=True)
           Path('diagnostics/latest-candidate-error.txt').write_text(out[:30000])
           PY
