@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after replacing the over-flattening narration compressor with light peak control, preserving the verified performance dynamics while retaining loudness and true-peak protection."
+            -f body="Project 002 Candidate Validation re-dispatched on the latest Project 002 branch after the reusable narration-dynamics fix."
 
-# Trigger revision: reusable narration-dynamics fix committed at a48d6d423d8f8e6168491944e44e134dc82c5732 on 2026-07-27.
+# Trigger revision: automation retry 2026-07-27T21:08+03:00; branch fix a48d6d423d8f8e6168491944e44e134dc82c5732.
