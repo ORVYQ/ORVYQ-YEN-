@@ -49,9 +49,18 @@ jobs:
             if [ -n "$CHANGED_PLAN" ]; then
               PROJECT_ID="$(jq -r '.project_id' "$CHANGED_PLAN")"
             else
-              mapfile -t CANDIDATES < <(find projects -path '*/research/footage_acquisition_plan.json' -type f -print0 | xargs -0 -r -n1 sh -c 'f="$0"; p="${f%/research/footage_acquisition_plan.json}"; test ! -f "$p/assets/footage_acquisition.runtime.json" && jq -r ".project_id" "$f"' | sort -u)
+              mapfile -t CANDIDATES < <(
+                find projects -path '*/research/footage_acquisition_plan.json' -type f -print0 |
+                  while IFS= read -r -d '' plan; do
+                    root="${plan%/research/footage_acquisition_plan.json}"
+                    runtime="$root/assets/footage_acquisition.runtime.json"
+                    planned="$(jq '.assets | length' "$plan")"
+                    actual="$(test -f "$runtime" && jq '.records | length' "$runtime" || echo 0)"
+                    if [ "$actual" -lt "$planned" ]; then jq -r '.project_id' "$plan"; fi
+                  done | sort -u
+              )
               if [ "${#CANDIDATES[@]}" -ne 1 ]; then
-                echo "::error::Could not resolve exactly one pending footage acquisition project; found ${#CANDIDATES[@]}."
+                echo "::error::Could not resolve exactly one incomplete footage acquisition project; found ${#CANDIDATES[@]}."
                 exit 1
               fi
               PROJECT_ID="${CANDIDATES[0]}"
