@@ -1,0 +1,27 @@
+name: Report ORVYQ Candidate Validation
+
+on:
+  workflow_run:
+    workflows: ["ORVYQ Candidate Validation"]
+    types: [completed]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  report:
+    if: github.event.workflow_run.head_branch == 'agent/002-deep-sea-cold-war'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report validation result to Project 002 PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          gh api repos/${{ github.repository }}/issues/3/comments \
+            -f body="Project 002 Candidate Validation finished with **${CONCLUSION}**. Run: https://github.com/${{ github.repository }}/actions/runs/${RUN_ID}. Source commit: \`${HEAD_SHA}\`."
