@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: orvyq-footage-acquisition-${{ github.ref }}
@@ -142,9 +143,21 @@ jobs:
           retention-days: 14
           path: |
             projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
             projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage/*.provenance.json
             projects/${{ steps.project.outputs.project_id }}/qa/local_assets.provenance.json
           if-no-files-found: warn
+
+      - name: Report acquisition result on PR 3
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+          PROJECT_ID: ${{ steps.project.outputs.project_id }}
+        run: |
+          PROJECT_LABEL="${PROJECT_ID:-unresolved}"
+          gh api repos/${{ github.repository }}/issues/3/comments \
+            -f body="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${{ github.ref_name }}\`."
