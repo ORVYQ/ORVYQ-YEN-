@@ -9,6 +9,7 @@ on:
 
 permissions:
   actions: read
+  contents: write
   issues: write
   pull-requests: write
 
@@ -16,6 +17,7 @@ jobs:
   inspect:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Report latest validation, coverage and review runs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,9 +25,15 @@ jobs:
           set -euo pipefail
           runs="$(gh api "repos/${{ github.repository }}/actions/runs?per_page=100")"
           body="$(printf '%s' "$runs" | jq -r '
-            [ .workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or .name == "ORVYQ Full-Length Review" or .name == "ORVYQ Full Length Review" or .name == "ORVYQ Project 002 Author Creative Coverage") ][0:15]
+            [ .workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or .name == "ORVYQ Full-Length Review" or .name == "ORVYQ Full Length Review" or .name == "ORVYQ Project 002 Author Creative Coverage") ][0:20]
             | if length == 0 then "No relevant ORVYQ runs found."
               else map("- " + .name + " run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, head_sha=`" + .head_sha + "`, url=" + .html_url) | "Latest ORVYQ coverage/validation/review runs:\n" + join("\n") end')"
+          printf '%s\n' "$body" > diagnostics/latest-orvyq-runs.txt
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
+          git config user.name "orvyq-inspector"
+          git config user.email "orvyq-inspector@users.noreply.github.com"
+          git add diagnostics/latest-orvyq-runs.txt
+          git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
+          git push origin HEAD:main
 
-# trigger 2026-07-27T19:15+03:00
+# trigger 2026-07-27T19:17+03:00
