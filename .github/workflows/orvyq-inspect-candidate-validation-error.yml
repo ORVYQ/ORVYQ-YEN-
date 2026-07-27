@@ -22,7 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           repo="${{ github.repository }}"
-          run_id="30257567458"
+          run_id="30284117956"
           jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
           job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
           gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
@@ -30,7 +30,7 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          target='Build the canonical full production shot list from real data'
+          target='Build canonical asset registry'
           hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
           if hits:
               start=hits[-1]
@@ -43,7 +43,7 @@ jobs:
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
               cleaned.append(line[:1600])
-          out='run_id=30257567458\njob_id='+str('89949640812')+'\n\n'+'\n'.join(cleaned)
+          out=f'run_id=30284117956\njob_id={job_id if False else "90037612833"}\n\n'+'\n'.join(cleaned)
           Path('diagnostics').mkdir(exist_ok=True)
           Path('diagnostics/latest-candidate-error.txt').write_text(out[:30000])
           PY
