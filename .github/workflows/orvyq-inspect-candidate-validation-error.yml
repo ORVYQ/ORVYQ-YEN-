@@ -36,19 +36,19 @@ jobs:
           hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
           if hits:
               start=hits[-1]
-              selected=lines[start:min(len(lines), start+180)]
+              selected=lines[start:min(len(lines), start+220)]
           else:
               err=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or 'error:' in l.lower()]
               start=max(0,(err[-1] if err else len(lines)-100)-40)
-              selected=lines[start:min(len(lines), start+180)]
+              selected=lines[start:min(len(lines), start+220)]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
-              cleaned.append(line[:800])
-          Path('excerpt.txt').write_text('\n'.join(cleaned)[:12000])
+              cleaned.append(line[:1000])
+          Path('excerpt.txt').write_text('\n'.join(cleaned)[:16000])
           PY
           excerpt="$(cat excerpt.txt)"
           body=$(printf 'Exact Candidate Validation pause-plan diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
           gh api "repos/$repo/issues/3/comments" -f body="$body"
 
-# Trigger revision: pause-plan failure extraction.
+# Trigger revision: inspect run 30231426253 pause-plan failure.
