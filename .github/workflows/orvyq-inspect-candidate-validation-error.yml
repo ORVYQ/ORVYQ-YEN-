@@ -9,13 +9,13 @@ on:
 
 permissions:
   actions: read
-  issues: write
-  pull-requests: write
+  contents: write
 
 jobs:
   inspect-error:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Extract latest validation failure
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,19 +34,21 @@ jobs:
           hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
           if hits:
               start=hits[-1]
-              selected=lines[start:min(len(lines),start+240)]
+              selected=lines[start:min(len(lines),start+260)]
           else:
               errs=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
               idx=errs[-1] if errs else len(lines)-1
-              selected=lines[max(0,idx-100):min(len(lines),idx+100)]
+              selected=lines[max(0,idx-120):min(len(lines),idx+120)]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
-              cleaned.append(line[:1200])
-          Path('excerpt.txt').write_text('\n'.join(cleaned)[:24000])
+              cleaned.append(line[:1600])
+          out='run_id=30246825065\njob_id=89915689250\n\n'+'\n'.join(cleaned)
+          Path('diagnostics').mkdir(exist_ok=True)
+          Path('diagnostics/latest-candidate-error.txt').write_text(out[:30000])
           PY
-          excerpt="$(cat excerpt.txt)"
-          body=$(printf 'Project 002 latest full-production diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
-          gh api "repos/$repo/issues/3/comments" -f body="$body"
-
-# Trigger revision: inspect full-production failure for run 30246825065.
+          git config user.name "orvyq-diagnostics-bot"
+          git config user.email "orvyq-diagnostics-bot@users.noreply.github.com"
+          git add diagnostics/latest-candidate-error.txt
+          git commit -m "Record latest Candidate Validation diagnostics [skip ci]" || exit 0
+          git push origin HEAD:main
