@@ -294,8 +294,7 @@
           "APPLICATION",
           "REVIEW",
           "NO PERMIT ISSUED"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_009_INDUSTRY_COUNTERARGUMENT": {
@@ -307,8 +306,7 @@
           "SUPPLY",
           "COST",
           "ECOLOGY"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "7": {
         "mode": "illustrative",
@@ -317,8 +315,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -330,8 +327,7 @@
           "CHEMISTRY",
           "DEMAND",
           "SUBSTITUTION"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_011_REFINING_BOTTLENECK": {
@@ -355,8 +351,7 @@
           "1979 TEST",
           "2023 SURVEY",
           "44 YEARS"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "5": {
         "mode": "illustrative",
@@ -365,8 +360,7 @@
         "labels": [
           "PARTIAL RECOLONISATION",
           "ALTERED COMMUNITIES"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "7": {
         "mode": "illustrative",
@@ -375,8 +369,7 @@
         "labels": [
           "1979: ONE MACHINE",
           "TODAY: A FLEET"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY": {
@@ -399,8 +392,7 @@
           "NEAR SEABED",
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
@@ -412,8 +404,7 @@
           "DIRECT TRACKS",
           "-37% DENSITY",
           "-32% RICHNESS"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "9": {
         "mode": "illustrative",
@@ -422,8 +413,7 @@
         "labels": [
           "ONE TEST: DAYS",
           "COMMERCIAL: YEARS"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "11": {
         "mode": "illustrative",
@@ -433,8 +423,7 @@
           "DISCHARGE",
           "MIDWATER FOOD WEB",
           "PLAUSIBLE RISK"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "13": {
         "mode": "illustrative",
@@ -444,8 +433,7 @@
           "OPTION",
           "LEVERAGE",
           "NEGOTIATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "15": {
         "mode": "illustrative",
@@ -455,8 +443,7 @@
           "2027 TRIAL",
           "ISA NEGOTIATION",
           "FIELD RESEARCH"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "17": {
         "mode": "illustrative",
@@ -466,8 +453,7 @@
           "THE MUD",
           "THE NODULES",
           "THE LAW"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "19": {
         "mode": "illustrative",
@@ -476,8 +462,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "21": {
         "mode": "illustrative",
@@ -486,8 +471,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "23": {
         "mode": "illustrative",
@@ -496,8 +480,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "25": {
         "mode": "illustrative",
@@ -506,8 +489,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "27": {
         "mode": "illustrative",
@@ -516,8 +498,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "29": {
         "mode": "illustrative",
@@ -526,8 +507,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "31": {
         "mode": "illustrative",
@@ -536,8 +516,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "33": {
         "mode": "illustrative",
@@ -546,8 +525,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "35": {
         "mode": "illustrative",
@@ -556,8 +534,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "37": {
         "mode": "illustrative",
@@ -566,8 +543,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "39": {
         "mode": "illustrative",
@@ -576,8 +552,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       },
       "41": {
         "mode": "illustrative",
@@ -586,8 +561,7 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
-        ],
-        "maxSeconds": 3.5
+        ]
       }
     }
   },
