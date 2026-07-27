@@ -9,7 +9,8 @@
         "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
         "trimInRatio": 0,
         "motion": "hold",
-        "role": "human_context"
+        "role": "human_context",
+        "reuse_reason": "The human-scale vessel image returns after the opening hook under the same technical-milestone claim, at a later continuous trim window, as a deliberate bridge from question to evidence."
       }
     },
     "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT": {
@@ -41,7 +42,8 @@
         "asset": "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4",
         "trimInRatio": 0.32,
         "motion": "pull",
-        "role": "human_context"
+        "role": "human_context",
+        "reuse_reason": "The shared-ocean image introduced in the hook returns under the common-heritage claim at a distinct trim window, converting the opening question into its legal context."
       }
     },
     "CLM_006_MINING_CODE_UNFINISHED": {
@@ -57,7 +59,8 @@
         "asset": "assets/footage/scene_007_7051fd0f969c083415562212.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "The rulebook image returns from the opening hook under the U.S. parallel-route claim at a different trim window, a deliberate geopolitical callback rather than an incidental repeat."
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
@@ -97,7 +100,8 @@
         "asset": "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "The seabed-consequence image that closes the hook returns under the 44-year persistence claim at a distinct trim window, deliberately resolving the opening warning with measured evidence."
       }
     },
     "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY": {
@@ -105,7 +109,8 @@
         "asset": "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4",
         "trimInRatio": 0.16,
         "motion": "drift_left",
-        "role": "human_context"
+        "role": "human_context",
+        "reuse_reason": "The intervention image introduced briefly in the hook returns under the industrial-trial biodiversity claim at a different trim window, where the film supplies the measured ecological result."
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
@@ -148,6 +153,12 @@
     "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
     "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4"
   ],
-  "hook_preloaded_usage": {},
+  "hook_preloaded_usage": {
+    "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4": 1,
+    "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4": 1,
+    "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4": 1,
+    "assets/footage/scene_007_7051fd0f969c083415562212.mp4": 1,
+    "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4": 1
+  },
   "slice_count_overrides": {}
 }
