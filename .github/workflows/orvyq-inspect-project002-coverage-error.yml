@@ -1,0 +1,54 @@
+name: Inspect Project 002 Coverage Failure
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-inspect-project002-coverage-error.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract exact coverage validation failure
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          repo="${{ github.repository }}"
+          run_id="30261751903"
+          job_id="89963027230"
+          gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          lines = Path('job.log').read_text(errors='replace').splitlines()
+          target = 'Validate authored coverage before commit'
+          hits = [i for i,l in enumerate(lines) if target.lower() in l.lower()]
+          if hits:
+              start = hits[-1]
+              selected = lines[start:min(len(lines), start+260)]
+          else:
+              errs = [i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
+              idx = errs[-1] if errs else len(lines)-1
+              selected = lines[max(0, idx-120):min(len(lines), idx+120)]
+          cleaned=[]
+          for line in selected:
+              line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
+              cleaned.append(line[:1800])
+          Path('diagnostics').mkdir(exist_ok=True)
+          Path('diagnostics/latest-coverage-error.txt').write_text(
+              f'run_id={30261751903}\njob_id={89963027230}\n\n' + '\n'.join(cleaned)[:40000]
+          )
+          PY
+          git config user.name "orvyq-diagnostics-bot"
+          git config user.email "orvyq-diagnostics-bot@users.noreply.github.com"
+          git add diagnostics/latest-coverage-error.txt
+          git commit -m "Record Project 002 coverage validation diagnostics [skip ci]" || exit 0
+          git push origin HEAD:main
