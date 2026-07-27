@@ -9,27 +9,25 @@ on:
 
 permissions:
   actions: read
-  issues: write
-  pull-requests: write
+  contents: write
 
 jobs:
   inspect:
     runs-on: ubuntu-latest
     steps:
-      - name: Find latest Candidate Validation and Full-Length Review runs
+      - uses: actions/checkout@v4
+      - name: Persist latest Candidate Validation and Full-Length Review runs
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          runs="$(gh api "repos/${{ github.repository }}/actions/runs?per_page=50")"
-          body="$(printf '%s' "$runs" | jq -r '
-            [.workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or (.name | test("Full-Length Review|Review Render"; "i")))][0:10]
-            | if length == 0 then
-                "No ORVYQ validation/review runs found."
-              else
-                map("- " + .name + " run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, head_sha=`" + .head_sha + "`, url=" + .html_url)
-                | "Latest ORVYQ validation/review runs:\n" + join("\n")
-              end')"
-          gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
-
-# Trigger revision: inspect after exact terminal pause correction.
+          runs="$(gh api "repos/${{ github.repository }}/actions/runs?per_page=80")"
+          printf '%s' "$runs" | jq -r '
+            [.workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or (.name | test("Full-Length Review|Review Render"; "i")))][0:12]
+            | map(.name + "|" + (.id|tostring) + "|" + .status + "|" + (.conclusion // "null") + "|" + .head_sha + "|" + .html_url)
+            | join("\n")' > diagnostics/latest-orvyq-runs.txt
+          git config user.name "orvyq-status-bot"
+          git config user.email "orvyq-status-bot@users.noreply.github.com"
+          git add diagnostics/latest-orvyq-runs.txt
+          git commit -m "Record latest ORVYQ run status [skip ci]" || exit 0
+          git push origin HEAD:main
