@@ -47,15 +47,27 @@ jobs:
              projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json
           node scripts/orvyq_resolve_pauses.mjs --project-id=002-the-new-war-beneath-the-ocean
 
-      - name: Dump real per-claim slice timings (diagnostic only, no authoring yet)
+      - name: Validate the hand-authored full-film coverage plan
         run: |
           set -euo pipefail
-          node scripts/orvyq_dump_claim_slices.mjs --project-id=002-the-new-war-beneath-the-ocean | tee /tmp/claim-slices.json
+          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean | tee /tmp/full-plan-result.json
 
-      - name: Upload slice diagnostics
+      - name: Upload validation result
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: project002-claim-slices-${{ github.run_id }}
-          path: /tmp/claim-slices.json
+          name: project002-coverage-validation-${{ github.run_id }}
+          path: |
+            /tmp/full-plan-result.json
+            projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json
           retention-days: 30
+
+      - name: Re-dispatch Candidate Validation on success
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run orvyq-candidate-validation.yml \
+            --repo "${{ github.repository }}" \
+            --ref agent/002-deep-sea-cold-war \
+            -f project_id=002-the-new-war-beneath-the-ocean
