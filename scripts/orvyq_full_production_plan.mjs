@@ -446,6 +446,28 @@ function growImageEvidenceSliceToFloor(checkpointTimes, sliceIndex, isFixedCheck
 // best-effort floor) silently skipping the cap would ship exactly the
 // generic-card-fraction overage this exists to fix. Mutates checkpointTimes
 // in place.
+// direction/sequence_plan.json's evidence_kind_overrides[claim_id] declares
+// a real materialized image set for a claim's native evidence slices. The
+// default (distinct_image_per_occurrence unset/false) attaches the FULL
+// declared image set to EVERY matching slice -- correct when a claim's
+// evidence-slice count matches its declared-image count, since each slice
+// then legibly holds the whole set, but it produces two consecutive shots
+// with an IDENTICAL evidence.image_assets set when a claim's evidence
+// slices end up truly adjacent in the final film, which
+// scripts/orvyq_semantic_visual_audit.mjs correctly rejects as a duplicate.
+// Setting distinct_image_per_occurrence cycles exactly one image per
+// occurrence instead (by occurrence index, wrapping if there are more
+// occurrences than images) -- opt-in per claim, so every override without
+// this flag keeps its exact prior fan-out-all behavior unchanged.
+export function resolveEvidenceOverrideAssets(kindOverride, evidenceKind, occurrence) {
+  if (!kindOverride || kindOverride.kind !== evidenceKind) return {};
+  if (kindOverride.distinct_image_per_occurrence && kindOverride.evidence_asset_ids?.length) {
+    const index = occurrence % kindOverride.evidence_asset_ids.length;
+    return { evidence_asset_ids: [kindOverride.evidence_asset_ids[index]], image_assets: [kindOverride.image_assets[index]] };
+  }
+  return { evidence_asset_ids: kindOverride.evidence_asset_ids, image_assets: kindOverride.image_assets };
+}
+
 export function shrinkGraphicBreakSliceToMax(checkpointTimes, sliceIndex, maxSeconds, isFixedCheckpoint, maxShotSeconds, claimId) {
   const leftCheckpoint = sliceIndex;
   const rightCheckpoint = sliceIndex + 1;
@@ -1297,8 +1319,7 @@ export async function buildFullProductionPlan(projectId) {
     // this only threads the override's declared real asset references
     // through, it does not itself verify readiness.
     const kindOverride = evidenceKindOverrides[shot.claim_id];
-    const overrideAssets =
-      kindOverride && kindOverride.kind === shot.evidenceKind ? { evidence_asset_ids: kindOverride.evidence_asset_ids, image_assets: kindOverride.image_assets } : {};
+    const overrideAssets = resolveEvidenceOverrideAssets(kindOverride, shot.evidenceKind, occurrence);
     return {
       ...base,
       asset_type: "evidence",

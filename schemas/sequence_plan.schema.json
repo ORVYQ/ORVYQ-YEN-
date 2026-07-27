@@ -9,7 +9,7 @@
     "project_id": { "type": "string" },
     "evidence_kind_overrides": {
       "type": "object",
-      "description": "Keyed by claim_id. Applies to every one of that claim's slices that would otherwise default to a NATIVE_KINDS card (i.e. slices with no FOOTAGE_ASSIGNMENTS or GRAPHIC_BREAK_ASSIGNMENTS entry of their own) -- pick claims with at most one such remaining slice so the same real image is not shown repeated, identical times in a row.",
+      "description": "Keyed by claim_id. Applies to every one of that claim's slices that would otherwise default to a NATIVE_KINDS card (i.e. slices with no FOOTAGE_ASSIGNMENTS or GRAPHIC_BREAK_ASSIGNMENTS entry of their own) -- pick claims with at most one such remaining slice so the same real image is not shown repeated, identical times in a row, or set distinct_image_per_occurrence when a claim genuinely needs more than one remaining slice and has a matching number of distinct declared images.",
         "additionalProperties": {
           "type": "object",
           "required": ["kind", "evidence_asset_ids", "image_assets"],
@@ -17,7 +17,11 @@
             "kind": { "enum": ["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"] },
             "evidence_asset_ids": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
             "image_assets": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-            "editorial_rationale": { "type": "string" }
+            "editorial_rationale": { "type": "string" },
+            "distinct_image_per_occurrence": {
+              "type": "boolean",
+              "description": "When true, each of this claim's remaining native evidence slices gets exactly one image (cycling through evidence_asset_ids/image_assets by occurrence index) instead of the full declared set on every slice -- opt-in, so every existing claim's original fan-out-all-images behavior is unchanged unless explicitly set."
+            }
           },
           "additionalProperties": false
         }

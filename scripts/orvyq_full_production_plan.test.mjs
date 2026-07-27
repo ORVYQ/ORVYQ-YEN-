@@ -9,6 +9,7 @@ import {
   expandFootageAssignments,
   applyEvidenceHoldToNextWindow,
   shrinkGraphicBreakSliceToMax,
+  resolveEvidenceOverrideAssets,
   loadEditorialAssetPlan,
   GRAPHIC_BREAK_ASSIGNMENTS,
   SLICE_COUNT_OVERRIDES
@@ -439,6 +440,37 @@ test("shrinkGraphicBreakSliceToMax: throws when neither neighbor has spare room 
   assert.throws(() => {
     shrinkGraphicBreakSliceToMax(checkpointTimes, 0, 2, isFixedCheckpoint, 8, "CLM_TEST");
   }, /cannot shrink its graphic recap slice/);
+});
+
+test("resolveEvidenceOverrideAssets returns nothing when there is no matching override", () => {
+  assert.deepEqual(resolveEvidenceOverrideAssets(undefined, "official_figure", 0), {});
+  assert.deepEqual(resolveEvidenceOverrideAssets({ kind: "split_documents", evidence_asset_ids: ["A"], image_assets: ["a.png"] }, "official_figure", 0), {});
+});
+
+test("resolveEvidenceOverrideAssets attaches the full declared set to every occurrence by default (unchanged prior behavior)", () => {
+  const override = { kind: "official_figure", evidence_asset_ids: ["A", "B"], image_assets: ["a.png", "b.png"] };
+  assert.deepEqual(resolveEvidenceOverrideAssets(override, "official_figure", 0), { evidence_asset_ids: ["A", "B"], image_assets: ["a.png", "b.png"] });
+  assert.deepEqual(resolveEvidenceOverrideAssets(override, "official_figure", 1), { evidence_asset_ids: ["A", "B"], image_assets: ["a.png", "b.png"] });
+});
+
+test("resolveEvidenceOverrideAssets cycles one distinct image per occurrence when distinct_image_per_occurrence is set (regression: CLM_006's shot_047 duplicate)", () => {
+  const override = {
+    kind: "split_documents",
+    evidence_asset_ids: ["EVID_ISA_REV3_COVER", "EVID_ISA_OUTSTANDING_ISSUES_COVER"],
+    image_assets: ["assets/evidence/isa_exploitation_regulations_rev3_cover.png", "assets/evidence/isa_outstanding_issues_cover.png"],
+    distinct_image_per_occurrence: true
+  };
+  const first = resolveEvidenceOverrideAssets(override, "split_documents", 0);
+  const second = resolveEvidenceOverrideAssets(override, "split_documents", 1);
+  assert.deepEqual(first, { evidence_asset_ids: ["EVID_ISA_REV3_COVER"], image_assets: ["assets/evidence/isa_exploitation_regulations_rev3_cover.png"] });
+  assert.deepEqual(second, { evidence_asset_ids: ["EVID_ISA_OUTSTANDING_ISSUES_COVER"], image_assets: ["assets/evidence/isa_outstanding_issues_cover.png"] });
+  assert.notDeepEqual(first.image_assets, second.image_assets);
+});
+
+test("resolveEvidenceOverrideAssets wraps around when there are more occurrences than declared images", () => {
+  const override = { kind: "official_figure", evidence_asset_ids: ["A", "B"], image_assets: ["a.png", "b.png"], distinct_image_per_occurrence: true };
+  assert.deepEqual(resolveEvidenceOverrideAssets(override, "official_figure", 2), { evidence_asset_ids: ["A"], image_assets: ["a.png"] });
+  assert.deepEqual(resolveEvidenceOverrideAssets(override, "official_figure", 3), { evidence_asset_ids: ["B"], image_assets: ["b.png"] });
 });
 
 test("sliceClaimWindow applies a selected project's declared graphic-break cap without losing timeline duration", async () => {

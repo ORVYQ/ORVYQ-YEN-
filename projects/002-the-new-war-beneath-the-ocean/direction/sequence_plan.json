@@ -38,7 +38,8 @@
         "assets/evidence/isa_exploitation_regulations_rev3_cover.png",
         "assets/evidence/isa_outstanding_issues_cover.png"
       ],
-      "editorial_rationale": "Place the 335-page revised code text beside the dated outstanding-issues document so the legal incompleteness is visible as primary evidence, not asserted through typography alone."
+      "distinct_image_per_occurrence": true,
+      "editorial_rationale": "This claim's real narration needs 2 native evidence slices, each showing a different one of the 2 declared documents in sequence -- the revised regulations text first, then the dated outstanding-issues document -- rather than both slices duplicating the same pair, which scripts/orvyq_semantic_visual_audit.mjs correctly rejects as an identical-evidence repeat."
     }
   }
 }
