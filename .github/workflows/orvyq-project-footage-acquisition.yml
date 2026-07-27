@@ -179,4 +179,4 @@ jobs:
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`. Commit diagnostics are attached to the run artifact."
 
-# Retry 6: force-add only verified generated assets that are intentionally ignored by repository policy.
+# Semantic expansion trigger 2026-07-28: acquire scene_021 through scene_030 to reduce pure-graphics ratio without weakening the 20% quality gate.
