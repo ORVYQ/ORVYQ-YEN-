@@ -1,126 +1,52 @@
-run_id=30257567458
-job_id=89949640812
+run_id=30284117956
+job_id=90037612833
 
-ok 213 - regression: the old full render's ~19 cards / ~141s total fails the new cap
----
-duration_ms: 0.411314
-...
-# Subtest: a repeated card title fails even if durations are otherwise compliant
-ok 214 - a repeated card title fails even if durations are otherwise compliant
----
-duration_ms: 0.246227
-...
-# Subtest: a card over the 6s exception threshold fails
-ok 215 - a card over the 6s exception threshold fails
----
-duration_ms: 0.267046
-...
-# Subtest: section_title and end_card graphics are structural, not counted against the emphasis budget
-ok 216 - section_title and end_card graphics are structural, not counted against the emphasis budget
----
-duration_ms: 0.203999
-...
-# Subtest: 1. candidate produced, then ONLY an approval-record commit is added afterward -> PASS (no HEAD-SHA dependency)
-ok 217 - 1. candidate produced, then ONLY an approval-record commit is added afterward -> PASS (no HEAD-SHA dependency)
----
-duration_ms: 45.55606
-...
-# Subtest: 2. edit plan changes after approval -> FAIL
-ok 218 - 2. edit plan changes after approval -> FAIL
----
-duration_ms: 50.965022
-...
-# Subtest: 3. final mix changes after approval -> FAIL
-ok 219 - 3. final mix changes after approval -> FAIL
----
-duration_ms: 45.462099
-...
-# Subtest: 4. an asset (registry) changes after approval -> FAIL
-ok 220 - 4. an asset (registry) changes after approval -> FAIL
----
-duration_ms: 31.846292
-...
-# Subtest: 5. review run ID mismatch (final workflow input vs approval record) -> FAIL
-ok 221 - 5. review run ID mismatch (final workflow input vs approval record) -> FAIL
----
-duration_ms: 18.650546
-...
-# Subtest: 6. review artifact SHA mismatch -> FAIL
-ok 222 - 6. review artifact SHA mismatch -> FAIL
----
-duration_ms: 17.002654
-...
-# Subtest: 7. a DIFFERENT candidate's approval record is used -> FAIL
-ok 223 - 7. a DIFFERENT candidate's approval record is used -> FAIL
----
-duration_ms: 20.788369
-...
-# Subtest: approving before candidate-identity hardening (no canonical_candidate_identity) fails clearly rather than crashing
-ok 224 - approving before candidate-identity hardening (no canonical_candidate_identity) fails clearly rather than crashing
----
-duration_ms: 5.070953
-...
-# Subtest: wrong mode fails
-ok 225 - wrong mode fails
----
-duration_ms: 18.481322
-...
-# Subtest: a partial-duration review (review_total_frames < candidate total_frames) fails
-ok 226 - a partial-duration review (review_total_frames < candidate total_frames) fails
----
-duration_ms: 20.61868
-...
-# Subtest: verifyBundleIntegrity passes when every placed file matches the bundle's own frozen_candidate.json
-ok 227 - verifyBundleIntegrity passes when every placed file matches the bundle's own frozen_candidate.json
----
-duration_ms: 46.382708
-...
-# Subtest: verifyBundleIntegrity fails when a placed file was altered after freezing (corruption/tamper in transit)
-ok 228 - verifyBundleIntegrity fails when a placed file was altered after freezing (corruption/tamper in transit)
----
-duration_ms: 32.976036
-...
-# Subtest: verifyBundleIntegrity fails when the render_ready_project directory was altered
-ok 229 - verifyBundleIntegrity fails when the render_ready_project directory was altered
----
-duration_ms: 29.332796
-...
-# Subtest: verifyBundleIntegrity throws clearly on a pre-hardening candidate with no canonical_candidate_identity
-ok 230 - verifyBundleIntegrity throws clearly on a pre-hardening candidate with no canonical_candidate_identity
----
-duration_ms: 7.796187
-...
-# Subtest: deriveConfigs derives scene_config.json identically for proof and full mode edit plans (same function, no mode branch)
-ok 231 - deriveConfigs derives scene_config.json identically for proof and full mode edit plans (same function, no mode branch)
----
-duration_ms: 20.414094
-...
-# Subtest: deriveConfigs throws before writing anything if direction/edit_plan.json is missing (fails closed, does not silently fall back)
-ok 232 - deriveConfigs throws before writing anything if direction/edit_plan.json is missing (fails closed, does not silently fall back)
----
-duration_ms: 4.920162
-...
-# Subtest: assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
-ok 233 - assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
----
-duration_ms: 0.595146
-...
-# Subtest: assertSafeBundleOutput accepts a properly separated public/output/source layout
-ok 234 - assertSafeBundleOutput accepts a properly separated public/output/source layout
----
-duration_ms: 0.384665
-...
-1..234
-# tests 234
-# suites 0
-# pass 234
-# fail 0
-# cancelled 0
-# skipped 0
-# todo 0
-# duration_ms 14625.20211
-##[group]Run node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
-[36;1mnode scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"[0m
+"source_sha256": "4652007dad67295f1f5c87c8cbc8e2df1a530e7671266a29f693a084375d3910",
+"start_seconds": 679.63,
+"end_seconds": 900.91,
+"duration_seconds": 221.27999999999997,
+"source_track_duration_seconds": 249.965714,
+"looped": false
+},
+{
+"cue_id": "CUE_07_07_PRECEDENT",
+"section_id": "SEC_07_PRECEDENT",
+"track_id": "sb_undertow",
+"title": "Undertow",
+"artist": "Scott Buckley",
+"composition_family": "undertow",
+"source_page_url": "https://www.scottbuckley.com.au/library/undertow/",
+"license_name": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+"license_url": "https://creativecommons.org/licenses/by/4.0/",
+"attribution": "'Undertow' by Scott Buckley — released under CC-BY 4.0. www.scottbuckley.com.au",
+"source_sha256": "4652007dad67295f1f5c87c8cbc8e2df1a530e7671266a29f693a084375d3910",
+"start_seconds": 900.91,
+"end_seconds": 1037.5333333333333,
+"duration_seconds": 136.62333333333333,
+"source_track_duration_seconds": 249.965714,
+"looped": false
+}
+],
+"license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+"license_url": "https://creativecommons.org/licenses/by/4.0/",
+"attribution": "'Undertow' by Scott Buckley — released under CC-BY 4.0. www.scottbuckley.com.au",
+"approved_for_final_edit": true,
+"sha256": "49b40a38e29afaaf386fb01d59ad6f3e4d3a3cab373ec2f3b4df780e66153b54",
+"bytes": 24566571,
+"resolved_at": "2026-07-27T16:22:03.086Z",
+"reproducibility": "canonical_registry_pinned",
+"canonical_track_ids": [
+"sb_undertow",
+"sb_undertow",
+"sb_undertow",
+"sb_undertow",
+"sb_undertow",
+"sb_undertow",
+"sb_undertow"
+]
+}
+##[group]Run node scripts/orvyq_audio_mix.mjs --project-id="$PROJECT_ID" --mode=candidate --duration-seconds="$CANDIDATE_DURATION_SECONDS" --head-silence-seconds="$HOOK_DURATION_SECONDS"
+[36;1mnode scripts/orvyq_audio_mix.mjs --project-id="$PROJECT_ID" --mode=candidate --duration-seconds="$CANDIDATE_DURATION_SECONDS" --head-silence-seconds="$HOOK_DURATION_SECONDS"[0m
 shell: /usr/bin/bash -e {0}
 env:
 PROJECT_ID: 002-the-new-war-beneath-the-ocean
@@ -130,16 +56,37 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+CANDIDATE_DURATION_SECONDS: 1037.5333333333333
+HOOK_DURATION_SECONDS: 14
 ##[endgroup]
 {
 "ok": true,
-"pause_count": 7,
-"narration_end_seconds": 994.68,
-"total_pause_seconds": 25,
-"output": "direction/resolved_pause_plan.json"
+"outputDuration": 1037.5333333333333,
+"headSilenceSeconds": 14,
+"narrationTimelineDuration": 1020.082449,
+"editorialPauseSeconds": 25,
+"measured": {
+"input_i": "-16.27",
+"input_tp": "-1.74",
+"input_lra": "2.70",
+"input_thresh": "-26.28",
+"output_i": "-16.21",
+"output_tp": "-1.50",
+"output_lra": "2.50",
+"output_thresh": "-26.22",
+"normalization_type": "dynamic",
+"target_offset": "0.21"
+},
+"musicProfile": "approved_licensed_bed",
+"musicSections": 7,
+"sfxAssets": 3
 }
-##[group]Run node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
-[36;1mnode scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"[0m
+##[group]Run set +e
+[36;1mset +e[0m
+[36;1mpython scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" > narration-qa.log 2>&1[0m
+[36;1mecho $? > narration-qa.status[0m
+[36;1mcat narration-qa.log[0m
+[36;1mexit 0[0m
 shell: /usr/bin/bash -e {0}
 env:
 PROJECT_ID: 002-the-new-war-beneath-the-ocean
@@ -149,31 +96,66 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+CANDIDATE_DURATION_SECONDS: 1037.5333333333333
+HOOK_DURATION_SECONDS: 14
 ##[endgroup]
-{"ok":false,"error":"Full production plan has 54 unresolved creative-coverage gap(s):\n- Uninterrupted evidence run of 15.7s (> 15s cap) from CLM_001_JAPAN_TECHNICAL_MILESTONE to CLM_001_JAPAN_TECHNICAL_MILESTONE (claims CLM_001_JAPAN_TECHNICAL_MILESTONE) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 15.6s (> 15s cap) from CLM_001_JAPAN_TECHNICAL_MILESTONE to CLM_001_JAPAN_TECHNICAL_MILESTONE (claims CLM_001_JAPAN_TECHNICAL_MILESTONE) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 19.6s (> 15s cap) from CLM_001_JAPAN_TECHNICAL_MILESTONE to CLM_001_JAPAN_TECHNICAL_MILESTONE (claims CLM_001_JAPAN_TECHNICAL_MILESTONE) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 21.9s (> 15s cap) from CLM_002_CHINA_RARE_EARTH_CHOKEPOINT to CLM_002_CHINA_RARE_EARTH_CHOKEPOINT (claims CLM_002_CHINA_RARE_EARTH_CHOKEPOINT) has no FOOTAGE_ASSIGNMENTS entry to break it up -- add an authored footage assignment inside this window, or acquire an additional licensed clip if the pool has none left to assign.\n- Uninterrupted evidence run of 15.9s (> 15s cap) from CLM_002_CHINA_RARE_EARTH_CHOKEPOINT to CLM_0
+[0;93m2026-07-27 16:26:20.761246215 [W:onnxruntime:Default, device_discovery.cc:134 GetPciBusId] Skipping pci_bus_id for PCI path at "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/5620e0c7-8062-4dce-aeb7-520c7ef76171" because filename "5620e0c7-8062-4dce-aeb7-520c7ef76171" did not match expected pattern of [0-9a-f]+:[0-9a-f]+:[0-9a-f]+[.][0-9a-f]+[m
+{"ok": true, "output": "projects/002-the-new-war-beneath-the-ocean/qa/speech_transcript.json", "word_count": 2230, "speech_coverage": 0.8007, "script_similarity": 0.9592, "average_word_probability": 0.9546}
+##[group]Run test "$(cat narration-qa.status)" = "0"
+[36;1mtest "$(cat narration-qa.status)" = "0"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+CANDIDATE_DURATION_SECONDS: 1037.5333333333333
+HOOK_DURATION_SECONDS: 14
+##[endgroup]
+##[group]Run node scripts/orvyq_caption_build.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_caption_build.mjs --project-id="$PROJECT_ID"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+CANDIDATE_DURATION_SECONDS: 1037.5333333333333
+HOOK_DURATION_SECONDS: 14
+##[endgroup]
+{
+"ok": true,
+"caption_count": 393,
+"duration_frames": 31126,
+"text_source": "voice/voice_script.txt",
+"source": "qa/speech_transcript.json"
+}
+##[group]Run node scripts/orvyq_asset_registry.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_asset_registry.mjs --project-id="$PROJECT_ID"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+CANDIDATE_DURATION_SECONDS: 1037.5333333333333
+HOOK_DURATION_SECONDS: 14
+##[endgroup]
+{"ok":false,"error":"Dynamic remix did not reach the minimum 4.5 LU loudness range (measured 3.6 LU)"}
 ##[error]Process completed with exit code 1.
-##[group]Run node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
-[36;1mnode scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"[0m
-shell: /usr/bin/bash -e {0}
-env:
-PROJECT_ID: 002-the-new-war-beneath-the-ocean
-pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
-PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
-Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-##[endgroup]
-{
-"ok": true,
-"schema_version": "1.0",
-"project_id": "002-the-new-war-beneath-the-ocean",
-"assets": []
-}
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ##[group]Run actions/upload-artifact@v4
 with:
-name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458
+name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30284117956
 retention-days: 30
 path: validation-source-sha.txt
 alignment-speech-qa.log
@@ -203,28 +185,30 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+CANDIDATE_DURATION_SECONDS: 1037.5333333333333
+HOOK_DURATION_SECONDS: 14
 ##[endgroup]
-(node:4815) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:5346) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 Multiple search paths detected. Calculating the least common ancestor of all paths
 The least common ancestor is /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-. This will be the root directory of the artifact
-With the provided path, there will be 8 files uploaded
+With the provided path, there will be 16 files uploaded
 Artifact name is valid!
 Root directory input is valid!
 Beginning upload of artifact content to blob storage
-(node:4815) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
-Uploaded bytes 78778
+(node:5346) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Uploaded bytes 150346
 Finished uploading artifact content to blob storage!
-SHA256 digest of uploaded artifact zip is 775d89c70e4f0db2a8f2aaeeb9ab489f95bef2bbf4782fa2ac8312a8f4bf57e6
+SHA256 digest of uploaded artifact zip is ca7aa9ca28564458580cc2ecdd09b0060459f2c17ee9776ac89fd1995c969cc4
 Finalizing artifact upload
-Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458.zip successfully finalized. Artifact ID 8649577478
-Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458 has been successfully uploaded! Final size is 78778 bytes. Artifact ID is 8649577478
-Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30257567458/artifacts/8649577478
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30284117956.zip successfully finalized. Artifact ID 8660415263
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30284117956 has been successfully uploaded! Final size is 150346 bytes. Artifact ID is 8660415263
+Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30284117956/artifacts/8660415263
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 Post job cleanup.
 [command]/usr/bin/git version
 git version 2.54.0
-Temporarily overriding HOME='/home/runner/work/_temp/79e82eb0-937c-472d-85b6-21dc24fef161' before making global git config changes
+Temporarily overriding HOME='/home/runner/work/_temp/088e1fad-0217-4a22-b5c2-43b82d1160ee' before making global git config changes
 Adding repository directory to the temporary git global config as a safe directory
 [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
 [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
