@@ -32,23 +32,21 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          target='Build the canonical full production shot list from real data'
-          hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
-          if hits:
-              start=hits[-1]
-              selected=lines[start:min(len(lines), start+300)]
+          error_indexes=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower() or 'error:' in l.lower()]
+          if error_indexes:
+              idx=error_indexes[-1]
+              start=max(0,idx-80)
+              selected=lines[start:min(len(lines),idx+60)]
           else:
-              err=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or 'error:' in l.lower()]
-              start=max(0,(err[-1] if err else len(lines)-100)-40)
-              selected=lines[start:min(len(lines), start+300)]
+              selected=lines[-180:]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
-              cleaned.append(line[:1000])
-          Path('excerpt.txt').write_text('\n'.join(cleaned)[:20000])
+              cleaned.append(line[:1200])
+          Path('excerpt.txt').write_text('\n'.join(cleaned)[:24000])
           PY
           excerpt="$(cat excerpt.txt)"
-          body=$(printf 'Exact Candidate Validation full-production diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
+          body=$(printf 'Latest Candidate Validation diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
           gh api "repos/$repo/issues/3/comments" -f body="$body"
 
-# Trigger revision: full production planning failure.
+# Trigger revision: latest Project 002 failure 2026-07-27.
