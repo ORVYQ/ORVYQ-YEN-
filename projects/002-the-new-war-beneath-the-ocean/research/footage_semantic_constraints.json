@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "policy": {
+    "selection_basis": "Pexels source-page title/slug must satisfy explicit positive and negative terms before download; the Full-Length Review remains the frame-level human verification gate.",
+    "blind_keyword_acceptance_forbidden": true
+  },
+  "scenes": {
+    "scene_022": {
+      "rejected_provider_asset_ids": ["35548139"],
+      "queries": ["engineers inspecting industrial machinery", "factory engineers testing equipment", "industrial technicians machinery blueprint"],
+      "fallback_queries": ["engineers factory equipment", "technicians industrial machine"],
+      "required_any_groups": [["engineer", "technician", "worker", "mechanic", "team"], ["machine", "machinery", "factory", "industrial", "equipment", "plant", "blueprint"]],
+      "forbidden_terms": ["cherry", "fruit", "food", "kitchen", "cooking", "agriculture"]
+    },
+    "scene_024": {
+      "rejected_provider_asset_ids": ["35844496"],
+      "queries": ["scientific research vessel at sea", "ocean survey ship", "marine research vessel"],
+      "fallback_queries": ["expedition vessel ocean", "survey boat marine"],
+      "required_any_groups": [["ship", "vessel", "boat"], ["research", "scientific", "survey", "expedition", "marine"]],
+      "forbidden_terms": ["cargo", "freight", "ferry", "cruise", "yacht", "fishing"]
+    },
+    "scene_025": {
+      "rejected_provider_asset_ids": ["8823145"],
+      "queries": ["underwater robot exploration", "submersible underwater vehicle", "ROV underwater ocean floor"],
+      "fallback_queries": ["underwater drone deep sea", "robot vehicle underwater"],
+      "required_any_groups": [["robot", "submersible", "rov", "drone", "vehicle"], ["underwater", "ocean", "sea", "deep"]],
+      "forbidden_terms": ["diver", "divers", "scuba", "swimmer", "snorkel", "urchin"]
+    },
+    "scene_026": {
+      "rejected_provider_asset_ids": ["8822976"],
+      "queries": ["marine scientist water sample", "ocean researcher collecting samples", "marine biology laboratory sample"],
+      "fallback_queries": ["scientist water testing laboratory", "researcher microscope marine sample"],
+      "required_any_groups": [["scientist", "researcher", "laboratory", "lab", "biologist", "technician"], ["sample", "water", "marine", "ocean", "microscope", "test-tube", "test tube"]],
+      "forbidden_terms": ["diver", "divers", "scuba", "swimmer", "urchin", "snorkel"]
+    },
+    "scene_028": {
+      "rejected_provider_asset_ids": ["32790667"],
+      "queries": ["underwater sediment seabed", "ocean floor sediment particles", "dark seabed underwater"],
+      "fallback_queries": ["deep sea floor sand particles", "underwater sand cloud"],
+      "required_any_groups": [["sediment", "seabed", "ocean-floor", "ocean floor", "sea-floor", "sea floor", "sand", "particles"], ["underwater", "ocean", "sea", "deep"]],
+      "forbidden_terms": ["sunlight", "coral", "reef", "tropical", "diver", "divers", "snorkel"]
+    },
+    "scene_029": {
+      "rejected_provider_asset_ids": ["29541109"],
+      "queries": ["research vessel deck crew", "ocean expedition ship crew equipment", "scientific vessel deck operations"],
+      "fallback_queries": ["marine research ship crew", "survey vessel equipment deployment"],
+      "required_any_groups": [["ship", "vessel", "boat"], ["crew", "deck", "equipment", "research", "scientific", "expedition", "survey"]],
+      "forbidden_terms": ["icebreaker", "frozen", "cargo", "ferry", "cruise"]
+    },
+    "scene_030": {
+      "rejected_provider_asset_ids": ["31330898"],
+      "queries": ["research ships at sea aerial", "scientific vessels ocean", "ocean survey ships"],
+      "fallback_queries": ["expedition vessels at sea", "marine research boats aerial"],
+      "required_any_groups": [["ship", "vessel", "boat"], ["research", "scientific", "survey", "expedition"]],
+      "forbidden_terms": ["ferry", "cargo", "freight", "cruise", "icebreaker", "frozen"]
+    },
+    "scene_031": {
+      "rejected_provider_asset_ids": ["8716786"],
+      "queries": ["international conference delegates meeting", "government officials policy meeting", "diplomatic negotiation table"],
+      "fallback_queries": ["delegates conference discussion", "officials negotiation meeting"],
+      "required_any_groups": [["meeting", "conference", "delegate", "official", "negotiation"], ["discussion", "table", "meeting", "conference"]],
+      "forbidden_terms": ["walking", "after", "leaving", "party"]
+    },
+    "scene_032": {
+      "rejected_provider_asset_ids": ["9338834"],
+      "queries": ["deep sea submersible underwater", "ROV descending deep ocean", "underwater robot dark ocean"],
+      "fallback_queries": ["underwater drone darkness", "submersible vehicle sea"],
+      "required_any_groups": [["submersible", "rov", "robot", "drone", "vehicle"], ["underwater", "ocean", "sea", "deep"]],
+      "forbidden_terms": ["diver", "divers", "scuba", "swimmer", "snorkel"]
+    }
+  }
+}
