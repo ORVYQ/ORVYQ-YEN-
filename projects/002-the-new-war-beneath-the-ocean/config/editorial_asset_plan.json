@@ -290,6 +290,24 @@
           "TECHNICAL REVIEW",
           "ECONOMIC REVIEW"
         ]
+      },
+      "1": {
+        "mode": "illustrative",
+        "title": "A LARGER TRIAL, NOT YET RUN",
+        "subtitle": "The 2026 test proved lift alone; a full production-chain trial is still ahead.",
+        "labels": [
+          "2026: LIFT TEST",
+          "2027: PRODUCTION-CHAIN TRIAL"
+        ]
+      },
+      "3": {
+        "mode": "illustrative",
+        "title": "THE SCHEDULE IS PLANNED, NOT GUARANTEED",
+        "subtitle": "A larger trial and its assessment are declared milestones, not a completed record.",
+        "labels": [
+          "PLANNED",
+          "NOT GUARANTEED"
+        ]
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
