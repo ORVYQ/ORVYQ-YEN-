@@ -1,4 +1,5 @@
 Latest ORVYQ coverage/validation/review runs:
+- ORVYQ Candidate Validation run `30284117956`: status=`completed`, conclusion=`failure`, head_sha=`5e8a1c69dcf385d71207f0e7e9b9529217ec559b`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30284117956
 - ORVYQ Candidate Validation run `30281933177`: status=`completed`, conclusion=`failure`, head_sha=`e6828288bf7d24091d05f0984a006f328e1b0780`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30281933177
 - ORVYQ Candidate Validation run `30279371388`: status=`completed`, conclusion=`failure`, head_sha=`a78946d5474f6dd90acfb2c535444c753d9f777c`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30279371388
 - ORVYQ Candidate Validation run `30277646745`: status=`completed`, conclusion=`failure`, head_sha=`ef9d7342440c6713364a86b0ff90b43232afaea4`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30277646745
@@ -13,5 +14,3 @@ Latest ORVYQ coverage/validation/review runs:
 - ORVYQ Project 002 Author Creative Coverage run `30269505202`: status=`completed`, conclusion=`success`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30269505202
 - ORVYQ Project 002 Author Creative Coverage run `30268968439`: status=`completed`, conclusion=`failure`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30268968439
 - ORVYQ Project 002 Author Creative Coverage run `30268733973`: status=`completed`, conclusion=`failure`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30268733973
-- ORVYQ Project 002 Author Creative Coverage run `30268206398`: status=`completed`, conclusion=`failure`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30268206398
-- ORVYQ Project 002 Author Creative Coverage run `30267473814`: status=`completed`, conclusion=`success`, head_sha=`dc1b6853983a07e548056e664e07725208501c74`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30267473814
