@@ -39,13 +39,13 @@
         "motion": "push",
         "role": "context"
       },
-      "3": {
+      "2": {
         "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
         "trimInRatio": 0.45,
         "motion": "hold",
         "role": "context"
       },
-      "5": {
+      "4": {
         "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
         "trimInRatio": 0.6,
         "motion": "push",
@@ -384,7 +384,7 @@
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
-      "3": {
+      "2": {
         "mode": "illustrative",
         "title": "NEITHER LOCAL NOR OCEAN-WIDE",
         "subtitle": "Disturbed sediment can travel kilometres, but concentration declines with distance, height and time.",
@@ -393,10 +393,19 @@
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
         ]
+      },
+      "4": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ]
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
-      "7": {
+      "6": {
         "mode": "illustrative",
         "title": "37% LOWER DENSITY. 32% LOWER RICHNESS.",
         "subtitle": "Two months after an industrial-scale trial, inside the direct mining tracks.",
@@ -406,7 +415,7 @@
           "-32% RICHNESS"
         ]
       },
-      "9": {
+      "8": {
         "mode": "illustrative",
         "title": "ONE TEST LASTS DAYS.",
         "subtitle": "A commercial operation could mean multiple collectors and repeated passes for years.",
@@ -415,7 +424,7 @@
           "COMMERCIAL: YEARS"
         ]
       },
-      "11": {
+      "10": {
         "mode": "illustrative",
         "title": "A MECHANISM, NOT A COLLAPSE",
         "subtitle": "Discharge particles may be nutritionally poor for midwater food webs -- a plausible risk, not an observed collapse.",
@@ -425,7 +434,7 @@
           "PLAUSIBLE RISK"
         ]
       },
-      "13": {
+      "12": {
         "mode": "illustrative",
         "title": "AN UNUSED OPTION STILL CHANGES POWER",
         "subtitle": "A state that can credibly claim another source negotiates differently from one that has none.",
@@ -435,7 +444,7 @@
           "NEGOTIATION"
         ]
       },
-      "15": {
+      "14": {
         "mode": "illustrative",
         "title": "2027: JAPAN RETURNS",
         "subtitle": "A longer production-chain test, then continued ISA negotiation and continued field research.",
@@ -445,7 +454,7 @@
           "FIELD RESEARCH"
         ]
       },
-      "17": {
+      "16": {
         "mode": "illustrative",
         "title": "THE LAW IS STILL UNFINISHED",
         "subtitle": "The mud, the nodules and the unfinished mining code all remain, six kilometres down.",
@@ -455,7 +464,7 @@
           "THE LAW"
         ]
       },
-      "19": {
+      "18": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -464,7 +473,7 @@
           "LIMITATION"
         ]
       },
-      "21": {
+      "20": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -473,7 +482,7 @@
           "LIMITATION"
         ]
       },
-      "23": {
+      "22": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -482,7 +491,7 @@
           "LIMITATION"
         ]
       },
-      "25": {
+      "24": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -491,7 +500,7 @@
           "LIMITATION"
         ]
       },
-      "27": {
+      "26": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -500,7 +509,7 @@
           "LIMITATION"
         ]
       },
-      "29": {
+      "28": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -509,7 +518,7 @@
           "LIMITATION"
         ]
       },
-      "31": {
+      "30": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -518,7 +527,7 @@
           "LIMITATION"
         ]
       },
-      "33": {
+      "32": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -527,7 +536,7 @@
           "LIMITATION"
         ]
       },
-      "35": {
+      "34": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -536,7 +545,7 @@
           "LIMITATION"
         ]
       },
-      "37": {
+      "36": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -545,7 +554,7 @@
           "LIMITATION"
         ]
       },
-      "39": {
+      "38": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
@@ -554,7 +563,16 @@
           "LIMITATION"
         ]
       },
-      "41": {
+      "40": {
+        "mode": "illustrative",
+        "title": "MEASURED, NOT ASSUMED",
+        "subtitle": "The evidence is specific; the claim is bounded.",
+        "labels": [
+          "EVIDENCE",
+          "LIMITATION"
+        ]
+      },
+      "42": {
         "mode": "illustrative",
         "title": "MEASURED, NOT ASSUMED",
         "subtitle": "The evidence is specific; the claim is bounded.",
