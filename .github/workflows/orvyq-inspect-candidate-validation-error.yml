@@ -32,23 +32,23 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          target='Validate selected project and production profile'
+          target='Resolve the canonical editorial pause plan'
           hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
           if hits:
               start=hits[-1]
-              selected=lines[start:min(len(lines), start+140)]
+              selected=lines[start:min(len(lines), start+180)]
           else:
               err=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or 'error:' in l.lower()]
               start=max(0,(err[-1] if err else len(lines)-100)-40)
-              selected=lines[start:min(len(lines), start+140)]
+              selected=lines[start:min(len(lines), start+180)]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
               cleaned.append(line[:800])
-          Path('excerpt.txt').write_text('\n'.join(cleaned)[:10000])
+          Path('excerpt.txt').write_text('\n'.join(cleaned)[:12000])
           PY
           excerpt="$(cat excerpt.txt)"
-          body=$(printf 'Exact Candidate Validation failing-step diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
+          body=$(printf 'Exact Candidate Validation pause-plan diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
           gh api "repos/$repo/issues/3/comments" -f body="$body"
 
-# Trigger revision: exact failing-step extraction.
+# Trigger revision: pause-plan failure extraction.
