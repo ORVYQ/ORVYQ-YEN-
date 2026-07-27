@@ -1,52 +1,26 @@
-run_id=30284117956
-job_id=90037612833
+run_id=30297777073
+job_id=90082944374
 
-"source_sha256": "4652007dad67295f1f5c87c8cbc8e2df1a530e7671266a29f693a084375d3910",
-"start_seconds": 679.63,
-"end_seconds": 900.91,
-"duration_seconds": 221.27999999999997,
-"source_track_duration_seconds": 249.965714,
-"looped": false
-},
-{
-"cue_id": "CUE_07_07_PRECEDENT",
-"section_id": "SEC_07_PRECEDENT",
-"track_id": "sb_undertow",
-"title": "Undertow",
-"artist": "Scott Buckley",
-"composition_family": "undertow",
-"source_page_url": "https://www.scottbuckley.com.au/library/undertow/",
-"license_name": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-"license_url": "https://creativecommons.org/licenses/by/4.0/",
-"attribution": "'Undertow' by Scott Buckley — released under CC-BY 4.0. www.scottbuckley.com.au",
-"source_sha256": "4652007dad67295f1f5c87c8cbc8e2df1a530e7671266a29f693a084375d3910",
-"start_seconds": 900.91,
-"end_seconds": 1037.5333333333333,
-"duration_seconds": 136.62333333333333,
-"source_track_duration_seconds": 249.965714,
-"looped": false
-}
-],
-"license": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
-"license_url": "https://creativecommons.org/licenses/by/4.0/",
-"attribution": "'Undertow' by Scott Buckley — released under CC-BY 4.0. www.scottbuckley.com.au",
-"approved_for_final_edit": true,
-"sha256": "49b40a38e29afaaf386fb01d59ad6f3e4d3a3cab373ec2f3b4df780e66153b54",
-"bytes": 24566571,
-"resolved_at": "2026-07-27T16:22:03.086Z",
-"reproducibility": "canonical_registry_pinned",
-"canonical_track_ids": [
-"sb_undertow",
-"sb_undertow",
-"sb_undertow",
-"sb_undertow",
-"sb_undertow",
-"sb_undertow",
-"sb_undertow"
-]
-}
-##[group]Run node scripts/orvyq_audio_mix.mjs --project-id="$PROJECT_ID" --mode=candidate --duration-seconds="$CANDIDATE_DURATION_SECONDS" --head-silence-seconds="$HOOK_DURATION_SECONDS"
-[36;1mnode scripts/orvyq_audio_mix.mjs --project-id="$PROJECT_ID" --mode=candidate --duration-seconds="$CANDIDATE_DURATION_SECONDS" --head-silence-seconds="$HOOK_DURATION_SECONDS"[0m
+ok 237 - assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
+---
+duration_ms: 0.466761
+...
+# Subtest: assertSafeBundleOutput accepts a properly separated public/output/source layout
+ok 238 - assertSafeBundleOutput accepts a properly separated public/output/source layout
+---
+duration_ms: 0.274032
+...
+1..238
+# tests 238
+# suites 0
+# pass 238
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12735.905636
+##[group]Run node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"[0m
 shell: /usr/bin/bash -e {0}
 env:
 PROJECT_ID: 002-the-new-war-beneath-the-ocean
@@ -56,37 +30,16 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-CANDIDATE_DURATION_SECONDS: 1037.5333333333333
-HOOK_DURATION_SECONDS: 14
 ##[endgroup]
 {
 "ok": true,
-"outputDuration": 1037.5333333333333,
-"headSilenceSeconds": 14,
-"narrationTimelineDuration": 1020.082449,
-"editorialPauseSeconds": 25,
-"measured": {
-"input_i": "-16.27",
-"input_tp": "-1.74",
-"input_lra": "2.70",
-"input_thresh": "-26.28",
-"output_i": "-16.21",
-"output_tp": "-1.50",
-"output_lra": "2.50",
-"output_thresh": "-26.22",
-"normalization_type": "dynamic",
-"target_offset": "0.21"
-},
-"musicProfile": "approved_licensed_bed",
-"musicSections": 7,
-"sfxAssets": 3
+"pause_count": 7,
+"narration_end_seconds": 994.68,
+"total_pause_seconds": 25,
+"output": "direction/resolved_pause_plan.json"
 }
-##[group]Run set +e
-[36;1mset +e[0m
-[36;1mpython scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" > narration-qa.log 2>&1[0m
-[36;1mecho $? > narration-qa.status[0m
-[36;1mcat narration-qa.log[0m
-[36;1mexit 0[0m
+##[group]Run node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"[0m
 shell: /usr/bin/bash -e {0}
 env:
 PROJECT_ID: 002-the-new-war-beneath-the-ocean
@@ -96,48 +49,16 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-CANDIDATE_DURATION_SECONDS: 1037.5333333333333
-HOOK_DURATION_SECONDS: 14
-##[endgroup]
-[0;93m2026-07-27 16:26:20.761246215 [W:onnxruntime:Default, device_discovery.cc:134 GetPciBusId] Skipping pci_bus_id for PCI path at "/sys/devices/LNXSYSTM:00/LNXSYBUS:00/ACPI0004:00/MSFT1000:00/5620e0c7-8062-4dce-aeb7-520c7ef76171" because filename "5620e0c7-8062-4dce-aeb7-520c7ef76171" did not match expected pattern of [0-9a-f]+:[0-9a-f]+:[0-9a-f]+[.][0-9a-f]+[m
-{"ok": true, "output": "projects/002-the-new-war-beneath-the-ocean/qa/speech_transcript.json", "word_count": 2230, "speech_coverage": 0.8007, "script_similarity": 0.9592, "average_word_probability": 0.9546}
-##[group]Run test "$(cat narration-qa.status)" = "0"
-[36;1mtest "$(cat narration-qa.status)" = "0"[0m
-shell: /usr/bin/bash -e {0}
-env:
-PROJECT_ID: 002-the-new-war-beneath-the-ocean
-pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
-PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
-Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-CANDIDATE_DURATION_SECONDS: 1037.5333333333333
-HOOK_DURATION_SECONDS: 14
-##[endgroup]
-##[group]Run node scripts/orvyq_caption_build.mjs --project-id="$PROJECT_ID"
-[36;1mnode scripts/orvyq_caption_build.mjs --project-id="$PROJECT_ID"[0m
-shell: /usr/bin/bash -e {0}
-env:
-PROJECT_ID: 002-the-new-war-beneath-the-ocean
-pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
-PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
-Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
-LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-CANDIDATE_DURATION_SECONDS: 1037.5333333333333
-HOOK_DURATION_SECONDS: 14
 ##[endgroup]
 {
 "ok": true,
-"caption_count": 393,
-"duration_frames": 31126,
-"text_source": "voice/voice_script.txt",
-"source": "qa/speech_transcript.json"
+"shot_count": 147,
+"total_duration_seconds": 1037.6799999999998,
+"claim_count": 15,
+"pause_count": 7
 }
-##[group]Run node scripts/orvyq_asset_registry.mjs --project-id="$PROJECT_ID"
-[36;1mnode scripts/orvyq_asset_registry.mjs --project-id="$PROJECT_ID"[0m
+##[group]Run npm run validate:canonical
+[36;1mnpm run validate:canonical[0m
 shell: /usr/bin/bash -e {0}
 env:
 PROJECT_ID: 002-the-new-war-beneath-the-ocean
@@ -147,15 +68,104 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-CANDIDATE_DURATION_SECONDS: 1037.5333333333333
-HOOK_DURATION_SECONDS: 14
 ##[endgroup]
-{"ok":false,"error":"Dynamic remix did not reach the minimum 4.5 LU loudness range (measured 3.6 LU)"}
+
+> orvyq@0.2.0 validate:canonical
+> node scripts/validate_canonical.mjs
+
+[PASS] (real) 001-the-ai-race-no-one-can-afford-to-win/direction/editorial_pause_map.json -- editorial_pauses.schema.json
+[PASS] (real) 001-the-ai-race-no-one-can-afford-to-win/direction/music_cue_sheet.json -- music_cues.schema.json
+[PASS] (real) 001-the-ai-race-no-one-can-afford-to-win/direction/sequence_plan.json -- sequence_plan.schema.json
+[PASS] (real) 001-the-ai-race-no-one-can-afford-to-win/canonical project assembly -- canonical_project.schema.json
+[PASS] (real generated) 001-the-ai-race-no-one-can-afford-to-win/voice/narration_alignment.json -- narration_alignment.schema.json
+[PASS] (real generated) 001-the-ai-race-no-one-can-afford-to-win/direction/resolved_pause_plan.json -- resolved_pause_plan.schema.json
+[PASS] (real) 002-the-new-war-beneath-the-ocean/direction/editorial_pause_map.json -- editorial_pauses.schema.json
+[PASS] (real) 002-the-new-war-beneath-the-ocean/direction/music_cue_sheet.json -- music_cues.schema.json
+[PASS] (real) 002-the-new-war-beneath-the-ocean/direction/sequence_plan.json -- sequence_plan.schema.json
+[PASS] (real) 002-the-new-war-beneath-the-ocean/canonical project assembly -- canonical_project.schema.json
+[PASS] (real generated) 002-the-new-war-beneath-the-ocean/voice/narration_alignment.json -- narration_alignment.schema.json
+[PASS] (real generated) 002-the-new-war-beneath-the-ocean/direction/resolved_pause_plan.json -- resolved_pause_plan.schema.json
+[PASS] (fixture) generic fixture footage shot -- shot.schema.json
+[PASS] (fixture) generic fixture graphic shot -- shot.schema.json
+[PASS] (fixture) generic fixture edit plan -- edit_plan.schema.json
+[PASS] (fixture) generic fixture timeline -- timeline.schema.json
+[PASS] (fixture) generic fixture captions -- captions.schema.json
+[PASS] (fixture) generic fixture audio mix -- audio_mix.schema.json
+[PASS] (fixture) generic fixture asset registry -- asset_registry.schema.json
+[PASS] (fixture) generic fixture evidence registry -- evidence_registry.schema.json
+[PASS] (fixture) generic fixture frozen candidate -- frozen_candidate.schema.json
+[PASS] (fixture) generic fixture approval -- proof_approval.schema.json
+[PASS] (fixture) generic fixture narration alignment -- narration_alignment.schema.json
+[PASS] (fixture) generic fixture resolved pause plan -- resolved_pause_plan.schema.json
+[PASS] (real shared) shared music registry -- music_registry.schema.json
+
+25/25 checks passed across 2 ready project(s).
+##[group]Run node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{"ok":true,"asset_count":9,"total_bytes":1750273,"runtime_manifest":"assets/evidence/primary_evidence.runtime.json"}
+##[group]Run node scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{
+"ok": true,
+"promoted": [],
+"stillPending": []
+}
+##[group]Run node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
+[36;1mnode scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{
+"ok": true,
+"schema_version": "1.0",
+"project_id": "002-the-new-war-beneath-the-ocean",
+"assets": []
+}
+##[group]Run node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full
+[36;1mnode scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{"ok":false,"error":"assets/evidence/jamstec_mining_system_diagram.png exceeds the 2-use limit"}
 ##[error]Process completed with exit code 1.
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ##[group]Run actions/upload-artifact@v4
 with:
-name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30284117956
+name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30297777073
 retention-days: 30
 path: validation-source-sha.txt
 alignment-speech-qa.log
@@ -185,30 +195,28 @@ Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
 LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
-CANDIDATE_DURATION_SECONDS: 1037.5333333333333
-HOOK_DURATION_SECONDS: 14
 ##[endgroup]
-(node:5346) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:4872) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 Multiple search paths detected. Calculating the least common ancestor of all paths
 The least common ancestor is /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-. This will be the root directory of the artifact
-With the provided path, there will be 16 files uploaded
+With the provided path, there will be 8 files uploaded
 Artifact name is valid!
 Root directory input is valid!
 Beginning upload of artifact content to blob storage
-(node:5346) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
-Uploaded bytes 150346
+(node:4872) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Uploaded bytes 78607
 Finished uploading artifact content to blob storage!
-SHA256 digest of uploaded artifact zip is ca7aa9ca28564458580cc2ecdd09b0060459f2c17ee9776ac89fd1995c969cc4
+SHA256 digest of uploaded artifact zip is 60db4785a57a6bdbbe41348d9938b80611d7dd904bb23632ee079d3ba58d2c90
 Finalizing artifact upload
-Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30284117956.zip successfully finalized. Artifact ID 8660415263
-Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30284117956 has been successfully uploaded! Final size is 150346 bytes. Artifact ID is 8660415263
-Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30284117956/artifacts/8660415263
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30297777073.zip successfully finalized. Artifact ID 8665382568
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30297777073 has been successfully uploaded! Final size is 78607 bytes. Artifact ID is 8665382568
+Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30297777073/artifacts/8665382568
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 Post job cleanup.
 [command]/usr/bin/git version
 git version 2.54.0
-Temporarily overriding HOME='/home/runner/work/_temp/088e1fad-0217-4a22-b5c2-43b82d1160ee' before making global git config changes
+Temporarily overriding HOME='/home/runner/work/_temp/6d939e67-af63-4435-958b-623cb23ef870' before making global git config changes
 Adding repository directory to the temporary git global config as a safe directory
 [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
 [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
