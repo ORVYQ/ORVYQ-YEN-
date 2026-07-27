@@ -22,7 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           repo="${{ github.repository }}"
-          run_id="30231426253"
+          run_id="30239510663"
           jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
           job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
           gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
@@ -46,7 +46,7 @@ jobs:
           Path('excerpt.txt').write_text('\n'.join(cleaned)[:24000])
           PY
           excerpt="$(cat excerpt.txt)"
-          body=$(printf 'Project 002 pause-resolution diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
+          body=$(printf 'Project 002 latest pause-resolution diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
           gh api "repos/$repo/issues/3/comments" -f body="$body"
 
-# Trigger revision: inspect exact pause-resolution failure for run 30231426253.
+# Trigger revision: inspect exact pause-resolution failure for run 30239510663.
