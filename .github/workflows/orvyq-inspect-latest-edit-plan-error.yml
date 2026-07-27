@@ -1,0 +1,47 @@
+name: Inspect latest Project 002 edit-plan failure
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-inspect-latest-edit-plan-error.yml"
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract failing edit-plan log
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          run_id=30273988416
+          job_id=90003293017
+          gh api "repos/${{ github.repository }}/actions/jobs/$job_id/logs" > job.log
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          lines=Path('job.log').read_text(errors='replace').splitlines()
+          target='Build the canonical candidate edit plan'
+          hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
+          if hits:
+              start=hits[-1]
+              selected=lines[start:min(len(lines),start+260)]
+          else:
+              errs=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '"ok":false' in l.lower()]
+              idx=errs[-1] if errs else len(lines)-1
+              selected=lines[max(0,idx-100):min(len(lines),idx+120)]
+          cleaned=[re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',x)[:1800] for x in selected]
+          Path('diagnostics').mkdir(exist_ok=True)
+          Path('diagnostics/latest-project002-edit-plan-error.txt').write_text('run_id=30273988416\njob_id=90003293017\n\n'+'\n'.join(cleaned))
+          PY
+          git config user.name "orvyq-diagnostics-bot"
+          git config user.email "orvyq-diagnostics-bot@users.noreply.github.com"
+          git add diagnostics/latest-project002-edit-plan-error.txt
+          git commit -m "Record latest Project 002 edit-plan diagnostics [skip ci]"
+          git push origin HEAD:main
