@@ -1,0 +1,30 @@
+name: ORVYQ Project 002 Candidate Validation Trigger
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/002-deep-sea-cold-war
+    paths:
+      - ".github/workflows/orvyq-project002-candidate-validation-trigger.yml"
+      - ".github/workflows/orvyq-candidate-validation.yml"
+      - "projects/002-the-new-war-beneath-the-ocean/assets/audio/final_voice.mp3"
+      - "projects/002-the-new-war-beneath-the-ocean/assets/evidence/**"
+      - "projects/002-the-new-war-beneath-the-ocean/assets/footage/**"
+      - "projects/002-the-new-war-beneath-the-ocean/research/**"
+      - "projects/002-the-new-war-beneath-the-ocean/direction/**"
+      - "projects/002-the-new-war-beneath-the-ocean/config/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: orvyq-project002-candidate-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    uses: ./.github/workflows/orvyq-candidate-validation.yml
+    with:
+      project_id: 002-the-new-war-beneath-the-ocean
+    secrets: inherit
