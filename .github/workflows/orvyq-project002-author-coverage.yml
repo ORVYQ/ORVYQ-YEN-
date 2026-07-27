@@ -1,0 +1,150 @@
+name: ORVYQ Project 002 Author Creative Coverage
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-project002-author-coverage.yml"
+
+permissions:
+  actions: write
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project 002 branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/002-deep-sea-cold-war
+          lfs: true
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Restore verified narration alignment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/validation-artifact
+          mkdir -p /tmp/validation-artifact
+          gh run download 30257567458 \
+            --repo "${{ github.repository }}" \
+            --name orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30257567458 \
+            --dir /tmp/validation-artifact
+          cp /tmp/validation-artifact/projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json \
+             projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json
+          node scripts/orvyq_resolve_pauses.mjs --project-id=002-the-new-war-beneath-the-ocean
+
+      - name: Author explicit footage and evidence-led graphic breaks
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json')
+          plan=json.loads(p.read_text())
+          A=plan['full_footage_pool']
+          # Each entry is explicit and editorially reviewable. span=2 means one
+          # continuous 10-12 second passage, not two repeated shots.
+          extra={
+            'CLM_001_JAPAN_TECHNICAL_MILESTONE': {4:A[15]},
+            'CLM_002_CHINA_RARE_EARTH_CHOKEPOINT': {4:A[1]},
+            'CLM_004_JAPAN_INDUSTRIAL_TIMELINE': {4:A[3]},
+            'CLM_005_COMMON_HERITAGE_PRINCIPLE': {4:A[16]},
+            'CLM_007_US_PARALLEL_ROUTE': {4:A[17]},
+            'CLM_009_INDUSTRY_COUNTERARGUMENT': {4:A[8]},
+            'CLM_012_LONG_TERM_TRACK_PERSISTENCE': {4:A[18],8:A[19]},
+            'CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY': {4:A[15]},
+            'CLM_014_PLUME_SCALE_IS_COMPLEX': {4:A[13]},
+            'CLM_015_MIDWATER_DISCHARGE_RISK': {
+              4:A[2],8:A[5],12:A[7],16:A[9],20:A[10],24:A[14],
+              28:A[16],32:A[17],36:A[18],40:A[19]
+            }
+          }
+          for claim, entries in plan['footage_assignments'].items():
+              first=entries.get('0')
+              if first:
+                  first['span']=2
+                  first['trimInRatio']=0
+                  first.setdefault('reuse_reason', 'A continuous claim-specific contextual passage; its placement interrupts dense evidence without replacing or weakening the cited primary material.')
+          for claim, entries in extra.items():
+              table=plan['footage_assignments'].setdefault(claim,{})
+              for idx,asset in entries.items():
+                  table[str(idx)]={
+                    'asset':asset,
+                    'trimInRatio':0.08 if idx % 8 == 4 else 0,
+                    'span':2,
+                    'motion':['push','drift_left','drift_right','pull'][((idx//4)-1)%4],
+                    'role':'human_context' if claim in {'CLM_001_JAPAN_TECHNICAL_MILESTONE','CLM_005_COMMON_HERITAGE_PRINCIPLE','CLM_009_INDUSTRY_COUNTERARGUMENT','CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY'} else 'context',
+                    'reuse_reason':'A deliberately separated contextual callback using a different continuous trim window to keep the evidence-led sequence cinematic while preserving the claim’s factual source material.'
+                  }
+          plan['graphic_break_assignments']={
+            'CLM_004_JAPAN_INDUSTRIAL_TIMELINE': {
+              '8': {
+                'mode':'illustrative',
+                'title':'A TEST IS NOT A SUPPLY CHAIN',
+                'subtitle':'Recovery, lifting, transport and refining remain separate industrial gates.',
+                'labels':['JAMSTEC TEST','INTEGRATED TRIAL','COMMERCIAL CHAIN'],
+                'maxSeconds':4.5
+              }
+            },
+            'CLM_009_INDUSTRY_COUNTERARGUMENT': {
+              '8': {
+                'mode':'illustrative',
+                'title':'THE ARGUMENT IS ABOUT TRADE-OFFS',
+                'subtitle':'Supply security does not erase ecological uncertainty.',
+                'labels':['SUPPLY','COST','ECOLOGY'],
+                'maxSeconds':4.5
+              }
+            }
+          }
+          plan['generation_policy']='evidence-led authored coverage; continuous span-2 footage; two source-specific illustrative breaks; no silent fallback'
+          p.write_text(json.dumps(plan,indent=2)+'\n')
+          PY
+
+      - name: Validate authored coverage before commit
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean
+
+      - name: Commit only the authored project inputs
+        run: |
+          set -euo pipefail
+          git config user.name "orvyq-coverage-editor"
+          git config user.email "orvyq-coverage-editor@users.noreply.github.com"
+          git add projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
+          git commit -m "Author full-film cinematic coverage for Project 002"
+          git pull --rebase origin agent/002-deep-sea-cold-war
+          git push origin HEAD:agent/002-deep-sea-cold-war
+
+      - name: Re-dispatch Candidate Validation
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run orvyq-candidate-validation.yml \
+            --repo "${{ github.repository }}" \
+            --ref agent/002-deep-sea-cold-war \
+            -f project_id=002-the-new-war-beneath-the-ocean
+          gh api repos/${{ github.repository }}/issues/3/comments \
+            -f body="Project 002 Candidate Validation re-dispatched after explicit full-film footage coverage and two evidence-led illustrative breaks were authored without weakening the 15-second evidence-run quality gate."
+
+      - name: Upload authoring diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: project002-authored-coverage-${{ github.run_id }}
+          path: |
+            projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
+            projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json
+          retention-days: 30
