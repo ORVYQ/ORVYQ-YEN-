@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation was dispatched on branch \`agent/002-deep-sea-cold-war\` after the verified narration upload."
+            -f body="Project 002 Candidate Validation was dispatched on branch \`agent/002-deep-sea-cold-war\` after the verified narration upload. Completion reporting is active."
 
-# Trigger revision: narration uploaded and byte-for-byte verified on 2026-07-27.
+# Trigger revision: completion reporter enabled on 2026-07-27.
