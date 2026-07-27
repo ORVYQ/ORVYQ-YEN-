@@ -31,3 +31,5 @@ jobs:
                 | "Latest ORVYQ Candidate Validation runs:\n" + join("\n")
               end')"
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
+
+# Trigger revision: inspect validation after readiness fix.
