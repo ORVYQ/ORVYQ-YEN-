@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation was re-dispatched after adding full narration QA and canonical alignment generation before editorial pause resolution."
+            -f body="Project 002 Candidate Validation was re-dispatched after matching every editorial pause anchor against the verified narration alignment."
 
-# Trigger revision: canonical narration alignment generated before pause resolution.
+# Trigger revision: verified narration pause-anchor alignment fixed.
