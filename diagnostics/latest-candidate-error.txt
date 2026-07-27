@@ -1,0 +1,209 @@
+run_id=30246825065
+job_id=89915689250
+
+ok 219 - 3. final mix changes after approval -> FAIL
+---
+duration_ms: 34.535655
+...
+# Subtest: 4. an asset (registry) changes after approval -> FAIL
+ok 220 - 4. an asset (registry) changes after approval -> FAIL
+---
+duration_ms: 34.226172
+...
+# Subtest: 5. review run ID mismatch (final workflow input vs approval record) -> FAIL
+ok 221 - 5. review run ID mismatch (final workflow input vs approval record) -> FAIL
+---
+duration_ms: 16.849503
+...
+# Subtest: 6. review artifact SHA mismatch -> FAIL
+ok 222 - 6. review artifact SHA mismatch -> FAIL
+---
+duration_ms: 15.269989
+...
+# Subtest: 7. a DIFFERENT candidate's approval record is used -> FAIL
+ok 223 - 7. a DIFFERENT candidate's approval record is used -> FAIL
+---
+duration_ms: 16.372448
+...
+# Subtest: approving before candidate-identity hardening (no canonical_candidate_identity) fails clearly rather than crashing
+ok 224 - approving before candidate-identity hardening (no canonical_candidate_identity) fails clearly rather than crashing
+---
+duration_ms: 5.223599
+...
+# Subtest: wrong mode fails
+ok 225 - wrong mode fails
+---
+duration_ms: 16.740982
+...
+# Subtest: a partial-duration review (review_total_frames < candidate total_frames) fails
+ok 226 - a partial-duration review (review_total_frames < candidate total_frames) fails
+---
+duration_ms: 14.281616
+...
+# Subtest: verifyBundleIntegrity passes when every placed file matches the bundle's own frozen_candidate.json
+ok 227 - verifyBundleIntegrity passes when every placed file matches the bundle's own frozen_candidate.json
+---
+duration_ms: 58.187106
+...
+# Subtest: verifyBundleIntegrity fails when a placed file was altered after freezing (corruption/tamper in transit)
+ok 228 - verifyBundleIntegrity fails when a placed file was altered after freezing (corruption/tamper in transit)
+---
+duration_ms: 34.597421
+...
+# Subtest: verifyBundleIntegrity fails when the render_ready_project directory was altered
+ok 229 - verifyBundleIntegrity fails when the render_ready_project directory was altered
+---
+duration_ms: 26.566992
+...
+# Subtest: verifyBundleIntegrity throws clearly on a pre-hardening candidate with no canonical_candidate_identity
+ok 230 - verifyBundleIntegrity throws clearly on a pre-hardening candidate with no canonical_candidate_identity
+---
+duration_ms: 5.157376
+...
+# Subtest: deriveConfigs derives scene_config.json identically for proof and full mode edit plans (same function, no mode branch)
+ok 231 - deriveConfigs derives scene_config.json identically for proof and full mode edit plans (same function, no mode branch)
+---
+duration_ms: 24.810578
+...
+# Subtest: deriveConfigs throws before writing anything if direction/edit_plan.json is missing (fails closed, does not silently fall back)
+ok 232 - deriveConfigs throws before writing anything if direction/edit_plan.json is missing (fails closed, does not silently fall back)
+---
+duration_ms: 8.242652
+...
+# Subtest: assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
+ok 233 - assertSafeBundleOutput rejects an output dir nested inside the Remotion public dir
+---
+duration_ms: 0.645183
+...
+# Subtest: assertSafeBundleOutput accepts a properly separated public/output/source layout
+ok 234 - assertSafeBundleOutput accepts a properly separated public/output/source layout
+---
+duration_ms: 0.355875
+...
+1..234
+# tests 234
+# suites 0
+# pass 234
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16328.836186
+##[group]Run node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{
+"ok": true,
+"pause_count": 7,
+"narration_end_seconds": 994.68,
+"total_pause_seconds": 25,
+"output": "direction/resolved_pause_plan.json"
+}
+##[group]Run node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+[36;1mnode scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{"ok":false,"error":"ENOENT: no such file or directory, open '/home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-/projects/002-the-new-war-beneath-the-ocean/direction/motion_hook.json'"}
+##[error]Process completed with exit code 1.
+##[group]Run node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
+[36;1mnode scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"[0m
+shell: /usr/bin/bash -e {0}
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+{
+"ok": true,
+"schema_version": "1.0",
+"project_id": "002-the-new-war-beneath-the-ocean",
+"assets": []
+}
+Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+##[group]Run actions/upload-artifact@v4
+with:
+name: orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30246825065
+retention-days: 30
+path: validation-source-sha.txt
+alignment-speech-qa.log
+alignment-speech-qa.status
+narration-qa.log
+narration-qa.status
+qa-chain.log
+qa-chain.status
+projects/002-the-new-war-beneath-the-ocean/qa/*.json
+projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json
+projects/002-the-new-war-beneath-the-ocean/config/production_profile.json
+projects/002-the-new-war-beneath-the-ocean/direction/edit_plan.json
+projects/002-the-new-war-beneath-the-ocean/remotion/captions.json
+projects/002-the-new-war-beneath-the-ocean/assets/asset_registry.json
+projects/002-the-new-war-beneath-the-ocean/assets/audio/final_mix.metadata.json
+projects/002-the-new-war-beneath-the-ocean/assets/music/approved_bed.provenance.json
+
+if-no-files-found: warn
+compression-level: 6
+overwrite: false
+include-hidden-files: false
+env:
+PROJECT_ID: 002-the-new-war-beneath-the-ocean
+pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+##[endgroup]
+(node:4923) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Multiple search paths detected. Calculating the least common ancestor of all paths
+The least common ancestor is /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-. This will be the root directory of the artifact
+With the provided path, there will be 8 files uploaded
+Artifact name is valid!
+Root directory input is valid!
+Beginning upload of artifact content to blob storage
+(node:4923) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Uploaded bytes 78778
+Finished uploading artifact content to blob storage!
+SHA256 digest of uploaded artifact zip is 90a3f182b36729a3098b9de2c503f3ef7342986fb242f8c4246973b46323ceb2
+Finalizing artifact upload
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30246825065.zip successfully finalized. Artifact ID 8645376069
+Artifact orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30246825065 has been successfully uploaded! Final size is 78778 bytes. Artifact ID is 8645376069
+Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30246825065/artifacts/8645376069
+Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Post job cleanup.
+[command]/usr/bin/git version
+git version 2.54.0
+Temporarily overriding HOME='/home/runner/work/_temp/c3b585c1-09ae-4eb5-8438-9c394f057f36' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+[command]/usr/bin/git config --global --add safe.directory /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
+[command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+http.https://github.com/.extraheader
+[command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+[command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Cleaning up orphan processes
+##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
