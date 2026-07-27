@@ -5,13 +5,6 @@
   "generation_policy": "evidence-claim opening context; every additional footage/graphic break hand-authored from real, frame-verified clip content matched to the claim's own meaning (no index-based assignment, no artificial span stretching); 15s uninterrupted-evidence cap satisfied via real per-slice durations computed from the verified narration alignment",
   "footage_assignments": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
-      "0": {
-        "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
-        "trimInRatio": 0,
-        "motion": "hold",
-        "role": "human_context",
-        "reuse_reason": "The human-scale vessel image returns after the opening hook under the same technical-milestone claim, at a later continuous trim window, as a deliberate bridge from question to evidence."
-      },
       "4": {
         "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
         "trimInRatio": 0,
