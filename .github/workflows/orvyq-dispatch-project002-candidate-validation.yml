@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation was re-dispatched after matching every editorial pause anchor against the verified narration alignment."
+            -f body="Project 002 Candidate Validation re-dispatched after matching the terminal editorial pause to the verified narration wording."
 
-# Trigger revision: verified narration pause-anchor alignment fixed.
+# Trigger revision: terminal pause anchor matched to verified narration on 2026-07-27.
