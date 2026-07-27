@@ -4,7 +4,8 @@ import crypto from "node:crypto";
 import { promises as fs } from "node:fs";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 
 const run = promisify(execFile);
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
@@ -91,5 +92,7 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  fetchPrimaryEvidence().then((runtime) => console.log(JSON.stringify({ ok: true, asset_count: runtime.assets.length, total_bytes: runtime.assets.reduce((sum, asset) => sum + asset.bytes, 0), runtime_manifest: runtime.policy.runtime_manifest }))).catch((error) => { console.error(JSON.stringify({ ok: false, error: error.message })); process.exitCode = 1; });
+  const args = parseArgs(process.argv.slice(2));
+  const projectId = resolveProjectId(args);
+  fetchPrimaryEvidence(projectId).then((runtime) => console.log(JSON.stringify({ ok: true, asset_count: runtime.assets.length, total_bytes: runtime.assets.reduce((sum, asset) => sum + asset.bytes, 0), runtime_manifest: runtime.policy.runtime_manifest }))).catch((error) => { console.error(JSON.stringify({ ok: false, error: error.message })); process.exitCode = 1; });
 }
