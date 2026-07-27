@@ -73,9 +73,11 @@ jobs:
           sudo apt-get install -y --no-install-recommends poppler-utils
 
       - name: Download and verify official primary evidence
+        shell: bash
         run: |
-          set -euo pipefail
-          ORVYQ_PROJECT_ID="$PROJECT_ID" node scripts/orvyq_fetch_primary_evidence.mjs | tee evidence-fetch-result.json
+          set -o pipefail
+          ORVYQ_PROJECT_ID="$PROJECT_ID" node scripts/orvyq_fetch_primary_evidence.mjs 2>&1 | tee evidence-fetch-result.log
+          exit "${PIPESTATUS[0]}"
 
       - name: Promote verified evidence assets
         run: |
@@ -148,7 +150,7 @@ jobs:
           name: orvyq-evidence-acquisition-${{ github.run_id }}
           retention-days: 30
           path: |
-            evidence-fetch-result.json
+            evidence-fetch-result.log
             evidence-promotion-result.json
             evidence-commit.log
             projects/${{ env.PROJECT_ID }}/research/primary_evidence_manifest.json
@@ -165,4 +167,4 @@ jobs:
         run: |
           set -euo pipefail
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 official-evidence acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`."
+            -f body="Project 002 official-evidence acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_ID}\` on \`${TARGET_BRANCH}\`. Full fetch diagnostics are attached."
