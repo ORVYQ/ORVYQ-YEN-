@@ -14,7 +14,7 @@
       },
       "4": {
         "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
-        "trimInRatio": 0.15,
+        "trimInRatio": 0,
         "motion": "push",
         "role": "context"
       },
@@ -24,12 +24,6 @@
         "motion": "drift_right",
         "role": "human_context",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
-      },
-      "6": {
-        "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
-        "trimInRatio": 0.15,
-        "motion": "pull",
-        "role": "context"
       }
     },
     "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT": {
@@ -69,7 +63,7 @@
       },
       "2": {
         "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
-        "trimInRatio": 0.1,
+        "trimInRatio": 0,
         "motion": "drift_left",
         "role": "context"
       },
@@ -105,13 +99,6 @@
         "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
         "trimInRatio": 0.02,
         "motion": "hold",
-        "role": "context",
-        "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
-      },
-      "6": {
-        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
-        "trimInRatio": 0.12,
-        "motion": "push",
         "role": "context",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       }
@@ -162,11 +149,11 @@
         "role": "human_context"
       },
       "3": {
-        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
-        "trimInRatio": 0.02,
+        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "trimInRatio": 0,
         "motion": "drift_right",
         "role": "context",
-        "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
+        "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       },
       "2": {
         "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
@@ -202,7 +189,7 @@
       },
       "3": {
         "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
-        "trimInRatio": 0.02,
+        "trimInRatio": 0,
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
@@ -218,7 +205,7 @@
       },
       "2": {
         "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
-        "trimInRatio": 0.15,
+        "trimInRatio": 0,
         "motion": "hold",
         "role": "context"
       }
@@ -240,17 +227,17 @@
       },
       "2": {
         "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
-        "trimInRatio": 0.02,
+        "trimInRatio": 0,
         "motion": "push",
         "role": "context",
         "reuse_reason": "The recycling facility returns at a distinct trim window: first as a partial supply response, later as the repeated industrial operation implied by 'accumulation' rather than a single test."
       },
       "43": {
-        "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
-        "trimInRatio": 0.12,
+        "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+        "trimInRatio": 0,
         "motion": "drift_left",
         "role": "human_context",
-        "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
+        "reuse_reason": "A distinct, deliberately separated real trim window of this claim's own contextual footage."
       },
       "4": {
         "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
@@ -579,6 +566,30 @@
         "labels": [
           "EVIDENCE",
           "LIMITATION"
+        ]
+      }
+    },
+    "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
+      "6": {
+        "mode": "illustrative",
+        "title": "A TECHNICAL RESULT, NOT A MINE",
+        "subtitle": "Continuous lift proved. Commercial viability and a new mine did not follow from it.",
+        "labels": [
+          "LIFTED",
+          "NOT COMMERCIAL",
+          "NOT A MINE"
+        ]
+      }
+    },
+    "CLM_005_COMMON_HERITAGE_PRINCIPLE": {
+      "6": {
+        "mode": "illustrative",
+        "title": "COMMON HERITAGE OF MANKIND",
+        "subtitle": "UNCLOS Articles 136-137: the seabed beyond national jurisdiction belongs to no one state.",
+        "labels": [
+          "UNCLOS",
+          "THE AREA",
+          "NO NATIONAL CLAIM"
         ]
       }
     }
