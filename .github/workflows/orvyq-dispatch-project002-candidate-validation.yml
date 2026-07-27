@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after stabilizing the terminal editorial pause anchor against the verified real narration transcript."
+            -f body="Project 002 Candidate Validation re-dispatched after authoring the missing sequence plan with real JAMSTEC and ISA primary-evidence placements."
 
-# Trigger revision: terminal pause anchor stabilized on 2026-07-27.
+# Trigger revision: real-evidence sequence plan authored on 2026-07-27.
