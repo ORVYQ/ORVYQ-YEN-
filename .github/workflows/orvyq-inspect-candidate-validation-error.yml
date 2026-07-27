@@ -22,9 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           repo="${{ github.repository }}"
-          run_json="$(gh api "repos/$repo/actions/runs?per_page=30")"
-          run_id="$(printf '%s' "$run_json" | jq -r '[.workflow_runs[] | select(.name == "ORVYQ Candidate Validation")][0].id')"
-          test "$run_id" != "null"
+          run_id="30231426253"
           jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
           job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
           gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
@@ -32,13 +30,15 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          error_indexes=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower() or 'error:' in l.lower()]
-          if error_indexes:
-              idx=error_indexes[-1]
-              start=max(0,idx-80)
-              selected=lines[start:min(len(lines),idx+60)]
+          target='Resolve the canonical editorial pause plan'
+          hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
+          if hits:
+              start=hits[-1]
+              selected=lines[start:min(len(lines),start+220)]
           else:
-              selected=lines[-180:]
+              errs=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
+              idx=errs[-1] if errs else len(lines)-1
+              selected=lines[max(0,idx-100):min(len(lines),idx+80)]
           cleaned=[]
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
@@ -46,7 +46,7 @@ jobs:
           Path('excerpt.txt').write_text('\n'.join(cleaned)[:24000])
           PY
           excerpt="$(cat excerpt.txt)"
-          body=$(printf 'Latest Candidate Validation diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
+          body=$(printf 'Project 002 pause-resolution diagnostics for run `%s`, job `%s`:\n\n```text\n%s\n```' "$run_id" "$job_id" "$excerpt")
           gh api "repos/$repo/issues/3/comments" -f body="$body"
 
-# Trigger revision: latest Project 002 failure 2026-07-27.
+# Trigger revision: inspect exact pause-resolution failure for run 30231426253.
