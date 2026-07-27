@@ -15,7 +15,7 @@
     "transition_out": { "enum": ["cut", "fade", "dissolve"] },
     "text_overlay": { "type": ["string", "null"] },
     "claim_id": { "type": "string" },
-    "visual_role": { "enum": ["evidence", "archive", "context", "metaphor", "graphic"] },
+    "visual_role": { "enum": ["evidence", "archive", "context", "human_context", "metaphor", "graphic"] },
     "editorial_purpose": { "type": "string", "minLength": 18 },
     "editorial_overlay": { "type": ["object", "null"] },
     "hook_question": {

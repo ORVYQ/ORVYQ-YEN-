@@ -23,7 +23,7 @@ import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 const run = promisify(execFile);
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
-const VALID_ROLES = new Set(["evidence", "archive", "context", "metaphor", "graphic"]);
+const VALID_ROLES = new Set(["evidence", "archive", "context", "human_context", "metaphor", "graphic"]);
 const VALID_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "source_timeline", "source_article", "concept_map", "boundary", "comparison", "recap", "evidence_chain"]);
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
 const FORBIDDEN = new Set(["benchmark", "market_pressure", "forecast", "trend_chart", "bar_chart", "line_chart"]);

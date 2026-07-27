@@ -27,7 +27,7 @@ import { loadProductionPolicy, resolveProjectId } from "./lib/orvyq-project-prof
 const FPS = 30;
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
 const NATIVE_KINDS = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
-const ALLOWED_ROLES = new Set(["evidence", "archive", "context", "metaphor", "graphic"]);
+const ALLOWED_ROLES = new Set(["evidence", "archive", "context", "human_context", "metaphor", "graphic"]);
 const ALLOWED_TRANSITIONS = new Set(["cut", "fade", "dissolve"]);
 const round = (value) => Math.round(value * 1000) / 1000;
 
