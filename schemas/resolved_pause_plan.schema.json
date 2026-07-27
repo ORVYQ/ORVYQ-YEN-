@@ -19,6 +19,7 @@
         "properties": {
           "pause_id": { "type": "string" },
           "anchor_text": { "type": "string" },
+          "question": { "type": ["string", "null"] },
           "purpose": { "type": ["string", "null"] },
           "sound_cue": { "type": "string" },
           "source_time_seconds": { "type": "number", "minimum": 0 },

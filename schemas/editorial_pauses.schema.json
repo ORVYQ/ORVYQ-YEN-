@@ -27,7 +27,7 @@
         "source_narration_seconds": { "type": "number", "minimum": 0 },
         "editorial_pause_seconds": { "type": "number", "minimum": 0 },
         "speech_timeline_end_seconds": { "type": "number", "minimum": 0 },
-        "proof_duration_seconds": { "type": "number", "exclusiveMinimum": 0 },
+        "proof_duration_seconds": { "type": "number", "minimum": 0 },
         "tail_release_seconds": { "type": "number", "minimum": 0 },
         "pauses": {
           "type": "array",
