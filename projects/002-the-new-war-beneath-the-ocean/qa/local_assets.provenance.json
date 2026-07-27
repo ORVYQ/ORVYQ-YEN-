@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "generated_at": "2026-07-27T00:21:57.749Z",
+  "records": [
+    {
+      "path": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
+      "provenance_path": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4.provenance.json",
+      "sha256": "f6f891ba720eac8de468ddb1bb672671339bd3e94f6b29da7977de8ae9bc8740",
+      "size_bytes": 7511680,
+      "provider": "pexels",
+      "provider_asset_id": "36033492",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+      "provenance_path": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4.provenance.json",
+      "sha256": "efcbb4538d8fe9f484ce17323f1e440f58b57f85bc0281c0ecb61abae73cca6d",
+      "size_bytes": 19390212,
+      "provider": "pexels",
+      "provider_asset_id": "11088525",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
+      "provenance_path": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4.provenance.json",
+      "sha256": "d9bd8bbce9105ce0d3bcd98ef471e4766fdca6f6c6136eddeb84d1513565d099",
+      "size_bytes": 13328981,
+      "provider": "pexels",
+      "provider_asset_id": "32599784",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
+      "provenance_path": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4.provenance.json",
+      "sha256": "1d0d95d62cf1f9fc820beeb4d4cadb4491b59b2184107501b845ae087a26b0af",
+      "size_bytes": 3199865,
+      "provider": "pexels",
+      "provider_asset_id": "15660444",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4",
+      "provenance_path": "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4.provenance.json",
+      "sha256": "2b5f9fb6e67ec23818ff6874a18682654d2bc7b1aae0270036998858b6d6aa75",
+      "size_bytes": 3325512,
+      "provider": "pexels",
+      "provider_asset_id": "31751374",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
+      "provenance_path": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4.provenance.json",
+      "sha256": "ed284d584ca6f5adf73fff7ce9d8ffe6d1d6d2747fba1706935e1ca39715ef49",
+      "size_bytes": 3284774,
+      "provider": "pexels",
+      "provider_asset_id": "8987021",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_007_7051fd0f969c083415562212.mp4",
+      "provenance_path": "assets/footage/scene_007_7051fd0f969c083415562212.mp4.provenance.json",
+      "sha256": "b9f5cc1d9d90af9d0854ae86440e05d43771dd89dc9ca3ce1fb0ecb5978a945d",
+      "size_bytes": 6014932,
+      "provider": "pexels",
+      "provider_asset_id": "29941036",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
+      "provenance_path": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4.provenance.json",
+      "sha256": "e3db07eb3c3cc971434072f467511859bc0393f0e8e6b4b5686448f57f31fd4a",
+      "size_bytes": 1660238,
+      "provider": "pexels",
+      "provider_asset_id": "35440493",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+      "provenance_path": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4.provenance.json",
+      "sha256": "1d828e360d54cd56862b7cf82d1ae947839440995662b238a646596767755852",
+      "size_bytes": 8017882,
+      "provider": "pexels",
+      "provider_asset_id": "32305292",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+      "provenance_path": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4.provenance.json",
+      "sha256": "4754a12f6f4b8032bba94198ec77b9258c5357e118ebc63ae71855f804005e61",
+      "size_bytes": 15518661,
+      "provider": "pexels",
+      "provider_asset_id": "5121750",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
+      "provenance_path": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4.provenance.json",
+      "sha256": "5b98d6633c0b5c9429b9193bc9b2a136c053aa21655a19079a72b1d278aa8781",
+      "size_bytes": 18706424,
+      "provider": "pexels",
+      "provider_asset_id": "37420128",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4",
+      "provenance_path": "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4.provenance.json",
+      "sha256": "0628c5e59b475972d427a2af9e4faafb65d1720af8660194453f77de2e612b37",
+      "size_bytes": 10668843,
+      "provider": "pexels",
+      "provider_asset_id": "38506234",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4",
+      "provenance_path": "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4.provenance.json",
+      "sha256": "70700d91fbc806d8d16015094c4ef8fbf9af3ecd377da5975e632f37b8ae4746",
+      "size_bytes": 4736950,
+      "provider": "pexels",
+      "provider_asset_id": "34838666",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
+      "provenance_path": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4.provenance.json",
+      "sha256": "4f4af1c832f7c2ae755e622e3ca72d4bd732c352ebbd725b5721407341b7fb41",
+      "size_bytes": 3943414,
+      "provider": "pexels",
+      "provider_asset_id": "8061443",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+      "provenance_path": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4.provenance.json",
+      "sha256": "2bc3a0c930b21a37d374d6073e99604b1f326b7cdd79fc7353eb1218688466c7",
+      "size_bytes": 13958058,
+      "provider": "pexels",
+      "provider_asset_id": "32454078",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+      "provenance_path": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4.provenance.json",
+      "sha256": "ce43b7a296425378a0abe506a4720de45b92640e07c6803a951c5d8e9630bc83",
+      "size_bytes": 3619955,
+      "provider": "pexels",
+      "provider_asset_id": "8381452",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
+      "provenance_path": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4.provenance.json",
+      "sha256": "813a92dc887ad117fff4cb76ba36b2bced31fc6904f1997ee4c486357b59b97b",
+      "size_bytes": 14107428,
+      "provider": "pexels",
+      "provider_asset_id": "28668454",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
+      "provenance_path": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4.provenance.json",
+      "sha256": "d00af33906220dcf5cdd074ea27eda3a3c334e98ffd659daeac976ebbfc88c1e",
+      "size_bytes": 6032218,
+      "provider": "pexels",
+      "provider_asset_id": "29702750",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+      "provenance_path": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4.provenance.json",
+      "sha256": "39319223f89f6c3f99a6f36910ec649ccc81de492e9118db578cd313fdf1ff42",
+      "size_bytes": 20060837,
+      "provider": "pexels",
+      "provider_asset_id": "36123913",
+      "approved_for_final_edit": true
+    },
+    {
+      "path": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+      "provenance_path": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4.provenance.json",
+      "sha256": "9e980c6d6a54a276b23e193f5f2a0114b40bcf25e59ac3d61e4ac07650dd088f",
+      "size_bytes": 6873789,
+      "provider": "pexels",
+      "provider_asset_id": "15777850",
+      "approved_for_final_edit": true
+    }
+  ]
+}
