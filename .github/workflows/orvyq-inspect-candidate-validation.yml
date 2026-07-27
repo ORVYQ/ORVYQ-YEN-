@@ -32,4 +32,4 @@ jobs:
               end')"
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
 
-# Trigger revision: inspect validation after readiness fix.
+# Trigger revision: inspect after narration alignment workflow fix.
