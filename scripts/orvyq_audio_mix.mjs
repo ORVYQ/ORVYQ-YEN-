@@ -305,7 +305,14 @@ function mixFilter({ headSilenceSeconds, timelineNarrationDuration, outputDurati
     // covers the end card, up to the full candidate duration.
     `[0:a]adelay=${Math.round(headSilenceSeconds * 1000)}|${Math.round(headSilenceSeconds * 1000)},atrim=duration=${voiceContentDuration},apad=pad_dur=${Math.max(0, outputDuration - voiceContentDuration)},atrim=duration=${outputDuration},highpass=f=70,lowpass=f=15500,acompressor=threshold=-20dB:ratio=2.2:attack=15:release=180,asplit=2[voice_sc][voice_mix]`,
     `[1:a]atrim=duration=${outputDuration},loudnorm=I=-23:TP=-3:LRA=11,volume='${musicArc}':eval=frame,afade=t=in:st=0:d=2.2,afade=t=out:st=${fadeOut}:d=${fadeOutSeconds}[music]`,
-    "[music][voice_sc]sidechaincompress=threshold=0.028:ratio=4:attack=18:release=480[ducked]",
+    // Matches scripts/orvyq_dynamic_remix.mjs's own recalibrated ducking
+    // (see that file's dynamicFilter() comment for the full rationale):
+    // this candidate mix is overwritten by the dynamic remix before final
+    // use, but narration QA runs against it directly, so it should reflect
+    // the same shared ducking design rather than a stricter, independently
+    // drifted one (previous ratio=4 at a lower -31dBFS threshold ducked the
+    // music far harder than the dynamic remix's own pass ever did).
+    "[music][voice_sc]sidechaincompress=threshold=0.08:ratio=1.6:attack=25:release=350[ducked]",
     ...sfxFilters,
     `[voice_mix][ducked]${sfxLabels.join("")}amix=inputs=${2 + sfxLabels.length}:normalize=0,${normalizeFilter(loudnorm)},aformat=channel_layouts=stereo[mix]`
   ];

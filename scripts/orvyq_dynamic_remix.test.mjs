@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { gainForEnergy, musicGainExpression } from "./orvyq_dynamic_remix.mjs";
+import { gainForEnergy, musicGainExpression, minimumAcceptableLra } from "./orvyq_dynamic_remix.mjs";
 
 test("gainForEnergy creates a meaningful but bounded section-energy spread", () => {
   assert.ok(gainForEnergy(0.76) - gainForEnergy(0.28) >= 0.4);
@@ -16,4 +16,20 @@ test("musicGainExpression follows authored cue boundaries and ramps", () => {
   assert.match(expression, /between\(t,0,10\)/);
   assert.match(expression, /between\(t,10,20\)/);
   assert.match(expression, /\*\(t-0\)\/10/);
+});
+
+test("minimumAcceptableLra stays within the realistic 3.5-4.0 LU band regardless of source", () => {
+  assert.ok(minimumAcceptableLra(0) >= 3.5);
+  assert.ok(minimumAcceptableLra(0) <= 4.0);
+  assert.ok(minimumAcceptableLra(10) >= 3.5);
+  assert.ok(minimumAcceptableLra(10) <= 4.0);
+});
+
+test("minimumAcceptableLra tracks the real source narration measurement (regression: Project 002's raw narration measured 4.30 LU)", () => {
+  assert.equal(minimumAcceptableLra(4.3), 3.8);
+});
+
+test("minimumAcceptableLra falls back to the realistic floor when the source measurement is missing or invalid", () => {
+  assert.equal(minimumAcceptableLra(NaN), 3.5);
+  assert.equal(minimumAcceptableLra(undefined), 3.5);
 });
