@@ -22,7 +22,7 @@ jobs:
         run: |
           set -euo pipefail
           repo="${{ github.repository }}"
-          run_id="30253665327"
+          run_id="30254157668"
           jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
           job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
           gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
@@ -30,11 +30,11 @@ jobs:
           from pathlib import Path
           import re
           lines=Path('job.log').read_text(errors='replace').splitlines()
-          target='Resolve the canonical editorial pause plan'
+          target='Build the canonical full production shot list from real data'
           hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
           if hits:
               start=hits[-1]
-              selected=lines[start:min(len(lines),start+260)]
+              selected=lines[start:min(len(lines),start+300)]
           else:
               errs=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
               idx=errs[-1] if errs else len(lines)-1
@@ -43,7 +43,7 @@ jobs:
           for line in selected:
               line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
               cleaned.append(line[:1600])
-          out='run_id=30253665327\njob_id=89937263391\n\n'+'\n'.join(cleaned)
+          out='run_id=30254157668\njob_id=89938785533\n\n'+'\n'.join(cleaned)
           Path('diagnostics').mkdir(exist_ok=True)
           Path('diagnostics/latest-candidate-error.txt').write_text(out[:30000])
           PY
