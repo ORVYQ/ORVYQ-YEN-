@@ -20,6 +20,7 @@
   "full_production": {
     "status": "planned",
     "blocking_claim_ids": [],
+    "generated_total_duration_seconds": 1037.68,
     "sections": [
       {
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
