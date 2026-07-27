@@ -21,14 +21,12 @@
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "kind": "official_figure",
       "evidence_asset_ids": [
-        "EVID_JAMSTEC_2027_TRIAL_DIAGRAM",
-        "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM"
+        "EVID_JAMSTEC_2027_TRIAL_DIAGRAM"
       ],
       "image_assets": [
-        "assets/evidence/jamstec_2027_trial_diagram.png",
-        "assets/evidence/jamstec_mining_system_diagram.png"
+        "assets/evidence/jamstec_2027_trial_diagram.png"
       ],
-      "editorial_rationale": "Use JAMSTEC's own system and 2027 trial figures to distinguish a completed lift test from the still-planned integrated industrial chain."
+      "editorial_rationale": "Use JAMSTEC's own 2027 integrated-trial figure, the claim's direct visual subject. EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM is deliberately not reused here: CLM_001_JAPAN_TECHNICAL_MILESTONE already attaches it to both of its own native evidence slices, exactly reaching the film's 2-use-per-source cap on its own."
     },
     "CLM_006_MINING_CODE_UNFINISHED": {
       "kind": "split_documents",
