@@ -35,6 +35,8 @@ const REALISTIC_LRA_CEILING = 4.0;
 // measured LRA and what the finished mix can retain of it.
 const SOURCE_LRA_RETENTION_TOLERANCE = 0.5;
 const TARGET_LRA = 7;
+const VOICE_COMPRESSOR_THRESHOLD_DB = -6;
+const VOICE_COMPRESSOR_RATIO = 1.05;
 const clamp = (value, minimum, maximum) => Math.min(maximum, Math.max(minimum, value));
 const round3 = (value) => Math.round(Number(value) * 1000) / 1000;
 
@@ -123,10 +125,16 @@ function dynamicFilter({ metadata, cues, inputIndexByCue, loudnorm = null }) {
   const fadeStart = Math.max(0, outputDuration - fadeSeconds);
   const { filters: sfxFilters, labels: sfxLabels } = buildSfxGraph(metadata.sfx_placements || [], inputIndexByCue);
   return [
-    `[0:a]adelay=${Math.round(headSilence * 1000)}|${Math.round(headSilence * 1000)},apad,atrim=duration=${outputDuration},highpass=f=65,lowpass=f=16000,acompressor=threshold=-12dB:ratio=1.25:attack=24:release=280,asplit=2[voice_sc][voice_mix]`,
+    // The source narration already passed dedicated speech QA and carries the
+    // natural paragraph/chapter dynamics that make a long-form documentary
+    // breathe. The former -12 dB / 1.25:1 compressor flattened that verified
+    // performance enough that even a correctly authored music envelope could
+    // not clear the cinematic LRA floor. Keep only very light peak control
+    // here; final loudnorm still protects integrated loudness and true peak.
+    `[0:a]adelay=${Math.round(headSilence * 1000)}|${Math.round(headSilence * 1000)},apad,atrim=duration=${outputDuration},highpass=f=65,lowpass=f=16000,acompressor=threshold=${VOICE_COMPRESSOR_THRESHOLD_DB}dB:ratio=${VOICE_COMPRESSOR_RATIO}:attack=24:release=280,asplit=2[voice_sc][voice_mix]`,
     `[1:a]atrim=duration=${outputDuration},loudnorm=I=-23:TP=-3:LRA=11,volume='${musicGain}':eval=frame,afade=t=in:st=0:d=2.2,afade=t=out:st=${fadeStart}:d=${fadeSeconds}[music]`,
-    // Ducking design (task-directed recalibration, see MINIMUM_ACCEPTABLE_LRA
-    // comment below for the full rationale): the previous threshold=0.035
+    // Ducking design (task-directed recalibration, see minimumAcceptableLra()'s
+    // comment above for the full rationale): the previous threshold=0.035
     // (~-29dBFS) engaged on almost any narration signal, including quiet
     // dips between words, and ratio=2 pushed the music close to silence for
     // the ~98% of runtime narration occupies -- leaving the music energy
@@ -194,8 +202,8 @@ export async function buildDynamicRemix(projectId = PROJECT_ID) {
   metadata.narration_ducking = { ...metadata.narration_ducking, ratio: 1.6, release_ms: 350, per_section_under_speech_gain: sectionGains.map((section) => section.gain_start) };
   metadata.dynamic_remix = {
     profile: "aperture-cinematic-v1",
-    voice_compressor_threshold_db: -12,
-    voice_compressor_ratio: 1.25,
+    voice_compressor_threshold_db: VOICE_COMPRESSOR_THRESHOLD_DB,
+    voice_compressor_ratio: VOICE_COMPRESSOR_RATIO,
     sidechain_ratio: 1.6,
     sidechain_release_ms: 350,
     section_energy_gains: sectionGains,
