@@ -1,0 +1,33 @@
+name: Inspect ORVYQ Candidate Validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-inspect-candidate-validation.yml"
+
+permissions:
+  actions: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find latest Candidate Validation runs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          runs="$(gh api "repos/${{ github.repository }}/actions/runs?per_page=30")"
+          body="$(printf '%s' "$runs" | jq -r '
+            [.workflow_runs[] | select(.name == "ORVYQ Candidate Validation")][0:5]
+            | if length == 0 then
+                "No ORVYQ Candidate Validation runs found."
+              else
+                map("- run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, event=`" + .event + "`, head_sha=`" + .head_sha + "`, url=" + .html_url)
+                | "Latest ORVYQ Candidate Validation runs:\n" + join("\n")
+              end')"
+          gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
