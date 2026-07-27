@@ -154,6 +154,13 @@
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
+      },
+      "7": {
+        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
+        "trimInRatio": 0.35,
+        "motion": "drift_left",
+        "role": "context",
+        "reuse_reason": "The land-based open-pit mine's own reuse_reason (CLM_004) already names this claim as its intended second occurrence, keeping the film's land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -201,6 +208,13 @@
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context"
+      },
+      "5": {
+        "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
+        "trimInRatio": 0.4,
+        "motion": "hold",
+        "role": "human_context",
+        "reuse_reason": "The research-vessel crew introduced in the opening hook returns at a distinct trim window, grounding the industrial-trial biodiversity result in the same real, working expedition rather than a generic stock cutaway."
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
@@ -237,6 +251,13 @@
         "trimInRatio": 0.15,
         "motion": "hold",
         "role": "context"
+      },
+      "12": {
+        "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+        "trimInRatio": 0.15,
+        "motion": "pull",
+        "role": "human_context",
+        "reuse_reason": "The same contemplative human figure's own reuse_reason (CLM_012) already names the strategic-insurance beat as its intended second occurrence, marking the film's two most reflective moments without introducing a new, unrelated face."
       }
     }
   },
@@ -316,15 +337,6 @@
           "COST",
           "ECOLOGY"
         ]
-      },
-      "7": {
-        "mode": "illustrative",
-        "title": "MEASURED, NOT ASSUMED",
-        "subtitle": "The evidence is specific; the claim is bounded.",
-        "labels": [
-          "EVIDENCE",
-          "LIMITATION"
-        ]
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -381,17 +393,6 @@
         ]
       }
     },
-    "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY": {
-      "5": {
-        "mode": "illustrative",
-        "title": "MEASURED, NOT ASSUMED",
-        "subtitle": "The evidence is specific; the claim is bounded.",
-        "labels": [
-          "EVIDENCE",
-          "LIMITATION"
-        ]
-      }
-    },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
       "2": {
         "mode": "illustrative",
@@ -441,16 +442,6 @@
           "DISCHARGE",
           "MIDWATER FOOD WEB",
           "PLAUSIBLE RISK"
-        ]
-      },
-      "12": {
-        "mode": "illustrative",
-        "title": "AN UNUSED OPTION STILL CHANGES POWER",
-        "subtitle": "A state that can credibly claim another source negotiates differently from one that has none.",
-        "labels": [
-          "OPTION",
-          "LEVERAGE",
-          "NEGOTIATION"
         ]
       },
       "14": {
@@ -592,16 +583,6 @@
       }
     },
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
-      "3": {
-        "mode": "illustrative",
-        "title": "5,569 METRES BELOW THE PACIFIC",
-        "subtitle": "The Chikyu-operated system lifted rare-earth mud continuously through a pipe reaching that depth in Japan's Minamitorishima zone.",
-        "labels": [
-          "5,569 METRES",
-          "CONTINUOUS LIFT",
-          "CHIKYU SYSTEM"
-        ]
-      },
       "6": {
         "mode": "illustrative",
         "title": "A TECHNICAL RESULT, NOT A MINE",
@@ -610,26 +591,6 @@
           "LIFTED",
           "NOT COMMERCIAL",
           "NOT A MINE"
-        ]
-      },
-      "5": {
-        "mode": "illustrative",
-        "title": "TESTED ONCE, NOT YET PROVEN AT SCALE",
-        "subtitle": "JAMSTEC's hardware performed in a single controlled test near Minamitorishima.",
-        "labels": [
-          "SINGLE TEST",
-          "CONTROLLED CONDITIONS",
-          "NOT COMMERCIAL SCALE"
-        ]
-      },
-      "7": {
-        "mode": "illustrative",
-        "title": "INSIDE JAPAN'S OWN WATERS",
-        "subtitle": "The Minamitorishima mud lies within Japan's exclusive economic zone, not the international seabed.",
-        "labels": [
-          "MINAMITORISHIMA",
-          "JAPAN EEZ",
-          "NOT THE HIGH SEAS"
         ]
       }
     },

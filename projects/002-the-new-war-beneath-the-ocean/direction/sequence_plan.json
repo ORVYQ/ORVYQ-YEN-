@@ -16,7 +16,8 @@
         "assets/evidence/jamstec_mining_machine.jpg",
         "assets/evidence/jamstec_machine_on_seafloor.jpg"
       ],
-      "editorial_rationale": "Open the film's evidence body with the actual Chikyu test, moving from recovered material to system architecture and real seabed hardware rather than a generic diagram card."
+      "distinct_image_per_occurrence": true,
+      "editorial_rationale": "Open the film's evidence body with the actual Chikyu test, moving from recovered material to system architecture and real seabed hardware rather than a generic diagram card. This claim now keeps 5 native evidence slices (3 of its illustrative graphic cards were converted back to native evidence to reduce the film's pure-graphics fraction); cycling one distinct image per occurrence instead of the full 4-image set on every slice keeps each real JAMSTEC image within the film's 2-use-per-source cap while still showing all 4 in sequence."
     },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "kind": "official_figure",
