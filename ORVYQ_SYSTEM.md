@@ -240,29 +240,19 @@ Project: `002-the-new-war-beneath-the-ocean`
 
 Branch: `agent/002-deep-sea-cold-war`
 
-Current status:
+Current status (last verified 2026-07-27, mid full-film coverage/validation pass):
 
 - Research dossier, source catalog and claim map: complete
-- English narration and ElevenLabs-ready script: complete
-- Scene architecture and editorial direction: complete
-- Pexels credential: configured and verified
-- Contextual footage search/download/validation: successful
-- Initial acquisition defect: selector preferred unnecessary 4K files, producing approximately 4.8 GB
-- First repair: selector changed to compact 720p/1080p edit-ready windows
-- Compact acquisition result: 20 validated clips, approximately 175.4 MB total
-- Second defect: blanket MP4 Git LFS routing blocked repository push
-- Second repair: Project 002 compact footage explicitly removed from LFS filtering
-- Third defect: workflow incorrectly required `filter: unspecified`; Git correctly reported the explicit `-filter` rule as `filter: unset`
-- Third repair: workflow now rejects only `filter: lfs` and accepts both valid non-LFS states
-- Latest failed acquisition run: `30225243889`, failure confined to the commit-step attribute check
-- Corrective workflow commit: `1415abf10e18582d40eb891cf9988aa813602ebb`
-- Next acquisition retry: triggered by the corrective workflow commit; result pending at this entry
-- Official evidence acquisition: configured; end-to-end materialisation still pending
-- Music acquisition: pending
-- User-supplied `final_voice.mp3`: pending
-- Candidate Validation: not yet eligible
+- English narration (~2,216 words) and ElevenLabs-ready script: complete
+- `final_voice.mp3` (~16m35s): supplied by the user, present at `assets/audio/final_voice.mp3`
+- Contextual footage acquisition: PASS (run `30227021870`) — 20 licensed compact Pexels clips, runtime/provenance manifests committed
+- Official evidence acquisition: PASS (run `30228891705`) — JAMSTEC and ISA official evidence assets present and marked ready
+- Full-film semantic visual coverage: hand-authored and verified. Every new footage break was assigned only after the real clip content was frame-inspected (contact sheets, all 20 clips) and matched to the claim it interrupts; break placement is computed from the real per-slice durations in the last verified narration alignment (run `30257567458`), not guessed. `node scripts/orvyq_full_production_plan.mjs` now returns `ok:true` (147 shots, 1037.68s) — run `30269505202` — with zero unresolved creative-coverage gaps
+- Reusable defects found and fixed while reaching that point: `orvyq_full_production_plan.mjs`'s graphic-recap `maxSeconds` shrink logic threw against fixed/near-full slice neighbors (two real failures, both root-caused and fixed by only capping cards with real donor room); `resolved_pause_plan.schema.json` rejected the real `question` field `orvyq-pause-resolver.mjs` has always written; `editorial_pauses.schema.json` required a positive legacy `proof_duration_seconds` even for a project built entirely after proof's retirement; `orvyq-music-acquisition.yml` was hardcoded to project 001 despite its underlying script already being project-agnostic
+- Music: Project 002 had no `music_cue_sheet.json` at all (candidate validation had never previously reached that stage). Authored one hand-built from the shared, already-licensed `music_library/registry.json` (`sb_undertow`, Scott Buckley, CC BY 4.0) as a single tonal world across all seven editorial sections, matching `config/music_acquisition.json`'s own creative direction — no new external fetch required
+- Candidate Validation: in progress on this entry — do not treat as passed until a specific run ID is recorded here with conclusion `success`
 - Full-Length Review: not started
-- Final Encode: forbidden until explicit approval
+- Final Encode: forbidden until explicit user approval of a completed Full-Length Review
 
 ## 15. Change log
 
@@ -283,3 +273,10 @@ Current status:
 - Recorded the blanket Git LFS routing defect and project-specific plain-Git exception.
 - Recorded the `unset` versus `unspecified` attribute-validation defect.
 - Changed validation to reject only an active LFS filter.
+
+### 2026-07-27 — Semantic visual relevance rule and full-film coverage authoring
+
+- A prior coverage-authoring attempt closed the film's 15s uninterrupted-evidence-run gaps by index-matching footage (`full_footage_pool[15]`, `[16]`, …) to claims without checking real clip content, and by forcing `span=2` footage placements that overran a clip's real duration (`run 30261751903` failure). Rejected as exactly the blind assignment this contract forbids.
+- Added the permanent **semantic visual relevance rule** (section 6): every visual must directly support the narrated word/sentence/claim/event, blind index/keyword/duration-gap assignment is forbidden, and an unfitting asset must never be reused to pass QA — acquire a new licensed asset with a narration-specific query, or author a source-derived graphic instead.
+- Re-authored Project 002's full-film coverage by frame-inspecting all 20 licensed clips (contact sheets) against their real content, cross-referencing each of the 15 claims' real narration text and evidence requirements, then computing exact real per-slice durations from the last verified alignment (run `30257567458`) to place each of the 54 required breaks precisely instead of guessing spacing. `orvyq_full_production_plan.mjs` now passes with zero coverage gaps (run `30269505202`).
+- Fixed reusable defects this authoring pass exposed: `shrinkGraphicBreakSliceToMax` threw on a graphic card with no real donor-neighbor capacity (two distinct real cases); `resolved_pause_plan.schema.json` and `editorial_pauses.schema.json` were both out of date against real script output/data. Authored Project 002's first-ever `music_cue_sheet.json` from the shared licensed registry, and parameterized `orvyq-music-acquisition.yml` (previously hardcoded to project 001) by `project_id`.
