@@ -46,7 +46,13 @@ const round3 = (value) => Math.round(Number(value) * 1000) / 1000;
 
 export function minimumAcceptableLra(sourceNarrationLra) {
   if (!Number.isFinite(sourceNarrationLra)) return REALISTIC_LRA_FLOOR;
-  return clamp(sourceNarrationLra - SOURCE_LRA_RETENTION_TOLERANCE, REALISTIC_LRA_FLOOR, REALISTIC_LRA_CEILING);
+  // round3 before clamping: floating-point subtraction (e.g. 4.4 - 0.8 in
+  // JS yields 3.6000000000000005, not 3.6) can make an otherwise-passing
+  // mix fail the `< requiredLra` check by a fraction of a rounding error
+  // that ffmpeg's own 2-decimal LRA reporting can never actually clear.
+  // Regression: run 30292647441 measured 3.6 LU against an unrounded
+  // requirement of 3.6000000000000005 LU and failed on this alone.
+  return clamp(round3(sourceNarrationLra - SOURCE_LRA_RETENTION_TOLERANCE), REALISTIC_LRA_FLOOR, REALISTIC_LRA_CEILING);
 }
 
 export function gainForEnergy(energy) {

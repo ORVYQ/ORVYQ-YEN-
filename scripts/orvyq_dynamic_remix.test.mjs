@@ -34,3 +34,8 @@ test("minimumAcceptableLra falls back to the realistic floor when the source mea
   assert.equal(minimumAcceptableLra(NaN), 3.5);
   assert.equal(minimumAcceptableLra(undefined), 3.5);
 });
+
+test("minimumAcceptableLra rounds cleanly so an exact-match mix isn't rejected by floating-point noise (regression: run 30292647441, 4.4 - 0.8 === 3.6000000000000005 in raw JS)", () => {
+  assert.equal(4.4 - 0.8 === 3.6, false);
+  assert.equal(minimumAcceptableLra(4.4), 3.6);
+});
