@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "ready",
-  "generation_policy": "evidence-claim opening context; every additional footage/graphic break hand-authored from real, frame-verified clip content matched to the claim's own meaning (no index-based assignment, no artificial span stretching); 15s uninterrupted-evidence cap satisfied via real per-slice durations computed from the verified narration alignment",
+  "generation_policy": "evidence-claim opening context; every additional footage/graphic break hand-authored from real, frame-verified clip content matched to the claim meaning; CLM_004 preserves at least one real JAMSTEC official-figure slice; no index-based assignment, no artificial span stretching; 15s uninterrupted-evidence cap preserved",
   "footage_assignments": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
       "4": {
@@ -274,13 +274,14 @@
           "UNVERIFIED AT SCALE"
         ]
       },
-      "1": {
+      "7": {
         "mode": "illustrative",
-        "title": "A LARGER TRIAL, NOT YET RUN",
-        "subtitle": "The 2026 test proved lift alone; a full production-chain trial is still ahead.",
+        "title": "2027 TRIAL, THEN ASSESSMENT",
+        "subtitle": "A larger production-chain trial precedes any technical and economic verdict.",
         "labels": [
-          "2026: LIFT TEST",
-          "2027: PRODUCTION-CHAIN TRIAL"
+          "2027 TRIAL",
+          "TECHNICAL REVIEW",
+          "ECONOMIC REVIEW"
         ]
       },
       "3": {
