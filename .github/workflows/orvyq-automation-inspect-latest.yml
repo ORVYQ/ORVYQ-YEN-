@@ -28,4 +28,4 @@ jobs:
               else map("- " + .name + " run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, head_sha=`" + .head_sha + "`, url=" + .html_url) | "Latest ORVYQ coverage/validation/review runs:\n" + join("\n") end')"
           gh api "repos/${{ github.repository }}/issues/3/comments" -f body="$body"
 
-# trigger 2026-07-27T14:18+03:00
+# trigger 2026-07-27T19:15+03:00
