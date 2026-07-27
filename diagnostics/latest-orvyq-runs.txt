@@ -1,4 +1,7 @@
 Latest ORVYQ coverage/validation/review runs:
+- ORVYQ Candidate Validation run `30291975402`: status=`in_progress`, conclusion=`null`, head_sha=`388e246e86d30bf99f886f61385532b869aba393`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30291975402
+- ORVYQ Candidate Validation run `30289975045`: status=`completed`, conclusion=`failure`, head_sha=`8b01a65d8ba3b9fc9a23e81fb5850c8df5982dfb`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30289975045
+- ORVYQ Candidate Validation run `30288667166`: status=`completed`, conclusion=`failure`, head_sha=`a48d6d423d8f8e6168491944e44e134dc82c5732`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30288667166
 - ORVYQ Candidate Validation run `30284117956`: status=`completed`, conclusion=`failure`, head_sha=`5e8a1c69dcf385d71207f0e7e9b9529217ec559b`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30284117956
 - ORVYQ Candidate Validation run `30281933177`: status=`completed`, conclusion=`failure`, head_sha=`e6828288bf7d24091d05f0984a006f328e1b0780`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30281933177
 - ORVYQ Candidate Validation run `30279371388`: status=`completed`, conclusion=`failure`, head_sha=`a78946d5474f6dd90acfb2c535444c753d9f777c`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30279371388
@@ -10,7 +13,3 @@ Latest ORVYQ coverage/validation/review runs:
 - ORVYQ Candidate Validation run `30271825454`: status=`completed`, conclusion=`failure`, head_sha=`f95c36dc9509e6612fade1455931ebd1e82ac31e`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30271825454
 - ORVYQ Candidate Validation run `30270726995`: status=`completed`, conclusion=`failure`, head_sha=`0109c09b9a73f8de8e214532c0c76a5673af2b50`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30270726995
 - ORVYQ Candidate Validation run `30270486806`: status=`completed`, conclusion=`failure`, head_sha=`84986006a167ae36ced6fa902d2e95aae5b86c40`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30270486806
-- ORVYQ Candidate Validation run `30269543156`: status=`completed`, conclusion=`failure`, head_sha=`70a104c6fd1412f8b5517e1160d59b6509509f97`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30269543156
-- ORVYQ Project 002 Author Creative Coverage run `30269505202`: status=`completed`, conclusion=`success`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30269505202
-- ORVYQ Project 002 Author Creative Coverage run `30268968439`: status=`completed`, conclusion=`failure`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30268968439
-- ORVYQ Project 002 Author Creative Coverage run `30268733973`: status=`completed`, conclusion=`failure`, head_sha=`3db081533f0db87efd469b08a16261b85edcd981`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30268733973
