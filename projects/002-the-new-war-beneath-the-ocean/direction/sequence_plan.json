@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "evidence_kind_overrides": {
+    "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
+      "kind": "image_sequence",
+      "evidence_asset_ids": [
+        "EVID_JAMSTEC_FIRST_MUD_SAMPLE",
+        "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM",
+        "EVID_JAMSTEC_MINING_MACHINE",
+        "EVID_JAMSTEC_MACHINE_ON_SEAFLOOR"
+      ],
+      "image_assets": [
+        "assets/evidence/jamstec_first_mud_sample.jpg",
+        "assets/evidence/jamstec_mining_system_diagram.png",
+        "assets/evidence/jamstec_mining_machine.jpg",
+        "assets/evidence/jamstec_machine_on_seafloor.jpg"
+      ],
+      "editorial_rationale": "Open the film's evidence body with the actual Chikyu test, moving from recovered material to system architecture and real seabed hardware rather than a generic diagram card."
+    },
+    "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
+      "kind": "official_figure",
+      "evidence_asset_ids": [
+        "EVID_JAMSTEC_2027_TRIAL_DIAGRAM",
+        "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM"
+      ],
+      "image_assets": [
+        "assets/evidence/jamstec_2027_trial_diagram.png",
+        "assets/evidence/jamstec_mining_system_diagram.png"
+      ],
+      "editorial_rationale": "Use JAMSTEC's own system and 2027 trial figures to distinguish a completed lift test from the still-planned integrated industrial chain."
+    },
+    "CLM_006_MINING_CODE_UNFINISHED": {
+      "kind": "split_documents",
+      "evidence_asset_ids": [
+        "EVID_ISA_REV3_COVER",
+        "EVID_ISA_OUTSTANDING_ISSUES_COVER"
+      ],
+      "image_assets": [
+        "assets/evidence/isa_exploitation_regulations_rev3_cover.png",
+        "assets/evidence/isa_outstanding_issues_cover.png"
+      ],
+      "editorial_rationale": "Place the 335-page revised code text beside the dated outstanding-issues document so the legal incompleteness is visible as primary evidence, not asserted through typography alone."
+    }
+  }
+}
