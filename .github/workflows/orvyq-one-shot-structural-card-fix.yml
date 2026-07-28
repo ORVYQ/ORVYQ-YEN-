@@ -1,6 +1,10 @@
 name: ORVYQ One-Shot Structural Card Fix
 
 on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - ".github/workflows/orvyq-one-shot-structural-card-fix.yml"
   push:
     branches:
       - agent/002-deep-sea-cold-war
@@ -16,6 +20,7 @@ concurrency:
 
 jobs:
   fix:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout current Project 002 branch
