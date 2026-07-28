@@ -495,8 +495,7 @@
         "labels": [
           "PLANNED",
           "NOT GUARANTEED"
-        ],
-        "maxSeconds": 6
+        ]
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
