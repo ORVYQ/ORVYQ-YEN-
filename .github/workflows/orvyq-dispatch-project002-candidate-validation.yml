@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched on latest branch head \`7396b99\` after semantic footage reuse rationale, full music continuity, and generic graphic-card ratio corrections. No quality threshold was weakened."
+            -f body="Project 002 Candidate Validation re-dispatched on latest branch head \`3426707\` after converting CLM_015 slice 34 from contextual footage to an honestly labelled illustrative graphic. This preserves the 15-second evidence-run cap while correcting the 46.1%-vs-45% contextual-body-footage overage. No quality threshold was weakened."
 
-# Trigger revision: 2026-07-28T05:15+03:00; latest Project 002 quality head 7396b999141fd2695eb54cd3c79cce7ec9bc8a13.
+# Trigger revision: 2026-07-28T12:15+03:00; latest Project 002 quality head 3426707ff829805b63fbd0841183eca72dc3e1aa.
