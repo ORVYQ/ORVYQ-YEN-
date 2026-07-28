@@ -55,7 +55,8 @@
     {
       "evidence_asset_id": "EVID_JAMSTEC_CHIKYU_DEPARTURE",
       "claim_ids": [
-        "CLM_001_JAPAN_TECHNICAL_MILESTONE"
+        "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+        "CLM_004_JAPAN_INDUSTRIAL_TIMELINE"
       ],
       "source_ids": [
         "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"
