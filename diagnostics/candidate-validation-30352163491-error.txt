@@ -1,0 +1,220 @@
+2026-07-28T10:49:54.1453495Z   duration_ms: 1.463337
+2026-07-28T10:49:54.1453828Z   ...
+2026-07-28T10:49:54.1454330Z # Subtest: music acquisition rejects project mismatch and duplicate cue mappings
+2026-07-28T10:49:54.1455002Z ok 101 - music acquisition rejects project mismatch and duplicate cue mappings
+2026-07-28T10:49:54.1455483Z   ---
+2026-07-28T10:49:54.1455745Z   duration_ms: 0.429047
+2026-07-28T10:49:54.1456027Z   ...
+2026-07-28T10:49:54.1456488Z # Subtest: attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457340Z ok 102 - attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457738Z   ---
+2026-07-28T10:49:54.1458028Z   duration_ms: 0.224329
+2026-07-28T10:49:54.1458297Z   ...
+2026-07-28T10:49:54.1458772Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1463344Z # Subtest: downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464133Z ok 103 - downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464567Z   ---
+2026-07-28T10:49:54.1464780Z   duration_ms: 1.295395
+2026-07-28T10:49:54.1464997Z   ...
+2026-07-28T10:49:54.1483258Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1516477Z # {"attempt":1,"max_attempts":1,"error":"Music download failed: HTTP 503 (cause: none reported)"}
+2026-07-28T10:49:54.1456027Z   ...
+2026-07-28T10:49:54.1456488Z # Subtest: attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457340Z ok 102 - attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457738Z   ---
+2026-07-28T10:49:54.1458028Z   duration_ms: 0.224329
+2026-07-28T10:49:54.1458297Z   ...
+2026-07-28T10:49:54.1458772Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1463344Z # Subtest: downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464133Z ok 103 - downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464567Z   ---
+2026-07-28T10:49:54.1464780Z   duration_ms: 1.295395
+2026-07-28T10:49:54.1464997Z   ...
+2026-07-28T10:49:54.1483258Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1516477Z # {"attempt":1,"max_attempts":1,"error":"Music download failed: HTTP 503 (cause: none reported)"}
+2026-07-28T10:49:54.1522190Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523009Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523691Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524465Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524935Z   ---
+2026-07-28T10:49:54.1525144Z   duration_ms: 7.463273
+2026-07-28T10:49:54.1456488Z # Subtest: attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457340Z ok 102 - attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457738Z   ---
+2026-07-28T10:49:54.1458028Z   duration_ms: 0.224329
+2026-07-28T10:49:54.1458297Z   ...
+2026-07-28T10:49:54.1458772Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1463344Z # Subtest: downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464133Z ok 103 - downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464567Z   ---
+2026-07-28T10:49:54.1464780Z   duration_ms: 1.295395
+2026-07-28T10:49:54.1464997Z   ...
+2026-07-28T10:49:54.1483258Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1516477Z # {"attempt":1,"max_attempts":1,"error":"Music download failed: HTTP 503 (cause: none reported)"}
+2026-07-28T10:49:54.1522190Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523009Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523691Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524465Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524935Z   ---
+2026-07-28T10:49:54.1525144Z   duration_ms: 7.463273
+2026-07-28T10:49:54.1525373Z   ...
+2026-07-28T10:49:54.1457340Z ok 102 - attribution is generated from the project's template and metadata
+2026-07-28T10:49:54.1457738Z   ---
+2026-07-28T10:49:54.1458028Z   duration_ms: 0.224329
+2026-07-28T10:49:54.1458297Z   ...
+2026-07-28T10:49:54.1458772Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1463344Z # Subtest: downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464133Z ok 103 - downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464567Z   ---
+2026-07-28T10:49:54.1464780Z   duration_ms: 1.295395
+2026-07-28T10:49:54.1464997Z   ...
+2026-07-28T10:49:54.1483258Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1516477Z # {"attempt":1,"max_attempts":1,"error":"Music download failed: HTTP 503 (cause: none reported)"}
+2026-07-28T10:49:54.1522190Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523009Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523691Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524465Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524935Z   ---
+2026-07-28T10:49:54.1525144Z   duration_ms: 7.463273
+2026-07-28T10:49:54.1525373Z   ...
+2026-07-28T10:49:54.1525802Z # Subtest: downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1457738Z   ---
+2026-07-28T10:49:54.1458028Z   duration_ms: 0.224329
+2026-07-28T10:49:54.1458297Z   ...
+2026-07-28T10:49:54.1458772Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1463344Z # Subtest: downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464133Z ok 103 - downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T10:49:54.1464567Z   ---
+2026-07-28T10:49:54.1464780Z   duration_ms: 1.295395
+2026-07-28T10:49:54.1464997Z   ...
+2026-07-28T10:49:54.1483258Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T10:49:54.1516477Z # {"attempt":1,"max_attempts":1,"error":"Music download failed: HTTP 503 (cause: none reported)"}
+2026-07-28T10:49:54.1522190Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523009Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523691Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524465Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524935Z   ---
+2026-07-28T10:49:54.1525144Z   duration_ms: 7.463273
+2026-07-28T10:49:54.1525373Z   ...
+2026-07-28T10:49:54.1525802Z # Subtest: downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526559Z ok 105 - downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1522190Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523009Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523691Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524465Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524935Z   ---
+2026-07-28T10:49:54.1525144Z   duration_ms: 7.463273
+2026-07-28T10:49:54.1525373Z   ...
+2026-07-28T10:49:54.1525802Z # Subtest: downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526559Z ok 105 - downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526975Z   ---
+2026-07-28T10:49:54.1527192Z   duration_ms: 0.938362
+2026-07-28T10:49:54.1527400Z   ...
+2026-07-28T10:49:54.1537707Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1549376Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1550368Z # Subtest: downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1551351Z ok 106 - downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1552007Z   ---
+2026-07-28T10:49:54.1552704Z   duration_ms: 2.840576
+2026-07-28T10:49:54.1553000Z   ...
+2026-07-28T10:49:54.1553421Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1523009Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1523691Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524465Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T10:49:54.1524935Z   ---
+2026-07-28T10:49:54.1525144Z   duration_ms: 7.463273
+2026-07-28T10:49:54.1525373Z   ...
+2026-07-28T10:49:54.1525802Z # Subtest: downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526559Z ok 105 - downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526975Z   ---
+2026-07-28T10:49:54.1527192Z   duration_ms: 0.938362
+2026-07-28T10:49:54.1527400Z   ...
+2026-07-28T10:49:54.1537707Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1549376Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1550368Z # Subtest: downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1551351Z ok 106 - downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1552007Z   ---
+2026-07-28T10:49:54.1552704Z   duration_ms: 2.840576
+2026-07-28T10:49:54.1553000Z   ...
+2026-07-28T10:49:54.1553421Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1560704Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1525802Z # Subtest: downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526559Z ok 105 - downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526975Z   ---
+2026-07-28T10:49:54.1527192Z   duration_ms: 0.938362
+2026-07-28T10:49:54.1527400Z   ...
+2026-07-28T10:49:54.1537707Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1549376Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1550368Z # Subtest: downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1551351Z ok 106 - downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1552007Z   ---
+2026-07-28T10:49:54.1552704Z   duration_ms: 2.840576
+2026-07-28T10:49:54.1553000Z   ...
+2026-07-28T10:49:54.1553421Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1560704Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1568093Z # Subtest: downloadWithRetry does not retry beyond the configured attempts or invent a fallback source
+2026-07-28T10:49:54.1575072Z ok 107 - downloadWithRetry does not retry beyond the configured attempts or invent a fallback source
+2026-07-28T10:49:54.1575657Z   ---
+2026-07-28T10:49:54.1575926Z   duration_ms: 2.791125
+2026-07-28T10:49:54.1576204Z   ...
+2026-07-28T10:49:54.2199001Z # Subtest: computeCanonicalFrozenCandidate is deterministic: same inputs produce the same candidate_hash and render_bundle_hash
+2026-07-28T10:49:54.1526559Z ok 105 - downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T10:49:54.1526975Z   ---
+2026-07-28T10:49:54.1527192Z   duration_ms: 0.938362
+2026-07-28T10:49:54.1527400Z   ...
+2026-07-28T10:49:54.1537707Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T10:49:54.1549376Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1550368Z # Subtest: downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1551351Z ok 106 - downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T10:49:54.1552007Z   ---
+2026-07-28T10:49:54.1552704Z   duration_ms: 2.840576
+2026-07-28T10:49:54.1553000Z   ...
+2026-07-28T10:49:54.1553421Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1560704Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T10:49:54.1568093Z # Subtest: downloadWithRetry does not retry beyond the configured attempts or invent a fallback source
+2026-07-28T10:49:54.1575072Z ok 107 - downloadWithRetry does not retry beyond the configured attempts or invent a fallback source
+2026-07-28T10:49:54.1575657Z   ---
+2026-07-28T10:49:54.1575926Z   duration_ms: 2.791125
+2026-07-28T10:49:54.1576204Z   ...
+2026-07-28T10:49:54.2199001Z # Subtest: computeCanonicalFrozenCandidate is deterministic: same inputs produce the same candidate_hash and render_bundle_hash
+2026-07-28T10:49:54.2217934Z ok 108 - computeCanonicalFrozenCandidate is deterministic: same inputs produce the same candidate_hash and render_bundle_hash
+2026-07-28T10:50:08.5887863Z ##[group]Run node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+2026-07-28T10:50:08.5888539Z [36;1mnode scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"[0m
+2026-07-28T10:50:08.5919320Z shell: /usr/bin/bash -e {0}
+2026-07-28T10:50:08.5919675Z env:
+2026-07-28T10:50:08.5919965Z   PROJECT_ID: 002-the-new-war-beneath-the-ocean
+2026-07-28T10:50:08.5920399Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5920882Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-07-28T10:50:08.5921375Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5921826Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5922486Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5923109Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-07-28T10:50:08.5923482Z ##[endgroup]
+2026-07-28T10:50:08.6552180Z {"ok":false,"error":"CLM_010_SCARCITY_IS_MINERAL_SPECIFIC: cannot shrink its graphic recap slice 2 to 7s -- neighboring capacity 0.14999999999997726s is below the required 0.8700000000000045s under the 8s per-shot cap (leftFixed=false, rightFixed=false)"}
+2026-07-28T10:50:08.6628246Z ##[error]Process completed with exit code 1.
+2026-07-28T10:50:08.6671333Z ##[group]Run node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
+2026-07-28T10:50:08.6672077Z [36;1mnode scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"[0m
+2026-07-28T10:50:08.6692928Z shell: /usr/bin/bash -e {0}
+2026-07-28T10:50:08.6693142Z env:
+2026-07-28T10:50:08.6693340Z   PROJECT_ID: 002-the-new-war-beneath-the-ocean
+2026-07-28T10:50:08.6693662Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5888539Z [36;1mnode scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"[0m
+2026-07-28T10:50:08.5919320Z shell: /usr/bin/bash -e {0}
+2026-07-28T10:50:08.5919675Z env:
+2026-07-28T10:50:08.5919965Z   PROJECT_ID: 002-the-new-war-beneath-the-ocean
+2026-07-28T10:50:08.5920399Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5920882Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
+2026-07-28T10:50:08.5921375Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5921826Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5922486Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.5923109Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib
+2026-07-28T10:50:08.5923482Z ##[endgroup]
+2026-07-28T10:50:08.6552180Z {"ok":false,"error":"CLM_010_SCARCITY_IS_MINERAL_SPECIFIC: cannot shrink its graphic recap slice 2 to 7s -- neighboring capacity 0.14999999999997726s is below the required 0.8700000000000045s under the 8s per-shot cap (leftFixed=false, rightFixed=false)"}
+2026-07-28T10:50:08.6628246Z ##[error]Process completed with exit code 1.
+2026-07-28T10:50:08.6671333Z ##[group]Run node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
+2026-07-28T10:50:08.6672077Z [36;1mnode scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"[0m
+2026-07-28T10:50:08.6692928Z shell: /usr/bin/bash -e {0}
+2026-07-28T10:50:08.6693142Z env:
+2026-07-28T10:50:08.6693340Z   PROJECT_ID: 002-the-new-war-beneath-the-ocean
+2026-07-28T10:50:08.6693662Z   pythonLocation: /opt/hostedtoolcache/Python/3.11.15/x64
+2026-07-28T10:50:08.6693999Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.11.15/x64/lib/pkgconfig
