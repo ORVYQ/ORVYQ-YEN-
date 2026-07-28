@@ -87,3 +87,5 @@ jobs:
             -f project_id=002-the-new-war-beneath-the-ocean
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 Candidate Validation re-dispatched after replacing the infeasible CLM_008 5-second recap cap with a validated 6.5-second cap. The whole-film generic-card budget remains below the 8% ceiling; no quality gate was weakened."
+
+# trigger 2026-07-28T13:17+03:00
