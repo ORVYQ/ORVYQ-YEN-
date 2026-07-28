@@ -36,4 +36,4 @@ jobs:
           git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T07:12+03:00 after semantic coverage-gap closer was added.
+# trigger 2026-07-28T07:18+03:00 after final semantic coverage retry.
