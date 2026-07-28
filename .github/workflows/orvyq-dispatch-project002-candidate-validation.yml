@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched on branch head \`5b1937a\` after removing the infeasible CLM_015 slice 34 recap compression. The shot keeps its natural duration; no footage, evidence, semantic placement or quality threshold was weakened."
+            -f body="Project 002 Candidate Validation re-dispatched on branch head \`514aa06\` after testing additional real capacity in the CLM_014 authored cards. The 8% generic-card quality ceiling remains unchanged."
 
-# Trigger revision: 2026-07-28T20:08+03:00; Project 002 head 5b1937a6d9d9cfe81f4097fa7f63bd0095657b0f.
+# Trigger revision: 2026-07-28T21:15+03:00; Project 002 head 514aa06d71306d80611f94f497a148d7d8bec9c2.
