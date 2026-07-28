@@ -1042,6 +1042,12 @@ export async function buildFullProductionPlan(projectId) {
   const rawShots = [];
   let currentSection = null;
   let isFirstWindowOverall = true;
+  // Section 1 keeps its dedicated full-screen title because it is also a
+  // deliberate break between two opening evidence shots. Later section
+  // titles are carried as overlays on their own source-backed evidence
+  // transition shots. This preserves the exact timeline and section rhythm
+  // without spending generic full-screen-card or contextual-footage budget.
+  let pendingSectionOverlay = null;
   for (const [windowIndex, window] of windows.entries()) {
     const isNewSection = window.claim.section_id !== currentSection;
     // The film's real opening is the licensed motion hook (see below), which
@@ -1053,32 +1059,38 @@ export async function buildFullProductionPlan(projectId) {
     const deferTitleCard = isNewSection && isFirstWindowOverall;
     let titleCardShot = null;
     if (isNewSection) {
+      if (pendingSectionOverlay)
+        throw new Error(`${currentSection}: section-title overlay was not consumed before ${window.claim.section_id}`);
       currentSection = window.claim.section_id;
       const section = sections.find((s) => s.section_id === currentSection);
-      titleCardShot = {
-        kind: "graphic",
-        section_id: currentSection,
-        claim_id: sectionFirstClaim.get(currentSection),
-        start: window.coverStart,
-        end: window.coverStart + TITLE_CARD_SECONDS,
-        // mode: "brand" routes this through OrvyqGraphic.tsx's clean,
-        // centered title layout explicitly -- without it, "section_title"
-        // is not in modeFor()'s spec.type whitelist and falls through to
-        // the "statement" mode's giant-label fallback (the exact,
-        // confirmed mechanism behind the rejected review's repeated giant
-        // "CONTEXT" cards).
-        graphic: { type: "section_title", mode: "brand", title: titleCase(currentSection), subtitle: section?.visual_strategy || null },
-        role: "graphic"
-      };
-      // Whether pushed now or deferred until after the first evidence
-      // slice, the title card always claims TITLE_CARD_SECONDS out of this
-      // section's own coverage window (real narration keeps playing under
-      // it) -- shrinking coverStart here, before slicing, keeps the total
-      // raw-shot duration sum equal to the real narration length either way.
-      // Pause matching is unaffected either way: graphic shots are always
-      // skipped by the pause-insertion pass below regardless of their own
-      // start/end or array position.
-      if (!deferTitleCard) rawShots.push(titleCardShot);
+      const sectionTitle = titleCase(currentSection);
+      if (deferTitleCard) {
+        titleCardShot = {
+          kind: "graphic",
+          section_id: currentSection,
+          claim_id: sectionFirstClaim.get(currentSection),
+          start: window.coverStart,
+          end: window.coverStart + TITLE_CARD_SECONDS,
+          graphic: { type: "section_title", mode: "brand", title: sectionTitle, subtitle: section?.visual_strategy || null },
+          role: "graphic"
+        };
+      } else {
+        rawShots.push({
+          kind: "evidence",
+          evidenceKind: "boundary",
+          section_id: currentSection,
+          claim_id: sectionFirstClaim.get(currentSection),
+          start: window.coverStart,
+          end: window.coverStart + TITLE_CARD_SECONDS,
+          role: "evidence",
+          overlay: {
+            type: "boundary",
+            eyebrow: `SECTION ${String(sections.findIndex((candidate) => candidate.section_id === currentSection) + 1).padStart(2, "0")}`,
+            title: sectionTitle,
+            font_px: 36
+          }
+        });
+      }
       window.coverStart += TITLE_CARD_SECONDS;
     }
     const slices = sliceClaimWindow(window.claim, window.coverStart, window.coverEnd, maxShotSeconds, tokens, pauseAnchorTimes, evidenceKindOverrides);
@@ -1273,7 +1285,8 @@ export async function buildFullProductionPlan(projectId) {
             sound_cue: shot.emphasis.sound_cue
           }
         : {}),
-      ...(shot.dissolveIn ? { transition_in: "dissolve" } : {})
+      ...(shot.dissolveIn ? { transition_in: "dissolve" } : {}),
+      ...(shot.overlay ? { overlay: shot.overlay } : {})
     };
     if (shot.kind === "graphic") {
       return { ...base, asset_type: "graphic", graphic: shot.graphic, visual_role: "graphic" };

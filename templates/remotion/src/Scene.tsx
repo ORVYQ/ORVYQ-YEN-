@@ -175,7 +175,7 @@ export const Scene: React.FC<SceneProps> = ({
           />
         )}
       </AbsoluteFill>
-      {assetType === "footage" ? (
+      {assetType === "footage" || editorialOverlay ? (
         <AbsoluteFill
           style={{
             opacity,
@@ -188,7 +188,7 @@ export const Scene: React.FC<SceneProps> = ({
           }}
         />
       ) : null}
-      {assetType === "footage" && editorialOverlay ? (
+      {assetType !== "graphic" && editorialOverlay ? (
         <EditorialOverlay
           spec={editorialOverlay}
           durationInFrames={durationInFrames}

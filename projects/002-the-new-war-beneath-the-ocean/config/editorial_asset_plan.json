@@ -507,8 +507,7 @@
           "APPLICATION",
           "REVIEW",
           "NO PERMIT ISSUED"
-        ],
-        "maxSeconds": 6.1
+        ]
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -520,8 +519,7 @@
           "CHEMISTRY",
           "DEMAND",
           "SUBSTITUTION"
-        ],
-        "maxSeconds": 7.75
+        ]
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -533,8 +531,7 @@
           "1979 TEST",
           "2023 SURVEY",
           "44 YEARS"
-        ],
-        "maxSeconds": 6
+        ]
       },
       "7": {
         "mode": "illustrative",
@@ -543,8 +540,7 @@
         "labels": [
           "1979: ONE MACHINE",
           "TODAY: A FLEET"
-        ],
-        "maxSeconds": 6
+        ]
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
@@ -556,8 +552,7 @@
           "NEAR SEABED",
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
-        ],
-        "maxSeconds": 5.9
+        ]
       },
       "4": {
         "mode": "illustrative",
@@ -566,8 +561,7 @@
         "labels": [
           "MEASURED DECLINE",
           "NOT A VERDICT"
-        ],
-        "maxSeconds": 6.55
+        ]
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
@@ -579,8 +573,7 @@
           "DIRECT TRACKS",
           "-37% DENSITY",
           "-32% RICHNESS"
-        ],
-        "maxSeconds": 6.4
+        ]
       },
       "34": {
         "mode": "illustrative",
