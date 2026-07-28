@@ -25,14 +25,19 @@ jobs:
           set -euo pipefail
           mkdir -p diagnostics
           gh api repos/${{ github.repository }}/actions/jobs/90243513222/logs > /tmp/job.log
-          awk '/Build the canonical full production shot list from real data/{capture=1} capture{print} /Report real footage clip durations/{exit}' /tmp/job.log > diagnostics/candidate-validation-30349530672.log
-          tail -n 220 diagnostics/candidate-validation-30349530672.log > /tmp/tail.log
-          body="$(printf 'Candidate Validation run `30349530672`, job `90243513222` exact failing-step diagnostics:\n\n```text\n'; cat /tmp/tail.log; printf '\n```')"
+          {
+            echo "=== ERROR MATCHES ==="
+            grep -nE 'ok.:false|##\[error\]|exceed|over |cap|fraction|generic|unresolved|failed|failure' /tmp/job.log | tail -n 160 || true
+            echo "=== JOB LOG TAIL ==="
+            tail -n 500 /tmp/job.log
+          } > diagnostics/candidate-validation-30349530672.log
+          tail -n 260 diagnostics/candidate-validation-30349530672.log > /tmp/tail.log
+          body="$(printf 'Candidate Validation run `30349530672`, job `90243513222` exact error diagnostics:\n\n```text\n'; cat /tmp/tail.log; printf '\n```')"
           gh api repos/${{ github.repository }}/issues/3/comments -f body="$body"
           git config user.name "orvyq-inspector"
           git config user.email "orvyq-inspector@users.noreply.github.com"
           git add diagnostics/candidate-validation-30349530672.log
-          git commit -m "Record Candidate Validation 30349530672 failure [skip ci]" || exit 0
+          git commit -m "Record Candidate Validation 30349530672 exact error [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T13:12+03:00
+# trigger 2026-07-28T13:14+03:00
