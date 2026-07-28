@@ -1,6 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
+  "request_revision": 2,
   "policy": {
     "selection_basis": "Pexels source-page title/slug must satisfy explicit positive and negative terms before download; the Full-Length Review remains the frame-level human verification gate.",
     "blind_keyword_acceptance_forbidden": true
