@@ -1,9 +1,6 @@
-run_id=30325566289
-job_id=90170149140
+run_id=30328345303
+job_id=90178252419
 
-Updating files:  77% (297/385)
-Updating files:  78% (301/385)
-Updating files:  79% (305/385)
 Updating files:  80% (308/385)
 Updating files:  81% (312/385)
 Updating files:  82% (316/385)
@@ -41,11 +38,11 @@ check-latest: false
 token: ***
 ##[endgroup]
 Attempting to download 20...
-(node:2379) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:2384) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
 Extracting ...
-[command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/77d8975c-ce69-49b4-b95e-349949e1b8ea -f /home/runner/work/_temp/f59ff9a4-f358-4b1f-82d4-6aebba29ebc8
+[command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/9876b44c-43b8-4c89-8c3b-4291431f04ab -f /home/runner/work/_temp/ba2e450e-e051-445c-861d-1d0bff0294d6
 Adding to the cache ...
 ##[group]Environment details
 node: v20.20.2
@@ -55,11 +52,10 @@ yarn: 1.22.22
 [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
 /home/runner/.npm
 Cache hit for: node-cache-Linux-x64-npm-729a0acaa9d0a44d876ebcfcc7e09abf48ee293096fffe822ead626fdb3b7e46
-(node:2379) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
-Received 0 of 283864 (0.0%), 0.0 MBs/sec
-Received 283864 of 283864 (100.0%), 0.3 MBs/sec
+(node:2384) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Received 283864 of 283864 (100.0%), 4.7 MBs/sec
 Cache Size: ~0 MB (283864 B)
-[command]/usr/bin/tar -xf /home/runner/work/_temp/3a5da245-b92d-4cd5-a3bf-793b8c9174e2/cache.tzst -P -C /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN- --use-compress-program unzstd
+[command]/usr/bin/tar -xf /home/runner/work/_temp/ba3d495a-e7fe-426f-a454-5240c0087dfa/cache.tzst -P -C /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN- --use-compress-program unzstd
 Cache restored successfully
 Cache restored from key: node-cache-Linux-x64-npm-729a0acaa9d0a44d876ebcfcc7e09abf48ee293096fffe822ead626fdb3b7e46
 ##[group]Run npm ci
@@ -67,7 +63,7 @@ Cache restored from key: node-cache-Linux-x64-npm-729a0acaa9d0a44d876ebcfcc7e09a
 shell: /usr/bin/bash -e {0}
 ##[endgroup]
 
-added 6 packages, and audited 7 packages in 496ms
+added 6 packages, and audited 7 packages in 449ms
 
 2 packages are looking for funding
 run `npm fund` for details
@@ -133,6 +129,10 @@ GH_TOKEN: ***
 [36;1m    'asset':'assets/footage/scene_032_d22df2b2e63b366f674b49e7.mp4','trimInRatio':0.34,'motion':'hold','role':'context',[0m
 [36;1m    'semantic_anchor':'Physical disturbance on the deep seabed can remain visible for decades.',[0m
 [36;1m    'semantic_rationale':'A restrained descent into the dark seabed keeps attention on physical depth and persistence without substituting for the official 1979-to-2023 evidence.'},[0m
+[36;1m  ('CLM_015_MIDWATER_DISCHARGE_RISK','6'): {[0m
+[36;1m    'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.05,'motion':'drift_left','role':'context',[0m
+[36;1m    'semantic_anchor':'Noise, light, suspended particles and the removal of nodules would become a new background condition under repeated commercial operation.',[0m
+[36;1m    'semantic_rationale':'A real exploration vehicle operating under artificial light at the seabed directly grounds the narration’s machinery, light and repeated-disturbance mechanism; it provides physical context without depicting or claiming a commercial mining event.'},[0m
 [36;1m  ('CLM_015_MIDWATER_DISCHARGE_RISK','8'): {[0m
 [36;1m    'asset':'assets/footage/scene_030_946dd964a29609c0ea0e2d71.mp4','trimInRatio':0.34,'motion':'drift_right','role':'context',[0m
 [36;1m    'semantic_anchor':'A short test is not equivalent to years of repeated commercial operation.',[0m
@@ -146,9 +146,9 @@ GH_TOKEN: ***
 [36;1m    'semantic_anchor':'Survey ships and pilot systems reserve a place in a future that may or may not arrive.',[0m
 [36;1m    'semantic_rationale':'Real survey and mapping operations directly support the physical preparation named in the narration while permits and legal claims remain represented by source-backed evidence.'},[0m
 [36;1m  ('CLM_015_MIDWATER_DISCHARGE_RISK','16'): {[0m
-[36;1m    'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.34,'motion':'pull','role':'context',[0m
+[36;1m    'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.58,'motion':'pull','role':'context',[0m
 [36;1m    'semantic_anchor':'The ability to reach a resource does not create an obligation to extract it.',[0m
-[36;1m    'semantic_rationale':'A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine.'}[0m
+[36;1m    'semantic_rationale':'A later, distinct section of the same exploration-vehicle source shows technical access without extraction, directly expressing the narration’s distinction between capability and obligation.'}[0m
 [36;1m}[0m
 [36;1m[0m
 [36;1mreuse_assets={v['asset'] for v in authored.values()}[0m
@@ -178,7 +178,7 @@ shell: /usr/bin/bash -e {0}
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ##[group]Run actions/upload-artifact@v4
 with:
-name: project002-semantic-coverage-30325566289
+name: project002-semantic-coverage-30328345303
 path: projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
 projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json
 
@@ -188,7 +188,7 @@ compression-level: 6
 overwrite: false
 include-hidden-files: false
 ##[endgroup]
-(node:2478) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:2482) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
 Multiple search paths detected. Calculating the least common ancestor of all paths
 The least common ancestor is /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-/projects/002-the-new-war-beneath-the-ocean. This will be the root directory of the artifact
@@ -196,19 +196,19 @@ With the provided path, there will be 2 files uploaded
 Artifact name is valid!
 Root directory input is valid!
 Beginning upload of artifact content to blob storage
-(node:2478) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
-Uploaded bytes 9294
+(node:2482) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Uploaded bytes 9481
 Finished uploading artifact content to blob storage!
-SHA256 digest of uploaded artifact zip is d667ea0d576e4127c46489a6843df0eec114b8c9faca1aee9e8db1d51e21486d
+SHA256 digest of uploaded artifact zip is 25f41d828ca9ae306f2ec015b8c8072c9e309867317467ff5c950f5ee20ede61
 Finalizing artifact upload
-Artifact project002-semantic-coverage-30325566289.zip successfully finalized. Artifact ID 8675536183
-Artifact project002-semantic-coverage-30325566289 has been successfully uploaded! Final size is 9294 bytes. Artifact ID is 8675536183
-Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30325566289/artifacts/8675536183
+Artifact project002-semantic-coverage-30328345303.zip successfully finalized. Artifact ID 8676477145
+Artifact project002-semantic-coverage-30328345303 has been successfully uploaded! Final size is 9481 bytes. Artifact ID is 8676477145
+Artifact download URL: https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30328345303/artifacts/8676477145
 Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 Post job cleanup.
 [command]/usr/bin/git version
 git version 2.54.0
-Temporarily overriding HOME='/home/runner/work/_temp/eb61ccc2-2ab2-4646-b688-5109591cdf32' before making global git config changes
+Temporarily overriding HOME='/home/runner/work/_temp/0f577198-cf71-46c1-a1ed-dfa0fda81bd4' before making global git config changes
 Adding repository directory to the temporary git global config as a safe directory
 [command]/usr/bin/git config --global --add safe.directory /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
 [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
