@@ -29,26 +29,19 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import re
-          lines=Path('job.log').read_text(errors='replace').splitlines()
-          target='Build the canonical full production shot list from real data'
-          hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
-          if hits:
-              start=hits[-1]
-              selected=lines[start:min(len(lines),start+420)]
-          else:
-              errs=[i for i,l in enumerate(lines) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
-              idx=errs[-1] if errs else len(lines)-1
-              selected=lines[max(0,idx-180):min(len(lines),idx+240)]
+          text=Path('job.log').read_text(errors='replace')
+          gaps=re.findall(r'- Uninterrupted evidence run of .*?(?=\\n- |"}\s*$|\n##\[error\])', text, flags=re.S)
           cleaned=[]
-          for line in selected:
-              line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
-              cleaned.append(line[:1800])
-          out='run_id=30322442450\njob_id='+str('90160942981')+'\n\n'+'\n'.join(cleaned)
+          for gap in gaps:
+              gap=gap.replace('\\n','\n')
+              gap=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',gap)
+              cleaned.append(gap.strip())
+          out='run_id=30322442450\njob_id=90160942981\ncoverage_gap_count='+str(len(cleaned))+'\n\n'+'\n'.join(cleaned)
           Path('diagnostics').mkdir(exist_ok=True)
-          Path('diagnostics/latest-candidate-error.txt').write_text(out[:40000])
+          Path('diagnostics/latest-coverage-gaps.txt').write_text(out[:50000])
           PY
           git config user.name "orvyq-diagnostics-bot"
           git config user.email "orvyq-diagnostics-bot@users.noreply.github.com"
-          git add diagnostics/latest-candidate-error.txt
-          git commit -m "Record latest Candidate Validation diagnostics [skip ci]" || exit 0
+          git add diagnostics/latest-coverage-gaps.txt
+          git commit -m "Record complete Project 002 coverage gaps [skip ci]" || exit 0
           git push origin HEAD:main
