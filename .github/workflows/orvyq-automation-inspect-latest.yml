@@ -36,4 +36,4 @@ jobs:
           git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T07:18+03:00 after final semantic coverage retry.
+# trigger 2026-07-28T08:15+03:00 after adding the final narration-specific slice-18 coverage beat.
