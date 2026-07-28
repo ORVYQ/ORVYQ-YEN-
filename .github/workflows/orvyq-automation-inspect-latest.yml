@@ -36,4 +36,4 @@ jobs:
           git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T03:13+03:00 after music continuity fix e8cd68d.
+# trigger 2026-07-28T05:17+03:00 after validation dispatch on Project 002 head 7396b99.
