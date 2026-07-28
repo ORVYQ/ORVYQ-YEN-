@@ -507,7 +507,8 @@
           "APPLICATION",
           "REVIEW",
           "NO PERMIT ISSUED"
-        ]
+        ],
+        "maxSeconds": 5
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -519,7 +520,8 @@
           "CHEMISTRY",
           "DEMAND",
           "SUBSTITUTION"
-        ]
+        ],
+        "maxSeconds": 5
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -552,7 +554,8 @@
           "NEAR SEABED",
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
-        ]
+        ],
+        "maxSeconds": 5
       },
       "4": {
         "mode": "illustrative",
@@ -561,7 +564,8 @@
         "labels": [
           "MEASURED DECLINE",
           "NOT A VERDICT"
-        ]
+        ],
+        "maxSeconds": 5
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
@@ -573,7 +577,8 @@
           "DIRECT TRACKS",
           "-37% DENSITY",
           "-32% RICHNESS"
-        ]
+        ],
+        "maxSeconds": 5
       },
       "34": {
         "mode": "illustrative",
@@ -583,7 +588,8 @@
           "DEEP OCEAN",
           "NOT VISIBLE FROM SHORE",
           "MEASURED, NOT ASSUMED"
-        ]
+        ],
+        "maxSeconds": 5
       },
       "20": {
         "mode": "illustrative",
@@ -593,7 +599,8 @@
           "NOT YET REALIZED",
           "CHANGING CHEMISTRY",
           "FUTURE DEMAND"
-        ]
+        ],
+        "maxSeconds": 5
       }
     }
   },
