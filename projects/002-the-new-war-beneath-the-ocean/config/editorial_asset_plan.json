@@ -376,18 +376,6 @@
     }
   },
   "graphic_break_assignments": {
-    "CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK": {
-      "2": {
-        "mode": "illustrative",
-        "title": "2025: SHIPMENTS FALL SHARPLY",
-        "subtitle": "Chinese export controls turned concentration into a physical supply problem.",
-        "labels": [
-          "EXPORT CONTROL",
-          "SHIPMENTS DOWN",
-          "PREMIUM PRICING"
-        ]
-      }
-    },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "3": {
         "mode": "illustrative",
@@ -396,36 +384,6 @@
         "labels": [
           "PLANNED",
           "NOT GUARANTEED"
-        ]
-      },
-      "5": {
-        "mode": "illustrative",
-        "title": "CLOSED-LOOP, NOT PROVEN LEAK-FREE",
-        "subtitle": "The lifting system is designed to reduce leakage as material rises -- a design goal, not yet a verified result.",
-        "labels": [
-          "CLOSED LOOP",
-          "DESIGN GOAL",
-          "UNVERIFIED AT SCALE"
-        ]
-      },
-      "7": {
-        "mode": "illustrative",
-        "title": "2027 TRIAL, THEN ASSESSMENT",
-        "subtitle": "A larger production-chain trial precedes any technical and economic verdict.",
-        "labels": [
-          "2027 TRIAL",
-          "TECHNICAL REVIEW",
-          "ECONOMIC REVIEW"
-        ]
-      },
-      "8": {
-        "mode": "illustrative",
-        "title": "A TEST IS NOT A SUPPLY CHAIN",
-        "subtitle": "Recovery, lifting, transport and refining remain separate industrial gates.",
-        "labels": [
-          "JAMSTEC TEST",
-          "INTEGRATED TRIAL",
-          "COMMERCIAL CHAIN"
         ]
       }
     },
@@ -441,18 +399,6 @@
         ]
       }
     },
-    "CLM_009_INDUSTRY_COUNTERARGUMENT": {
-      "5": {
-        "mode": "illustrative",
-        "title": "THE ARGUMENT IS ABOUT TRADE-OFFS",
-        "subtitle": "Supply security does not erase ecological uncertainty.",
-        "labels": [
-          "SUPPLY",
-          "COST",
-          "ECOLOGY"
-        ]
-      }
-    },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
       "2": {
         "mode": "illustrative",
@@ -465,18 +411,6 @@
         ]
       }
     },
-    "CLM_011_REFINING_BOTTLENECK": {
-      "2": {
-        "mode": "illustrative",
-        "title": "THE BOTTLENECK MAY NOT BE THE MINE",
-        "subtitle": "Extraction, separation and magnet manufacturing are three separate gates.",
-        "labels": [
-          "MINE",
-          "REFINERY",
-          "MAGNET"
-        ]
-      }
-    },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
       "2": {
         "mode": "illustrative",
@@ -486,15 +420,6 @@
           "1979 TEST",
           "2023 SURVEY",
           "44 YEARS"
-        ]
-      },
-      "5": {
-        "mode": "illustrative",
-        "title": "RECOVERY WAS NOT ZERO. NOT COMPLETE.",
-        "subtitle": "Some mobile organisms and sediment fauna had begun to recolonise.",
-        "labels": [
-          "PARTIAL RECOLONISATION",
-          "ALTERED COMMUNITIES"
         ]
       },
       "7": {
@@ -537,78 +462,6 @@
           "DIRECT TRACKS",
           "-37% DENSITY",
           "-32% RICHNESS"
-        ]
-      },
-      "8": {
-        "mode": "illustrative",
-        "title": "ONE TEST LASTS DAYS.",
-        "subtitle": "A commercial operation could mean multiple collectors and repeated passes for years.",
-        "labels": [
-          "ONE TEST: DAYS",
-          "COMMERCIAL: YEARS"
-        ]
-      },
-      "10": {
-        "mode": "illustrative",
-        "title": "A MECHANISM, NOT A COLLAPSE",
-        "subtitle": "Discharge particles may be nutritionally poor for midwater food webs -- a plausible risk, not an observed collapse.",
-        "labels": [
-          "DISCHARGE",
-          "MIDWATER FOOD WEB",
-          "PLAUSIBLE RISK"
-        ]
-      },
-      "14": {
-        "mode": "illustrative",
-        "title": "2027: JAPAN RETURNS",
-        "subtitle": "A longer production-chain test, then continued ISA negotiation and continued field research.",
-        "labels": [
-          "2027 TRIAL",
-          "ISA NEGOTIATION",
-          "FIELD RESEARCH"
-        ]
-      },
-      "16": {
-        "mode": "illustrative",
-        "title": "THE LAW IS STILL UNFINISHED",
-        "subtitle": "The mud, the nodules and the unfinished mining code all remain, six kilometres down.",
-        "labels": [
-          "THE MUD",
-          "THE NODULES",
-          "THE LAW"
-        ]
-      },
-      "18": {
-        "mode": "illustrative",
-        "title": "SPECIFIC FINDINGS, UNSETTLED RULES",
-        "subtitle": "The density, richness and discharge findings are documented; whether regulation catches up before mining scales remains open.",
-        "labels": [
-          "DOCUMENTED FINDINGS",
-          "RULES STILL OPEN"
-        ]
-      }
-    },
-    "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
-      "6": {
-        "mode": "illustrative",
-        "title": "A TECHNICAL RESULT, NOT A MINE",
-        "subtitle": "Continuous lift proved. Commercial viability and a new mine did not follow from it.",
-        "labels": [
-          "LIFTED",
-          "NOT COMMERCIAL",
-          "NOT A MINE"
-        ]
-      }
-    },
-    "CLM_005_COMMON_HERITAGE_PRINCIPLE": {
-      "6": {
-        "mode": "illustrative",
-        "title": "COMMON HERITAGE OF MANKIND",
-        "subtitle": "UNCLOS Articles 136-137: the seabed beyond national jurisdiction belongs to no one state.",
-        "labels": [
-          "UNCLOS",
-          "THE AREA",
-          "NO NATIONAL CLAIM"
         ]
       }
     }
