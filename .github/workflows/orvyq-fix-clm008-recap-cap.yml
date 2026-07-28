@@ -60,9 +60,32 @@ jobs:
           PY
 
       - name: Validate full production plan before commit
-        run: node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean
+        id: validate
+        shell: bash
+        run: |
+          set +e
+          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean 2>&1 | tee /tmp/clm008-validation.log
+          status=${PIPESTATUS[0]}
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          exit "$status"
+
+      - name: Report exact validation failure
+        if: failure() && steps.validate.outputs.status != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tail -n 80 /tmp/clm008-validation.log > /tmp/clm008-validation-tail.log
+          body="$(python - <<'PY'
+          from pathlib import Path
+          text = Path('/tmp/clm008-validation-tail.log').read_text(errors='replace')
+          print('Exact CLM008 recap-cap validation failure:\n\n```text\n' + text[-6000:] + '\n```')
+          PY
+          )"
+          gh api repos/${{ github.repository }}/issues/3/comments -f body="$body"
 
       - name: Commit verified project configuration
+        if: success()
         run: |
           set -euo pipefail
           git checkout -- projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json || true
@@ -78,6 +101,7 @@ jobs:
           fi
 
       - name: Re-dispatch Candidate Validation
+        if: success()
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -88,4 +112,4 @@ jobs:
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 Candidate Validation re-dispatched after replacing the infeasible CLM_008 5-second recap cap with a validated 6.5-second cap. The whole-film generic-card budget remains below the 8% ceiling; no quality gate was weakened."
 
-# trigger 2026-07-28T13:17+03:00
+# trigger 2026-07-28T14:09+03:00 with exact failure reporting.
