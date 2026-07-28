@@ -161,10 +161,9 @@ jobs:
           node --check scripts/orvyq_full_production_plan.mjs
           node --check scripts/orvyq_pacing_audit.mjs
           python3 -m py_compile scripts/orvyq_speech_qa.py
-          ! grep -q 'orvyq_one_shot_section_sting_qa_fix' .github/workflows/ci.yml
           test ! -e scripts/orvyq_one_shot_section_sting_qa_fix.py
 
-      - name: Commit production fix and restore normal CI
+      - name: Commit production fix
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
