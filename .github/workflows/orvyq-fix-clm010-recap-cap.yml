@@ -105,3 +105,5 @@ jobs:
             -f project_id=002-the-new-war-beneath-the-ocean
           gh api repos/${{ github.repository }}/issues/3/comments \
             -f body="Project 002 Candidate Validation re-dispatched after setting CLM_010's recap cap to 7.75s, within the exact 0.15s neighboring capacity reported by the full-production planner. No quality threshold or card content was changed."
+
+# Triggered 2026-07-28 after confirming the initial workflow-file creation did not produce a visible run.
