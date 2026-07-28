@@ -152,6 +152,8 @@ jobs:
           set -euo pipefail
           git config user.name "orvyq-semantic-editor"
           git config user.email "orvyq-semantic-editor@users.noreply.github.com"
+          git checkout -- projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json \
+                          projects/002-the-new-war-beneath-the-ocean/direction/editorial_pause_map.json
           git add projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
           if git diff --cached --quiet; then
             echo "Semantic coverage plan is already current; continuing to Candidate Validation."
@@ -183,5 +185,3 @@ jobs:
             projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
             projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json
           retention-days: 30
-
-# Automation retrigger: 2026-07-28 semantic coverage idempotency fix verified.
