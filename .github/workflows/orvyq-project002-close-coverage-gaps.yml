@@ -86,6 +86,10 @@ jobs:
               'asset':'assets/footage/scene_032_d22df2b2e63b366f674b49e7.mp4','trimInRatio':0.34,'motion':'hold','role':'context',
               'semantic_anchor':'Physical disturbance on the deep seabed can remain visible for decades.',
               'semantic_rationale':'A restrained descent into the dark seabed keeps attention on physical depth and persistence without substituting for the official 1979-to-2023 evidence.'},
+            ('CLM_015_MIDWATER_DISCHARGE_RISK','6'): {
+              'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.05,'motion':'drift_left','role':'context',
+              'semantic_anchor':'Noise, light, suspended particles and the removal of nodules would become a new background condition under repeated commercial operation.',
+              'semantic_rationale':'A real exploration vehicle operating under artificial light at the seabed directly grounds the narration’s machinery, light and repeated-disturbance mechanism; it provides physical context without depicting or claiming a commercial mining event.'},
             ('CLM_015_MIDWATER_DISCHARGE_RISK','8'): {
               'asset':'assets/footage/scene_030_946dd964a29609c0ea0e2d71.mp4','trimInRatio':0.34,'motion':'drift_right','role':'context',
               'semantic_anchor':'A short test is not equivalent to years of repeated commercial operation.',
@@ -99,9 +103,9 @@ jobs:
               'semantic_anchor':'Survey ships and pilot systems reserve a place in a future that may or may not arrive.',
               'semantic_rationale':'Real survey and mapping operations directly support the physical preparation named in the narration while permits and legal claims remain represented by source-backed evidence.'},
             ('CLM_015_MIDWATER_DISCHARGE_RISK','16'): {
-              'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.34,'motion':'pull','role':'context',
+              'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.58,'motion':'pull','role':'context',
               'semantic_anchor':'The ability to reach a resource does not create an obligation to extract it.',
-              'semantic_rationale':'A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine.'}
+              'semantic_rationale':'A later, distinct section of the same exploration-vehicle source shows technical access without extraction, directly expressing the narration’s distinction between capability and obligation.'}
           }
 
           reuse_assets={v['asset'] for v in authored.values()}
@@ -144,7 +148,7 @@ jobs:
             --ref agent/002-deep-sea-cold-war \
             -f project_id=002-the-new-war-beneath-the-ocean
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after all remaining long evidence runs were closed with narration-specific verified footage. No quality threshold was weakened."
+            -f body="Project 002 Candidate Validation re-dispatched after the final 15.7-second evidence run was closed with narration-specific seabed-operation footage. No quality threshold was weakened."
 
       - name: Upload coverage diagnostics
         if: always()
