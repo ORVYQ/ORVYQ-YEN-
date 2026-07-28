@@ -1,5 +1,6 @@
 Latest ORVYQ coverage/validation/review runs:
-- ORVYQ Candidate Validation run `30322442450`: status=`in_progress`, conclusion=`null`, head_sha=`7396b999141fd2695eb54cd3c79cce7ec9bc8a13`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30322442450
+- ORVYQ Project 002 Close Semantic Coverage Gaps run `30325566289`: status=`completed`, conclusion=`failure`, head_sha=`83dbc9e2b70366e1dfcc13f87003ef8f2466593c`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30325566289
+- ORVYQ Candidate Validation run `30322442450`: status=`completed`, conclusion=`failure`, head_sha=`7396b999141fd2695eb54cd3c79cce7ec9bc8a13`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30322442450
 - ORVYQ Candidate Validation run `30321854203`: status=`completed`, conclusion=`failure`, head_sha=`7396b999141fd2695eb54cd3c79cce7ec9bc8a13`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30321854203
 - ORVYQ Candidate Validation run `30320774278`: status=`completed`, conclusion=`failure`, head_sha=`0df777322bfd2c553f16352ee62678d21f2e1c17`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30320774278
 - ORVYQ Candidate Validation run `30319905820`: status=`completed`, conclusion=`failure`, head_sha=`f1c1c1fb5de7b21c269be900d9048b546695177d`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30319905820
