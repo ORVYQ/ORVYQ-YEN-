@@ -1,0 +1,263 @@
+run_id=30325566289
+job_id=90170149140
+
+﻿2026-07-28T03:18:33.2072910Z Current runner version: '2.336.0'
+##[group]Runner Image Provisioner
+Hosted Compute Agent
+Version: 20260707.563
+Commit: 02667638d2b423fbc733a8e32a88b44996a3ba6e
+Build Date: 2026-07-07T19:33:50Z
+Worker ID: {8d30d6fb-53f4-4daf-90d7-58221b5a42a5}
+Azure Region: westus
+##[endgroup]
+##[group]Operating System
+Ubuntu
+24.04.4
+LTS
+##[endgroup]
+##[group]Runner Image
+Image: ubuntu-24.04
+Version: 20260720.247.2
+Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260720.247/images/ubuntu/Ubuntu2404-Readme.md
+Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260720.247
+##[endgroup]
+##[group]GITHUB_TOKEN Permissions
+Actions: write
+Contents: write
+Issues: write
+Metadata: read
+PullRequests: write
+##[endgroup]
+Secret source: Actions
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Complete job name: close-gaps
+Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+##[group]Run actions/checkout@v4
+with:
+ref: agent/002-deep-sea-cold-war
+lfs: true
+fetch-depth: 1
+repository: ORVYQ/ORVYQ-YEN-
+token: ***
+ssh-strict: true
+ssh-user: git
+persist-credentials: true
+clean: true
+sparse-checkout-cone-mode: true
+fetch-tags: false
+show-progress: true
+submodules: false
+set-safe-directory: true
+allow-unsafe-pr-checkout: false
+##[endgroup]
+Syncing repository: ORVYQ/ORVYQ-YEN-
+##[group]Getting Git version info
+Working directory is '/home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-'
+[command]/usr/bin/git version
+git version 2.54.0
+[command]/usr/bin/git lfs version
+git-lfs/3.7.1 (GitHub; linux amd64; go 1.24.4)
+##[endgroup]
+Temporarily overriding HOME='/home/runner/work/_temp/def6d708-554d-45ee-8437-3aed0a7dbf62' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+[command]/usr/bin/git config --global --add safe.directory /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
+Deleting the contents of '/home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-'
+##[group]Initializing the repository
+[command]/usr/bin/git init /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 	git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 	git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+Initialized empty Git repository in /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN-/.git/
+[command]/usr/bin/git remote add origin https://github.com/ORVYQ/ORVYQ-YEN-
+##[endgroup]
+##[group]Disabling automatic garbage collection
+[command]/usr/bin/git config --local gc.auto 0
+##[endgroup]
+##[group]Setting up auth
+[command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+[command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+[command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+##[endgroup]
+[command]/usr/bin/git lfs install --local
+Updated Git hooks.
+Git LFS initialized.
+##[group]Fetching the repository
+[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +refs/heads/agent/002-deep-sea-cold-war*:refs/remotes/origin/agent/002-deep-sea-cold-war* +refs/tags/agent/002-deep-sea-cold-war*:refs/tags/agent/002-deep-sea-cold-war*
+From https://github.com/ORVYQ/ORVYQ-YEN-
+* [new branch]      agent/002-deep-sea-cold-war -> origin/agent/002-deep-sea-cold-war
+##[endgroup]
+##[group]Determining the checkout info
+[command]/usr/bin/git branch --list --remote origin/agent/002-deep-sea-cold-war
+origin/agent/002-deep-sea-cold-war
+##[endgroup]
+##[group]Fetching LFS objects
+[command]/usr/bin/git lfs fetch origin refs/remotes/origin/agent/002-deep-sea-cold-war
+Fetching reference refs/remotes/origin/agent/002-deep-sea-cold-war
+##[endgroup]
+[command]/usr/bin/git sparse-checkout disable
+[command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+##[group]Checking out the ref
+[command]/usr/bin/git checkout --progress --force -B agent/002-deep-sea-cold-war refs/remotes/origin/agent/002-deep-sea-cold-war
+Updating files:  27% (105/385)
+Updating files:  28% (108/385)
+Updating files:  29% (112/385)
+Updating files:  30% (116/385)
+Updating files:  31% (120/385)
+Updating files:  32% (124/385)
+Updating files:  33% (128/385)
+Updating files:  34% (131/385)
+Updating files:  35% (135/385)
+Updating files:  36% (139/385)
+Updating files:  37% (143/385)
+Updating files:  38% (147/385)
+Updating files:  39% (151/385)
+Updating files:  40% (154/385)
+Updating files:  41% (158/385)
+Updating files:  42% (162/385)
+Updating files:  43% (166/385)
+Updating files:  44% (170/385)
+Updating files:  45% (174/385)
+Updating files:  46% (178/385)
+Updating files:  47% (181/385)
+Updating files:  48% (185/385)
+Updating files:  49% (189/385)
+Updating files:  50% (193/385)
+Updating files:  51% (197/385)
+Updating files:  52% (201/385)
+Updating files:  53% (205/385)
+Updating files:  54% (208/385)
+Updating files:  55% (212/385)
+Updating files:  56% (216/385)
+Updating files:  57% (220/385)
+Updating files:  58% (224/385)
+Updating files:  59% (228/385)
+Updating files:  60% (231/385)
+Updating files:  61% (235/385)
+Updating files:  62% (239/385)
+Updating files:  63% (243/385)
+Updating files:  64% (247/385)
+Updating files:  65% (251/385)
+Updating files:  66% (255/385)
+Updating files:  67% (258/385)
+Updating files:  68% (262/385)
+Updating files:  69% (266/385)
+Updating files:  70% (270/385)
+Updating files:  71% (274/385)
+Updating files:  72% (278/385)
+Updating files:  73% (282/385)
+Updating files:  74% (285/385)
+Updating files:  75% (289/385)
+Updating files:  76% (293/385)
+Updating files:  77% (297/385)
+Updating files:  78% (301/385)
+Updating files:  79% (305/385)
+Updating files:  80% (308/385)
+Updating files:  81% (312/385)
+Updating files:  82% (316/385)
+Updating files:  83% (320/385)
+Updating files:  84% (324/385)
+Updating files:  85% (328/385)
+Updating files:  86% (332/385)
+Updating files:  87% (335/385)
+Updating files:  88% (339/385)
+Updating files:  89% (343/385)
+Updating files:  90% (347/385)
+Updating files:  91% (351/385)
+Updating files:  92% (355/385)
+Updating files:  93% (359/385)
+Updating files:  94% (362/385)
+Updating files:  95% (366/385)
+Updating files:  96% (370/385)
+Updating files:  97% (374/385)
+Updating files:  98% (378/385)
+Updating files:  99% (382/385)
+Updating files: 100% (385/385)
+Updating files: 100% (385/385), done.
+Switched to a new branch 'agent/002-deep-sea-cold-war'
+branch 'agent/002-deep-sea-cold-war' set up to track 'origin/agent/002-deep-sea-cold-war'.
+##[endgroup]
+[command]/usr/bin/git log -1 --format=%H
+7396b999141fd2695eb54cd3c79cce7ec9bc8a13
+Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+##[group]Run actions/setup-node@v4
+with:
+node-version: 20
+cache: npm
+always-auth: false
+check-latest: false
+token: ***
+##[endgroup]
+Attempting to download 20...
+(node:2379) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+Extracting ...
+[command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/77d8975c-ce69-49b4-b95e-349949e1b8ea -f /home/runner/work/_temp/f59ff9a4-f358-4b1f-82d4-6aebba29ebc8
+Adding to the cache ...
+##[group]Environment details
+node: v20.20.2
+npm: 10.8.2
+yarn: 1.22.22
+##[endgroup]
+[command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+/home/runner/.npm
+Cache hit for: node-cache-Linux-x64-npm-729a0acaa9d0a44d876ebcfcc7e09abf48ee293096fffe822ead626fdb3b7e46
+(node:2379) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+Received 0 of 283864 (0.0%), 0.0 MBs/sec
+Received 283864 of 283864 (100.0%), 0.3 MBs/sec
+Cache Size: ~0 MB (283864 B)
+[command]/usr/bin/tar -xf /home/runner/work/_temp/3a5da245-b92d-4cd5-a3bf-793b8c9174e2/cache.tzst -P -C /home/runner/work/ORVYQ-YEN-/ORVYQ-YEN- --use-compress-program unzstd
+Cache restored successfully
+Cache restored from key: node-cache-Linux-x64-npm-729a0acaa9d0a44d876ebcfcc7e09abf48ee293096fffe822ead626fdb3b7e46
+##[group]Run npm ci
+[36;1mnpm ci[0m
+shell: /usr/bin/bash -e {0}
+##[endgroup]
+
+added 6 packages, and audited 7 packages in 496ms
+
+2 packages are looking for funding
+run `npm fund` for details
+
+found 0 vulnerabilities
+##[group]Run set -euo pipefail
+[36;1mset -euo pipefail[0m
+[36;1mrm -rf /tmp/validation-artifact[0m
+[36;1mmkdir -p /tmp/validation-artifact[0m
+[36;1mgh run download 30322442450 \[0m
+[36;1m  --repo "ORVYQ/ORVYQ-YEN-" \[0m
+[36;1m  --name orvyq-candidate-validation-002-the-new-war-beneath-the-ocean-30322442450 \[0m
+[36;1m  --dir /tmp/validation-artifact[0m
+[36;1mcp /tmp/validation-artifact/projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json \[0m
+[36;1m   projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json[0m
+[36;1mnode scripts/orvyq_resolve_pauses.mjs --project-id=002-the-new-war-beneath-the-ocean[0m
+shell: /usr/bin/bash -e {0}
+env:
+GH_TOKEN: ***
+##[endgroup]
+{
+"ok": true,
+"pause_count": 7,
+"narration_end_seconds": 994.68,
+"total_pause_seconds": 25,
+"output": "direction/resolved_pause_plan.json"
+}
