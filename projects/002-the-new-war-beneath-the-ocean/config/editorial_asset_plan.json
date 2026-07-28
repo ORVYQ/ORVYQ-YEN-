@@ -555,7 +555,7 @@
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 5.9
       },
       "4": {
         "mode": "illustrative",
