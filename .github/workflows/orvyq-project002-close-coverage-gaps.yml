@@ -105,7 +105,11 @@ jobs:
             ('CLM_015_MIDWATER_DISCHARGE_RISK','16'): {
               'asset':'assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4','trimInRatio':0.58,'motion':'pull','role':'context',
               'semantic_anchor':'The ability to reach a resource does not create an obligation to extract it.',
-              'semantic_rationale':'A later, distinct section of the same exploration-vehicle source shows technical access without extraction, directly expressing the narration’s distinction between capability and obligation.'}
+              'semantic_rationale':'A later, distinct section of the same exploration-vehicle source shows technical access without extraction, directly expressing the narration’s distinction between capability and obligation.'},
+            ('CLM_015_MIDWATER_DISCHARGE_RISK','18'): {
+              'asset':'assets/footage/scene_026_dce0f8aa2af200e5eeadd37d.mp4','trimInRatio':0.34,'motion':'drift_right','role':'human_context',
+              'semantic_anchor':'The strongest case against rushing is not that science already knows every consequence. It is that science does not.',
+              'semantic_rationale':'Scientists collecting baseline samples directly visualise the knowledge gap named in the narration. The shot supports uncertainty and the need for measurement without claiming that the generic expedition produced any cited result.'}
           }
 
           reuse_assets={v['asset'] for v in authored.values()}
