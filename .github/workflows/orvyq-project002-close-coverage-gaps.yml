@@ -125,9 +125,23 @@ jobs:
           PY
 
       - name: Validate semantic coverage before commit
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -euo pipefail
-          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean
+          set +e
+          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean 2>&1 | tee semantic-coverage-validation.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            tail -n 120 semantic-coverage-validation.log > semantic-coverage-error.txt
+            body=$(python - <<'PY'
+          from pathlib import Path
+          text=Path('semantic-coverage-error.txt').read_text(errors='replace')
+          print('Project 002 semantic coverage validation failed with the exact error:\n\n```text\n'+text[-12000:]+'\n```')
+          PY
+            )
+            gh api repos/${{ github.repository }}/issues/3/comments -f body="$body"
+            exit "$status"
+          fi
 
       - name: Commit authored semantic coverage
         run: |
@@ -148,7 +162,7 @@ jobs:
             --ref agent/002-deep-sea-cold-war \
             -f project_id=002-the-new-war-beneath-the-ocean
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after the final 15.7-second evidence run was closed with narration-specific seabed-operation footage. No quality threshold was weakened."
+            -f body="Project 002 Candidate Validation re-dispatched after the final semantic evidence run was closed with narration-specific footage. No quality threshold was weakened."
 
       - name: Upload coverage diagnostics
         if: always()
@@ -156,6 +170,8 @@ jobs:
         with:
           name: project002-semantic-coverage-${{ github.run_id }}
           path: |
+            semantic-coverage-validation.log
+            semantic-coverage-error.txt
             projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
             projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json
           retention-days: 30
