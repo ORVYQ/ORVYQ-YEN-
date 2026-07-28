@@ -508,7 +508,7 @@
           "REVIEW",
           "NO PERMIT ISSUED"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 6.1
       }
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
@@ -521,7 +521,7 @@
           "DEMAND",
           "SUBSTITUTION"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 7.0
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -555,7 +555,7 @@
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 6.5
       },
       "4": {
         "mode": "illustrative",
@@ -565,7 +565,7 @@
           "MEASURED DECLINE",
           "NOT A VERDICT"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 6.6
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
@@ -578,7 +578,7 @@
           "-37% DENSITY",
           "-32% RICHNESS"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 3
       },
       "34": {
         "mode": "illustrative",
@@ -589,7 +589,7 @@
           "NOT VISIBLE FROM SHORE",
           "MEASURED, NOT ASSUMED"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 3
       },
       "20": {
         "mode": "illustrative",
@@ -600,7 +600,7 @@
           "CHANGING CHEMISTRY",
           "FUTURE DEMAND"
         ],
-        "maxSeconds": 5
+        "maxSeconds": 3
       }
     }
   },
