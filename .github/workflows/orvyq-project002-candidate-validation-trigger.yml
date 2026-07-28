@@ -8,6 +8,8 @@ on:
     paths:
       - ".github/workflows/orvyq-project002-candidate-validation-trigger.yml"
       - ".github/workflows/orvyq-candidate-validation.yml"
+      - "scripts/orvyq_full_production_plan.mjs"
+      - "templates/remotion/src/**"
       - "projects/002-the-new-war-beneath-the-ocean/assets/audio/final_voice.mp3"
       - "projects/002-the-new-war-beneath-the-ocean/assets/evidence/**"
       - "projects/002-the-new-war-beneath-the-ocean/assets/footage/**"
