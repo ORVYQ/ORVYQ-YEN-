@@ -9,19 +9,19 @@
     "random_whoosh_glitch_boom_forbidden": true,
     "silence_may_be_used_as_an_editorial_cue": true,
     "full_render_requires_all_cues_ready": true,
-    "policy_note": "Single composition family (sb_undertow, CC BY 4.0) carries the whole film -- one continuous musical backbone with energy automation across the seven editorial sections, not a mandated minimum number of distinct audio files."
+    "policy_note": "Single composition family (sb_undertow, CC BY 4.0) carries the whole film -- one continuous musical backbone with energy automation across the seven editorial sections, including the motion hook and end-card release, not a mandated minimum number of distinct audio files."
   },
   "full_cues": [
     {
       "cue_id": "CUE_01_01_MUD_TO_DAYLIGHT",
       "section_id": "SEC_01_MUD_TO_DAYLIGHT",
       "track_id": "sb_undertow",
-      "start": 14.0,
+      "start": 0.0,
       "end": 130.84,
       "state": "submerged_curiosity",
       "energy_start": 0.65,
       "energy_end": 0.35,
-      "function": "Open on the Chikyu test and the depth descent; the licensed motion hook plays fully unducked here, so this is the hook's own energetic opening, settling into curiosity as narration begins.",
+      "function": "Open on the Chikyu test and the depth descent; the licensed motion hook plays fully unducked from frame zero, then settles into curiosity as narration begins.",
       "instrumentation": "sub-bass pressure, distant mechanical pulse, sparse sonar-like texture",
       "transition_out": "crossfade forward, no hard cut",
       "status": "ready"
@@ -101,13 +101,13 @@
       "section_id": "SEC_07_PRECEDENT",
       "track_id": "sb_undertow",
       "start": 900.91,
-      "end": 1033.68,
+      "end": 1037.68,
       "state": "reflective_resolution",
       "energy_start": 0.45,
       "energy_end": 0.1,
-      "function": "Governance, distributed risk and the closing line; wide, unresolved ambience settling to the film's quietest point.",
+      "function": "Governance, distributed risk and the closing line; wide, unresolved ambience continues through the full end-card release so the film never drops its tonal world prematurely.",
       "instrumentation": "wide unresolved ambience, no resolution chord",
-      "transition_out": "long release into silence under the final line",
+      "transition_out": "long release to silence at the exact film end",
       "status": "ready"
     }
   ]
