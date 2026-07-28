@@ -142,3 +142,10 @@ jobs:
           fi
           export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
           npx remotion compositions src/index.ts
+
+  project002_candidate_validation:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/002-deep-sea-cold-war'
+    uses: ./.github/workflows/orvyq-candidate-validation.yml
+    with:
+      project_id: 002-the-new-war-beneath-the-ocean
+    secrets: inherit
