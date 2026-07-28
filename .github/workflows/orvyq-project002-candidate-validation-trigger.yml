@@ -2,6 +2,21 @@ name: ORVYQ Project 002 Candidate Validation Trigger
 
 on:
   workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches:
+      - claude/orvyq-canonical-candidate-parity-bl7w0u
+    paths:
+      - ".github/workflows/orvyq-project002-candidate-validation-trigger.yml"
+      - ".github/workflows/orvyq-candidate-validation.yml"
+      - "scripts/orvyq_full_production_plan.mjs"
+      - "templates/remotion/src/**"
+      - "projects/002-the-new-war-beneath-the-ocean/assets/audio/final_voice.mp3"
+      - "projects/002-the-new-war-beneath-the-ocean/assets/evidence/**"
+      - "projects/002-the-new-war-beneath-the-ocean/assets/footage/**"
+      - "projects/002-the-new-war-beneath-the-ocean/research/**"
+      - "projects/002-the-new-war-beneath-the-ocean/direction/**"
+      - "projects/002-the-new-war-beneath-the-ocean/config/**"
   push:
     branches:
       - agent/002-deep-sea-cold-war
@@ -23,7 +38,7 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: orvyq-project002-candidate-validation-${{ github.ref }}
+  group: orvyq-project002-candidate-validation-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -31,14 +46,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Record validation start on the active PR
+        if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number')"
-          if [ -n "$PR_NUMBER" ]; then
-            gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Project 002 Candidate Validation started: run \`$GITHUB_RUN_ID\`, source \`$GITHUB_SHA\`."
-          fi
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Project 002 Candidate Validation started: run \`$GITHUB_RUN_ID\`, source \`$SOURCE_SHA\`."
 
   validate:
     needs: announce
@@ -53,12 +66,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Record validation result on the active PR
+        if: github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
           VALIDATION_RESULT: ${{ needs.validate.result }}
-        run: |
-          set -euo pipefail
-          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number')"
-          if [ -n "$PR_NUMBER" ]; then
-            gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Project 002 Candidate Validation finished: run \`$GITHUB_RUN_ID\`, source \`$GITHUB_SHA\`, result=\`$VALIDATION_RESULT\`."
-          fi
+        run: gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "Project 002 Candidate Validation finished: run \`$GITHUB_RUN_ID\`, source \`$SOURCE_SHA\`, result=\`$VALIDATION_RESULT\`."
