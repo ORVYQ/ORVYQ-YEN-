@@ -520,11 +520,11 @@
       },
       "4": {
         "mode": "illustrative",
-        "title": "MEASURED, NOT ASSUMED",
-        "subtitle": "The evidence is specific; the claim is bounded.",
+        "title": "A DECLINE CURVE, NOT A VERDICT",
+        "subtitle": "The plume data describes a measured decline with distance and time -- not a verdict on ocean-wide impact.",
         "labels": [
-          "EVIDENCE",
-          "LIMITATION"
+          "MEASURED DECLINE",
+          "NOT A VERDICT"
         ]
       }
     },
@@ -580,11 +580,11 @@
       },
       "18": {
         "mode": "illustrative",
-        "title": "MEASURED, NOT ASSUMED",
-        "subtitle": "The evidence is specific; the claim is bounded.",
+        "title": "SPECIFIC FINDINGS, UNSETTLED RULES",
+        "subtitle": "The density, richness and discharge findings are documented; whether regulation catches up before mining scales remains open.",
         "labels": [
-          "EVIDENCE",
-          "LIMITATION"
+          "DOCUMENTED FINDINGS",
+          "RULES STILL OPEN"
         ]
       }
     },
