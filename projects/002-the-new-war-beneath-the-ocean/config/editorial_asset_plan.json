@@ -520,7 +520,8 @@
           "CHEMISTRY",
           "DEMAND",
           "SUBSTITUTION"
-        ]
+        ],
+        "maxSeconds": 7.75
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -553,7 +554,8 @@
           "NEAR SEABED",
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
-        ]
+        ],
+        "maxSeconds": 6.5
       },
       "4": {
         "mode": "illustrative",
