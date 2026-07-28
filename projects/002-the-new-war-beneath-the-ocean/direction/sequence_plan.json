@@ -22,12 +22,15 @@
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "kind": "official_figure",
       "evidence_asset_ids": [
-        "EVID_JAMSTEC_2027_TRIAL_DIAGRAM"
+        "EVID_JAMSTEC_2027_TRIAL_DIAGRAM",
+        "EVID_JAMSTEC_CHIKYU_DEPARTURE"
       ],
       "image_assets": [
-        "assets/evidence/jamstec_2027_trial_diagram.png"
+        "assets/evidence/jamstec_2027_trial_diagram.png",
+        "assets/evidence/jamstec_chikyu_departure.jpg"
       ],
-      "editorial_rationale": "Use JAMSTEC's own 2027 integrated-trial figure, the claim's direct visual subject. EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM is deliberately not reused here: CLM_001_JAPAN_TECHNICAL_MILESTONE already attaches it to both of its own native evidence slices, exactly reaching the film's 2-use-per-source cap on its own."
+      "distinct_image_per_occurrence": true,
+      "editorial_rationale": "Use JAMSTEC's own 2027 integrated-trial figure, the claim's direct visual subject, for this claim's native evidence slices. This claim now has 3 native evidence slices (not 2), because its earlier illustrative graphic cards at two of those slice positions were since removed by later footage authoring without a replacement being assigned; giving those slices back to native evidence rather than inventing a graphic keeps the fix inside real evidence, per the semantic-relevance rule. Attaching only EVID_JAMSTEC_2027_TRIAL_DIAGRAM to all 3 slices would exceed the film's 2-use-per-source cap, and EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM is unavailable here (CLM_001_JAPAN_TECHNICAL_MILESTONE already reaches its own 2-use cap on that image). EVID_JAMSTEC_CHIKYU_DEPARTURE is a real, already-fetched-and-verified official JAMSTEC image from the exact same source press release, entirely unused by any other claim, and directly on-topic (the vessel departing for the very test this claim's industrial timeline covers). distinct_image_per_occurrence cycles the two images across the 3 slices (2027 trial diagram twice, Chikyu departure once), keeping both within cap."
     },
     "CLM_006_MINING_CODE_UNFINISHED": {
       "kind": "split_documents",
