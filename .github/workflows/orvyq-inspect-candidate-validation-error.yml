@@ -16,32 +16,38 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Extract latest validation failure
+      - name: Extract latest semantic coverage failure
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           repo="${{ github.repository }}"
-          run_id="30322442450"
+          run_id="30325566289"
           jobs="$(gh api "repos/$repo/actions/runs/$run_id/jobs")"
           job_id="$(printf '%s' "$jobs" | jq -r '.jobs[0].id')"
           gh api "repos/$repo/actions/jobs/$job_id/logs" > job.log
           python - <<'PY'
           from pathlib import Path
           import re
-          text=Path('job.log').read_text(errors='replace')
-          gaps=re.findall(r'- Uninterrupted evidence run of .*?(?=\\n- |"}\s*$|\n##\[error\])', text, flags=re.S)
+          lines=Path('job.log').read_text(errors='replace').splitlines()
+          target='Validate semantic coverage before commit'
+          hits=[i for i,l in enumerate(lines) if target.lower() in l.lower()]
+          start=hits[-1] if hits else 0
+          selected=lines[start:min(len(lines),start+260)]
+          errors=[i for i,l in enumerate(selected) if '##[error]' in l.lower() or '{"ok":false' in l.lower()]
+          if errors:
+              idx=errors[0]
+              selected=selected[max(0,idx-100):min(len(selected),idx+80)]
           cleaned=[]
-          for gap in gaps:
-              gap=gap.replace('\\n','\n')
-              gap=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',gap)
-              cleaned.append(gap.strip())
-          out='run_id=30322442450\njob_id=90160942981\ncoverage_gap_count='+str(len(cleaned))+'\n\n'+'\n'.join(cleaned)
+          for line in selected:
+              line=re.sub(r'^\d{4}-\d{2}-\d{2}T[^Z]+Z\s*','',line)
+              cleaned.append(line[:2200])
+          out='run_id=30325566289\njob_id=90170149140\n\n'+'\n'.join(cleaned)
           Path('diagnostics').mkdir(exist_ok=True)
-          Path('diagnostics/latest-coverage-gaps.txt').write_text(out[:50000])
+          Path('diagnostics/latest-semantic-coverage-error.txt').write_text(out[:50000])
           PY
           git config user.name "orvyq-diagnostics-bot"
           git config user.email "orvyq-diagnostics-bot@users.noreply.github.com"
-          git add diagnostics/latest-coverage-gaps.txt
-          git commit -m "Record complete Project 002 coverage gaps [skip ci]" || exit 0
+          git add diagnostics/latest-semantic-coverage-error.txt
+          git commit -m "Record latest semantic coverage diagnostics [skip ci]" || exit 0
           git push origin HEAD:main
