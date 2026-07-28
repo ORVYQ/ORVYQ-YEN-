@@ -25,7 +25,7 @@ jobs:
           set -euo pipefail
           runs="$(gh api "repos/${{ github.repository }}/actions/runs?per_page=100")"
           body="$(printf '%s' "$runs" | jq -r '
-            [ .workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or .name == "ORVYQ Full-Length Review" or .name == "ORVYQ Full Length Review" or .name == "ORVYQ Project 002 Author Creative Coverage" or .name == "ORVYQ Project 002 Close Semantic Coverage Gaps") ][0:20]
+            [ .workflow_runs[] | select(.name == "ORVYQ Candidate Validation" or .name == "ORVYQ Full-Length Review" or .name == "ORVYQ Full Length Review" or .name == "ORVYQ Project 002 Author Creative Coverage" or .name == "ORVYQ Project 002 Close Semantic Coverage Gaps" or .name == "ORVYQ Fix CLM008 Recap Cap") ][0:20]
             | if length == 0 then "No relevant ORVYQ runs found."
               else map("- " + .name + " run `" + (.id|tostring) + "`: status=`" + .status + "`, conclusion=`" + (.conclusion // "null") + "`, head_sha=`" + .head_sha + "`, url=" + .html_url) | "Latest ORVYQ coverage/validation/review runs:\n" + join("\n") end')"
           printf '%s\n' "$body" > diagnostics/latest-orvyq-runs.txt
@@ -36,4 +36,4 @@ jobs:
           git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T13:10+03:00 after generic-card duration fix.
+# trigger 2026-07-28T13:20+03:00 after CLM008 recap-cap correction.
