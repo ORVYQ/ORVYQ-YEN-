@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Apply structural section-title fix
         run: |
           python3 scripts/orvyq_one_shot_structural_card_fix.py
