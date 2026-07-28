@@ -36,4 +36,4 @@ jobs:
           git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T17:10+03:00 after CLM010 and CLM015 recap corrections.
+# trigger 2026-07-28T20:08+03:00 after CLM015 slice 34 natural-width correction.
