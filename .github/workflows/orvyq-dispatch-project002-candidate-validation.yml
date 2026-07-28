@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after extending the canonical licensed music cue sheet from frame zero through the exact film end. This fixes the real continuity gap without weakening audio quality gates. Source commit: \`e8cd68d\`."
+            -f body="Project 002 Candidate Validation re-dispatched on latest branch head \`7396b99\` after semantic footage reuse rationale, full music continuity, and generic graphic-card ratio corrections. No quality threshold was weakened."
 
-# Trigger revision: 2026-07-28T03:09+03:00; full-timeline music continuity fixed at e8cd68daeabce08d39f367411c3e74903fdc4505.
+# Trigger revision: 2026-07-28T05:15+03:00; latest Project 002 quality head 7396b999141fd2695eb54cd3c79cce7ec9bc8a13.
