@@ -147,15 +147,19 @@ jobs:
             exit "$status"
           fi
 
-      - name: Commit authored semantic coverage
+      - name: Commit authored semantic coverage when changed
         run: |
           set -euo pipefail
           git config user.name "orvyq-semantic-editor"
           git config user.email "orvyq-semantic-editor@users.noreply.github.com"
           git add projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
-          git commit -m "Close Project 002 evidence runs with semantic footage"
-          git pull --rebase origin agent/002-deep-sea-cold-war
-          git push origin HEAD:agent/002-deep-sea-cold-war
+          if git diff --cached --quiet; then
+            echo "Semantic coverage plan is already current; continuing to Candidate Validation."
+          else
+            git commit -m "Close Project 002 evidence runs with semantic footage"
+            git pull --rebase origin agent/002-deep-sea-cold-war
+            git push origin HEAD:agent/002-deep-sea-cold-war
+          fi
 
       - name: Re-dispatch Candidate Validation
         env:
@@ -166,7 +170,7 @@ jobs:
             --ref agent/002-deep-sea-cold-war \
             -f project_id=002-the-new-war-beneath-the-ocean
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after the final semantic evidence run was closed with narration-specific footage. No quality threshold was weakened."
+            -f body="Project 002 Candidate Validation re-dispatched after the final semantic evidence run was validated. The authored coverage plan was committed when changed; an already-current plan no longer blocks the workflow. No quality threshold was weakened."
 
       - name: Upload coverage diagnostics
         if: always()
