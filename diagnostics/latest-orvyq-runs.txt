@@ -1,4 +1,6 @@
 Latest ORVYQ coverage/validation/review runs:
+- ORVYQ Candidate Validation run `30386441978`: status=`in_progress`, conclusion=`null`, head_sha=`514aa06d71306d80611f94f497a148d7d8bec9c2`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30386441978
+- ORVYQ Candidate Validation run `30381761130`: status=`completed`, conclusion=`failure`, head_sha=`5b1937a6d9d9cfe81f4097fa7f63bd0095657b0f`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30381761130
 - ORVYQ Candidate Validation run `30376871334`: status=`completed`, conclusion=`failure`, head_sha=`1c3bb689d29e40e4d61addeef7ac1b5e62b16848`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30376871334
 - ORVYQ Candidate Validation run `30364320651`: status=`completed`, conclusion=`failure`, head_sha=`a2d3a4148736dc02bdcb332e24737ac874d59e8d`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30364320651
 - ORVYQ Fix CLM008 Recap Cap run `30353753230`: status=`completed`, conclusion=`failure`, head_sha=`1403f3b8a2a6d8f6ce3fcd541dd27e1578bb8e18`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30353753230
@@ -7,6 +9,3 @@ Latest ORVYQ coverage/validation/review runs:
 - ORVYQ Fix CLM008 Recap Cap run `30349960442`: status=`completed`, conclusion=`failure`, head_sha=`5e8a01f370be24ee47a63a445a3a0fdb3a0fdcba`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30349960442
 - ORVYQ Candidate Validation run `30349530672`: status=`completed`, conclusion=`failure`, head_sha=`d9ad1df94a3ed3cbd6bf2c59d2f813cfbe1cebee`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30349530672
 - ORVYQ Candidate Validation run `30347688067`: status=`completed`, conclusion=`failure`, head_sha=`f1b12be0464de39f454a9e3eed95c8da5965fc75`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30347688067
-- ORVYQ Candidate Validation run `30346028230`: status=`completed`, conclusion=`failure`, head_sha=`3426707ff829805b63fbd0841183eca72dc3e1aa`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30346028230
-- ORVYQ Candidate Validation run `30345428551`: status=`completed`, conclusion=`cancelled`, head_sha=`3426707ff829805b63fbd0841183eca72dc3e1aa`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30345428551
-- ORVYQ Candidate Validation run `30344714471`: status=`completed`, conclusion=`failure`, head_sha=`777b1e19b10bf6d11b824cd824baa3743072735d`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30344714471
