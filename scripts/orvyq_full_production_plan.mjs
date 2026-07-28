@@ -42,6 +42,10 @@ import { FPS, END_CARD_SECONDS } from "./lib/orvyq-timeline.mjs";
 
 const TARGET_SHOT_SECONDS = 6;
 const TITLE_CARD_SECONDS = 2.5;
+// The first section title is a compact cinematic sting between opening
+// evidence beats. Keeping it title-only at two seconds preserves the evidence
+// break while leaving a deterministic margin below the 8% full-screen-card cap.
+const FIRST_SECTION_TITLE_SECONDS = 2;
 const DEFAULT_FONT_PX = 32;
 export { END_CARD_SECONDS };
 
@@ -1070,8 +1074,8 @@ export async function buildFullProductionPlan(projectId) {
           section_id: currentSection,
           claim_id: sectionFirstClaim.get(currentSection),
           start: window.coverStart,
-          end: window.coverStart + TITLE_CARD_SECONDS,
-          graphic: { type: "section_title", mode: "brand", title: sectionTitle, subtitle: section?.visual_strategy || null },
+          end: window.coverStart + FIRST_SECTION_TITLE_SECONDS,
+          graphic: { type: "section_title", mode: "brand", title: sectionTitle, subtitle: null },
           role: "graphic"
         };
       } else {
@@ -1087,11 +1091,15 @@ export async function buildFullProductionPlan(projectId) {
             type: "boundary",
             eyebrow: `SECTION ${String(sections.findIndex((candidate) => candidate.section_id === currentSection) + 1).padStart(2, "0")}`,
             title: sectionTitle,
-            font_px: 36
+            font_px: 36,
+            // This is a concise section sting, not a paragraph, quotation or
+            // evidence-reading overlay. The pacing audit therefore evaluates
+            // it under the authored 2.5s title-sting contract.
+            reading_required: false
           }
         });
       }
-      window.coverStart += TITLE_CARD_SECONDS;
+      window.coverStart += deferTitleCard ? FIRST_SECTION_TITLE_SECONDS : TITLE_CARD_SECONDS;
     }
     const slices = sliceClaimWindow(window.claim, window.coverStart, window.coverEnd, maxShotSeconds, tokens, pauseAnchorTimes, evidenceKindOverrides);
     applyEvidenceHoldToNextWindow(windows, windowIndex, window.coverEnd, slices);

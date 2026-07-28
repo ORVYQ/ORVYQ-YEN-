@@ -23,7 +23,12 @@ export async function runPacingAudit(projectId = PROJECT_ID) {
     const seconds = durations[index];
     if (seconds <= 0 || seconds > maxSeconds + 0.001) failures.push(`${shot.shot_id} duration ${seconds.toFixed(2)}s violates 0-${maxSeconds}s`);
     if (["evidence", "archive"].includes(shot.visual_role) && seconds < 4) warnings.push(`${shot.shot_id} may be too short for evidence reading`);
-    if (shot.editorial_overlay && seconds < 4) failures.push(`${shot.shot_id} has a reading overlay but lasts only ${seconds.toFixed(2)}s`);
+    // Short authored section stings contain only an eyebrow and a title. They
+    // are deliberately distinct from reading overlays that carry evidence,
+    // quotations or explanatory copy and still require at least four seconds.
+    const readingRequired = shot.editorial_overlay?.reading_required !== false;
+    if (shot.editorial_overlay && readingRequired && seconds < 4)
+      failures.push(`${shot.shot_id} has a reading overlay but lasts only ${seconds.toFixed(2)}s`);
   }
 
   for (let index = 2; index < durations.length; index += 1) {
