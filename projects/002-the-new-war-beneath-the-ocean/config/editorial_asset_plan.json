@@ -16,7 +16,8 @@
         "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
         "trimInRatio": 0,
         "motion": "push",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This industrial-operation image is introduced during Japan's technical milestone and returns later during the industrial timeline as a deliberate bridge from a completed test to the still-unfinished production chain; the two uses occupy distinct trim windows."
       }
     },
     "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT": {
@@ -30,13 +31,15 @@
         "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
         "trimInRatio": 0.1,
         "motion": "hold",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This processing and supply-chain image is introduced under China's material chokepoint and returns under the unfinished mining-code section to contrast physical industrial concentration with unresolved governance; each occurrence uses a distinct trim window."
       },
       "4": {
         "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
         "trimInRatio": 0.15,
         "motion": "push",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This mineral-supply image is introduced while explaining concentration risk and returns under mineral-specific scarcity at a distinct trim window, narrowing the broad chokepoint argument to the metals and chemistries that actually matter."
       }
     },
     "CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK": {
@@ -44,7 +47,8 @@
         "asset": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
         "trimInRatio": 0.16,
         "motion": "drift_left",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This trade-and-supply image is introduced when export controls become a physical shortage and returns under common heritage at a distinct trim window, contrasting controlled national supply with resources governed as a shared domain."
       }
     },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
@@ -52,19 +56,22 @@
         "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
         "trimInRatio": 0.24,
         "motion": "drift_right",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This industrial-operation image returns from the technical-milestone section at a distinct trim window, deliberately connecting demonstrated lifting capability with the larger production-chain sequence that remains to be proven."
       },
       "2": {
         "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
         "trimInRatio": 0,
         "motion": "drift_left",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This processing-chain image is introduced while separating Japan's test milestones and returns under the refining-bottleneck claim at a distinct trim window, connecting extraction hardware to the downstream gate that determines usable supply."
       },
       "4": {
         "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
         "trimInRatio": 0.15,
         "motion": "drift_left",
-        "role": "human_context"
+        "role": "human_context",
+        "reuse_reason": "This human industrial-work image is introduced while describing the planned production chain and returns under the industry's counterargument at a distinct trim window, keeping real workers and operators present on both sides of the trade-off."
       },
       "6": {
         "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
@@ -86,7 +93,8 @@
         "asset": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
         "trimInRatio": 0.15,
         "motion": "pull",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This trade-and-supply image returns from the export-control claim at a distinct trim window, deliberately setting national restriction against the common-heritage principle without presenting the stock footage as primary evidence."
       },
       "4": {
         "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
@@ -101,7 +109,8 @@
         "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
         "trimInRatio": 0,
         "motion": "hold",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This processing and supply-chain image returns from the chokepoint claim at a distinct trim window, linking the physical race for capacity to the legal framework that has not yet been completed."
       }
     },
     "CLM_007_US_PARALLEL_ROUTE": {
@@ -116,7 +125,8 @@
         "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
         "trimInRatio": 0.15,
         "motion": "drift_left",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure."
       },
       "5": {
         "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
@@ -131,7 +141,8 @@
         "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
         "trimInRatio": 0.16,
         "motion": "drift_left",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This regulatory and operational context is introduced while clarifying that no U.S. commercial permit exists and returns later at a distinct trim window when the film weighs midwater-discharge risk before any commercial decision."
       }
     },
     "CLM_009_INDUSTRY_COUNTERARGUMENT": {
@@ -139,7 +150,8 @@
         "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
         "trimInRatio": 0.24,
         "motion": "drift_right",
-        "role": "human_context"
+        "role": "human_context",
+        "reuse_reason": "This human industrial-work image returns from Japan's production timeline at a distinct trim window, deliberately grounding the industry's supply-security argument in the same real-world operational context rather than a new generic cutaway."
       },
       "2": {
         "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
@@ -168,7 +180,8 @@
         "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
         "trimInRatio": 0.32,
         "motion": "pull",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This mineral-supply image returns from the China chokepoint sequence at a distinct trim window, deliberately shifting the same supply question from national concentration to mineral-specific demand and substitution."
       }
     },
     "CLM_011_REFINING_BOTTLENECK": {
@@ -176,7 +189,8 @@
         "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
         "trimInRatio": 0,
         "motion": "hold",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This processing-chain image returns from Japan's industrial timeline at a distinct trim window, deliberately showing that reaching or lifting material is not the same as refining it into a strategic input."
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -207,7 +221,8 @@
         "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
         "trimInRatio": 0,
         "motion": "hold",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This ecological-impact image is introduced with the measured biodiversity result and returns under midwater-discharge risk at a distinct trim window, carrying the film's evidence-led ecological consequence motif from seabed disturbance into the water column."
       },
       "5": {
         "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
@@ -222,7 +237,8 @@
         "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
         "trimInRatio": 0.24,
         "motion": "drift_right",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This ocean-impact context returns from the U.S. parallel-route section at a distinct trim window, deliberately shifting from competing legal routes to the shared physical question of how disturbed sediment moves."
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
@@ -230,7 +246,8 @@
         "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
         "trimInRatio": 0.32,
         "motion": "pull",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This ecological-impact image returns from the industrial-trial biodiversity section at a distinct trim window, deliberately connecting observed biological change with the broader question of where discharged sediment and processing water may create risk."
       },
       "2": {
         "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
@@ -243,7 +260,8 @@
         "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
         "trimInRatio": 0.15,
         "motion": "hold",
-        "role": "context"
+        "role": "context",
+        "reuse_reason": "This regulatory and operational context returns from the no-permit claim at a distinct trim window, deliberately connecting the absence of approval with the unresolved environmental conditions that approval would have to address."
       },
       "12": {
         "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
@@ -481,7 +499,7 @@
       },
       "7": {
         "mode": "illustrative",
-        "title": "1979 MACHINE ≠ MODERN FLEET",
+        "title": "1979 MACHINE \u2260 MODERN FLEET",
         "subtitle": "A small experimental collector is not the same as continuous commercial operation.",
         "labels": [
           "1979: ONE MACHINE",
