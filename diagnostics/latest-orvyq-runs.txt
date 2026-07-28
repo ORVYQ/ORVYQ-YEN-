@@ -1,4 +1,10 @@
 Latest ORVYQ coverage/validation/review runs:
+- ORVYQ Candidate Validation run `30341511184`: status=`queued`, conclusion=`null`, head_sha=`ffea4c02fb414c57118c9d801975e4119d3e3b96`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30341511184
+- ORVYQ Project 002 Close Semantic Coverage Gaps run `30341463404`: status=`in_progress`, conclusion=`null`, head_sha=`db133c87e8cf37b698e590cd71b0475856d19513`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30341463404
+- ORVYQ Candidate Validation run `30341216914`: status=`completed`, conclusion=`failure`, head_sha=`ffea4c02fb414c57118c9d801975e4119d3e3b96`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30341216914
+- ORVYQ Project 002 Close Semantic Coverage Gaps run `30341168561`: status=`completed`, conclusion=`success`, head_sha=`c0f818b852308166c5dc7fd362ab3b686ccdbfff`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30341168561
+- ORVYQ Project 002 Close Semantic Coverage Gaps run `30334125518`: status=`completed`, conclusion=`failure`, head_sha=`81d2e52725f83cb02210f98fa033d308fd26826c`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30334125518
+- ORVYQ Project 002 Close Semantic Coverage Gaps run `30332456320`: status=`completed`, conclusion=`failure`, head_sha=`408dfe4377266b19c9eedf2a93c488ee4bae592c`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30332456320
 - ORVYQ Project 002 Close Semantic Coverage Gaps run `30331027175`: status=`completed`, conclusion=`failure`, head_sha=`c5db66ff41c7e65d109f8e7584ce32ed1b38cf00`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30331027175
 - ORVYQ Project 002 Close Semantic Coverage Gaps run `30329547823`: status=`completed`, conclusion=`failure`, head_sha=`02c1cfc97ac5876fb2fa4815977a6e6a9a8bcdba`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30329547823
 - ORVYQ Project 002 Close Semantic Coverage Gaps run `30328345303`: status=`completed`, conclusion=`failure`, head_sha=`5aa7b53a8109b8b5cd4e4d8f3e7b4c00ee96d0f1`, url=https://github.com/ORVYQ/ORVYQ-YEN-/actions/runs/30328345303
