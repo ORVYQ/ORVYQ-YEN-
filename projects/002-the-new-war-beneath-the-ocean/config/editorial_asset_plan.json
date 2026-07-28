@@ -333,15 +333,6 @@
         "role": "human_context",
         "reuse_reason": "The same contemplative human figure's own reuse_reason (CLM_012) already names the strategic-insurance beat as its intended second occurrence, marking the film's two most reflective moments without introducing a new, unrelated face."
       },
-      "20": {
-        "asset": "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
-        "trimInRatio": 0,
-        "motion": "drift_right",
-        "role": "context",
-        "semantic_anchor": "There is another possibility.",
-        "semantic_rationale": "A real research environment supports the narrated possibility that new technologies and changing chemistry can reduce future mineral demand; it is contextual footage, not proof of a specific breakthrough.",
-        "reuse_reason": "A deliberately separated second use of the same verified clip, using a distinct trim window to connect two explicitly related narration beats; the footage is contextual and never replaces primary evidence."
-      },
       "22": {
         "asset": "assets/footage/scene_022_bcbf8b5226c8c67a6a8f69c4.mp4",
         "trimInRatio": 0,
@@ -592,6 +583,16 @@
           "DEEP OCEAN",
           "NOT VISIBLE FROM SHORE",
           "MEASURED, NOT ASSUMED"
+        ]
+      },
+      "20": {
+        "mode": "illustrative",
+        "title": "A POSSIBILITY, NOT A GUARANTEE",
+        "subtitle": "New technology and changing battery chemistry could reduce future mineral demand -- they have not yet.",
+        "labels": [
+          "NOT YET REALIZED",
+          "CHANGING CHEMISTRY",
+          "FUTURE DEMAND"
         ]
       }
     }
