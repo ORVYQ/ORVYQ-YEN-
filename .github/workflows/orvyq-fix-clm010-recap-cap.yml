@@ -1,4 +1,4 @@
-name: ORVYQ Fix CLM010 Recap Cap
+name: ORVYQ Fix Recap Capacity
 
 on:
   workflow_dispatch:
@@ -47,7 +47,7 @@ jobs:
              projects/002-the-new-war-beneath-the-ocean/voice/narration_alignment.json
           node scripts/orvyq_resolve_pauses.mjs --project-id=002-the-new-war-beneath-the-ocean
 
-      - name: Set feasible CLM010 recap duration cap
+      - name: Set feasible authored recap duration caps
         run: |
           python - <<'PY'
           import json
@@ -55,6 +55,7 @@ jobs:
           p = Path('projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json')
           data = json.loads(p.read_text())
           data['graphic_break_assignments']['CLM_010_SCARCITY_IS_MINERAL_SPECIFIC']['2']['maxSeconds'] = 7.75
+          data['graphic_break_assignments']['CLM_015_MIDWATER_DISCHARGE_RISK']['6']['maxSeconds'] = 6.5
           p.write_text(json.dumps(data, indent=2) + '\n')
           PY
 
@@ -63,7 +64,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean 2>&1 | tee /tmp/clm010-validation.log
+          node scripts/orvyq_full_production_plan.mjs --project-id=002-the-new-war-beneath-the-ocean 2>&1 | tee /tmp/recap-cap-validation.log
           status=${PIPESTATUS[0]}
           echo "status=$status" >> "$GITHUB_OUTPUT"
           exit "$status"
@@ -76,8 +77,8 @@ jobs:
           set -euo pipefail
           body="$(python - <<'PY'
           from pathlib import Path
-          text=Path('/tmp/clm010-validation.log').read_text(errors='replace')
-          print('Exact Project 002 full-production validation failure after the CLM_010 capacity correction:\n\n```text\n'+text[-7000:]+'\n```')
+          text=Path('/tmp/recap-cap-validation.log').read_text(errors='replace')
+          print('Exact Project 002 full-production validation failure after feasible recap-cap corrections:\n\n```text\n'+text[-7000:]+'\n```')
           PY
           )"
           gh api repos/${{ github.repository }}/issues/3/comments -f body="$body"
@@ -90,9 +91,13 @@ jobs:
           git config user.name "orvyq-coverage-editor"
           git config user.email "orvyq-coverage-editor@users.noreply.github.com"
           git add projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
-          git commit -m "Use feasible CLM010 recap duration cap"
-          git pull --rebase origin agent/002-deep-sea-cold-war
-          git push origin HEAD:agent/002-deep-sea-cold-war
+          if git diff --cached --quiet; then
+            echo "Recap caps are already current; continuing without an empty commit."
+          else
+            git commit -m "Use feasible authored recap duration caps"
+            git pull --rebase origin agent/002-deep-sea-cold-war
+            git push origin HEAD:agent/002-deep-sea-cold-war
+          fi
 
       - name: Re-dispatch Candidate Validation
         if: success()
@@ -104,6 +109,6 @@ jobs:
             --ref agent/002-deep-sea-cold-war \
             -f project_id=002-the-new-war-beneath-the-ocean
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched after setting CLM_010's recap cap to 7.75s, within the exact 0.15s neighboring capacity reported by the full-production planner. No quality threshold or card content was changed."
+            -f body="Project 002 Candidate Validation re-dispatched after setting CLM_010 and CLM_015 authored recap caps to durations supported by their exact neighboring capacity. Card content and all quality thresholds remain unchanged."
 
-# Triggered 2026-07-28 after confirming the initial workflow-file creation did not produce a visible run.
+# Triggered 2026-07-28 after exact CLM_015 capacity diagnostics.
