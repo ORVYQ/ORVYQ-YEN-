@@ -1,0 +1,46 @@
+name: Inspect Candidate Validation 30364320651
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-inspect-30364320651.yml"
+
+permissions:
+  actions: read
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract exact failing error
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh api repos/${{ github.repository }}/actions/jobs/90291577812/logs > /tmp/job.log
+          python - <<'PY'
+          from pathlib import Path
+          lines=Path('/tmp/job.log').read_text(errors='replace').splitlines()
+          hits=[]
+          for i,l in enumerate(lines):
+              if '"ok":false' in l or '##[error]' in l or 'Error:' in l or 'error":"' in l:
+                  hits.append(i)
+          idx=hits[0] if hits else max(0,len(lines)-120)
+          start=max(0,idx-35); end=min(len(lines),idx+80)
+          out='\n'.join(lines[start:end])+'\n'
+          Path('diagnostics/candidate-validation-30364320651-error.txt').write_text(out)
+          print(out)
+          PY
+          body="$(sed -n '1,120p' diagnostics/candidate-validation-30364320651-error.txt)"
+          gh api repos/${{ github.repository }}/issues/3/comments -f body="Candidate Validation 30364320651 exact failure:\n\n\`\`\`text\n${body}\n\`\`\`"
+          git config user.name orvyq-inspector
+          git config user.email orvyq-inspector@users.noreply.github.com
+          git add diagnostics/candidate-validation-30364320651-error.txt
+          git commit -m "Record Candidate Validation 30364320651 exact error [skip ci]"
+          git push origin HEAD:main
