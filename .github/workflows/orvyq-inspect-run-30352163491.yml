@@ -1,0 +1,58 @@
+name: Inspect Candidate Validation 30352163491
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/orvyq-inspect-run-30352163491.yml"
+
+permissions:
+  actions: read
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Extract exact failure
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p diagnostics
+          gh api repos/${{ github.repository }}/actions/jobs/90251920480/logs > /tmp/job.log
+          python - <<'PY'
+          from pathlib import Path
+          lines = Path('/tmp/job.log').read_text(errors='replace').splitlines()
+          hits=[]
+          for i,line in enumerate(lines):
+              if ('{"ok":false' in line or '##[error]' in line or 'error"' in line.lower()) and i > 100:
+                  hits.extend(lines[max(0,i-12):min(len(lines),i+8)])
+          if not hits:
+              hits=lines[-180:]
+          text='\n'.join(hits[-220:])
+          Path('diagnostics/candidate-validation-30352163491-error.txt').write_text(text+'\n')
+          PY
+          body="$(python - <<'PY'
+          from pathlib import Path
+          text=Path('diagnostics/candidate-validation-30352163491-error.txt').read_text(errors='replace')
+          print('Candidate Validation run `30352163491`, job `90251920480` exact error diagnostics:\n\n```text\n'+text[-10000:]+'\n```')
+          PY
+          )"
+          gh api repos/${{ github.repository }}/issues/3/comments -f body="$body"
+
+      - name: Commit diagnostics
+        run: |
+          set -euo pipefail
+          git config user.name "orvyq-inspector"
+          git config user.email "orvyq-inspector@users.noreply.github.com"
+          git add diagnostics/candidate-validation-30352163491-error.txt
+          git commit -m "Record Candidate Validation 30352163491 exact error [skip ci]" || exit 0
+          git push origin HEAD:main
