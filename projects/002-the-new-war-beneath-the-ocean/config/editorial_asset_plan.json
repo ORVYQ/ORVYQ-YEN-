@@ -520,8 +520,7 @@
           "CHEMISTRY",
           "DEMAND",
           "SUBSTITUTION"
-        ],
-        "maxSeconds": 7.0
+        ]
       }
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
@@ -554,8 +553,7 @@
           "NEAR SEABED",
           "DECLINES WITH DISTANCE",
           "MEASURED, NOT ASSUMED"
-        ],
-        "maxSeconds": 6.5
+        ]
       },
       "4": {
         "mode": "illustrative",
@@ -564,8 +562,7 @@
         "labels": [
           "MEASURED DECLINE",
           "NOT A VERDICT"
-        ],
-        "maxSeconds": 6.6
+        ]
       }
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
