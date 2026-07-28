@@ -495,7 +495,8 @@
         "labels": [
           "PLANNED",
           "NOT GUARANTEED"
-        ]
+        ],
+        "maxSeconds": 6
       }
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
@@ -533,7 +534,8 @@
           "1979 TEST",
           "2023 SURVEY",
           "44 YEARS"
-        ]
+        ],
+        "maxSeconds": 6
       },
       "7": {
         "mode": "illustrative",
@@ -542,7 +544,8 @@
         "labels": [
           "1979: ONE MACHINE",
           "TODAY: A FLEET"
-        ]
+        ],
+        "maxSeconds": 6
       }
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
