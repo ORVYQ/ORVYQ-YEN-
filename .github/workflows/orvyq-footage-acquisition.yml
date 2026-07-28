@@ -47,9 +47,17 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PROJECT_ID="${{ inputs.project_id }}"
           else
-            CHANGED_PLAN="$(git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" | grep -E '^projects/[^/]+/research/footage_acquisition_plan\.json$' | head -n 1 || true)"
-            if [ -n "$CHANGED_PLAN" ]; then
-              PROJECT_ID="$(jq -r '.project_id' "$CHANGED_PLAN")"
+            CHANGED_INPUT="$(
+              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
+                grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints)\.json$' |
+                head -n 1 || true
+            )"
+            if [ -n "$CHANGED_INPUT" ]; then
+              PROJECT_ID="$(jq -r '.project_id' "$CHANGED_INPUT")"
+              if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+                echo "::error::Changed footage input $CHANGED_INPUT does not declare a valid project_id."
+                exit 1
+              fi
             else
               mapfile -t CANDIDATES < <(
                 find projects -path '*/research/footage_acquisition_plan.json' -type f -print0 |
@@ -93,7 +101,10 @@ jobs:
           sudo apt-get install -y --no-install-recommends ffmpeg
 
       - name: Acquire missing licensed contextual footage and resolve editorial targets
-        run: node scripts/orvyq_acquire_footage_demand.mjs --project-id="$PROJECT_ID"
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_acquire_footage_demand.mjs --project-id="$PROJECT_ID" 2>&1 | tee footage-acquisition.log
 
       - name: Validate every acquired or reused clip and provenance record
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
@@ -144,6 +155,7 @@ jobs:
           name: orvyq-footage-acquisition-${{ steps.project.outputs.project_id }}-${{ github.run_id }}
           retention-days: 14
           path: |
+            footage-acquisition.log
             projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
@@ -155,11 +167,20 @@ jobs:
 
       - name: Report acquisition result on PR 3
         if: always()
+        shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
           JOB_STATUS: ${{ job.status }}
           PROJECT_ID: ${{ steps.project.outputs.project_id }}
         run: |
           PROJECT_LABEL="${PROJECT_ID:-unresolved}"
-          gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${{ github.ref_name }}\`."
+          DETAILS="$(tail -n 20 footage-acquisition.log 2>/dev/null || true)"
+          BODY="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${{ github.ref_name }}\`."
+          if [ -n "$DETAILS" ]; then
+            BODY="${BODY}
+
+\`\`\`text
+${DETAILS}
+\`\`\`"
+          fi
+          gh api repos/${{ github.repository }}/issues/3/comments -f body="$BODY"
