@@ -36,4 +36,4 @@ jobs:
           git commit -m "Record latest ORVYQ run state [skip ci]" || exit 0
           git push origin HEAD:main
 
-# trigger 2026-07-28T11:10+03:00 after semantic coverage retry dispatch.
+# trigger 2026-07-28T13:10+03:00 after generic-card duration fix.
