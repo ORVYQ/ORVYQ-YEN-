@@ -583,6 +583,16 @@
           "-37% DENSITY",
           "-32% RICHNESS"
         ]
+      },
+      "34": {
+        "mode": "illustrative",
+        "title": "DAMAGE CAN BE INVISIBLE FROM THE SURFACE",
+        "subtitle": "Deep-ocean disturbance is measured by instruments, not by what a ship on the surface can see.",
+        "labels": [
+          "DEEP OCEAN",
+          "NOT VISIBLE FROM SHORE",
+          "MEASURED, NOT ASSUMED"
+        ]
       }
     }
   },
