@@ -25,6 +25,7 @@ concurrency:
 
 env:
   PROJECT_ID: ${{ inputs.project_id }}
+  SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
   validate:
@@ -33,13 +34,14 @@ jobs:
       - name: Checkout exact source
         uses: actions/checkout@v4
         with:
+          ref: ${{ env.SOURCE_SHA }}
           lfs: true
 
       - name: Lock exact source commit
         run: |
           set -euo pipefail
           ACTUAL_SHA="$(git rev-parse HEAD)"
-          test "$ACTUAL_SHA" = "$GITHUB_SHA"
+          test "$ACTUAL_SHA" = "$SOURCE_SHA"
           printf '%s\n' "$ACTUAL_SHA" | tee validation-source-sha.txt
 
       - name: Set up Node
