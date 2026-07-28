@@ -68,22 +68,6 @@ if pacing.count(old) != 1:
 pacing = pacing.replace(old, new)
 pacing_path.write_text(pacing)
 
-# Restore the normal CI workflow after this one-shot job commits the real fix.
-ci_path = Path(".github/workflows/ci.yml")
-ci = ci_path.read_text()
-ci = ci.replace("permissions:\n  contents: write", "permissions:\n  contents: read", 1)
-start = ci.find("  apply_project002_section_sting_fix:\n")
-end = ci.find("  project002_candidate_validation:\n", start)
-if start == -1 or end == -1:
-    raise SystemExit("Could not locate temporary CI patch job markers")
-ci = ci[:start] + ci[end:]
-ci = ci.replace(
-    "  project002_candidate_validation:\n    if: false\n",
-    "  project002_candidate_validation:\n    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/002-deep-sea-cold-war'\n",
-    1,
-)
-ci_path.write_text(ci)
-
 # The helper is intentionally self-deleting; the resulting branch contains
-# only the production fix and the normal validation workflow.
+# only the production planner and pacing-audit changes.
 Path(__file__).unlink()
