@@ -396,15 +396,6 @@
         "semantic_rationale": "A multidisciplinary decision meeting reflects the narrated trade-off among technological, ecological and social risks rather than presenting a simplistic pro- or anti-mining image.",
         "reuse_reason": "A deliberately separated second use of the same verified clip, using a distinct trim window to connect two explicitly related narration beats; the footage is contextual and never replaces primary evidence."
       },
-      "34": {
-        "asset": "assets/footage/scene_028_302643d5a7693ccd8c1b3aef.mp4",
-        "trimInRatio": 0,
-        "motion": "drift_left",
-        "role": "context",
-        "semantic_anchor": "The deep ocean may carry damage that cannot be seen from shore.",
-        "semantic_rationale": "Dark seabed and suspended sediment provide restrained physical context for distant, hard-to-observe impacts; measured plume claims remain source-backed graphics and documents.",
-        "reuse_reason": "A deliberately separated second use of the same verified clip, using a distinct trim window to connect two explicitly related narration beats; the footage is contextual and never replaces primary evidence."
-      },
       "36": {
         "asset": "assets/footage/scene_029_f96aaf3562a374104dc35a79.mp4",
         "trimInRatio": 0,
@@ -494,6 +485,13 @@
         "semantic_anchor": "The strongest case against rushing is not that science already knows every consequence. It is that science does not.",
         "semantic_rationale": "Scientists collecting baseline samples directly visualise the knowledge gap named in the narration. The shot supports uncertainty and the need for measurement without claiming that the generic expedition produced any cited result.",
         "reuse_reason": "A deliberately separated second use of the same verified clip, using a distinct trim window to connect two explicitly related narration beats; the footage is contextual and never replaces primary evidence."
+      },
+      "43": {
+        "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+        "trimInRatio": 0,
+        "motion": "drift_left",
+        "role": "human_context",
+        "reuse_reason": "A distinct, deliberately separated real trim window of this claim's own contextual footage."
       }
     }
   },
