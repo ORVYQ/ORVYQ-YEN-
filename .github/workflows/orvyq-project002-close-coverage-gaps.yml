@@ -183,3 +183,5 @@ jobs:
             projects/002-the-new-war-beneath-the-ocean/config/editorial_asset_plan.json
             projects/002-the-new-war-beneath-the-ocean/direction/editorial_blueprint.json
           retention-days: 30
+
+# Automation retrigger: 2026-07-28 semantic coverage idempotency fix verified.
