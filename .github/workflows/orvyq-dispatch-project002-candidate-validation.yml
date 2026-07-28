@@ -32,6 +32,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/${{ github.repository }}/issues/3/comments \
-            -f body="Project 002 Candidate Validation re-dispatched on current branch head \`1385eb97\`. Quality gates remain unchanged."
+            -f body="Project 002 Candidate Validation re-dispatched after extending the canonical licensed music cue sheet from frame zero through the exact film end. This fixes the real continuity gap without weakening audio quality gates. Source commit: \`e8cd68d\`."
 
-# Trigger revision: 2026-07-28T02:20+03:00; branch head 1385eb97e77c3217b53e2af065b44bb7b86e022c.
+# Trigger revision: 2026-07-28T03:09+03:00; full-timeline music continuity fixed at e8cd68daeabce08d39f367411c3e74903fdc4505.
