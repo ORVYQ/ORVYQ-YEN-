@@ -1,0 +1,115 @@
+2026-07-28T13:39:09.2981951Z # Subtest: evaluateEvidenceShot: does not flag two adjacent shots with genuinely different content
+2026-07-28T13:39:09.2983315Z ok 96 - evaluateEvidenceShot: does not flag two adjacent shots with genuinely different content
+2026-07-28T13:39:09.2984126Z   ---
+2026-07-28T13:39:09.2984465Z   duration_ms: 0.344654
+2026-07-28T13:39:09.2984838Z   ...
+2026-07-28T13:39:09.2985782Z # Subtest: evaluateEvidenceShot: fails when a required limitation is omitted
+2026-07-28T13:39:09.2986815Z ok 97 - evaluateEvidenceShot: fails when a required limitation is omitted
+2026-07-28T13:39:09.2987460Z   ---
+2026-07-28T13:39:09.2987858Z   duration_ms: 0.484846
+2026-07-28T13:39:09.2988222Z   ...
+2026-07-28T13:39:09.2989394Z # Subtest: evaluateEvidenceShot: fails when body content contains a number unsupported by the claim's own verified data
+2026-07-28T13:39:09.2991031Z ok 98 - evaluateEvidenceShot: fails when body content contains a number unsupported by the claim's own verified data
+2026-07-28T13:39:09.2992216Z   ---
+2026-07-28T13:39:09.2992560Z   duration_ms: 0.231842
+2026-07-28T13:39:09.2992918Z   ...
+2026-07-28T13:39:09.2993810Z # Subtest: evaluateEvidenceShot: does not flag a number that is genuinely present in the claim's own data
+2026-07-28T13:39:09.2995197Z ok 99 - evaluateEvidenceShot: does not flag a number that is genuinely present in the claim's own data
+2026-07-28T13:39:09.2996385Z   ---
+2026-07-28T13:39:09.2996774Z   duration_ms: 0.254676
+2026-07-28T13:39:09.2997148Z   ...
+2026-07-28T13:39:09.3102462Z # Subtest: music acquisition accepts an arbitrary project's licensed cue plan
+2026-07-28T13:39:09.3104110Z ok 100 - music acquisition accepts an arbitrary project's licensed cue plan
+2026-07-28T13:39:09.3105273Z   ---
+2026-07-28T13:39:09.3106370Z   duration_ms: 1.475486
+2026-07-28T13:39:09.3106944Z   ...
+2026-07-28T13:39:09.3108136Z # Subtest: music acquisition rejects project mismatch and duplicate cue mappings
+2026-07-28T13:39:09.3109881Z ok 101 - music acquisition rejects project mismatch and duplicate cue mappings
+2026-07-28T13:39:09.3110931Z   ---
+2026-07-28T13:39:09.3111451Z   duration_ms: 0.512277
+2026-07-28T13:39:09.3112253Z   ...
+2026-07-28T13:39:09.3113256Z # Subtest: attribution is generated from the project's template and metadata
+2026-07-28T13:39:09.3114896Z ok 102 - attribution is generated from the project's template and metadata
+2026-07-28T13:39:09.3116727Z   ---
+2026-07-28T13:39:09.3117308Z   duration_ms: 1.099602
+2026-07-28T13:39:09.3118136Z   ...
+2026-07-28T13:39:09.3119188Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T13:39:09.3120777Z # Subtest: downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T13:39:09.3122726Z ok 103 - downloadWithRetry returns the response bytes on first-attempt success without retrying
+2026-07-28T13:39:09.3123996Z   ---
+2026-07-28T13:39:09.3124752Z   duration_ms: 1.727196
+2026-07-28T13:39:09.3125919Z   ...
+2026-07-28T13:39:09.3127157Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ETIMEDOUT)"}
+2026-07-28T13:39:09.3129141Z # {"attempt":1,"max_attempts":1,"error":"Music download failed: HTTP 503 (cause: none reported)"}
+2026-07-28T13:39:09.3130676Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T13:39:09.3132744Z # Subtest: downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T13:39:09.3135009Z ok 104 - downloadWithRetry retries after a transient network error and succeeds once the fetch recovers
+2026-07-28T13:39:09.3136516Z   ---
+2026-07-28T13:39:09.3137177Z   duration_ms: 8.227638
+2026-07-28T13:39:09.3137890Z   ...
+2026-07-28T13:39:09.3139036Z # Subtest: downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T13:39:09.3140590Z ok 105 - downloadWithRetry reports the HTTP status code when the response is not ok
+2026-07-28T13:39:09.3141863Z   ---
+2026-07-28T13:39:09.3142659Z   duration_ms: 1.14565
+2026-07-28T13:39:09.3143262Z   ...
+2026-07-28T13:39:09.3144482Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T13:39:09.3146184Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: ENOTFOUND)"}
+2026-07-28T13:39:09.3147661Z # {"attempt":1,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T13:39:09.3149479Z # Subtest: downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T13:39:09.3151276Z ok 106 - downloadWithRetry gives up after the configured attempt count, preserving the last error as cause
+2026-07-28T13:39:09.3152451Z   ---
+2026-07-28T13:39:09.3153127Z   duration_ms: 4.694369
+2026-07-28T13:39:09.3153643Z   ...
+2026-07-28T13:39:09.3154661Z # {"attempt":2,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T13:39:09.3156252Z # {"attempt":3,"max_attempts":3,"error":"fetch failed (cause: none reported)"}
+2026-07-28T13:39:09.3157902Z # Subtest: downloadWithRetry does not retry beyond the configured attempts or invent a fallback source
+2026-07-28T13:39:09.3159636Z ok 107 - downloadWithRetry does not retry beyond the configured attempts or invent a fallback source
+2026-07-28T13:39:09.3160581Z   ---
+2026-07-28T13:39:09.3161054Z   duration_ms: 3.315584
+2026-07-28T13:39:09.3161569Z   ...
+2026-07-28T13:39:09.4622464Z # Subtest: computeCanonicalFrozenCandidate is deterministic: same inputs produce the same candidate_hash and render_bundle_hash
+2026-07-28T13:39:09.4626598Z ok 108 - computeCanonicalFrozenCandidate is deterministic: same inputs produce the same candidate_hash and render_bundle_hash
+2026-07-28T13:39:09.4627712Z   ---
+2026-07-28T13:39:09.4628103Z   duration_ms: 104.018272
+2026-07-28T13:39:09.4628494Z   ...
+2026-07-28T13:39:09.4988371Z # Subtest: candidate_hash changes when a real creative input (edit_plan.json) changes
+2026-07-28T13:39:09.5000636Z ok 109 - candidate_hash changes when a real creative input (edit_plan.json) changes
+2026-07-28T13:39:09.5007779Z   ---
+2026-07-28T13:39:09.5012669Z   duration_ms: 37.374607
+2026-07-28T13:39:09.5026187Z   ...
+2026-07-28T13:39:09.5247458Z # Subtest: candidate_hash is unaffected by operational-only fields (created_at is never part of the hashed identity)
+2026-07-28T13:39:09.5259120Z ok 110 - candidate_hash is unaffected by operational-only fields (created_at is never part of the hashed identity)
+2026-07-28T13:39:09.5260417Z   ---
+2026-07-28T13:39:09.5261160Z   duration_ms: 25.507336
+2026-07-28T13:39:09.5261919Z   ...
+2026-07-28T13:39:09.5395190Z # Subtest: kindFor maps known visual_treatment vocabulary and falls back to boundary for unknown values
+2026-07-28T13:39:09.5417667Z ok 111 - kindFor maps known visual_treatment vocabulary and falls back to boundary for unknown values
+2026-07-28T13:39:09.5446860Z   ---
+2026-07-28T13:39:09.5476593Z   duration_ms: 1.775918
+2026-07-28T13:39:09.5477229Z   ...
+2026-07-28T13:39:09.5506385Z # Subtest: titleCase strips the SEC_NN_ prefix and title-cases each word
+2026-07-28T13:39:09.5536727Z ok 112 - titleCase strips the SEC_NN_ prefix and title-cases each word
+2026-07-28T13:39:09.5563593Z   ---
+2026-07-28T13:39:09.5564172Z   duration_ms: 0.217225
+2026-07-28T13:39:09.5564634Z   ...
+2026-07-28T13:39:09.5565287Z # Subtest: locateClaimWindow finds an exact contiguous quote
+2026-07-28T13:39:09.5566490Z ok 113 - locateClaimWindow finds an exact contiguous quote
+2026-07-28T13:39:09.5567156Z   ---
+2026-07-28T13:39:09.5567583Z   duration_ms: 0.865367
+2026-07-28T13:39:09.5567998Z   ...
+2026-07-28T13:39:09.5568849Z # Subtest: locateClaimWindow falls back to bag-of-words matching for a reordered paraphrase
+2026-07-28T13:39:09.5570138Z ok 114 - locateClaimWindow falls back to bag-of-words matching for a reordered paraphrase
+2026-07-28T13:39:09.5570949Z   ---
+2026-07-28T13:39:09.5571456Z   duration_ms: 0.600431
+2026-07-28T13:39:09.5571949Z   ...
+2026-07-28T13:39:09.5572760Z # Subtest: locateClaimWindow throws when a claim cannot be located at all
+2026-07-28T13:39:09.5574064Z ok 115 - locateClaimWindow throws when a claim cannot be located at all
+2026-07-28T13:39:09.5574774Z   ---
+2026-07-28T13:39:09.5575138Z   duration_ms: 0.710346
+2026-07-28T13:39:09.5575789Z   ...
+2026-07-28T13:39:09.5577072Z # Subtest: sliceClaimWindow splits a window into slices no longer than the max, with no rotation and no artificial duration variation
+2026-07-28T13:39:09.5578955Z ok 116 - sliceClaimWindow splits a window into slices no longer than the max, with no rotation and no artificial duration variation
+2026-07-28T13:39:09.5579955Z   ---
+2026-07-28T13:39:09.5580336Z   duration_ms: 0.908778
+2026-07-28T13:39:09.5582007Z   ...
+2026-07-28T13:39:09.5583153Z # Subtest: sliceClaimWindow returns a single slice when the window already fits within the cap
