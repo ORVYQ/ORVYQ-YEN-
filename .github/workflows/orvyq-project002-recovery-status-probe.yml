@@ -1,5 +1,6 @@
 name: ORVYQ Project 002 Recovery Status Probe
 
+# One-shot status refresh after the repaired recovery workflow was dispatched.
 on:
   push:
     branches: [agent/002-deep-sea-cold-war]
