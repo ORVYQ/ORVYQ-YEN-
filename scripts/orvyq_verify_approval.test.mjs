@@ -4,7 +4,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { PROJECTS_DIR } from "./lib/fs-utils.mjs";
 import { computeCanonicalFrozenCandidate, sha256OfJson } from "./orvyq_frozen_candidate.mjs";
-import { verifyApprovalRecord } from "./orvyq_verify_approval.mjs";
+import { verifyApprovalRecord, verifyEditorialSignoff } from "./orvyq_verify_approval.mjs";
 
 const FIXTURE_PROJECT_ID = "998-verify-approval-fixture";
 const FIXTURE_DIR = path.join(PROJECTS_DIR, FIXTURE_PROJECT_ID);
@@ -197,4 +197,115 @@ test("a partial-duration review (review_total_frames < candidate total_frames) f
   const result = await verifyApprovalRecord(FIXTURE_PROJECT_ID, { expectedMode: "full" });
   assert.equal(result.pass, false);
   assert.ok(result.failures.some((f) => f.includes("review_total_frames")));
+});
+
+// ---- verifyEditorialSignoff() ----
+
+async function writeWarningReport(fileName, warnings) {
+  await fs.mkdir(path.join(FIXTURE_DIR, "qa"), { recursive: true });
+  await fs.writeFile(path.join(FIXTURE_DIR, "qa", fileName), JSON.stringify({ warnings }));
+}
+
+async function writeEditorialSignoff(signoff) {
+  await fs.mkdir(path.join(FIXTURE_DIR, "qa"), { recursive: true });
+  await fs.writeFile(path.join(FIXTURE_DIR, "qa", "editorial_signoff.json"), JSON.stringify(signoff, null, 2));
+}
+
+function editorialSignoffFor(candidate, overrides = {}) {
+  return {
+    approved: true,
+    reviewer: "brsctncnbrk@gmail.com",
+    approved_at: "2026-07-30T00:00:00Z",
+    candidate_hash: candidate.candidate_hash,
+    candidate_source_sha: candidate.canonical_candidate_identity.source_commit_sha,
+    acknowledged_warnings: [],
+    ...overrides
+  };
+}
+
+test("editorial: no qa/editorial_signoff.json committed -> FAIL", async (t) => {
+  await writeFixtureProject();
+  t.after(() => fs.rm(FIXTURE_DIR, { recursive: true, force: true }));
+  const candidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(candidate);
+
+  const result = await verifyEditorialSignoff(FIXTURE_PROJECT_ID);
+  assert.equal(result.pass, false);
+  assert.ok(result.failures.some((f) => f.includes("No qa/editorial_signoff.json")));
+});
+
+test("editorial: approved !== true -> FAIL", async (t) => {
+  await writeFixtureProject();
+  t.after(() => fs.rm(FIXTURE_DIR, { recursive: true, force: true }));
+  const candidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(candidate);
+  await writeEditorialSignoff(editorialSignoffFor(candidate, { approved: false }));
+
+  const result = await verifyEditorialSignoff(FIXTURE_PROJECT_ID);
+  assert.equal(result.pass, false);
+  assert.ok(result.failures.some((f) => f.includes("approved is not true")));
+});
+
+test("editorial: candidate changes after sign-off -> FAIL (stale candidate_hash)", async (t) => {
+  await writeFixtureProject();
+  t.after(() => fs.rm(FIXTURE_DIR, { recursive: true, force: true }));
+  const candidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(candidate);
+  await writeEditorialSignoff(editorialSignoffFor(candidate));
+
+  await writeFixtureProject({ shotCount: 2 });
+  const changedCandidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(changedCandidate);
+
+  const result = await verifyEditorialSignoff(FIXTURE_PROJECT_ID);
+  assert.equal(result.pass, false);
+  assert.ok(result.failures.some((f) => f.includes("candidate_hash")));
+});
+
+test("editorial: current warnings all acknowledged and approved -> PASS", async (t) => {
+  await writeFixtureProject();
+  t.after(() => fs.rm(FIXTURE_DIR, { recursive: true, force: true }));
+  const candidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(candidate);
+  await writeWarningReport("real_asset_coverage_audit.json", ["section SEC_06 has 0 distinct real evidence asset(s), below the target of 2"]);
+  await writeWarningReport("generic_card_audit.json", []);
+  await writeWarningReport("tension_card_audit.json", ["shot_029 (\"...\") is 2.0s, outside the typical 2.5-4.5s band"]);
+  await writeEditorialSignoff(
+    editorialSignoffFor(candidate, {
+      acknowledged_warnings: ["section SEC_06 has 0 distinct real evidence asset(s), below the target of 2", 'shot_029 ("...") is 2.0s, outside the typical 2.5-4.5s band']
+    })
+  );
+
+  const result = await verifyEditorialSignoff(FIXTURE_PROJECT_ID);
+  assert.equal(result.pass, true, result.failures.join("; "));
+});
+
+test("editorial: a NEW warning appears after sign-off was recorded -> FAIL", async (t) => {
+  await writeFixtureProject();
+  t.after(() => fs.rm(FIXTURE_DIR, { recursive: true, force: true }));
+  const candidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(candidate);
+  await writeWarningReport("real_asset_coverage_audit.json", ["section SEC_06 has 0 distinct real evidence asset(s), below the target of 2"]);
+  await writeEditorialSignoff(editorialSignoffFor(candidate, { acknowledged_warnings: [] }));
+
+  const result = await verifyEditorialSignoff(FIXTURE_PROJECT_ID);
+  assert.equal(result.pass, false);
+  assert.ok(result.failures.some((f) => f.includes("does not acknowledge")));
+});
+
+test("editorial: sign-off for a DIFFERENT, fabricated candidate -> FAIL", async (t) => {
+  await writeFixtureProject();
+  t.after(() => fs.rm(FIXTURE_DIR, { recursive: true, force: true }));
+  const candidate = await computeCanonicalFrozenCandidate(FIXTURE_PROJECT_ID);
+  await writeFrozenCandidate(candidate);
+  await writeEditorialSignoff(
+    editorialSignoffFor({
+      candidate_hash: sha256OfJson({ not: "the-real-candidate" }),
+      canonical_candidate_identity: { source_commit_sha: "f".repeat(40) }
+    })
+  );
+
+  const result = await verifyEditorialSignoff(FIXTURE_PROJECT_ID);
+  assert.equal(result.pass, false);
+  assert.ok(result.failures.some((f) => f.includes("candidate_hash")));
 });

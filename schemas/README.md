@@ -1,9 +1,10 @@
 # schemas/ — canonical data contracts
 
-Twelve JSON Schemas (draft 2020-12) covering the shapes named in `docs/migration-plan.md`
+Thirteen JSON Schemas (draft 2020-12). Twelve cover the shapes named in `docs/migration-plan.md`
 Phase 2: `canonical_project`, `shot`, `timeline`, `edit_plan`, `captions`, `editorial_pauses`,
 `music_cues`, `audio_mix`, `asset_registry`, `evidence_registry`, `frozen_candidate`,
-`proof_approval`.
+`proof_approval`. `editorial_signoff` was added later (see below) to close a gap the original
+twelve left open.
 
 Validated by `scripts/validate_canonical.mjs` (`npm run validate:canonical`).
 
@@ -34,6 +35,19 @@ Validated by `scripts/validate_canonical.mjs` (`npm run validate:canonical`).
   canonical freeze model (section 10): a frozen candidate is identified by hashes of every
   canonical input, and a proof approval references a frozen candidate by hash. Full render is
   only permitted when the current frozen candidate's hash matches an existing approval exactly.
+- **`editorial_signoff.schema.json`** closes a gap `proof_approval` never covered: three
+  editorial QA audits (real-evidence coverage, generic-card usage, emphasis-beat pacing)
+  deliberately report shortfalls as `warnings`, never hard failures, so a project can pass
+  automated QA while a human has never actually read those warnings. This schema is
+  `proof_approval`'s identity-hash pattern applied to that gap instead: a sign-off is valid for
+  one exact `candidate_hash` and must list every warning those reports currently produce in
+  `acknowledged_warnings`, so a new warning introduced later can't silently ride on an old
+  sign-off. It also concretely fulfills `orvyq_alignment_score.mjs`'s own long-standing
+  `human_rendered_video_review: { required: true, status: "pending" }` field, which nothing has
+  ever read back or transitioned. Verified by `verifyEditorialSignoff()` in
+  `scripts/orvyq_verify_approval.mjs`, alongside `verifyApprovalRecord()`, at the same render-time
+  gate — not during Candidate Validation, for the same anti-circularity reason `proof_approval`
+  isn't checked there either.
 
 ## What's intentionally not here
 

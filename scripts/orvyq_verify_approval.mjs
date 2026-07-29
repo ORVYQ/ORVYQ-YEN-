@@ -23,10 +23,35 @@
 // since a whole-file hash would change on every rebuild regardless of any
 // real content change).
 import path from "node:path";
-import { projectDir, readJson, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, readJsonSafe, pathExists, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { computeCanonicalFrozenCandidate } from "./orvyq_frozen_candidate.mjs";
 
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
+
+// The project-agnostic audits whose "warnings" arrays report editorial
+// content shortfalls (real-evidence coverage, generic-card usage/margin,
+// emphasis-beat pacing) without ever hard-failing on them -- see each
+// script's own header comment for why a hard numeric fail was deliberately
+// rejected in favor of always-honest warning reporting. verifyEditorialSignoff()
+// below is what actually requires a human to have read these before a
+// render is allowed to proceed; the list of report filenames is the only
+// thing that ties it to those scripts. (orvyq_alignment_score.mjs's own
+// qa/alignment_readiness.json report has no `warnings` array -- its
+// unaddressed gap is different in shape: `human_rendered_video_review`
+// is written as `{ required: true, status: "pending" }` on every run, and
+// nothing anywhere ever reads that status back or transitions it. A signed,
+// hash-matched qa/editorial_signoff.json IS that human review completing --
+// see verifyEditorialSignoff()'s own comment.)
+const EDITORIAL_WARNING_REPORT_FILES = ["real_asset_coverage_audit.json", "generic_card_audit.json", "tension_card_audit.json"];
+
+async function collectCurrentEditorialWarnings(dir) {
+  const warnings = [];
+  for (const file of EDITORIAL_WARNING_REPORT_FILES) {
+    const report = await readJsonSafe(path.join(dir, "qa", file));
+    if (report && Array.isArray(report.warnings)) warnings.push(...report.warnings);
+  }
+  return warnings;
+}
 
 // Stage 1 (cheap, runs before any build step): confirms the approval on file
 // still names the candidate actually committed at HEAD, for the right mode.
@@ -107,6 +132,73 @@ export async function verifyApprovalRecord(projectId = PROJECT_ID, { expectedMod
   return { pass: failures.length === 0, failures, approval, storedCandidate };
 }
 
+// Editorial counterpart to verifyApprovalRecord(), checked alongside it at
+// the same early stage. proof_approval.json approves that a human reviewed
+// THIS candidate technically; editorial_signoff.json approves that a human
+// has actually read the current editorial QA warnings for that same
+// candidate and accepts them (see schemas/editorial_signoff.schema.json).
+// This is also, concretely, what fulfills qa/alignment_readiness.json's own
+// long-standing `human_rendered_video_review: { required: true, status:
+// "pending" }` field -- that field has never had anything read it back or
+// move it out of "pending"; an approved, hash-matched editorial_signoff.json
+// for the same candidate is the human review it was always describing.
+// Same identity model as the technical approval on purpose: candidate_hash
+// ties the sign-off to one exact frozen candidate, so a re-edit/re-render
+// invalidates it automatically with no extra logic, and it is intentionally
+// NOT checked during Candidate Validation (same reasoning
+// scripts/orvyq_edit_plan_tests.mjs already documents for proof_approval.json:
+// no candidate exists yet for a human to review at that point, so requiring
+// it there would just recreate the same circularity) -- it is a render gate,
+// not a validation gate.
+export async function verifyEditorialSignoff(projectId = PROJECT_ID) {
+  const dir = projectDir(projectId);
+  const signoffPath = path.join(dir, "qa", "editorial_signoff.json");
+  const candidatePath = path.join(dir, "qa", "frozen_candidate.json");
+
+  if (!(await pathExists(candidatePath))) return { pass: false, failures: ["No qa/frozen_candidate.json is committed."] };
+  const storedCandidate = await readJson(candidatePath);
+
+  if (!(await pathExists(signoffPath))) {
+    return {
+      pass: false,
+      failures: ["No qa/editorial_signoff.json is committed -- render is blocked until a human reads the current editorial QA warnings for this exact candidate and signs off (schemas/editorial_signoff.schema.json)."]
+    };
+  }
+
+  const signoff = await readJson(signoffPath);
+  const failures = [];
+
+  if (signoff.approved !== true) failures.push("qa/editorial_signoff.json.approved is not true.");
+
+  if (!signoff.candidate_hash) {
+    failures.push("qa/editorial_signoff.json has no candidate_hash and cannot approve a live candidate.");
+  } else if (signoff.candidate_hash !== storedCandidate.candidate_hash) {
+    failures.push(
+      `qa/editorial_signoff.json.candidate_hash (${signoff.candidate_hash}) does not match the currently committed qa/frozen_candidate.json's own candidate_hash ` +
+        `(${storedCandidate.candidate_hash}) -- the candidate has changed (or been replaced) since this editorial sign-off was recorded; it no longer covers what is on disk.`
+    );
+  }
+
+  const identity = storedCandidate.canonical_candidate_identity;
+  if (signoff.candidate_source_sha && identity?.source_commit_sha && signoff.candidate_source_sha !== identity.source_commit_sha) {
+    failures.push(
+      `qa/editorial_signoff.json.candidate_source_sha (${signoff.candidate_source_sha}) does not match qa/frozen_candidate.json's own source_commit_sha (${identity.source_commit_sha}) -- ` +
+        "this sign-off was recorded against a different candidate build."
+    );
+  }
+
+  const currentWarnings = await collectCurrentEditorialWarnings(dir);
+  const acknowledged = new Set(signoff.acknowledged_warnings || []);
+  const unacknowledged = currentWarnings.filter((warning) => !acknowledged.has(warning));
+  if (unacknowledged.length) {
+    failures.push(
+      `qa/editorial_signoff.json does not acknowledge ${unacknowledged.length} current editorial warning(s), so it cannot have been reviewed against what is on disk now: ${unacknowledged.join("; ")}`
+    );
+  }
+
+  return { pass: failures.length === 0, failures, signoff, storedCandidate, currentWarnings };
+}
+
 // Stage 2 (runs after the render bundle has been placed/assembled, right
 // before rendering): recomputes a frozen candidate from those real files and
 // confirms candidate_hash/render_bundle_hash still match the committed,
@@ -140,13 +232,23 @@ export async function verifyFrozenCandidateFreshness(projectId = PROJECT_ID, { r
   return { pass: failures.length === 0, failures, fresh, storedCandidate };
 }
 
+// Early stage checks both approvals together -- technical (proof_approval.json)
+// and editorial (editorial_signoff.json) -- through this one CLI call, so the
+// two existing invocations in .github/workflows/orvyq-final-encode.yml
+// (--stage=early, --stage=late) needed no new workflow step to become
+// editorial-aware.
+async function verifyEarlyStage(projectId, options) {
+  const [approval, editorial] = await Promise.all([verifyApprovalRecord(projectId, options), verifyEditorialSignoff(projectId)]);
+  return { pass: approval.pass && editorial.pass, failures: [...approval.failures, ...editorial.failures], approval, editorial };
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = parseArgs(process.argv.slice(2));
   const stage = args.stage || "early";
   const run =
     stage === "late"
       ? verifyFrozenCandidateFreshness(args["project-id"] || PROJECT_ID, { renderReadyDir: args["render-ready-dir"] || undefined })
-      : verifyApprovalRecord(args["project-id"] || PROJECT_ID, { expectedMode: args.mode || "full", approvedReviewRunId: args["approved-review-run-id"] || null });
+      : verifyEarlyStage(args["project-id"] || PROJECT_ID, { expectedMode: args.mode || "full", approvedReviewRunId: args["approved-review-run-id"] || null });
   run
     .then((result) => {
       printJson(result);
