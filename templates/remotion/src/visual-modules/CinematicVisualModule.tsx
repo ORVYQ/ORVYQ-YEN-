@@ -87,9 +87,6 @@ export const CinematicVisualModule: React.FC<{
         {spec.visible_text.primary ? <div style={{ color: INK, fontSize: 43, lineHeight: 1.04, fontWeight: 720, letterSpacing: "-.035em", marginTop: 24, textShadow: "0 8px 30px rgba(0,0,0,.85)" }}>{spec.visible_text.primary}</div> : null}
         {spec.visible_text.secondary ? <div style={{ color: MUTED, fontSize: 21, lineHeight: 1.42, marginTop: 20, maxWidth: 450, textShadow: "0 6px 24px rgba(0,0,0,.9)" }}>{spec.visible_text.secondary}</div> : null}
       </div>
-      <div style={{ position: "absolute", left: 86, bottom: clearance + 44, width: 420, color: "rgba(246,242,233,.52)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 14, lineHeight: 1.4, letterSpacing: ".06em" }}>
-        The document remains the picture. Typography only guides the inspection.
-      </div>
       {source(spec)}
     </AbsoluteFill>;
   }
@@ -103,10 +100,13 @@ export const CinematicVisualModule: React.FC<{
 
   if (module === "mechanism_explainer") {
     const steps = (evidence?.steps || [spec.visible_text.primary, spec.visible_text.secondary]).filter(Boolean).slice(0, 4) as string[];
-    return <AbsoluteFill style={{ background: "#040A11" }}><MotionGround progress={progress} seed="mechanism" />
+    return <AbsoluteFill style={{ background: "#040A11" }}>
+      <MotionGround progress={progress} seed="mechanism" />
       <div style={{ position: "absolute", left: 82, right: 82, top: 190, display: "flex", alignItems: "center", gap: 20 }}>
-        {steps.map((step, index) => <React.Fragment key={`${step}-${index}`}><div style={{ flex: 1, minHeight: 300, padding: 30, borderTop: `4px solid ${index === steps.length - 1 ? RED : BLUE}`, background: "rgba(8,20,31,.72)" }}><div style={{ color: BLUE, fontSize: 18 }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontSize: 30, lineHeight: 1.15, marginTop: 22 }}>{step}</div></div>{index < steps.length - 1 ? <div style={{ color: BLUE, fontSize: 34 }}>→</div> : null}</React.Fragment>)}</div>
-      </div>{source(spec)}</AbsoluteFill>;
+        {steps.map((step, index) => <React.Fragment key={`${step}-${index}`}><div style={{ flex: 1, minHeight: 300, padding: 30, borderTop: `4px solid ${index === steps.length - 1 ? RED : BLUE}`, background: "rgba(8,20,31,.72)" }}><div style={{ color: BLUE, fontSize: 18 }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontSize: 30, lineHeight: 1.15, marginTop: 22 }}>{step}</div></div>{index < steps.length - 1 ? <div style={{ color: BLUE, fontSize: 34 }}>→</div> : null}</React.Fragment>)}
+      </div>
+      {source(spec)}
+    </AbsoluteFill>;
   }
 
   if (module === "data_scene") {
