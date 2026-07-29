@@ -3,7 +3,7 @@
   "project_id": "002-the-new-war-beneath-the-ocean",
   "evidence_kind_overrides": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
-      "kind": "image_sequence",
+      "kind": "official_figure",
       "evidence_asset_ids": [
         "EVID_JAMSTEC_FIRST_MUD_SAMPLE",
         "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM",
@@ -17,7 +17,8 @@
         "assets/evidence/jamstec_machine_on_seafloor.jpg"
       ],
       "distinct_image_per_occurrence": true,
-      "editorial_rationale": "Open the film's evidence body with the actual Chikyu test, moving from recovered material to system architecture and real seabed hardware rather than a generic diagram card. This claim now keeps 5 native evidence slices (3 of its illustrative graphic cards were converted back to native evidence to reduce the film's pure-graphics fraction); cycling one distinct image per occurrence instead of the full 4-image set on every slice keeps each real JAMSTEC image within the film's 2-use-per-source cap while still showing all 4 in sequence."
+      "editorial_rationale": "Open the post-hook evidence body with two official JAMSTEC captures together, satisfying the project profile's explicit two-asset official-figure requirement. Later native evidence slices rotate one real image at a time, starting after the opening pair and wrapping only when needed, so each source remains within the two-use cap while the film still moves from recovered material to system architecture and seabed hardware.",
+      "first_occurrence_asset_count": 2
     },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "kind": "official_figure",
