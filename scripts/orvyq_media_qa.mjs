@@ -5,6 +5,7 @@
 // ported near-verbatim from the golden script, since it never referenced
 // plan.preview/composition.json.
 import path from "node:path";
+import { promises as fs } from "node:fs";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { parseArgs, projectDir, writeJsonAtomic, readJson, pathExists } from "./lib/fs-utils.mjs";
@@ -105,7 +106,8 @@ export async function runMediaQa({ projectId, video, reportPath, captionsPath, a
   const duration = await durationSeconds(video);
   const dir = projectDir(projectId);
   const speechQaPath = path.join(dir, "qa", "speech_transcript.json");
-  const [blackDetect, brightnessDetect, silenceDetect, loudness, captions, audioMetadata, speechQa, blueprint] = await Promise.all([
+  const voiceScriptPath = path.join(dir, "voice", "voice_script.txt");
+  const [blackDetect, brightnessDetect, silenceDetect, loudness, captions, audioMetadata, speechQa, blueprint, voiceScript] = await Promise.all([
     command("ffmpeg", ["-hide_banner", "-nostats", "-i", video, "-an", "-vf", "blackdetect=d=0.6:pix_th=0.08:pic_th=0.985", "-f", "null", "-"]),
     command("ffmpeg", ["-hide_banner", "-nostats", "-i", video, "-an", "-vf", "fps=30,signalstats,metadata=print:key=lavfi.signalstats.YAVG", "-f", "null", "-"]),
     command("ffmpeg", ["-hide_banner", "-nostats", "-i", video, "-vn", "-af", "silencedetect=n=-52dB:d=2.5", "-f", "null", "-"]),
@@ -113,11 +115,14 @@ export async function runMediaQa({ projectId, video, reportPath, captionsPath, a
     readJson(captionsPath),
     readJson(audioMetadataPath),
     readJson(speechQaPath),
-    readJson(path.join(dir, "direction", "editorial_blueprint.json"))
+    readJson(path.join(dir, "direction", "editorial_blueprint.json")),
+    fs.readFile(voiceScriptPath, "utf8")
   ]);
   // Same canonical policy value orvyq_speech_qa.py and orvyq_edit_plan_tests.mjs
   // read -- see docs/source-audit.md section 7's threshold-drift finding.
   const minimumScriptSimilarity = Number(blueprint.global_rules?.minimum_script_similarity ?? 0.85);
+  const normalizedScript = normalize(voiceScript);
+  const requiredOpeningWords = normalizedScript.split(/\s+/).slice(0, 4).join(" ");
 
   const blackSegments = parseBlack(`${blackDetect.stdout}\n${blackDetect.stderr}`);
   const lumaSamples = parseLumaSamples(`${brightnessDetect.stdout}\n${brightnessDetect.stderr}`);
@@ -137,7 +142,9 @@ export async function runMediaQa({ projectId, video, reportPath, captionsPath, a
   const captionItems = captions.captions || [];
   const captionStyleOk = captions.style?.line_count === 1 && captions.style?.active_word_effect === false && captions.style?.background === "none";
   const captionSourceOk = captions.source === "qa/speech_transcript.json" && captions.text_source === "voice/voice_script.txt";
-  const captionTextOk = captionItems.length > 0 && /^Every major AI lab\b/i.test(captionItems[0]?.text || "") && captionItems.every((item) => item.text && item.text.length <= 52 && item.text.trim().split(/\s+/).length <= 7);
+  const firstCaptionText = normalize(captionItems[0]?.text || "");
+  const captionOpeningOk = firstCaptionText.length > 0 && normalizedScript.startsWith(firstCaptionText);
+  const captionTextOk = captionItems.length > 0 && captionOpeningOk && captionItems.every((item) => item.text && item.text.length <= 52 && item.text.trim().split(/\s+/).length <= 7);
   const captionTimingOk = captionItems.every((item) => item.start_frame >= 0 && item.end_frame > item.start_frame && item.end_frame <= captions.duration_frames);
   const captionsOk = captionStyleOk && captionSourceOk && captionTextOk && captionTimingOk;
 
@@ -150,7 +157,7 @@ export async function runMediaQa({ projectId, video, reportPath, captionsPath, a
   const audioAssetsOk = declaredAudioAssetsExist.every(Boolean);
 
   const normalizedTranscript = normalize(speechQa.transcript);
-  const openingSpeechOk = normalizedTranscript.startsWith("every major ai lab");
+  const openingSpeechOk = requiredOpeningWords.length > 0 && normalizedTranscript.startsWith(requiredOpeningWords);
   const speechOk = speechQa.passed === true && speechQa.word_count >= 30 && speechQa.script_similarity >= minimumScriptSimilarity && openingSpeechOk;
 
   const pass = nonTerminalBlack.length === 0 && brightnessDrops.length === 0 && meaningfulSilence.length === 0 && durationOk && loudnessOk && truePeakOk && dynamicsOk && captionsOk && soundDesignOk && audioAssetsOk && speechOk;
@@ -162,7 +169,7 @@ export async function runMediaQa({ projectId, video, reportPath, captionsPath, a
     thresholds: {
       max_nonterminal_black_seconds: 0.6, brightness_sample_rate_fps: 30, maximum_transient_brightness_drop_seconds: 0.5, near_black_average_luma: 28, minimum_neighbor_average_luma: 12, maximum_relative_luma: 0.6,
       max_nonterminal_silence_seconds: 2.5, integrated_lufs_range: [-18, -13], max_true_peak_dbtp: -1, minimum_loudness_range: 2, caption_line_count: 1, max_caption_words: 7, max_caption_chars: 52,
-      minimum_speech_similarity: minimumScriptSimilarity, required_opening_words: "Every major AI lab", required_music_profiles: approvedMusicProfiles
+      minimum_speech_similarity: minimumScriptSimilarity, required_opening_words: requiredOpeningWords, required_music_profiles: approvedMusicProfiles
     },
     black_segments: blackSegments,
     nonterminal_black_segments: nonTerminalBlack,
@@ -173,7 +180,7 @@ export async function runMediaQa({ projectId, video, reportPath, captionsPath, a
     loudness: { integrated_lufs: integratedLufs, true_peak_dbtp: truePeak, loudness_range: loudnessRange, pass: loudnessOk && truePeakOk && dynamicsOk },
     duration: { actual_seconds: duration, expected_seconds: Number(audioMetadata.duration_seconds), pass: durationOk },
     speech: { word_count: speechQa.word_count, script_similarity: speechQa.script_similarity, coverage: speechQa.speech_coverage, opening_pass: openingSpeechOk, pass: speechOk },
-    captions: { count: captionItems.length, style_pass: captionStyleOk, source_pass: captionSourceOk, text_pass: captionTextOk, timing_pass: captionTimingOk, pass: captionsOk },
+    captions: { count: captionItems.length, style_pass: captionStyleOk, source_pass: captionSourceOk, opening_pass: captionOpeningOk, text_pass: captionTextOk, timing_pass: captionTimingOk, pass: captionsOk },
     sound_design: { music_profile: audioMetadata.music_profile, music_asset: audioMetadata.music_asset, procedural_noise_generation: audioMetadata.procedural_noise_generation, sfx_types: sfxAssets.length, sfx_origin: audioMetadata.sfx_origin || null, assets_exist: audioAssetsOk, pass: soundDesignOk && audioAssetsOk },
     pass
   };
