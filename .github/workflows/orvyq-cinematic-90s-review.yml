@@ -1,0 +1,74 @@
+name: ORVYQ Cinematic 90s Review
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - agent/orvyq-cinematic-visual-engine
+    paths:
+      - ".github/workflows/orvyq-cinematic-90s-review.yml"
+      - ".github/acceptance-proof/run-90s-review.sh"
+      - "templates/remotion/src/visual-modules/CinematicVisualModule.tsx"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: orvyq-cinematic-90s-review-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  SYSTEM_SHA: ${{ github.sha }}
+
+jobs:
+  render-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Verify shared runtime remains project-independent
+        run: node scripts/orvyq_system_independence_audit.mjs
+
+      - name: Install media and SVG tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg espeak-ng librsvg2-bin python3-pil
+
+      - name: Install canonical renderer dependencies
+        working-directory: templates/remotion
+        run: npm ci
+
+      - name: Build and validate the 90-second canonical review
+        run: bash .github/acceptance-proof/run-90s-review.sh
+
+      - name: Upload compact review bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-cinematic-90s-review-${{ github.run_id }}
+          retention-days: 5
+          compression-level: 6
+          if-no-files-found: error
+          path: |
+            acceptance-proof/orvyq-acceptance-proof.mp4
+            acceptance-proof/contact-sheet.jpg
+            acceptance-proof/proof-validation.json
+            acceptance-proof/media-metadata.json
+            acceptance-proof/final-edit-plan.json
+            acceptance-proof/visual-module-plan.json
+            acceptance-proof/frames/first.png
+            acceptance-proof/frames/middle.png
+            acceptance-proof/frames/end.png
