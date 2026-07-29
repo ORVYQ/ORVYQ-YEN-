@@ -33,12 +33,6 @@ async function filesUnder(relativeRoot) {
   return output;
 }
 
-function collectStrings(value, output) {
-  if (typeof value === "string") output.add(value);
-  else if (Array.isArray(value)) for (const item of value) collectStrings(item, output);
-  else if (value && typeof value === "object") for (const item of Object.values(value)) collectStrings(item, output);
-}
-
 function tokenClass(token) {
   if (/^\d{3}-[a-z0-9-]+$/i.test(token)) return "project_id";
   if (/^CLM_\d+_[A-Z0-9_]+$/.test(token)) return "claim_id";
@@ -46,6 +40,14 @@ function tokenClass(token) {
   if (/^scene_\d+_[a-f0-9]{10,}\.(?:mp4|mov|webm|png|jpe?g|webp)$/i.test(token)) return "asset_name";
   if (/^\d{10,}$/.test(token)) return "historical_run_id";
   return "source_name";
+}
+
+function addStructuredTokens(parsed, values) {
+  const sources = parsed?.source_catalog || parsed?.sources || [];
+  for (const source of sources) {
+    if (source?.source_id) values.add(source.source_id);
+    if (source?.publisher && String(source.publisher).trim().length >= 5) values.add(String(source.publisher).trim());
+  }
 }
 
 async function projectTokens() {
@@ -67,15 +69,12 @@ async function projectTokens() {
       const abs = path.join(projectRoot, rel);
       if (!(await pathExists(abs))) continue;
       const raw = await fs.readFile(abs, "utf8").catch(() => "");
-      let parsed = null;
-      try { parsed = JSON.parse(raw); } catch { parsed = null; }
-      if (parsed) collectStrings(parsed, values);
+      try { addStructuredTokens(JSON.parse(raw), values); } catch { /* malformed project data is handled by canonical validation */ }
       for (const match of raw.matchAll(/\b(?:CLM_\d+_[A-Z0-9_]+|SRC_[A-Z0-9_]+|scene_\d+_[a-f0-9]{10,}\.(?:mp4|mov|webm|png|jpe?g|webp)|\d{10,})\b/g)) values.add(match[0]);
     }
   }
   return [...values]
-    .filter((value) => typeof value === "string")
-    .filter((value) => /^(?:\d{3}-[a-z0-9-]+|CLM_|SRC_|scene_\d+_|\d{10,})/i.test(value) || (/^[A-Za-z][A-Za-z0-9 .&-]{5,}$/.test(value) && value.split(/\s+/).length <= 6))
+    .filter((value) => typeof value === "string" && value.length >= 5)
     .map((value) => ({ value, kind: tokenClass(value) }));
 }
 

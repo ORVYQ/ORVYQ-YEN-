@@ -2,6 +2,7 @@
 import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
+import { loadCanonicalAjv } from "./lib/schema-validate.mjs";
 import { attachVisualModules } from "./lib/orvyq-visual-module-selector.mjs";
 import { buildOpeningPlan } from "./lib/orvyq-opening-engine.mjs";
 
@@ -18,6 +19,13 @@ export async function buildCinematicVisualPlan(projectId) {
 
   plan.shots = attachVisualModules(plan.shots, { fps: plan.fps });
   const openingPlan = buildOpeningPlan(plan, motionHook);
+  const ajv = loadCanonicalAjv();
+  const validateOpening = ajv.getSchema("opening_plan.schema.json");
+  const validateModule = ajv.getSchema("visual_module.schema.json");
+  if (!validateOpening?.(openingPlan)) throw new Error(`Opening plan schema validation failed: ${JSON.stringify(validateOpening?.errors || [])}`);
+  for (const shot of plan.shots) {
+    if (!validateModule?.(shot.visual_module)) throw new Error(`${shot.shot_id || "shot"} visual module schema validation failed: ${JSON.stringify(validateModule?.errors || [])}`);
+  }
   plan.opening = {
     plan_schema_version: openingPlan.schema_version,
     selected_archetype: openingPlan.selected_archetype,

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       project_id:
-        description: "Project directory id under projects/ (for example 002-my-film)"
+        description: "Project directory id under projects/"
         type: string
         required: true
   workflow_call:
@@ -55,7 +55,6 @@ jobs:
 
       - name: Validate selected project and production profile
         run: |
-          set -euo pipefail
           node --input-type=module -e "
             import { loadProductionPolicy } from './scripts/lib/orvyq-project-profile.mjs';
             const policy = await loadProductionPolicy(process.env.PROJECT_ID);
@@ -75,7 +74,6 @@ jobs:
 
       - name: Install media, PDF and speech tooling
         run: |
-          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg poppler-utils
           python -m pip install --disable-pip-version-check faster-whisper==1.2.0 requests==2.32.5
@@ -125,9 +123,11 @@ jobs:
       - name: Apply project-authored creative polish
         run: node scripts/orvyq_creative_polish.mjs --project-id="$PROJECT_ID"
 
+      - name: Build project-independent cinematic visual and opening plans
+        run: node scripts/orvyq_visual_plan.mjs --project-id="$PROJECT_ID"
+
       - name: Resolve the canonical candidate duration
         run: |
-          set -euo pipefail
           node -e "
             const p = require('./projects/$PROJECT_ID/direction/edit_plan.json');
             const motionHook = require('./projects/$PROJECT_ID/direction/motion_hook.json');
@@ -183,9 +183,11 @@ jobs:
             validation-source-sha.txt
             projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
             projects/${{ env.PROJECT_ID }}/qa/full_narration_speech_qa.json
+            projects/${{ env.PROJECT_ID }}/qa/visual_module_plan.json
             projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
             projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
+            projects/${{ env.PROJECT_ID }}/direction/opening_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
             projects/${{ env.PROJECT_ID }}/assets/**
             projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/**
@@ -219,6 +221,7 @@ jobs:
             projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
             projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
+            projects/${{ env.PROJECT_ID }}/direction/opening_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
             projects/${{ env.PROJECT_ID }}/assets/asset_registry.json
             projects/${{ env.PROJECT_ID }}/assets/audio/final_mix.metadata.json
