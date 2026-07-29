@@ -14,7 +14,6 @@ concurrency:
 
 jobs:
   validate:
-    if: ${{ !contains(github.event.pull_request.title || '', '[PATCHING]') && !contains(github.event.head_commit.message || '', '[PATCHING]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -128,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
-      SYSTEM_SHA: 281f09282c111f5f5691593c95a8a876bc1b07bb
+      SYSTEM_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
       - name: Checkout exact proof source
         uses: actions/checkout@v4
