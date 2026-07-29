@@ -49,7 +49,11 @@ jobs:
         run: npm ci
 
       - name: Verify shared runtime remains project-independent
-        run: node scripts/orvyq_system_independence_audit.mjs
+        run: |
+          set -euo pipefail
+          mkdir -p acceptance-proof/pre-render
+          node scripts/orvyq_system_independence_audit.mjs
+          cp system-independence-report.json acceptance-proof/pre-render/system-independence-report.json
 
       - name: Install media and SVG tooling
         run: |
