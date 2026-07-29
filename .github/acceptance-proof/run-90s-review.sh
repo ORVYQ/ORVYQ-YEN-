@@ -25,6 +25,7 @@ replacements = {
     "--crf=24": "--crf=27",
     "-ss 37.5": "-ss 45",
     "-ss 72": "-ss 87",
+    "60 <= duration <= 90": "60 <= duration <= 90.1",
 }
 
 for old, new in replacements.items():
