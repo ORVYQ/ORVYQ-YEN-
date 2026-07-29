@@ -34,14 +34,32 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
   const evidenceSources = [];
   for (const sourceId of evidenceSourceIds) {
     const source = sourceById.get(sourceId);
-    if (!source || !source.official || !source.url || !source.publisher || !source.title) {
+    // `official` classifies whether the publisher is an official governmental,
+    // intergovernmental or regulatory source. It is not a completeness flag:
+    // peer-reviewed primary research and explicitly attributed corporate
+    // positions are valid documentary sources while correctly declaring
+    // official:false. Provenance completeness therefore requires the field to
+    // be present as a boolean, plus an identifiable publisher/title/URL/type.
+    const hasCompleteProvenance =
+      source &&
+      typeof source.official === "boolean" &&
+      Boolean(source.url && source.publisher && source.title && source.source_type);
+    if (!hasCompleteProvenance) {
       failures.push(`Evidence source ${sourceId} is incomplete`);
       continue;
     }
     const related = plan.shots.filter((shot) => (shot.evidence?.source_ids || shot.editorial_overlay?.source_ids || []).includes(sourceId));
     evidenceSources.push({
-      source_id: sourceId, publisher: source.publisher, title: source.title, publication_date: source.publication_date || null,
-      source_url: source.url, official: true, claim_ids: unique(related.map((shot) => shot.claim_id)), shot_ids: related.map((shot) => shot.shot_id), limitation: source.limitation || null
+      source_id: sourceId,
+      publisher: source.publisher,
+      title: source.title,
+      publication_date: source.publication_date || null,
+      source_url: source.url,
+      source_type: source.source_type,
+      official: source.official === true,
+      claim_ids: unique(related.map((shot) => shot.claim_id)),
+      shot_ids: related.map((shot) => shot.shot_id),
+      limitation: source.limitation || null
     });
   }
 
@@ -58,8 +76,13 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
       usage.set(assetId, (usage.get(assetId) || 0) + 1);
       if (!captures.some((item) => item.evidence_asset_id === assetId))
         captures.push({
-          evidence_asset_id: assetId, local_asset: produced.local_asset, sha256: produced.sha256, bytes: produced.bytes, source_url: produced.source_url,
-          source_ids: declared.source_ids, provenance_mode: "official_primary_capture",
+          evidence_asset_id: assetId,
+          local_asset: produced.local_asset,
+          sha256: produced.sha256,
+          bytes: produced.bytes,
+          source_url: produced.source_url,
+          source_ids: declared.source_ids,
+          provenance_mode: "official_primary_capture",
           editorial_basis: "Official source capture with visible attribution for documentary analysis; provenance record, not a legal opinion."
         });
     }
@@ -67,7 +90,15 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
 
   const derived = plan.shots
     .filter((shot) => shot.asset_type === "evidence" && !(shot.evidence?.evidence_asset_ids || []).length)
-    .map((shot) => ({ shot_id: shot.shot_id, kind: shot.evidence.kind, title: shot.evidence.title, source_ids: shot.evidence.source_ids, source_label: shot.evidence.source_label, provenance_mode: "source_derived_graphic", limitation: shot.evidence.limitation || null }));
+    .map((shot) => ({
+      shot_id: shot.shot_id,
+      kind: shot.evidence.kind,
+      title: shot.evidence.title,
+      source_ids: shot.evidence.source_ids,
+      source_label: shot.evidence.source_label,
+      provenance_mode: "source_derived_graphic",
+      limitation: shot.evidence.limitation || null
+    }));
 
   const footageAssets = unique(plan.shots.filter((shot) => shot.asset_type === "footage").map((shot) => shot.video_asset));
   const footage = [];
@@ -82,7 +113,14 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
       failures.push(`Footage is not approved: ${asset}`);
       continue;
     }
-    footage.push({ asset, provider: provenance.provider, provider_asset_id: provenance.provider_asset_id, source_page_url: provenance.source_page_url, license_url: provenance.license_url, timeline_uses: plan.shots.filter((shot) => shot.video_asset === asset).length });
+    footage.push({
+      asset,
+      provider: provenance.provider,
+      provider_asset_id: provenance.provider_asset_id,
+      source_page_url: provenance.source_page_url,
+      license_url: provenance.license_url,
+      timeline_uses: plan.shots.filter((shot) => shot.video_asset === asset).length
+    });
   }
 
   const motionHook = auditMotionHook(plan);
@@ -94,8 +132,14 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
   ];
   if (audioMetadata.music_asset)
     audio.push({
-      asset: audioMetadata.music_asset, role: "music bed", profile: audioMetadata.music_profile, sections: audioMetadata.music_sections || [],
-      license: audioMetadata.music_profile === "original_tonal_score" ? "Original ORVYQ tonal score generated locally; no third-party recording." : audioMetadata.music_attribution || "Approved licensed bed; evidence required."
+      asset: audioMetadata.music_asset,
+      role: "music bed",
+      profile: audioMetadata.music_profile,
+      sections: audioMetadata.music_sections || [],
+      license:
+        audioMetadata.music_profile === "original_tonal_score"
+          ? "Original ORVYQ tonal score generated locally; no third-party recording."
+          : audioMetadata.music_attribution || "Approved licensed bed; evidence required."
     });
 
   let musicProvenance = null;
@@ -108,7 +152,12 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
         failures.push("Approved music provenance file is missing");
       } else {
         musicProvenance = await readJson(provenancePath);
-        if (musicProvenance.asset !== audioMetadata.music_asset || musicProvenance.approved_for_final_edit !== true || !String(musicProvenance.license_url || "").includes("/licenses/by/4.0") || !musicProvenance.attribution)
+        if (
+          musicProvenance.asset !== audioMetadata.music_asset ||
+          musicProvenance.approved_for_final_edit !== true ||
+          !String(musicProvenance.license_url || "").includes("/licenses/by/4.0") ||
+          !musicProvenance.attribution
+        )
           failures.push("Approved music provenance is incomplete");
         else {
           const musicBytes = await fs.readFile(path.join(dir, audioMetadata.music_asset));
@@ -128,7 +177,14 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
       failures.push(`Declared SFX is missing: ${asset}`);
       continue;
     }
-    soundEffects.push({ asset, origin: audioMetadata.sfx_origin, license: "Original synthesized sound effect generated locally for ORVYQ.", placements: (audioMetadata.sfx_placements || []).filter((placement) => placement.sfx_id === path.basename(asset, path.extname(asset)).replace(/^orvyq_/, "")) });
+    soundEffects.push({
+      asset,
+      origin: audioMetadata.sfx_origin,
+      license: "Original synthesized sound effect generated locally for ORVYQ.",
+      placements: (audioMetadata.sfx_placements || []).filter(
+        (placement) => placement.sfx_id === path.basename(asset, path.extname(asset)).replace(/^orvyq_/, "")
+      )
+    });
   }
 
   const maximum = Math.max(0, ...usage.values());
@@ -167,7 +223,17 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   buildLicenseAudit()
-    .then((result) => console.log(JSON.stringify({ ok: true, official_captures: result.official_primary_captures.length, source_derived_graphics: result.source_derived_graphics.length, footage: result.footage.length, maximum_primary_capture_uses: result.maximum_primary_capture_uses })))
+    .then((result) =>
+      console.log(
+        JSON.stringify({
+          ok: true,
+          official_captures: result.official_primary_captures.length,
+          source_derived_graphics: result.source_derived_graphics.length,
+          footage: result.footage.length,
+          maximum_primary_capture_uses: result.maximum_primary_capture_uses
+        })
+      )
+    )
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));
       process.exitCode = 1;
