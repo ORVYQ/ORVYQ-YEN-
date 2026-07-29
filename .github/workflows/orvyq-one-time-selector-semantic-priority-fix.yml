@@ -1,0 +1,188 @@
+name: ORVYQ One-Time Selector Semantic Priority Fix
+
+on:
+  push:
+    branches:
+      - agent/orvyq-cinematic-visual-engine
+    paths:
+      - .github/workflows/orvyq-one-time-selector-semantic-priority-fix.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: orvyq-one-time-selector-semantic-priority-fix
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout current visual-engine branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/orvyq-cinematic-visual-engine
+          fetch-depth: 0
+
+      - name: Apply project-independent selector priority repair
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          selector = Path('scripts/lib/orvyq-visual-module-selector.mjs')
+          text = selector.read_text()
+
+          sets_old = '''const COMPARISON_KINDS = new Set(["comparison", "boundary"]);
+          const MECHANISM_KINDS = new Set(["concept_map", "evidence_chain"]);
+          '''
+          sets_new = '''const COMPARISON_KINDS = new Set(["comparison", "boundary"]);
+          const MECHANISM_KINDS = new Set(["concept_map", "evidence_chain"]);
+          const MAP_KINDS = new Set(["map", "regional_map", "route_map", "geographic_map"]);
+          '''
+          if sets_old not in text:
+              raise SystemExit('selector kind-set anchor is missing')
+          text = text.replace(sets_old, sets_new, 1)
+
+          map_old = '''    requires_map: /map|route|region|country|geograph/i.test(`${evidence.kind || ""} ${evidence.title || ""}`),'''
+          map_new = '''    requires_map: MAP_KINDS.has(evidence.kind) || /\\b(?:map|route|region|country|geograph(?:y|ic|ical)?)\\b/i.test(`${evidence.title || ""} ${evidence.subtitle || ""} ${shot.editorial_purpose || ""}`),'''
+          if map_old not in text:
+              raise SystemExit('selector map requirement is missing')
+          text = text.replace(map_old, map_new, 1)
+
+          ranking_old = '''  if (requirements.requires_map) return ["map_scene", "evidence_lens", "timeline_reconstruction"];
+            if (requirements.requires_data_visualization) return ["data_scene", "comparison_composition", "evidence_lens"];
+            if (OFFICIAL_DOCUMENT_KINDS.has(evidence.kind)) return ["document_dive", "evidence_lens"];
+            if (OFFICIAL_IMAGE_KINDS.has(evidence.kind)) return ["evidence_lens", "document_dive", "timeline_reconstruction"];
+            if (COMPARISON_KINDS.has(evidence.kind)) return ["comparison_composition", "evidence_lens"];
+            if (evidence.kind === "source_timeline") return ["timeline_reconstruction", "evidence_lens"];
+            if (MECHANISM_KINDS.has(evidence.kind)) return ["mechanism_explainer", "evidence_lens"];
+            if (evidence.kind === "source_article") return ["evidence_lens", "document_dive"];
+          '''
+          ranking_new = '''  if (OFFICIAL_DOCUMENT_KINDS.has(evidence.kind)) return ["document_dive", "evidence_lens"];
+            if (OFFICIAL_IMAGE_KINDS.has(evidence.kind)) return ["evidence_lens", "document_dive", "timeline_reconstruction"];
+            if (COMPARISON_KINDS.has(evidence.kind)) return ["comparison_composition", "evidence_lens"];
+            if (evidence.kind === "source_timeline") return ["timeline_reconstruction", "evidence_lens"];
+            if (MECHANISM_KINDS.has(evidence.kind)) return ["mechanism_explainer", "evidence_lens"];
+            if (requirements.requires_map) return ["map_scene", "evidence_lens", "timeline_reconstruction"];
+            if (requirements.requires_data_visualization) return ["data_scene", "comparison_composition", "evidence_lens"];
+            if (evidence.kind === "source_article") return ["evidence_lens", "document_dive"];
+          '''
+          if ranking_old not in text:
+              raise SystemExit('selector ranking block is missing')
+          text = text.replace(ranking_old, ranking_new, 1)
+          selector.write_text(text)
+
+          tests = Path('scripts/orvyq_cinematic_visual_engine.test.mjs')
+          test_text = tests.read_text()
+          test_anchor = '''test("selector avoids immediate layout repetition without round-robin", () => {
+          '''
+          test_insert = '''test("concept-map evidence is not misclassified as a geographic map", () => {
+            const shot = evidenceShot({
+              evidence: {
+                ...evidenceShot().evidence,
+                kind: "concept_map",
+                title: "How the sealed loop transfers heat",
+                image_assets: [],
+                steps: ["Collect", "Move", "Hold", "Return"],
+              },
+            });
+            const selected = selectVisualModule(shot, { fps: 30, previous_modules: [] });
+            assert.equal(selected.visual_module.selected_visual_module, "mechanism_explainer");
+          });
+
+          test("numbered source timelines preserve timeline semantics before generic data detection", () => {
+            const shot = evidenceShot({
+              evidence: {
+                ...evidenceShot().evidence,
+                kind: "source_timeline",
+                title: "The decision closes before winter",
+                image_assets: [],
+                items: [
+                  { label: "Design review", value: "Week 1" },
+                  { label: "Access rules", value: "Week 3" },
+                  { label: "Public launch", value: "Week 8" },
+                ],
+              },
+            });
+            const selected = selectVisualModule(shot, { fps: 30, previous_modules: [] });
+            assert.equal(selected.visual_module.selected_visual_module, "timeline_reconstruction");
+          });
+
+          test("selector avoids immediate layout repetition without round-robin", () => {
+          '''
+          if test_anchor not in test_text:
+              raise SystemExit('targeted-test insertion anchor is missing')
+          test_text = test_text.replace(test_anchor, test_insert, 1)
+          tests.write_text(test_text)
+
+          ci = Path('.github/workflows/ci.yml')
+          ci_text = ci.read_text()
+          old_sha = '      SYSTEM_SHA: 281f09282c111f5f5691593c95a8a876bc1b07bb'
+          expression = '$' + '{{ github.event.pull_request.head.sha }}'
+          new_sha = f'      SYSTEM_SHA: {expression}'
+          if old_sha not in ci_text:
+              raise SystemExit('stale proof system SHA is missing')
+          ci_text = ci_text.replace(old_sha, new_sha, 1)
+          ci.write_text(ci_text)
+          PY
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Syntax-check changed JavaScript
+        run: |
+          set -euo pipefail
+          node --check scripts/lib/orvyq-visual-module-selector.mjs
+          node --check scripts/orvyq_cinematic_visual_engine.test.mjs
+
+      - name: Run system-independence audit
+        run: node scripts/orvyq_system_independence_audit.mjs
+
+      - name: Run cinematic visual-engine targeted tests
+        run: node --test scripts/orvyq_cinematic_visual_engine.test.mjs
+
+      - name: Validate canonical schemas and data contracts
+        run: npm run validate:canonical
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Run all unit tests
+        run: npm test
+
+      - name: Check canonical parity and project isolation
+        run: npm run orvyq:parity-check
+
+      - name: Install canonical renderer dependencies
+        working-directory: templates/remotion
+        run: npm ci
+
+      - name: Type-check canonical renderer
+        working-directory: templates/remotion
+        run: npx tsc --noEmit
+
+      - name: Resolve canonical composition with deterministic browser
+        working-directory: templates/remotion
+        run: |
+          set -euo pipefail
+          node --input-type=module -e "import { ensureBrowser } from '@remotion/renderer'; await ensureBrowser({ logLevel: 'info' });"
+          BROWSER="$(find node_modules/.remotion -type f \( -name chrome-headless-shell -o -name chrome \) -perm -111 -print -quit)"
+          test -n "$BROWSER"
+          export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
+          npx remotion compositions src/index.ts
+
+      - name: Commit validated general repair and remove patch workflow
+        run: |
+          set -euo pipefail
+          rm .github/workflows/orvyq-one-time-selector-semantic-priority-fix.yml
+          git config user.name "orvyq-system-patcher"
+          git config user.email "orvyq-system-patcher@users.noreply.github.com"
+          git add scripts/lib/orvyq-visual-module-selector.mjs scripts/orvyq_cinematic_visual_engine.test.mjs .github/workflows/ci.yml .github/workflows/orvyq-one-time-selector-semantic-priority-fix.yml
+          git diff --cached --check
+          git commit -m "Prioritize semantic visual kinds before generic signals" -m "Systemic root cause: substring map detection treated concept_map as geographic content, while generic numeric detection outranked source_timeline semantics. General fix: recognize maps through explicit kinds and word-bounded editorial language, and rank exact document, comparison, timeline and mechanism semantics before generic map/data requirements. Regression tests cover concept maps and numbered timelines. Proof reporting now records the actual pull-request head SHA. Full syntax, independence, targeted, schema, unit, parity/isolation, TypeScript and composition checks passed before commit. No proof topic, Project 002 identifier, quality threshold or special-case selector rule was added."
+          git push origin HEAD:agent/orvyq-cinematic-visual-engine
