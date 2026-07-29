@@ -68,12 +68,13 @@ jobs:
         run: bash .github/acceptance-proof/run-90s-review.sh
 
       - name: Upload compact review bundle
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: orvyq-cinematic-90s-review-${{ github.run_id }}
           retention-days: 5
           compression-level: 6
-          if-no-files-found: error
+          if-no-files-found: warn
           path: |
             acceptance-proof/orvyq-acceptance-proof.mp4
             acceptance-proof/contact-sheet.jpg
