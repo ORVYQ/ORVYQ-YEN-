@@ -9,26 +9,34 @@ on:
       - ".github/workflows/orvyq-cinematic-90s-review.yml"
       - ".github/acceptance-proof/run-90s-review.sh"
       - "templates/remotion/src/visual-modules/CinematicVisualModule.tsx"
+  pull_request:
+    branches:
+      - agent/002-deep-sea-cold-war
+    paths:
+      - ".github/workflows/orvyq-cinematic-90s-review.yml"
+      - ".github/acceptance-proof/run-90s-review.sh"
+      - "templates/remotion/src/visual-modules/CinematicVisualModule.tsx"
 
 permissions:
   contents: read
 
 concurrency:
-  group: orvyq-cinematic-90s-review-${{ github.ref }}
+  group: orvyq-cinematic-90s-review-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
-  SYSTEM_SHA: ${{ github.sha }}
+  SYSTEM_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
   render-review:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.ref == 'agent/orvyq-cinematic-visual-engine'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - name: Checkout exact source
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.sha }}
+          ref: ${{ env.SYSTEM_SHA }}
           fetch-depth: 0
 
       - name: Set up Node
