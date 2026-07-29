@@ -12,6 +12,86 @@ const OFFICIAL = new Set(["split_documents", "official_document", "official_figu
 const DERIVED = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
 const CRITICAL = 5;
 
+export const DEFAULT_VISUAL_MEDIUM_BALANCE = Object.freeze({
+  contextual_body_footage_fraction_min: 0.35,
+  contextual_body_footage_fraction_max: 0.55,
+  source_derived_graphic_fraction_max: 0.30,
+  card_like_visual_fraction_max: 0.35,
+});
+
+function finiteFraction(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1 ? parsed : null;
+}
+
+export function auditVisualMediumBalance({
+  durationFrames,
+  contextualBodyFrames,
+  derivedFrames,
+  pureGraphicFrames,
+  rules = {},
+}) {
+  const duration = Number(durationFrames) > 0 ? Number(durationFrames) : 1;
+  const contextualBodyFraction = Number(contextualBodyFrames || 0) / duration;
+  const sourceDerivedGraphicFraction = Number(derivedFrames || 0) / duration;
+  const fullScreenGraphicFraction = Number(pureGraphicFrames || 0) / duration;
+  const cardLikeVisualFraction = (Number(derivedFrames || 0) + Number(pureGraphicFrames || 0)) / duration;
+
+  // Project configuration may make the reusable system stricter, never looser.
+  // This prevents a single acceptance project from weakening the shared visual
+  // language merely to make its current cut pass.
+  const configuredMinContextual = finiteFraction(rules.contextual_body_footage_fraction_min);
+  const configuredMaxContextual = finiteFraction(rules.contextual_body_footage_fraction_max);
+  const configuredMaxDerived = finiteFraction(rules.source_derived_graphic_fraction_max);
+  const configuredMaxCardLike = finiteFraction(rules.card_like_visual_fraction_max);
+  const thresholds = {
+    contextual_body_footage_fraction_min: Math.max(
+      DEFAULT_VISUAL_MEDIUM_BALANCE.contextual_body_footage_fraction_min,
+      configuredMinContextual ?? 0,
+    ),
+    contextual_body_footage_fraction_max: Math.min(
+      DEFAULT_VISUAL_MEDIUM_BALANCE.contextual_body_footage_fraction_max,
+      configuredMaxContextual ?? 1,
+    ),
+    source_derived_graphic_fraction_max: Math.min(
+      DEFAULT_VISUAL_MEDIUM_BALANCE.source_derived_graphic_fraction_max,
+      configuredMaxDerived ?? 1,
+    ),
+    card_like_visual_fraction_max: Math.min(
+      DEFAULT_VISUAL_MEDIUM_BALANCE.card_like_visual_fraction_max,
+      configuredMaxCardLike ?? 1,
+    ),
+  };
+
+  const failures = [];
+  if (contextualBodyFraction < thresholds.contextual_body_footage_fraction_min)
+    failures.push(
+      `contextual body footage ${(contextualBodyFraction * 100).toFixed(1)}%; minimum ${(thresholds.contextual_body_footage_fraction_min * 100).toFixed(0)}%`,
+    );
+  if (contextualBodyFraction > thresholds.contextual_body_footage_fraction_max)
+    failures.push(
+      `contextual body footage ${(contextualBodyFraction * 100).toFixed(1)}%; maximum ${(thresholds.contextual_body_footage_fraction_max * 100).toFixed(0)}%`,
+    );
+  if (sourceDerivedGraphicFraction > thresholds.source_derived_graphic_fraction_max)
+    failures.push(
+      `source-derived graphic scenes ${(sourceDerivedGraphicFraction * 100).toFixed(1)}%; maximum ${(thresholds.source_derived_graphic_fraction_max * 100).toFixed(0)}%`,
+    );
+  if (cardLikeVisualFraction > thresholds.card_like_visual_fraction_max)
+    failures.push(
+      `card-like visual time ${(cardLikeVisualFraction * 100).toFixed(1)}%; maximum ${(thresholds.card_like_visual_fraction_max * 100).toFixed(0)}% (source-derived graphics plus full-screen graphic cards)`,
+    );
+
+  return {
+    contextual_body_footage_fraction: contextualBodyFraction,
+    source_derived_graphic_fraction: sourceDerivedGraphicFraction,
+    full_screen_graphic_fraction: fullScreenGraphicFraction,
+    card_like_visual_fraction: cardLikeVisualFraction,
+    thresholds,
+    failures,
+    pass: failures.length === 0,
+  };
+}
+
 export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
   const [plan, blueprint, evidenceMap] = await Promise.all([
@@ -73,7 +153,6 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   const duration = plan.duration_frames || 1;
   const genericFraction = genericStockFrames / duration;
   const totalFootageFraction = footageFrames / duration;
-  const contextualBodyFraction = contextualBodyFrames / duration;
   const officialFraction = officialFrames / duration;
   const derivedFraction = derivedFrames / duration;
   const graphicFraction = pureGraphicFrames / duration;
@@ -87,21 +166,25 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   // these fraction checks to apply differently to. Every threshold below
   // applies identically to both modes' plan.shots/duration_frames, which are
   // themselves identical regardless of which mode label produced this run.
-  const cinematicProof = plan.quality_policy?.cinematic_body_footage === true;
+  const cinematicCandidate = plan.quality_policy?.cinematic_body_footage === true;
   if (!motionHook.pass) failures.push(...motionHook.failures);
-  if (cinematicProof && contextualBodyFraction < 0.25) failures.push(`contextual body footage ${(contextualBodyFraction * 100).toFixed(1)}%; minimum 25%`);
-  if (cinematicProof && contextualBodyFraction > 0.45) failures.push(`contextual body footage ${(contextualBodyFraction * 100).toFixed(1)}%; maximum 45%`);
-  if (cinematicProof && emphasisBeats < 4) failures.push(`cinematic candidate contains ${emphasisBeats} emphasis beats; 4 required`);
-  if (cinematicProof && maximumEvidenceRunFrames / plan.fps > Number(plan.quality_policy?.maximum_uninterrupted_evidence_seconds || 15) + 0.001)
+  const visualMediumBalance = auditVisualMediumBalance({
+    durationFrames: duration,
+    contextualBodyFrames,
+    derivedFrames,
+    pureGraphicFrames,
+    rules,
+  });
+  if (cinematicCandidate) failures.push(...visualMediumBalance.failures);
+  if (cinematicCandidate && emphasisBeats < 4) failures.push(`cinematic candidate contains ${emphasisBeats} emphasis beats; 4 required`);
+  if (cinematicCandidate && maximumEvidenceRunFrames / plan.fps > Number(plan.quality_policy?.maximum_uninterrupted_evidence_seconds || 15) + 0.001)
     failures.push(`uninterrupted evidence run ${(maximumEvidenceRunFrames / plan.fps).toFixed(2)}s exceeds 15s`);
-  // Recalibrated against what a fully run-length-compliant cut of this
-  // specific film actually achieves (measured: ~44.1% evidence, ~17.1%
-  // graphics against the real full_production shot list) rather than
-  // proof's old, now-retired 150s-cut-specific numbers (55% evidence floor,
-  // 10% graphics ceiling), which assumed a separately-authored short,
-  // evidence-image-heavy cut that no longer exists in either mode.
-  if (cinematicProof && totalEvidenceFraction < 0.4) failures.push(`evidence/source-derived scenes ${(totalEvidenceFraction * 100).toFixed(1)}%; required 40%`);
-  const graphicCeiling = 0.2;
+  // Evidence remains mandatory, but the medium-balance gate above prevents
+  // source-derived evidence compositions from becoming the dominant visual
+  // language. Real footage and real captures must carry the film between
+  // the moments that genuinely require diagrams, comparisons or cards.
+  if (cinematicCandidate && totalEvidenceFraction < 0.4) failures.push(`evidence/source-derived scenes ${(totalEvidenceFraction * 100).toFixed(1)}%; required 40%`);
+  const graphicCeiling = Math.min(0.08, finiteFraction(rules.full_screen_graphic_fraction_max) ?? 1);
   if (graphicFraction > graphicCeiling) failures.push(`pure graphics ${(graphicFraction * 100).toFixed(1)}%; maximum ${(graphicCeiling * 100).toFixed(0)}%`);
 
   for (const claim of evidenceMap.claims.filter((item) => item.importance >= CRITICAL && item.status !== "removed")) {
@@ -127,11 +210,13 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
     role_fractions: Object.fromEntries(Object.entries(roleFrames).map(([role, frames]) => [role, frames / duration])),
     generic_stock_fraction: genericFraction,
     total_footage_fraction: totalFootageFraction,
-    contextual_body_footage_fraction: contextualBodyFraction,
+    contextual_body_footage_fraction: visualMediumBalance.contextual_body_footage_fraction,
     official_primary_capture_fraction: officialFraction,
     source_derived_graphic_fraction: derivedFraction,
     evidence_archive_fraction: totalEvidenceFraction,
     full_screen_graphic_fraction: graphicFraction,
+    card_like_visual_fraction: visualMediumBalance.card_like_visual_fraction,
+    visual_medium_balance_thresholds: visualMediumBalance.thresholds,
     emphasis_beat_count: emphasisBeats,
     maximum_uninterrupted_evidence_seconds: maximumEvidenceRunFrames / plan.fps,
     image_uses: Object.fromEntries([...imageUses.entries()].sort((a, b) => b[1] - a[1])),
