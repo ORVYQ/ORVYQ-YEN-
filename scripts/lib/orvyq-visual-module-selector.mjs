@@ -10,6 +10,7 @@ const OFFICIAL_DOCUMENT_KINDS = new Set(["split_documents", "official_document",
 const OFFICIAL_IMAGE_KINDS = new Set(["official_figure", "image_sequence", "recap"]);
 const COMPARISON_KINDS = new Set(["comparison", "boundary"]);
 const MECHANISM_KINDS = new Set(["concept_map", "evidence_chain"]);
+const MAP_KINDS = new Set(["map", "regional_map", "route_map", "geographic_map"]);
 
 function durationSeconds(shot, fps = 30) {
   if (Number.isFinite(Number(shot.duration))) return Number(shot.duration);
@@ -88,7 +89,7 @@ function visualRequirementsFor(shot, semantic) {
     requires_real_source: shot.asset_type === "evidence",
     requires_document_visibility: OFFICIAL_DOCUMENT_KINDS.has(evidence.kind),
     requires_data_visualization: hasNumericEvidence(evidence),
-    requires_map: /map|route|region|country|geograph/i.test(`${evidence.kind || ""} ${evidence.title || ""}`),
+    requires_map: MAP_KINDS.has(evidence.kind) || /\b(?:map|route|region|country|geograph(?:y|ic|ical)?)\b/i.test(`${evidence.title || ""} ${evidence.subtitle || ""} ${shot.editorial_purpose || ""}`),
     requires_comparison: semantic.narrative_function === "comparison",
     requires_mechanism: semantic.narrative_function === "mechanism",
     requires_human_context: semantic.narrative_function === "human_consequence",
@@ -109,13 +110,13 @@ function rankedModules(shot, semantic, requirements) {
     if (shot.graphic?.type === "section_title" || shot.graphic?.type === "end_card") return ["chapter_transition", "editorial_emphasis_moment"];
     return ["editorial_emphasis_moment", "chapter_transition"];
   }
-  if (requirements.requires_map) return ["map_scene", "evidence_lens", "timeline_reconstruction"];
-  if (requirements.requires_data_visualization) return ["data_scene", "comparison_composition", "evidence_lens"];
   if (OFFICIAL_DOCUMENT_KINDS.has(evidence.kind)) return ["document_dive", "evidence_lens"];
   if (OFFICIAL_IMAGE_KINDS.has(evidence.kind)) return ["evidence_lens", "document_dive", "timeline_reconstruction"];
   if (COMPARISON_KINDS.has(evidence.kind)) return ["comparison_composition", "evidence_lens"];
   if (evidence.kind === "source_timeline") return ["timeline_reconstruction", "evidence_lens"];
   if (MECHANISM_KINDS.has(evidence.kind)) return ["mechanism_explainer", "evidence_lens"];
+  if (requirements.requires_map) return ["map_scene", "evidence_lens", "timeline_reconstruction"];
+  if (requirements.requires_data_visualization) return ["data_scene", "comparison_composition", "evidence_lens"];
   if (evidence.kind === "source_article") return ["evidence_lens", "document_dive"];
   return ["evidence_lens", "mechanism_explainer"];
 }

@@ -69,6 +69,38 @@ test("official documents select document dive and preserve a real visual foundat
   assert.equal(selected.visual_module.fallback_policy, "fail_loud");
 });
 
+test("concept-map evidence is not misclassified as a geographic map", () => {
+  const shot = evidenceShot({
+    evidence: {
+      ...evidenceShot().evidence,
+      kind: "concept_map",
+      title: "How the sealed loop transfers heat",
+      image_assets: [],
+      steps: ["Collect", "Move", "Hold", "Return"],
+    },
+  });
+  const selected = selectVisualModule(shot, { fps: 30, previous_modules: [] });
+  assert.equal(selected.visual_module.selected_visual_module, "mechanism_explainer");
+});
+
+test("numbered source timelines preserve timeline semantics before generic data detection", () => {
+  const shot = evidenceShot({
+    evidence: {
+      ...evidenceShot().evidence,
+      kind: "source_timeline",
+      title: "The decision closes before winter",
+      image_assets: [],
+      items: [
+        { label: "Design review", value: "Week 1" },
+        { label: "Access rules", value: "Week 3" },
+        { label: "Public launch", value: "Week 8" },
+      ],
+    },
+  });
+  const selected = selectVisualModule(shot, { fps: 30, previous_modules: [] });
+  assert.equal(selected.visual_module.selected_visual_module, "timeline_reconstruction");
+});
+
 test("selector avoids immediate layout repetition without round-robin", () => {
   const planned = attachVisualModules([
     evidenceShot({ shot_id: "shot_001", start_frame: 0, end_frame: 180 }),
