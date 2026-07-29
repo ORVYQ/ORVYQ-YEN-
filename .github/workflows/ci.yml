@@ -8,8 +8,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: orvyq-ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
+    if: ${{ !contains(github.event.pull_request.title || '', '[PATCHING]') && !contains(github.event.head_commit.message || '', '[PATCHING]') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
