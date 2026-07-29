@@ -231,7 +231,11 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
     Math.abs(captions.captions[0].start_frame - hookEndFrame) <= plan.fps * 2,
     `first caption (frame ${captions.captions[0].start_frame}) should land close to the motion hook's own end (frame ${hookEndFrame})`
   );
-  assert.match(captions.captions[0].text, /^Every major AI lab\b/i);
+  // Caption content is project-authored. The cross-project invariant is that
+  // the first timed caption contains real narration text; pinning this smoke
+  // test to Project 001's opening sentence makes every fresh project fail
+  // despite correct timing, transcript alignment and caption generation.
+  assert.ok(captions.captions[0].text.trim().length > 0, "first caption must contain canonical narration text");
   let previousCaptionEnd = -1;
   for (const caption of captions.captions) {
     const words = caption.text.trim().split(/\s+/);
