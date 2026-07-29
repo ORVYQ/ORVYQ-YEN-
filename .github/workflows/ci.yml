@@ -50,7 +50,7 @@ jobs:
           exit 0
 
       - name: Upload schema validation diagnostics
-        if: always()
+        if: ${{ always() && hashFiles('schema-validation.log') != '' && hashFiles('schema-validation.status') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: orvyq-schema-validation-${{ github.run_id }}
@@ -76,7 +76,7 @@ jobs:
           exit 0
 
       - name: Upload unit test diagnostics
-        if: always()
+        if: ${{ always() && hashFiles('unit-tests.log') != '' && hashFiles('unit-tests.status') != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: orvyq-unit-tests-${{ github.run_id }}
@@ -100,14 +100,19 @@ jobs:
         working-directory: templates/remotion
         run: npx tsc --noEmit
 
+      - name: Install deterministic Remotion browser
+        working-directory: templates/remotion
+        run: |
+          node --input-type=module -e "import { ensureBrowser } from '@remotion/renderer'; await ensureBrowser({ logLevel: 'info' });"
+
       - name: Resolve composition against placeholder data without rendering
         working-directory: templates/remotion
         run: |
           set -euo pipefail
-          BROWSER="$(command -v google-chrome-stable || command -v google-chrome || command -v chromium-browser || command -v chromium || true)"
+          BROWSER="$(find node_modules/.remotion -type f \( -name chrome-headless-shell -o -name chrome \) -perm -111 -print -quit)"
           if [ -z "$BROWSER" ]; then
-            echo "No system Chrome/Chromium found; type-check already passed."
-            exit 0
+            echo "Remotion browser installation completed but no executable was found." >&2
+            exit 1
           fi
           export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
           npx remotion compositions src/index.ts

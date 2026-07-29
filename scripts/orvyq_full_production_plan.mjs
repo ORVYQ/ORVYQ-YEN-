@@ -284,9 +284,8 @@ export function locateClaimWindow(tokens, claim, searchFromTokenIndex) {
   // two different ways: a common word (e.g. "capital") can coincidentally
   // match an earlier, unrelated occurrence and strand every later claim
   // word behind it; and some editorial rewrites reorder clauses entirely
-  // (e.g. CLM_016 says "Compliance costs may be easier for established
-  // companies to absorb" where the real line says "Established companies
-  // may... be able to absorb the complex compliance... costs" -- the same
+  // For example, an editorial rewrite may move a sentence subject
+  // ahead of a later clause while preserving the same
   // words, in a different order). So this scores every candidate window by
   // bag-of-words containment (order-independent, each significant claim
   // word counted at most once) and keeps the best-scoring, earliest,
@@ -320,11 +319,9 @@ export function locateClaimWindow(tokens, claim, searchFromTokenIndex) {
     // Score, don't just count: a raw word-count max lets a stray word that
     // coincidentally belongs to a LATER claim (found only because the
     // window reached that far) beat a tighter, more localized match with
-    // one fewer word -- observed for real, where CLM_018's own excerpt
-    // ("before systems ship" -- the real line says "before THEY ship")
-    // could only complete its full count by reaching into CLM_019's "when
-    // SYSTEMS misbehave", overshooting the cursor past CLM_019's real
-    // position entirely. Subtracting the normalized span prefers a
+    // one fewer word -- a real excerpt may only complete its full count
+    // by reaching into a later claim\'s separate use of the same noun,
+    // overshooting the cursor past that later claim\'s real position entirely. Subtracting the normalized span prefers a
     // slightly-lower-count but tightly-clustered real phrase instead.
     const score = found.size - (span / tokensToMatch.length) * 0.4;
     if (score > best.score) {
@@ -602,9 +599,9 @@ function protectedSliceIndices(claimId) {
 // need freezing when the run on the OTHER side of one of them is itself a
 // multi-slice evidence run -- which that evidence run's own protection
 // already covers. This asymmetry (only evidence-run edges matter) is what
-// leaves CLM_009/CLM_018/CLM_020-style claims (footage/graphic interleaved
-// almost every slice, see FOOTAGE_ASSIGNMENTS/GRAPHIC_BREAK_ASSIGNMENTS
-// above) real room for duration variety -- treating footage-run edges as
+// leaves heavily interleaved claims (footage/graphic alternating across
+// most slices, see FOOTAGE_ASSIGNMENTS/GRAPHIC_BREAK_ASSIGNMENTS above)
+// real room for duration variety -- treating footage-run edges as
 // equally sacred left such claims with almost no movable boundaries at all.
 function frozenRunEdgeBoundaries(protectedIndices, sliceCount) {
   const frozen = new Set();
@@ -675,16 +672,16 @@ function frozenRunEdgeBoundaries(protectedIndices, sliceCount) {
 // One slice MORE than the technical minimum (Math.ceil(duration/cap)) may
 // be declared here for a specific claim: real per-slice headroom under
 // maxShotSeconds shrinks as duration/cap approaches an exact multiple of
-// cap, and for CLM_020_SYSTEMIC_INCENTIVE_FINAL specifically (this film's
-// single longest claim, ~135s) the technical-minimum slice count leaves so
+// cap, and for exceptionally long claims near an exact cap multiple, the
+// technical-minimum slice count can leave so
 // little real headroom (~0.05-0.12s per boundary, most of it consumed by
 // upstream drift within the same run of free boundaries) that several
 // consecutive real ASR word timestamps (checked against both word-starts
 // and word-ends) never land inside the safe window at all -- confirmed
 // directly, not assumed. One additional slice roughly triples that
 // headroom, without changing which asset/trim/motion/role any existing
-// FOOTAGE_ASSIGNMENTS entry declares (only the two highest slice indices in
-// CLM_020's own table above were re-keyed by +1 to match).
+// FOOTAGE_ASSIGNMENTS entry declares; per-project assignment indices may be
+// re-keyed when an explicit slice-count override changes their positions.
 // Per-project slice-count overrides are loaded from config/editorial_asset_plan.json.
 
 
@@ -790,7 +787,7 @@ export function sliceClaimWindow(claim, coverStart, coverEnd, maxShotSeconds, to
       // neighbor's width is already fully determined independent of
       // anything chosen here (both its own edges are pure idealAt()/
       // coverEnd values) -- avoiding a tie with it up front is exactly
-      // what CLM_020's real closing-pause-pinned pair needed.
+      // what a real closing-pause-pinned pair can require.
       const avoidDurations = [];
       if (j - 2 >= 0) {
         const priorDuration = checkpointTimes[j - 1] - checkpointTimes[j - 2];
@@ -984,9 +981,9 @@ export async function buildFullProductionPlan(projectId) {
 
   // loadResolvedEvidenceMap() appends evidence_resolutions.json's
   // claim_additions to the END of the claims array (Map insertion order),
-  // regardless of which section they narratively belong to -- CLM_021 (a
-  // real addition) belongs to SEC_04, well before the film's final
-  // sections, but without this sort it would be located last, after the
+  // regardless of which section they narratively belong to -- a real
+  // addition may belong to an earlier section, well before the project\'s
+  // final sections, but without this sort it would be located last, after the
   // forward-only cursor has already passed its real position. Sorting by
   // each claim's section's position in full_production.sections (a stable
   // sort, so claims already correctly ordered within the same section keep
@@ -1259,10 +1256,9 @@ export async function buildFullProductionPlan(projectId) {
   const totalDuration = narrationEnd + insertedSeconds;
 
   // A claim can be real editorial synthesis rather than a new factual
-  // assertion (e.g. CLM_020_SYSTEMIC_INCENTIVE_FINAL's own
-  // evidence_requirements: "Treat as the film's synthesis, visually built
-  // from earlier verified evidence rather than a new factual claim") --
-  // evidence_resolutions.json legitimately leaves such claims' source_ids
+  // assertion. A project\'s evidence requirements may explicitly define a
+  // synthesis as a visual recap of earlier verified evidence. In that case,
+  // evidence_resolutions.json legitimately leaves the claim\'s source_ids
   // empty rather than attaching them to one arbitrary earlier source. But
   // buildCanonicalEditPlan still requires every evidence shot to carry
   // real, visible source attribution, and this must not be satisfied by
