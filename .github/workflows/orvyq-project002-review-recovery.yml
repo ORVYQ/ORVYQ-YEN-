@@ -1,0 +1,141 @@
+name: ORVYQ Project 002 Review Recovery
+
+on:
+  push:
+    branches: [agent/002-deep-sea-cold-war]
+    paths:
+      - ".github/workflows/orvyq-project002-review-recovery.yml"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: orvyq-project002-review-recovery
+  cancel-in-progress: false
+
+env:
+  PROJECT_ID: 002-the-new-war-beneath-the-ocean
+  SOURCE_REVIEW_RUN_ID: "30434356822"
+  SOURCE_REVIEW_SHA: c3894f5377d1ceb791f695640ac206f6a9695004
+  REVIEW_WIDTH: "1280"
+  REVIEW_HEIGHT: "720"
+
+jobs:
+  recover-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: Checkout repaired QA source
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Download completed review MP4
+        uses: actions/download-artifact@v4
+        with:
+          name: orvyq-full-length-review-${{ env.PROJECT_ID }}-${{ env.SOURCE_REVIEW_RUN_ID }}
+          path: source-review
+          run-id: ${{ env.SOURCE_REVIEW_RUN_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download exact render bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: orvyq-render-bundle-${{ env.PROJECT_ID }}-${{ env.SOURCE_REVIEW_RUN_ID }}
+          path: source-render-bundle
+          run-id: ${{ env.SOURCE_REVIEW_RUN_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download original review QA package
+        uses: actions/download-artifact@v4
+        with:
+          name: orvyq-review-qa-${{ env.PROJECT_ID }}-${{ env.SOURCE_REVIEW_RUN_ID }}
+          path: source-qa
+          run-id: ${{ env.SOURCE_REVIEW_RUN_ID }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Reconstruct exact completed review without rendering
+        run: |
+          set -euo pipefail
+          DEST="projects/$PROJECT_ID"
+          BUNDLE="source-render-bundle/projects/$PROJECT_ID"
+          QA="source-qa/projects/$PROJECT_ID"
+          VIDEO="$(find source-review -type f -name orvyq_review.mp4 -print -quit)"
+          test -n "$VIDEO" && test -s "$VIDEO"
+          test -d "$BUNDLE/assets"
+          test -f "$BUNDLE/qa/review_render_manifest.json"
+          test -f "$QA/qa/speech_transcript.json"
+
+          rm -rf "$DEST/assets" "$DEST/remotion/render_ready_project"
+          mkdir -p "$DEST/direction" "$DEST/remotion" "$DEST/qa" "$DEST/remotion/render_ready_project/out"
+          cp -r "$BUNDLE/assets" "$DEST/assets"
+          cp "$BUNDLE/direction/edit_plan.json" "$DEST/direction/edit_plan.json"
+          cp "$BUNDLE/remotion/captions.json" "$DEST/remotion/captions.json"
+          cp "$BUNDLE/qa/frozen_candidate.json" "$DEST/qa/frozen_candidate.json"
+          cp "$BUNDLE/qa/review_render_manifest.json" "$DEST/qa/review_render_manifest.json"
+          cp "$QA/qa/speech_transcript.json" "$DEST/qa/speech_transcript.json"
+          cp "$VIDEO" "$DEST/remotion/render_ready_project/out/orvyq_review.mp4"
+
+      - name: Verify completed video identity and dimensions
+        run: |
+          set -euo pipefail
+          VIDEO="projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4"
+          EXPECTED_SHA="$(node -e "const m=require('./projects/$PROJECT_ID/qa/review_render_manifest.json'); process.stdout.write(m.artifact.video_sha256)")"
+          ACTUAL_SHA="$(sha256sum "$VIDEO" | cut -d' ' -f1)"
+          test "$ACTUAL_SHA" = "$EXPECTED_SHA"
+          echo "REVIEW_VIDEO_SHA256=$ACTUAL_SHA" >> "$GITHUB_ENV"
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Verify review duration and resolution
+        run: |
+          set -euo pipefail
+          VIDEO="projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4"
+          WIDTH="$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of default=nk=1:nw=1 "$VIDEO")"
+          HEIGHT="$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of default=nk=1:nw=1 "$VIDEO")"
+          test "$WIDTH" = "$REVIEW_WIDTH"
+          test "$HEIGHT" = "$REVIEW_HEIGHT"
+
+      - name: Run repaired post-render media QA
+        run: node scripts/orvyq_media_qa.mjs --project-id "$PROJECT_ID" --video "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" --report "projects/$PROJECT_ID/qa/orvyq_review_media_qa.json"
+
+      - name: Re-run near-black audit
+        run: node scripts/orvyq_near_black_audit.mjs --project-id "$PROJECT_ID" --video "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4"
+
+      - name: Upload recovered official review
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-full-length-review-recovered-${{ env.PROJECT_ID }}-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out/orvyq_review.mp4
+            projects/${{ env.PROJECT_ID }}/qa/review_render_manifest.json
+            projects/${{ env.PROJECT_ID }}/qa/orvyq_review_media_qa.json
+            projects/${{ env.PROJECT_ID }}/qa/near_black_audit.json
+            projects/${{ env.PROJECT_ID }}/qa/speech_transcript.json
+          if-no-files-found: error
+
+      - name: Report recovered review success
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 3,
+              body: `Project 002 completed 720p review from run ${process.env.SOURCE_REVIEW_RUN_ID} passed repaired project-independent post-render QA without re-rendering. Official recovered review run: ${context.runId}. Final Encode remains blocked pending explicit approval.`
+            });
