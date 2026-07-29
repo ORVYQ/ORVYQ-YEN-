@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://orvyq.dev/schemas/shot.schema.json",
   "title": "Shot",
-  "description": "A single entry in a canonical edit plan's shots array, matching the discriminated union Video.tsx/Scene.tsx consume (BaseShot & FootageShot|GraphicShot|EvidenceShot). end_frame > start_frame is enforced by the validator script, not expressible in pure JSON Schema.",
+  "description": "A canonical ORVYQ shot. Internal semantic intent is separated from the viewer-facing cinematic visual module; semantic enum names are never display instructions.",
   "type": "object",
   "required": ["shot_id", "scene_id", "start_frame", "end_frame", "asset_type", "transition_in", "transition_out"],
   "properties": {
@@ -16,6 +16,7 @@
     "text_overlay": { "type": ["string", "null"] },
     "claim_id": { "type": "string" },
     "visual_role": { "enum": ["evidence", "archive", "context", "human_context", "metaphor", "graphic"] },
+    "editorial_role": { "type": "string" },
     "editorial_purpose": { "type": "string", "minLength": 18 },
     "editorial_overlay": { "type": ["object", "null"] },
     "hook_question": {
@@ -51,7 +52,43 @@
     "contextual_footage": { "type": "boolean" },
     "provenance_mode": { "type": "string" },
     "motif": { "type": "string" },
-    "reuse_reason": { "type": "string" }
+    "reuse_reason": { "type": "string" },
+    "semantic_intent": {
+      "type": "object",
+      "required": ["editorial_role", "claim_type", "evidence_relationship", "certainty_level", "source_type", "narrative_function", "information_density", "emotional_tone", "visual_priority", "source_visibility_requirement"],
+      "properties": {
+        "editorial_role": { "type": "string" },
+        "claim_type": { "type": "string" },
+        "evidence_relationship": { "type": "string" },
+        "certainty_level": { "type": "string" },
+        "source_type": { "type": "string" },
+        "narrative_function": { "type": "string" },
+        "information_density": { "enum": ["low", "medium", "high"] },
+        "emotional_tone": { "type": "string" },
+        "visual_priority": { "type": "string" },
+        "source_visibility_requirement": { "enum": ["visible", "optional"] }
+      },
+      "additionalProperties": false
+    },
+    "visual_requirements": {
+      "type": "object",
+      "required": ["requires_real_source", "requires_document_visibility", "requires_data_visualization", "requires_map", "requires_comparison", "requires_mechanism", "requires_human_context", "requires_motion", "requires_archival_context", "requires_scale_visualization", "available_primary_visual_count"],
+      "properties": {
+        "requires_real_source": { "type": "boolean" },
+        "requires_document_visibility": { "type": "boolean" },
+        "requires_data_visualization": { "type": "boolean" },
+        "requires_map": { "type": "boolean" },
+        "requires_comparison": { "type": "boolean" },
+        "requires_mechanism": { "type": "boolean" },
+        "requires_human_context": { "type": "boolean" },
+        "requires_motion": { "type": "boolean" },
+        "requires_archival_context": { "type": "boolean" },
+        "requires_scale_visualization": { "type": "boolean" },
+        "available_primary_visual_count": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "visual_module": { "$ref": "visual_module.schema.json" }
   },
   "allOf": [
     {

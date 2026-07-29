@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0-cinematic-visual-engine",
   "profile_id": "orvyq-aperture-cinematic",
   "description": "Project-independent creative and QA boundaries for ORVYQ cinematic documentary production.",
   "creative_limits": {
@@ -7,17 +7,28 @@
     "maximum_uses_per_source": 2,
     "hook": {
       "minimum_cuts": 3,
-      "maximum_cuts": 6,
+      "maximum_cuts": 8,
       "minimum_duration_seconds": 8,
-      "maximum_duration_seconds": 15,
+      "maximum_duration_seconds": 45,
       "question_minimum_characters": 25,
-      "question_maximum_characters": 120,
-      "human_context_first_required": true
+      "question_maximum_characters": 140,
+      "human_context_first_required": false,
+      "supported_archetypes": [
+        "contradiction",
+        "human_consequence",
+        "object_mystery",
+        "scale_revelation",
+        "decision_point",
+        "archival_rupture"
+      ],
+      "first_verified_evidence_maximum_seconds": 45,
+      "minimum_visual_module_types": 2,
+      "title_on_first_frame_forbidden": true
     },
     "editorial_rhythm": {
       "minimum_question_beats": 4,
       "maximum_question_beats": 12,
-      "brief_accent_minimum_seconds": 1.5,
+      "brief_accent_minimum_seconds": 1,
       "brief_accent_maximum_seconds": 3,
       "full_pause_minimum_seconds": 3
     },
@@ -33,6 +44,28 @@
       "maximum_assets": 3,
       "materialized_asset_prefix": "assets/evidence/",
       "allowed_extensions": [".png", ".jpg", ".jpeg", ".webp"]
+    },
+    "visual_modules": {
+      "allowed": [
+        "cinematic_footage_overlay",
+        "document_dive",
+        "evidence_lens",
+        "comparison_composition",
+        "mechanism_explainer",
+        "data_scene",
+        "timeline_reconstruction",
+        "map_scene",
+        "editorial_emphasis_moment",
+        "chapter_transition"
+      ],
+      "full_screen_text_is_default": false,
+      "automatic_card_fallback_forbidden": true,
+      "maximum_full_screen_text_fraction": 0.05,
+      "maximum_text_only_seconds": 4,
+      "maximum_presentation_chain": 1,
+      "minimum_modules_per_section": 2,
+      "minimum_module_repeat_gap": 2,
+      "subtitle_clearance_px": 180
     }
   }
 }

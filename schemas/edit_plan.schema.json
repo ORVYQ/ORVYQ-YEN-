@@ -2,13 +2,13 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://orvyq.dev/schemas/edit_plan.schema.json",
   "title": "Canonical Edit Plan",
-  "description": "The single edit-plan shape produced by buildCanonicalEditPlan() for BOTH proof and full render modes. This deliberately replaces the golden system's three branching schema_version strings ('7.0-cinematic-proof' / '6.3-motion-hook-evidence-proof' / '5.1-evidence-led-full') with one constant schema_version plus an explicit mode + frame_range pair -- see docs/migration-plan.md section 1-2. duration_frames is always the canonical FULL timeline length in both modes; frame_range.end_frame is what varies (<=duration_frames for proof, ==duration_frames for full).",
+  "description": "The single canonical edit plan used by Candidate Validation, Full-Length Review and Final Encode. Cinematic visual-module planning augments this same plan; it never creates a parallel renderer or timeline.",
   "type": "object",
   "required": ["schema_version", "project_id", "mode", "frame_range", "fps", "duration_frames", "audio_mix_asset", "shots", "quality_policy"],
   "properties": {
     "schema_version": { "const": "1.0-canonical" },
     "project_id": { "type": "string" },
-    "mode": { "enum": ["candidate", "proof", "full"], "description": "\"candidate\" is the live value going forward -- one candidate, no separate creative modes. \"proof\"/\"full\" are accepted only for historical/regression edit plans produced before this hardening." },
+    "mode": { "enum": ["candidate", "proof", "full"] },
     "frame_range": {
       "type": "object",
       "required": ["start_frame", "end_frame"],
@@ -19,11 +19,7 @@
       "additionalProperties": false
     },
     "fps": { "const": 30 },
-    "duration_frames": {
-      "type": "integer",
-      "minimum": 1,
-      "description": "Canonical full-timeline duration -- identical value in proof and full mode."
-    },
+    "duration_frames": { "type": "integer", "minimum": 1 },
     "audio_mix_asset": { "type": "string" },
     "captions_asset": { "type": "string" },
     "brand": { "type": "object" },
@@ -31,18 +27,26 @@
     "strategy": { "type": "string" },
     "render_source_sha": { "type": ["string", "null"] },
     "art_direction": { "type": "object" },
-    "motion_hook": {
+    "motion_hook": { "type": "object" },
+    "opening": {
       "type": "object",
-      "description": "Result of auditMotionHook() -- always evaluated for both modes, see scripts/lib/orvyq-motion-hook.mjs."
+      "required": ["plan_schema_version", "selected_archetype", "selected_score", "central_question", "title_reveal", "first_evidence", "visual_module_types"],
+      "properties": {
+        "plan_schema_version": { "const": "1.0-cinematic-opening" },
+        "selected_archetype": { "type": "string" },
+        "selected_score": { "type": "number" },
+        "central_question": { "type": "string", "pattern": "\\?$" },
+        "title_reveal": { "type": "object" },
+        "first_evidence": { "type": "object" },
+        "visual_module_types": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string" } }
+      },
+      "additionalProperties": false
     },
     "blacklisted_assets": { "type": "array", "items": { "type": "string" } },
     "source_usage": { "type": "object" },
     "evidence_asset_usage": { "type": "object" },
     "shots": { "type": "array", "items": { "$ref": "shot.schema.json" } },
-    "quality_policy": {
-      "type": "object",
-      "description": "Editorial policy fractions/flags read from editorial_blueprint.json.global_rules, not hardcoded per-mode duplicates."
-    }
+    "quality_policy": { "type": "object" }
   },
   "additionalProperties": false
 }

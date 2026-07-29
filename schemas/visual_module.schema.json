@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orvyq.dev/schemas/visual_module.schema.json",
+  "title": "ORVYQ Cinematic Visual Module",
+  "type": "object",
+  "required": [
+    "selected_visual_module",
+    "selection_rationale",
+    "primary_visual",
+    "visible_text",
+    "text_density",
+    "source_display_method",
+    "motion_behavior",
+    "scene_duration_range",
+    "transition_behavior",
+    "fallback_policy",
+    "presentation_intent",
+    "safe_areas"
+  ],
+  "properties": {
+    "selected_visual_module": {
+      "enum": [
+        "cinematic_footage_overlay",
+        "document_dive",
+        "evidence_lens",
+        "comparison_composition",
+        "mechanism_explainer",
+        "data_scene",
+        "timeline_reconstruction",
+        "map_scene",
+        "editorial_emphasis_moment",
+        "chapter_transition"
+      ]
+    },
+    "selection_rationale": { "type": "string", "minLength": 24 },
+    "primary_visual": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "enum": ["footage", "image", "source_derived", "generated_motion_background"] },
+        "asset": { "type": "string" },
+        "additional_assets": { "type": "array", "items": { "type": "string" } },
+        "source_ids": { "type": "array", "items": { "type": "string" } },
+        "seed": { "type": "string" },
+        "trim_in_sec": { "type": "number", "minimum": 0 },
+        "trim_out_sec": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "secondary_visual": {
+      "type": ["object", "null"],
+      "properties": {
+        "kind": { "enum": ["image", "source_derived", "generated_motion_background"] },
+        "asset": { "type": "string" },
+        "source_ids": { "type": "array", "items": { "type": "string" } },
+        "seed": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "visible_text": {
+      "type": "object",
+      "properties": {
+        "primary": { "type": ["string", "null"] },
+        "secondary": { "type": ["string", "null"] },
+        "source": { "type": ["string", "null"] },
+        "left": { "type": ["string", "null"] },
+        "right": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "text_density": { "enum": ["low", "medium", "high"] },
+    "source_display_method": { "enum": ["document_margin", "subtle_footer", "corner_attribution", "narration_only"] },
+    "motion_behavior": { "type": "string", "minLength": 3 },
+    "scene_duration_range": {
+      "type": "object",
+      "required": ["minimum_seconds", "maximum_seconds"],
+      "properties": {
+        "minimum_seconds": { "type": "number", "minimum": 0.5 },
+        "maximum_seconds": { "type": "number", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "transition_behavior": { "enum": ["cut", "fade", "dissolve"] },
+    "fallback_policy": { "const": "fail_loud" },
+    "presentation_intent": { "enum": ["viewer_copy", "show_editorial_label"] },
+    "safe_areas": {
+      "type": "object",
+      "required": ["subtitle_clearance_px", "horizontal_margin_px", "mobile_minimum_font_px"],
+      "properties": {
+        "subtitle_clearance_px": { "type": "integer", "minimum": 160 },
+        "horizontal_margin_px": { "type": "integer", "minimum": 48 },
+        "mobile_minimum_font_px": { "type": "integer", "minimum": 32 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

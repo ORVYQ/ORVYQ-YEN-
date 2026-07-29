@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orvyq.dev/schemas/opening_plan.schema.json",
+  "title": "ORVYQ Cinematic Opening Plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "generated_from",
+    "candidates",
+    "selected_archetype",
+    "selected_score",
+    "selection_rationale",
+    "central_question",
+    "title_reveal",
+    "first_evidence",
+    "phases",
+    "opening_shot_ids",
+    "visual_module_types",
+    "pass"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0-cinematic-opening" },
+    "generated_from": { "const": "canonical_edit_plan" },
+    "candidates": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["archetype", "scores", "total_score", "applicable", "disqualifiers", "supporting_assets"],
+        "properties": {
+          "archetype": { "enum": ["contradiction", "human_consequence", "object_mystery", "scale_revelation", "decision_point", "archival_rupture"] },
+          "scores": { "type": "object" },
+          "archetype_bonus": { "type": "number" },
+          "total_score": { "type": "number" },
+          "applicable": { "type": "boolean" },
+          "disqualifiers": { "type": "array", "items": { "type": "string" } },
+          "supporting_assets": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      }
+    },
+    "selected_archetype": { "enum": ["contradiction", "human_consequence", "object_mystery", "scale_revelation", "decision_point", "archival_rupture"] },
+    "selected_score": { "type": "number" },
+    "selection_rationale": { "type": "string", "minLength": 24 },
+    "central_question": { "type": "string", "pattern": "\\?$", "minLength": 20 },
+    "title_reveal": {
+      "type": "object",
+      "required": ["show_on_first_frame", "after_curiosity_is_established", "target_window_seconds"],
+      "properties": {
+        "show_on_first_frame": { "const": false },
+        "after_curiosity_is_established": { "const": true },
+        "target_window_seconds": { "type": "array", "prefixItems": [{ "type": "number" }, { "type": "number" }], "minItems": 2, "maxItems": 2 }
+      },
+      "additionalProperties": false
+    },
+    "first_evidence": {
+      "type": "object",
+      "required": ["required_by_seconds", "actual_seconds", "shot_id"],
+      "properties": {
+        "required_by_seconds": { "type": "number", "maximum": 45 },
+        "actual_seconds": { "type": ["number", "null"] },
+        "shot_id": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    },
+    "phases": { "type": "array", "minItems": 5, "items": { "type": "object" } },
+    "opening_shot_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "visual_module_types": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string" } },
+    "minimum_visual_module_types": { "type": "integer", "minimum": 2 },
+    "narration_visual_alignment_required": { "const": true },
+    "generic_stock_is_evidence": { "const": false },
+    "pass": { "const": true }
+  },
+  "additionalProperties": false
+}
