@@ -116,3 +116,69 @@ jobs:
           fi
           export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
           npx remotion compositions src/index.ts
+
+  acceptance_proof:
+    needs: validate
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/orvyq-cinematic-visual-engine'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      SYSTEM_SHA: 281f09282c111f5f5691593c95a8a876bc1b07bb
+    steps:
+      - name: Checkout exact proof source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Verify clean shared runtime before fixture injection
+        run: |
+          set -euo pipefail
+          mkdir -p acceptance-proof/pre-render
+          node scripts/orvyq_system_independence_audit.mjs
+          cp system-independence-report.json acceptance-proof/pre-render/system-independence-report.json
+
+      - name: Install media, speech and SVG tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg espeak-ng librsvg2-bin python3-pil
+
+      - name: Install canonical renderer dependencies
+        working-directory: templates/remotion
+        run: npm ci
+
+      - name: Build, render and validate synthetic proof
+        run: bash .github/acceptance-proof/run.sh
+
+      - name: Upload verified acceptance proof bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-cinematic-acceptance-proof-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            acceptance-proof/orvyq-acceptance-proof.mp4
+            acceptance-proof/contact-sheet.jpg
+            acceptance-proof/proof-validation.json
+            acceptance-proof/media-metadata.json
+            acceptance-proof/implementation-status.md
+            acceptance-proof/sha256sums.txt
+            acceptance-proof/opening-plan.json
+            acceptance-proof/visual-module-plan.json
+            acceptance-proof/final-edit-plan.json
+            acceptance-proof/compositions-before.log
+            acceptance-proof/compositions-after.log
+            acceptance-proof/decode.log
+            acceptance-proof/blackdetect.log
+            acceptance-proof/frames/*.png
+            acceptance-proof/pre-render/*.json
+            acceptance-proof/post-render/*.json
+          if-no-files-found: error
