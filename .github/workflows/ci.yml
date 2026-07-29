@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   validate:
@@ -143,38 +143,8 @@ jobs:
           export FACTFORGE_REMOTION_BROWSER_EXECUTABLE="$BROWSER"
           npx remotion compositions src/index.ts
 
-  apply_remove_circular_approval_gate:
-    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/002-deep-sea-cold-war' && github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Project 002 branch
-        uses: actions/checkout@v4
-        with:
-          ref: agent/002-deep-sea-cold-war
-          fetch-depth: 0
-
-      - name: Remove circular pre-review approval gate
-        run: python3 scripts/orvyq_one_shot_remove_circular_approval_gate.py
-
-      - name: Verify focused contract
-        run: |
-          node --check scripts/orvyq_edit_plan_tests.mjs
-          ! grep -q 'full render requires qa/proof_approval.json' scripts/orvyq_edit_plan_tests.mjs
-          grep -q 'orvyq-final-encode.yml' scripts/orvyq_edit_plan_tests.mjs
-          test ! -e scripts/orvyq_one_shot_remove_circular_approval_gate.py
-
-      - name: Commit production fix
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git diff --cached --check
-          git commit -m "Move human approval gate to Final Encode only"
-          git pull --rebase origin agent/002-deep-sea-cold-war
-          git push origin HEAD:agent/002-deep-sea-cold-war
-
   project002_candidate_validation:
-    if: false
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'agent/002-deep-sea-cold-war'
     uses: ./.github/workflows/orvyq-candidate-validation.yml
     with:
       project_id: 002-the-new-war-beneath-the-ocean
