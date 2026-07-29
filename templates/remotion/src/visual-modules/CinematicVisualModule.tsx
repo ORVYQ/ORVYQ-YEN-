@@ -53,15 +53,46 @@ export const CinematicVisualModule: React.FC<{
     {source(spec)}
   </AbsoluteFill>;
 
-  if (module === "document_dive") return <AbsoluteFill style={{ background: "#03070C", overflow: "hidden" }}>
-    <MotionGround progress={progress} seed="document dive" />
-    {src ? <div style={{ position: "absolute", left: 620, right: 80, top: 64, bottom: clearance + 34, overflow: "hidden", background: "#ECEAE4", boxShadow: "0 32px 100px rgba(0,0,0,.7)" }}>
-      <Img src={src} style={{ width: "100%", height: "100%", objectFit: "contain", objectPosition: "center top", transform: `scale(${1.02 + progress * .09}) translateY(${-progress * 2}%)`, transformOrigin: "center top" }} />
-      <div style={{ position: "absolute", left: "8%", right: "8%", top: `${36 + progress * 10}%`, height: 4, background: RED }} />
-    </div> : null}
-    <div style={{ position: "absolute", left: 82, top: 170, width: 470 }}><Text primary={spec.visible_text.primary} secondary={spec.visible_text.secondary} /></div>
-    {source(spec)}
-  </AbsoluteFill>;
+  if (module === "document_dive") {
+    const reveal = interpolate(progress, [0, .22], [0, 1], clamp);
+    const scanY = interpolate(progress, [0, 1], [26, 68], clamp);
+    return <AbsoluteFill style={{ background: "#02050A", overflow: "hidden" }}>
+      <MotionGround progress={progress} seed="primary source" />
+      {src ? <>
+        <Img
+          src={src}
+          style={{
+            position: "absolute",
+            left: "27%",
+            top: "-12%",
+            width: "84%",
+            height: "124%",
+            objectFit: "cover",
+            objectPosition: "center top",
+            opacity: .9,
+            filter: "contrast(1.03) saturate(.78) brightness(.78)",
+            transform: `perspective(1800px) rotateY(-8deg) rotateZ(-1.1deg) scale(${1.05 + progress * .08}) translateY(${-progress * 2.5}%)`,
+            transformOrigin: "center center",
+            boxShadow: "-42px 0 110px rgba(0,0,0,.72)",
+          }}
+        />
+        <div style={{ position: "absolute", left: "43%", right: "7%", top: `${scanY}%`, height: 3, background: RED, boxShadow: "0 0 24px rgba(224,106,99,.72)", opacity: .9 }} />
+        <div style={{ position: "absolute", left: "42%", width: 2, top: "13%", bottom: clearance + 36, background: "linear-gradient(transparent,rgba(246,242,233,.38),transparent)", opacity: .7 }} />
+      </> : null}
+      <AbsoluteFill style={{ background: "linear-gradient(90deg,rgba(2,5,10,.98) 0%,rgba(2,5,10,.88) 27%,rgba(2,5,10,.28) 56%,rgba(2,5,10,.08) 100%)" }} />
+      <div style={{ position: "absolute", left: 86, top: 170, width: 510, opacity: reveal, transform: `translateY(${(1 - reveal) * 18}px)`, fontFamily: "Arial, Helvetica, sans-serif" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, color: RED, fontSize: 15, fontWeight: 700, letterSpacing: ".18em", textTransform: "uppercase" }}>
+          <span style={{ width: 34, height: 2, background: RED }} /> Primary source
+        </div>
+        {spec.visible_text.primary ? <div style={{ color: INK, fontSize: 43, lineHeight: 1.04, fontWeight: 720, letterSpacing: "-.035em", marginTop: 24, textShadow: "0 8px 30px rgba(0,0,0,.85)" }}>{spec.visible_text.primary}</div> : null}
+        {spec.visible_text.secondary ? <div style={{ color: MUTED, fontSize: 21, lineHeight: 1.42, marginTop: 20, maxWidth: 450, textShadow: "0 6px 24px rgba(0,0,0,.9)" }}>{spec.visible_text.secondary}</div> : null}
+      </div>
+      <div style={{ position: "absolute", left: 86, bottom: clearance + 44, width: 420, color: "rgba(246,242,233,.52)", fontFamily: "Arial, Helvetica, sans-serif", fontSize: 14, lineHeight: 1.4, letterSpacing: ".06em" }}>
+        The document remains the picture. Typography only guides the inspection.
+      </div>
+      {source(spec)}
+    </AbsoluteFill>;
+  }
 
   if (module === "comparison_composition") return <AbsoluteFill style={{ background: "#040A11" }}>
     <MotionGround progress={progress} seed="comparison" />
@@ -74,7 +105,7 @@ export const CinematicVisualModule: React.FC<{
     const steps = (evidence?.steps || [spec.visible_text.primary, spec.visible_text.secondary]).filter(Boolean).slice(0, 4) as string[];
     return <AbsoluteFill style={{ background: "#040A11" }}><MotionGround progress={progress} seed="mechanism" />
       <div style={{ position: "absolute", left: 82, right: 82, top: 190, display: "flex", alignItems: "center", gap: 20 }}>
-        {steps.map((step, index) => <React.Fragment key={`${step}-${index}`}><div style={{ flex: 1, minHeight: 300, padding: 30, borderTop: `4px solid ${index === steps.length - 1 ? RED : BLUE}`, background: "rgba(8,20,31,.72)" }}><div style={{ color: BLUE, fontSize: 18 }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontSize: 30, lineHeight: 1.15, marginTop: 22 }}>{step}</div></div>{index < steps.length - 1 ? <div style={{ color: BLUE, fontSize: 34 }}>→</div> : null}</React.Fragment>)}
+        {steps.map((step, index) => <React.Fragment key={`${step}-${index}`}><div style={{ flex: 1, minHeight: 300, padding: 30, borderTop: `4px solid ${index === steps.length - 1 ? RED : BLUE}`, background: "rgba(8,20,31,.72)" }}><div style={{ color: BLUE, fontSize: 18 }}>{String(index + 1).padStart(2, "0")}</div><div style={{ color: INK, fontSize: 30, lineHeight: 1.15, marginTop: 22 }}>{step}</div></div>{index < steps.length - 1 ? <div style={{ color: BLUE, fontSize: 34 }}>→</div> : null}</React.Fragment>)}</div>
       </div>{source(spec)}</AbsoluteFill>;
   }
 
