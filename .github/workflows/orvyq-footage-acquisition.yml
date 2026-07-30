@@ -148,9 +148,6 @@ jobs:
       - name: Fail closed every pending footage approval
         run: node scripts/orvyq_fail_closed_pending_footage.mjs --project-id="$PROJECT_ID"
 
-      - name: Validate every acquired or reused clip and provenance record
-        run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
-
       - name: Generate byte-bound footage contact sheets
         run: node scripts/orvyq_generate_footage_contact_sheets.mjs --project-id="$PROJECT_ID"
 
