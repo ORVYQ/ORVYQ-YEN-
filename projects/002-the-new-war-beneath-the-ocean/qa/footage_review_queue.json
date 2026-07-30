@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "generated_at": "2026-07-30T21:10:27.498Z",
+  "generated_at": "2026-07-30T22:11:57.605Z",
   "pending_review_count": 49,
   "entries_with_exact_uses": 40,
   "entries": [
@@ -548,6 +548,13 @@
       "status": "pending_visual_review",
       "approved_uses_if_visually_valid": [
         {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "Opening visual premise before the first narrated sentence.",
+          "semantic_rationale": "Descend into verified deep-ocean conditions so the shared legal space is introduced as a physical environment rather than an abstract map.",
+          "trim_in_sec": 0.5,
+          "trim_out_sec": 3
+        },
+        {
           "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
           "narration_anchor": "At that depth, there is no sunlight. The pressure is crushing. The water is close to freezing, and",
           "semantic_rationale": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present.",
@@ -622,6 +629,13 @@
       "semantic_rationale": "Restrained frontier metaphor and transition bed.",
       "status": "pending_visual_review",
       "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "Opening visual premise before the first narrated sentence.",
+          "semantic_rationale": "Return to the open ocean as a restrained frontier metaphor before dissolving into verified expedition evidence.",
+          "trim_in_sec": 0.5,
+          "trim_out_sec": 3.5
+        },
         {
           "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
           "narration_anchor": "microscopic layer. They contain manganese, nickel, copper and cobalt. Unlike Japan's rare earth mud, these nodules often lie",
