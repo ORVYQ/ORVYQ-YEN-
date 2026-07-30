@@ -177,6 +177,43 @@ function pick(videos, usedIds, item) {
   return candidates[0] || null;
 }
 
+export async function preflightPexelsSelections(items, key, usedIds, policy, searchFn = search) {
+  const selectedByScene = new Map();
+  const failures = [];
+  for (const item of items) {
+    const id = sceneId(item.scene_id);
+    const queries = [...new Set([...(item.queries || []), ...(item.fallback_queries || [])]
+      .map(String)
+      .map((query) => query.trim())
+      .filter(Boolean))];
+    let selected;
+    let selectedQuery;
+    for (const query of queries) {
+      selected = pick(
+        await searchFn(query, key, Number(policy.results_per_query || 30)),
+        usedIds,
+        item,
+      );
+      if (selected) {
+        selectedQuery = query;
+        break;
+      }
+    }
+    if (!selected) {
+      failures.push(id);
+      continue;
+    }
+    usedIds.add(String(selected.video.id));
+    selectedByScene.set(id, { selected, selectedQuery });
+  }
+  if (failures.length) {
+    throw new Error(
+      `No unique semantically eligible Pexels clip found for ${failures.join(", ")}`,
+    );
+  }
+  return selectedByScene;
+}
+
 async function probe(file) {
   const { stdout } = await execFileAsync("ffprobe", [
     "-v", "error",
@@ -278,24 +315,12 @@ async function acquireDirectOne(projectId, dir, item, usedIds) {
   };
 }
 
-async function acquireOne(projectId, dir, item, key, usedIds, policy) {
+async function acquireOne(projectId, dir, item, key, usedIds, policy, preselected = null) {
   if (item.direct_source) {
     return acquireDirectOne(projectId, dir, item, usedIds);
   }
   const id = sceneId(item.scene_id);
-  const queries = [...new Set([...(item.queries || []), ...(item.fallback_queries || [])]
-    .map(String)
-    .map((query) => query.trim())
-    .filter(Boolean))];
-  let selected;
-  let selectedQuery;
-  for (const query of queries) {
-    selected = pick(await search(query, key, Number(policy.results_per_query || 30)), usedIds, item);
-    if (selected) {
-      selectedQuery = query;
-      break;
-    }
-  }
+  const { selected, selectedQuery } = preselected || {};
   if (!selected) throw new Error(`${id}: no unique semantically eligible Pexels clip found`);
   usedIds.add(String(selected.video.id));
   const candidate = shortHash(`${selected.video.id}:${selected.rendition.id}:${selected.rendition.link}`);
@@ -530,13 +555,36 @@ export async function acquireDemandFootage(projectId) {
     for (const rejected of item.rejected_provider_asset_ids || []) usedIds.add(String(rejected));
   }
   await fs.mkdir(path.join(dir, "assets", "footage"), { recursive: true });
+  const reusableByScene = new Map();
+  const pendingPexels = [];
+  for (const item of plan.assets) {
+    const id = sceneId(item.scene_id);
+    const old = await reusable(
+      dir,
+      previousByScene.get(id),
+      id,
+      item,
+      plan._approvedByProviderId,
+    );
+    if (old) {
+      reusableByScene.set(id, old);
+    } else if (!item.direct_source) {
+      pendingPexels.push(item);
+    }
+  }
+  const preselected = await preflightPexelsSelections(
+    pendingPexels,
+    key,
+    new Set(usedIds),
+    plan.policy || {},
+  );
   const records = [];
   let acquired = 0;
   let reused = 0;
   for (const item of plan.assets) {
     const id = sceneId(item.scene_id);
     const previousRecord = previousByScene.get(id);
-    const old = await reusable(dir, previousRecord, id, item, plan._approvedByProviderId);
+    const old = reusableByScene.get(id);
     if (old) {
       records.push(old);
       usedIds.add(old.provider_asset_id);
@@ -548,7 +596,15 @@ export async function acquireDemandFootage(projectId) {
       await fs.rm(oldMedia, { force: true });
       await fs.rm(`${oldMedia}.provenance.json`, { force: true });
     }
-    records.push(await acquireOne(projectId, dir, item, key, usedIds, plan.policy || {}));
+    records.push(await acquireOne(
+      projectId,
+      dir,
+      item,
+      key,
+      usedIds,
+      plan.policy || {},
+      preselected.get(id),
+    ));
     acquired += 1;
   }
   await writeJsonAtomic(path.join(dir, "assets", "local_assets.json"), {

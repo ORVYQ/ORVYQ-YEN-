@@ -7,6 +7,7 @@ import {
   validateAssignment,
   validateCapacityTarget,
   materializeAssignments,
+  preflightPexelsSelections,
 } from "./orvyq_acquire_footage_demand.mjs";
 
 function assignedItem(overrides = {}) {
@@ -48,6 +49,55 @@ test("validateCapacityTarget rejects a fixed asset count that cannot cover the m
   assert.throws(
     () => validateCapacityTarget({ ...valid, assets: [assignedItem({ expected_replacement_seconds: 7 })] }),
     /below required/
+  );
+});
+
+test("Pexels preflight reports every scene with no eligible metadata match", async () => {
+  const video = {
+    id: 101,
+    duration: 12,
+    url: "https://www.pexels.com/video/working-ship-ocean-waves-101/",
+    user: { name: "Source Creator" },
+    video_files: [{
+      id: 201,
+      file_type: "video/mp4",
+      width: 1920,
+      height: 1080,
+      link: "https://videos.pexels.com/video-files/101/101-hd_1920_1080_30fps.mp4",
+    }],
+  };
+  const items = [
+    {
+      scene_id: "scene_001",
+      queries: ["working ship"],
+      min_duration_seconds: 8,
+      semantic_title_constraints: {
+        required_any_groups: [["working"], ["ship"]],
+        forbidden_terms: [],
+      },
+    },
+    {
+      scene_id: "scene_002",
+      queries: ["magnet factory"],
+      min_duration_seconds: 8,
+      semantic_title_constraints: {
+        required_any_groups: [["magnet"], ["factory"]],
+        forbidden_terms: [],
+      },
+    },
+    {
+      scene_id: "scene_003",
+      queries: ["underwater robot"],
+      min_duration_seconds: 8,
+      semantic_title_constraints: {
+        required_any_groups: [["underwater"], ["robot"]],
+        forbidden_terms: [],
+      },
+    },
+  ];
+  await assert.rejects(
+    () => preflightPexelsSelections(items, "test-key", new Set(), {}, async () => [video]),
+    /scene_002, scene_003/,
   );
 });
 

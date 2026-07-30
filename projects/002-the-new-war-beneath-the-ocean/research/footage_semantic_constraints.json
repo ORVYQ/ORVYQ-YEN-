@@ -14,9 +14,9 @@
       "forbidden_terms": ["tour", "tourist", "fishing", "yacht", "sailboat", "cruise", "boarding"]
     },
     "scene_002": {
-      "queries": ["scientific research vessel rough ocean", "ocean survey ship heavy seas"],
-      "fallback_queries": ["working research ship waves", "expedition vessel rough sea"],
-      "required_any_groups": [["research", "scientific", "survey", "expedition"], ["ship", "vessel"]],
+      "queries": ["working ship rough ocean waves", "large vessel heavy sea"],
+      "fallback_queries": ["cargo ship rough sea waves", "working boat open ocean"],
+      "required_any_groups": [["working", "cargo", "commercial", "industrial", "large"], ["ship", "vessel", "boat"], ["ocean", "sea", "wave", "water"]],
       "forbidden_terms": ["fishing", "yacht", "sailboat", "cruise", "tourist"]
     },
     "scene_003": {
