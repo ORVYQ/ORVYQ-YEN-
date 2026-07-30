@@ -119,7 +119,18 @@ For each asset, retain as applicable:
 
 Every visual, video, document, map, animation or graphic must directly explain, emphasise or meaningfully support the word, sentence, claim, event, object or emotion being narrated at that moment. General topic similarity alone is not sufficient visual fitness. Blind visual assignment by file order, asset index, keyword match or the need to fill a duration gap is forbidden. The real content of an asset must be inspected (frame-by-frame or by direct viewing, not filename or provider metadata alone) and its semantic relationship to the narration verified before assignment.
 
-If the existing asset pool has no semantically fitting visual, the correct response is not to reuse an unrelated asset to pass quality control. Acquire a new licensed asset with a search query built directly from the narrated sentence, event or object, or author an original source-derived map, diagram, comparison or evidence composition instead.
+Every shot must carry its exact `narration_anchor`, `claim_id`,
+`semantic_rationale` and one explicit physical, historical, conceptual or
+direct-evidence link. A rejected provider asset is globally barred from every
+later scene and backfill pool. If the existing pool has no semantically fitting
+visual, the system records a blocked asset request; it does not insert an
+approximate clip or automatically author a decorative graphic.
+
+Primary evidence requires a real institution, source title, publication date,
+direct provenance and a content identity bound to the document page/figure
+and relevant region. Different crops of the same content identity count once.
+A designed frame around a real source does not turn it into a graphic, while a
+designed imitation of a document can never count as evidence.
 
 ### Storage rules
 
@@ -148,12 +159,19 @@ It must verify at minimum:
 - audio integrity
 - renderability
 - absence of placeholders and unapproved fallbacks
-- whole-film visual-medium balance, including a 35–60% contextual-footage
-  range, no more than 30% source-derived graphics and no more than 35%
-  combined card-like presentation
+- mutually exclusive whole-film visual-medium balance: 60–70% contextual
+  footage, at least 20% real primary evidence, at most 15% graphics/cards in
+  total, and at most 3% full-screen text cards
+- no double classification: every frame belongs to exactly one of contextual
+  footage, primary evidence, or graphics/cards
+- at most one graphics/card shot in succession, no section above 25%
+  graphics/cards, no card template used more than three times, and no
+  full-screen template used more than twice
 - per-section card/graphic clustering, so healthy whole-film averages cannot
   hide a local slideshow
 - repeated evidence/card presentation motifs
+- concise premium card copy, named ORVYQ templates, and an explicit factual
+  necessity (comparison, timeline, geography, mechanism or critical result)
 
 A failed candidate is repaired internally. It is not presented to the user as review-ready.
 
@@ -259,7 +277,7 @@ Project: `002-the-new-war-beneath-the-ocean`
 
 Branch: `main`
 
-Current status (last verified 2026-07-30):
+Current status (last verified 2026-07-30, render-free visual-system revision):
 
 - Research dossier, 15 sourced factual claims, narration (~2,216 words),
   ElevenLabs handoff and `final_voice.mp3` are complete.
@@ -275,23 +293,21 @@ Current status (last verified 2026-07-30):
 - The media-QA opening is now project-derived and covered by cross-project
   regression tests. The existing review artifact is the render-free
   regression evidence; no replacement render is required for this defect.
-- Shared visual-balance gates now reject the old candidate: its 38.85%
-  source-derived and 46.84% card-like fractions exceed the new 30% and 35%
-  ceilings, and section-level clustering is checked independently.
-- Footage Acquisition run `30524147398` completed and committed 50 compact,
-  repository-owned Pexels clips. Direct contact-sheet/frame review rejected
-  nine metadata matches whose visible content did not fit their narration
-  targets; none can enter authored assignments or automated backfill.
+- The exact mutually exclusive baseline is 57.08% contextual footage, 5.72%
+  real primary evidence and 37.20% graphics/cards; full-screen text cards are
+  5.73%. The prior overlapping category report is retired.
+- The complete 50-clip provenance pool was re-audited fail-closed. Source-page
+  metadata is sufficient to reject 37 false or generic matches; the remaining
+  13 are pending byte-bound contact-sheet review and none is currently
+  approved for a new candidate.
 - Project 002's long closing claim was split into six narration-anchored
   synthesis claims so the last 5m46s is no longer one 47-shot claim. The
   corrected 150-shot, 31,128-frame plan uses 89 footage shots and 52 evidence
   shots. Every used footage source stays at or below two non-contiguous uses.
-- Render-free local Candidate Validation now passes 258/258 unit tests,
-  26/26 canonical checks, the complete `orvyq:qa` chain and render-ready
-  TypeScript validation. The measured mix is 59.49% total footage, 58.14%
-  contextual body footage, 29.05% source-derived graphics, 34.79% card-like
-  presentation, 5.72% official primary capture and 34.78% evidence/archive;
-  the longest uninterrupted evidence run is 13.83s.
+- Project 002 now has an explicit decision for all 60 baseline card/graphic
+  moments. Its materialized target is 61.84% footage, 25.86% primary evidence,
+  12.30% graphics/cards and 2.41% full-screen text, with no adjacent card
+  shots. Nineteen real-evidence/footage requests block materialization.
 - Presentation-motif identity is based on the reader-facing image/content,
   not citation title alone. Distinct JAMSTEC captures and distinct IEA
   comparisons therefore remain independently auditable without being falsely
@@ -308,10 +324,24 @@ Current status (last verified 2026-07-30):
   temporary roots. Both runs produced the same 19 generic files after
   normalising the creation timestamp, with no Project 001 or Project 002
   identifiers or assets.
-- Full-Length Review remains explicitly dispatched. Final Encode remains
-  forbidden until the user reviews and approves the corrected candidate.
+- `full_production.status` is `blocked_pending_visual_assets`. Full-Length
+  Review and Final Encode remain forbidden until the requested assets are
+  acquired, provenance-verified, semantically approved and materialized.
 
 ## 15. Change log
+
+### 2026-07-30 — Exclusive-medium and semantic fail-closed contract
+
+- Replaced overlapping visual fractions with one exclusive classifier and
+  permanent 60/20/15/3 gates.
+- Made narration anchor, claim, semantic rationale and semantic-link fields
+  mandatory on every shot.
+- Added global rejected-footage exclusion, byte-bound contact-sheet approval,
+  primary-evidence content fingerprints and crop-deduplication.
+- Added a premium ORVYQ card system with restrained motion, consistent safe
+  areas, shorter typography, named templates and necessity checks.
+- Replanned all 60 Project 002 card moments and blocked the candidate on 19
+  explicit real-asset requests. No video render was started.
 
 ### 2026-07-30 — Project-independent QA and visual-balance hardening
 

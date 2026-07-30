@@ -51,18 +51,26 @@ not be rendered.
 The shared balance policy is enforced by the semantic visual audit, alignment
 score and edit-plan tests:
 
-- contextual footage: 35–60% of the complete timeline;
-- source-derived graphics: at most 30%;
-- full-screen generic graphics: at most 8%;
-- all card-like presentation combined: at most 35%;
-- official primary evidence: at least 5%;
-- contextual footage plus real evidence/archive: at least 30%;
-- per section, source-derived graphics: at most 48%;
-- per section, all card-like presentation: at most 50%.
+- contextual footage: 60–70% of the complete timeline;
+- real primary evidence: at least 20%;
+- source-derived graphics, infographics, diagrams, recap cards, overlays and
+  every other card combined: at most 15%;
+- full-screen text cards: at most 3%;
+- per section, all graphics/cards combined: at most 25%;
+- at most one graphics/card shot in succession;
+- any one graphics/card template may appear at most three times;
+- a full-screen template may appear at most twice.
 
-Project profiles may tighten these limits but cannot loosen them. Repeated
-evidence/card motifs and section-local clusters fail even when whole-film
-averages appear healthy.
+The three top-level media categories are mutually exclusive. An overlay makes
+its whole shot a card interval; it cannot also count as footage. A designed
+real document remains primary evidence only when institution, title, date,
+provenance and content identity are present. Decorative document recreations
+never count as evidence, and different crops of one content identity do not
+create artificial diversity.
+
+Project profiles may tighten these limits but cannot loosen them. Every shot
+also requires a claim ID, exact narration anchor, semantic rationale and
+explicit physical/historical/conceptual/direct-evidence link.
 
 ## 4. Full-Length Review
 

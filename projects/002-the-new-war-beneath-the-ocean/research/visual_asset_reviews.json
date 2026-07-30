@@ -1,0 +1,257 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "review_basis": "Fail-closed metadata/provenance audit of the complete 50-clip pool. A source-page mismatch is sufficient to reject; metadata agreement is not sufficient to approve without contact-sheet/frame review.",
+  "policy": {
+    "default_status_for_unlisted_assets": "pending_frame_review",
+    "rejected_asset_global_reentry_forbidden": true,
+    "automatic_backfill_forbidden": true,
+    "approval_requires_contact_sheet_sha256": true,
+    "approval_requires_claim_id_narration_anchor_and_semantic_rationale": true
+  },
+  "summary": {
+    "pool_assets": 50,
+    "rejected_from_metadata": 37,
+    "pending_frame_review": 13,
+    "approved": 0
+  },
+  "pending_frame_review_scene_ids": [
+    "scene_009",
+    "scene_010",
+    "scene_011",
+    "scene_017",
+    "scene_018",
+    "scene_022",
+    "scene_023",
+    "scene_027",
+    "scene_028",
+    "scene_033",
+    "scene_035",
+    "scene_040",
+    "scene_043"
+  ],
+  "rejected_assets": [
+    {
+      "scene_id": "scene_001",
+      "provider_asset_id": "36033492",
+      "source_page_url": "https://www.pexels.com/video/boat-boarding-scene-in-scenic-coastal-area-36033492/",
+      "reason": "Scenic boat boarding does not establish a scientific research-vessel crew or expedition operation."
+    },
+    {
+      "scene_id": "scene_002",
+      "provider_asset_id": "11088525",
+      "source_page_url": "https://www.pexels.com/video/fishing-boat-on-sea-11088525/",
+      "reason": "A fishing boat is a false physical match for the narrated research-vessel context."
+    },
+    {
+      "scene_id": "scene_003",
+      "provider_asset_id": "32599784",
+      "source_page_url": "https://www.pexels.com/video/underwater-exploration-with-coral-and-squid-32599784/",
+      "reason": "Coral-and-squid beauty imagery does not show deep-sea robotics or the claimed technical operation."
+    },
+    {
+      "scene_id": "scene_004",
+      "provider_asset_id": "15660444",
+      "source_page_url": "https://www.pexels.com/video/a-boat-is-being-pulled-by-a-tug-boat-in-the-ocean-15660444/",
+      "reason": "A tug towing a boat does not show the industrial pipe or seabed-system operation named by the assignment."
+    },
+    {
+      "scene_id": "scene_005",
+      "provider_asset_id": "31751374",
+      "source_page_url": "https://www.pexels.com/video/industrial-machine-control-panel-close-up-31751374/",
+      "reason": "An anonymous control panel illustrates a noun but not the human monitoring or marine-system decision described by narration."
+    },
+    {
+      "scene_id": "scene_006",
+      "provider_asset_id": "8987021",
+      "source_page_url": "https://www.pexels.com/video/video-of-grinding-metal-8987021/",
+      "reason": "Generic metal grinding is not evidence or context for motor, magnet, or rare-earth manufacturing."
+    },
+    {
+      "scene_id": "scene_007",
+      "provider_asset_id": "29941036",
+      "source_page_url": "https://www.pexels.com/video/modern-blue-industrial-building-exterior-29941036/",
+      "reason": "A generic building exterior has no visible physical connection to the narrated manufacturing stage."
+    },
+    {
+      "scene_id": "scene_008",
+      "provider_asset_id": "35440493",
+      "source_page_url": "https://www.pexels.com/video/wind-turbines-silhouetted-at-sunset-35440493/",
+      "reason": "Sunset turbines are atmospheric end-use imagery, not the maintenance or supply-chain mechanism assigned to this beat."
+    },
+    {
+      "scene_id": "scene_012",
+      "provider_asset_id": "38506234",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-moalboal-s-beautiful-coastline-38506234/",
+      "reason": "A tropical Philippine coastline cannot stand in for the specific remote Pacific geography in narration."
+    },
+    {
+      "scene_id": "scene_013",
+      "provider_asset_id": "34838666",
+      "source_page_url": "https://www.pexels.com/video/business-meeting-with-technology-presentation-34838666/",
+      "reason": "A commercial technology presentation is not diplomacy or an export-control negotiation."
+    },
+    {
+      "scene_id": "scene_014",
+      "provider_asset_id": "8061443",
+      "source_page_url": "https://www.pexels.com/video/man-signing-on-a-paper-8061443/",
+      "reason": "Generic signing footage reduces two legal rulebooks to a keyword illustration and supplies no historical connection."
+    },
+    {
+      "scene_id": "scene_015",
+      "provider_asset_id": "32454078",
+      "source_page_url": "https://www.pexels.com/video/underwater-exploration-with-sea-turtle-in-ocean-32454078/",
+      "reason": "A sea turtle beauty shot does not carry the sediment-plume mechanism being narrated."
+    },
+    {
+      "scene_id": "scene_016",
+      "provider_asset_id": "8381452",
+      "source_page_url": "https://www.pexels.com/video/a-scientist-working-inside-a-laboratory-8381452/",
+      "reason": "An unrelated generic laboratory is explicitly insufficient for marine-science evidence or context."
+    },
+    {
+      "scene_id": "scene_019",
+      "provider_asset_id": "36123913",
+      "source_page_url": "https://www.pexels.com/video/dramatic-black-and-white-oceanfront-cityscape-36123913/",
+      "reason": "A stylized cityscape is atmospheric decoration without a physical or conceptual link to the deep-ocean frontier claim."
+    },
+    {
+      "scene_id": "scene_020",
+      "provider_asset_id": "15777850",
+      "source_page_url": "https://www.pexels.com/video/a-woman-looking-at-the-sea-on-benijo-beach-in-tenerife-canary-islands-15777850/",
+      "reason": "A contemplative beach shot is a generic emotional backfill, not support for the narrated decision."
+    },
+    {
+      "scene_id": "scene_021",
+      "provider_asset_id": "3191288",
+      "source_page_url": "https://www.pexels.com/video/a-man-of-science-observing-a-liquid-sample-inside-a-test-tube-3191288/",
+      "reason": "A generic test tube does not show battery chemistry, mineral specificity, or the claimed experiment."
+    },
+    {
+      "scene_id": "scene_024",
+      "provider_asset_id": "15547488",
+      "source_page_url": "https://www.pexels.com/video/an-aerial-view-of-a-ship-in-the-water-15547488/",
+      "reason": "An unidentified ship cannot be used as a scientific survey vessel."
+    },
+    {
+      "scene_id": "scene_025",
+      "provider_asset_id": "8328050",
+      "source_page_url": "https://www.pexels.com/video/a-man-controlling-a-robot-8328050/",
+      "reason": "A terrestrial robot-control scene is a false match for an underwater ROV operation."
+    },
+    {
+      "scene_id": "scene_026",
+      "provider_asset_id": "8327144",
+      "source_page_url": "https://www.pexels.com/video/scientist-dropping-a-liquid-in-a-glass-tube-8327144/",
+      "reason": "A generic liquid transfer does not establish a marine baseline sample or field context."
+    },
+    {
+      "scene_id": "scene_029",
+      "provider_asset_id": "5417207",
+      "source_page_url": "https://www.pexels.com/video/people-sailing-on-a-moving-boat-5417207/",
+      "reason": "Recreational sailing is not research-vessel deck operations."
+    },
+    {
+      "scene_id": "scene_030",
+      "provider_asset_id": "14059424",
+      "source_page_url": "https://www.pexels.com/video/moody-sky-over-ships-on-seashore-14059424/",
+      "reason": "Unidentified ships under a moody sky are atmosphere, not a scientific fleet or comparison."
+    },
+    {
+      "scene_id": "scene_031",
+      "provider_asset_id": "6951503",
+      "source_page_url": "https://www.pexels.com/video/people-having-a-meeting-in-the-conference-room-6951503/",
+      "reason": "A generic conference-room meeting cannot represent international rulemaking."
+    },
+    {
+      "scene_id": "scene_032",
+      "provider_asset_id": "29475225",
+      "source_page_url": "https://www.pexels.com/video/drone-aerial-view-of-fishing-boat-on-blue-ocean-29475225/",
+      "reason": "The source is an aerial fishing boat despite an ROV/deep-ocean assignment; this is a direct false match."
+    },
+    {
+      "scene_id": "scene_034",
+      "provider_asset_id": "8381443",
+      "source_page_url": "https://www.pexels.com/video/medical-practitioners-using-medical-equipment-while-in-the-laboratory-8381443/",
+      "reason": "Medical practitioners do not represent environmental or marine researchers."
+    },
+    {
+      "scene_id": "scene_036",
+      "provider_asset_id": "3192306",
+      "source_page_url": "https://www.pexels.com/video/group-of-people-having-a-meeting-3192306/",
+      "reason": "The meeting has no verifiable policy, government, or scientific decision context."
+    },
+    {
+      "scene_id": "scene_037",
+      "provider_asset_id": "32243769",
+      "source_page_url": "https://www.pexels.com/video/factory-worker-operating-textile-machine-32243769/",
+      "reason": "Textile production is unrelated to the narrated prototype or mineral-processing test."
+    },
+    {
+      "scene_id": "scene_038",
+      "provider_asset_id": "6952133",
+      "source_page_url": "https://www.pexels.com/video/man-speaking-in-the-conference-podium-6952133/",
+      "reason": "A generic podium does not establish an international assembly or governance act."
+    },
+    {
+      "scene_id": "scene_039",
+      "provider_asset_id": "3196465",
+      "source_page_url": "https://www.pexels.com/video/scientist-working-and-looking-through-a-microscope-3196465/",
+      "reason": "A generic microscope visualizes 'science' as a keyword and does not show materials or battery research."
+    },
+    {
+      "scene_id": "scene_041",
+      "provider_asset_id": "7643616",
+      "source_page_url": "https://www.pexels.com/video/businesspeople-having-a-meeting-in-the-office-7643616/",
+      "reason": "An office business meeting is not a policy negotiation."
+    },
+    {
+      "scene_id": "scene_042",
+      "provider_asset_id": "13620584",
+      "source_page_url": "https://www.pexels.com/video/maltese-pilot-motorboat-13620584/",
+      "reason": "A pilot motorboat is a false substitute for a scientific research vessel."
+    },
+    {
+      "scene_id": "scene_044",
+      "provider_asset_id": "31529056",
+      "source_page_url": "https://www.pexels.com/video/efficient-blue-collar-team-in-textile-production-31529056/",
+      "reason": "Efficient textile production contradicts the assigned supply-disruption beat and is the wrong industry."
+    },
+    {
+      "scene_id": "scene_045",
+      "provider_asset_id": "6951402",
+      "source_page_url": "https://www.pexels.com/video/people-sitting-in-a-conference-room-6951402/",
+      "reason": "A generic conference room cannot stand in for international-law negotiation."
+    },
+    {
+      "scene_id": "scene_046",
+      "provider_asset_id": "19265006",
+      "source_page_url": "https://www.pexels.com/video/two-small-boats-are-floating-in-the-water-19265006/",
+      "reason": "Two small boats do not show scientists collecting water samples."
+    },
+    {
+      "scene_id": "scene_047",
+      "provider_asset_id": "19115722",
+      "source_page_url": "https://www.pexels.com/video/a-group-of-people-are-loading-wood-into-a-truck-19115722/",
+      "reason": "Loading wood into a truck is unrelated to a coastal industrial community or deep-sea policy impact."
+    },
+    {
+      "scene_id": "scene_048",
+      "provider_asset_id": "8514316",
+      "source_page_url": "https://www.pexels.com/video/female-scientists-posing-with-monstera-plants-8514316/",
+      "reason": "Scientists posing with plants do not establish marine research, inherited precedent, or the narrated decision."
+    },
+    {
+      "scene_id": "scene_049",
+      "provider_asset_id": "27556594",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-a-sailboat-in-the-sea-27556594/",
+      "reason": "A sailboat is a false match for a scientific expedition vessel."
+    },
+    {
+      "scene_id": "scene_050",
+      "provider_asset_id": "6951641",
+      "source_page_url": "https://www.pexels.com/video/people-talking-while-in-the-conference-room-6951641/",
+      "reason": "A generic conversation has no verifiable committee-hearing or regulatory context."
+    }
+  ]
+}
