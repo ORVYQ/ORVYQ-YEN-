@@ -1,0 +1,58 @@
+{
+  "stable_asset_id": "a3898c99bce542b8549b51fd",
+  "scene_id": "scene_047",
+  "provider": "pexels",
+  "provider_asset_id": "15894768",
+  "source_page_url": "https://www.pexels.com/video/fishing-boats-in-the-sea-with-people-on-them-15894768/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "khanhhoangminh",
+  "attribution_required": false,
+  "search_query": "coastal industrial community workers",
+  "editorial_role": "human_context",
+  "editorial_note": "People living and working near industry give the distribution of risk a grounded human context without standing for a named affected community.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "community",
+        "people",
+        "worker",
+        "person",
+        "town",
+        "industrial",
+        "factory",
+        "port",
+        "harbor"
+      ]
+    ],
+    "forbidden_terms": [
+      "tourist",
+      "vacation",
+      "beach-party",
+      "resort",
+      "wedding"
+    ]
+  },
+  "duration": 16,
+  "actual_duration_seconds": 16,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 11695057,
+  "sha256": "757354a66a159c00899b8c89194745bacf59d199d98eae9898aeff85cbf1172f",
+  "actual_sha256": "757354a66a159c00899b8c89194745bacf59d199d98eae9898aeff85cbf1172f",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "11365149",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:49:20.317Z"
+}

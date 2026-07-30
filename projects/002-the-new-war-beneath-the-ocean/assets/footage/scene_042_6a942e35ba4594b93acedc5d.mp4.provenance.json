@@ -1,0 +1,55 @@
+{
+  "stable_asset_id": "d7ec75d3eb817e2d02f145d3",
+  "scene_id": "scene_042",
+  "provider": "pexels",
+  "provider_asset_id": "20256990",
+  "source_page_url": "https://www.pexels.com/video/a-boat-is-traveling-across-the-water-20256990/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "K",
+  "attribution_required": false,
+  "search_query": "scientific research vessel ocean survey",
+  "editorial_role": "context",
+  "editorial_note": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "ship",
+        "vessel",
+        "boat",
+        "ocean",
+        "sea"
+      ]
+    ],
+    "forbidden_terms": [
+      "cargo",
+      "freight",
+      "ferry",
+      "cruise",
+      "yacht",
+      "fishing"
+    ]
+  },
+  "duration": 14.014,
+  "actual_duration_seconds": 14.014,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 13073441,
+  "sha256": "80e0acd520967a8c18dac32a6d6577089274b17b5f63c0f37303711bb78b5846",
+  "actual_sha256": "80e0acd520967a8c18dac32a6d6577089274b17b5f63c0f37303711bb78b5846",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "8999165",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:48:08.000Z"
+}

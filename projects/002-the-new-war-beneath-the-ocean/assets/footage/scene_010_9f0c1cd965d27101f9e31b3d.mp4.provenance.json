@@ -1,0 +1,59 @@
+{
+  "stable_asset_id": "3eef504fdd2af41fb57b98db",
+  "scene_id": "scene_010",
+  "provider": "pexels",
+  "provider_asset_id": "33938964",
+  "source_page_url": "https://www.pexels.com/video/molten-metal-glowing-in-a-foundry-furnace-33938964/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "aksinfo7 universe",
+  "attribution_required": false,
+  "search_query": "metal refinery molten metal industrial",
+  "editorial_role": "context",
+  "editorial_note": "Processing and refining chokepoint.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "metal",
+        "mineral",
+        "smelting",
+        "refinery",
+        "molten"
+      ],
+      [
+        "industrial",
+        "factory",
+        "processing",
+        "furnace"
+      ]
+    ],
+    "forbidden_terms": [
+      "jewelry",
+      "blacksmith",
+      "art",
+      "craft"
+    ]
+  },
+  "duration": 12.001667,
+  "actual_duration_seconds": 12.001667,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 11498474,
+  "sha256": "345b462d2f6f0704b384ccbe4bd0f075e2d0186e82d2919f1e59283bd43c768e",
+  "actual_sha256": "345b462d2f6f0704b384ccbe4bd0f075e2d0186e82d2919f1e59283bd43c768e",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "14402037",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:41:23.592Z"
+}

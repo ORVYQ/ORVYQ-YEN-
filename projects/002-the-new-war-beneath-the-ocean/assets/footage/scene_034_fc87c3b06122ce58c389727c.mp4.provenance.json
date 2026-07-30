@@ -1,0 +1,53 @@
+{
+  "stable_asset_id": "b59e504247a213603c06f716",
+  "scene_id": "scene_034",
+  "provider": "pexels",
+  "provider_asset_id": "4121354",
+  "source_page_url": "https://www.pexels.com/video/lab-laboratory-medical-medicine-4121354/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Edward Jenner",
+  "attribution_required": false,
+  "search_query": "scientists reviewing research data",
+  "editorial_role": "human_context",
+  "editorial_note": "A multidisciplinary review setting embodies a decision made with incomplete evidence without implying that the people shown advise a named government.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "scientist",
+        "researcher",
+        "research",
+        "laboratory",
+        "data"
+      ]
+    ],
+    "forbidden_terms": [
+      "medical-patient",
+      "hospital-patient",
+      "school-child",
+      "party"
+    ]
+  },
+  "duration": 16,
+  "actual_duration_seconds": 16,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 3591633,
+  "sha256": "8cfa01c0b64792b9551d5b9dfe34b1ae4ce60cff9f42dc8d92474f88508046a1",
+  "actual_sha256": "8cfa01c0b64792b9551d5b9dfe34b1ae4ce60cff9f42dc8d92474f88508046a1",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "9362524",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:46:45.710Z"
+}

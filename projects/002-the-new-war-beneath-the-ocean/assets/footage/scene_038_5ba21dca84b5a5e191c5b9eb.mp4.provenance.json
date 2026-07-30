@@ -1,0 +1,54 @@
+{
+  "stable_asset_id": "94c128f9603b662c02cb1a6e",
+  "scene_id": "scene_038",
+  "provider": "pexels",
+  "provider_asset_id": "6951297",
+  "source_page_url": "https://www.pexels.com/video/a-tilt-down-shot-of-and-empty-conference-room-6951297/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Werner Pfennig",
+  "attribution_required": false,
+  "search_query": "international assembly delegates meeting",
+  "editorial_role": "human_context",
+  "editorial_note": "An international assembly provides human governance context for common heritage; UNCLOS and ISA documents remain the legal evidence.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "delegate",
+        "official",
+        "assembly",
+        "conference",
+        "government"
+      ]
+    ],
+    "forbidden_terms": [
+      "party",
+      "concert",
+      "wedding",
+      "walking",
+      "leaving"
+    ]
+  },
+  "duration": 16,
+  "actual_duration_seconds": 16,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 2118924,
+  "sha256": "d38cf7ca096d2fb196b8842836f6851e62ef31f0cbb5f665f9c2ae0c08a5ee67",
+  "actual_sha256": "d38cf7ca096d2fb196b8842836f6851e62ef31f0cbb5f665f9c2ae0c08a5ee67",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "10244339",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:47:24.256Z"
+}

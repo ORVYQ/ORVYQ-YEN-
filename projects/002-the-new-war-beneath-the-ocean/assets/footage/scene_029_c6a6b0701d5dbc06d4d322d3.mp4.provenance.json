@@ -1,0 +1,52 @@
+{
+  "stable_asset_id": "f808cf5ddafe253968fc1f1f",
+  "scene_id": "scene_029",
+  "provider": "pexels",
+  "provider_asset_id": "10904397",
+  "source_page_url": "https://www.pexels.com/video/sea-seen-from-ship-10904397/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Glenn Langhorst",
+  "attribution_required": false,
+  "search_query": "research vessel deck crew",
+  "editorial_role": "human_context",
+  "editorial_note": "A working research-vessel deck supports the announced return to field operations while avoiding any claim that generic footage depicts Chikyu or the 2027 trial itself.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "ship",
+        "vessel",
+        "boat"
+      ]
+    ],
+    "forbidden_terms": [
+      "icebreaker",
+      "frozen",
+      "cargo",
+      "ferry",
+      "cruise"
+    ]
+  },
+  "duration": 16,
+  "actual_duration_seconds": 16,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 22299278,
+  "sha256": "3090e2b4c461801f4689a6dea5313ff506cbf5a2f8d831a5e7e652d9f2ec72f9",
+  "actual_sha256": "3090e2b4c461801f4689a6dea5313ff506cbf5a2f8d831a5e7e652d9f2ec72f9",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "4798316",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:45:06.750Z"
+}

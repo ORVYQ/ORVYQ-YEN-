@@ -2,25 +2,25 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "ready",
-  "generation_policy": "demand-led narration-anchored footage acquisition plus direct frame review; semantic mismatches are excluded from both authored assignments and automated backfill",
+  "generation_policy": "demand-led narration-anchored footage acquisition; exact downloaded paths replace only explicit graphic targets; source-title semantic constraints reject clear metadata mismatches before download; no fixed clip-count completion and no silent fallback",
   "footage_assignments": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
       "2": {
-        "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+        "asset": "assets/footage/scene_016_direct.mp4",
         "trimInRatio": 0.02,
         "motion": "drift_right",
         "role": "human_context",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       },
       "4": {
-        "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
+        "asset": "assets/footage/scene_004_a8d00eae8b2843138618e4e4.mp4",
         "trimInRatio": 0,
         "motion": "push",
         "role": "context",
         "reuse_reason": "This industrial-operation image is introduced during Japan's technical milestone and returns later during the industrial timeline as a deliberate bridge from a completed test to the still-unfinished production chain; the two uses occupy distinct trim windows."
       },
       "5": {
-        "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+        "asset": "assets/footage/scene_002_c4c90d72f299c6b6917d1d5e.mp4",
         "trimInRatio": 0.44,
         "motion": "pull",
         "role": "context",
@@ -29,7 +29,7 @@
         "reuse_reason": "The rough-ocean vessel first establishes exposed surface logistics during the supply-chain setup and returns here at a distinct trim window to close the technical milestone on real offshore operating conditions."
       },
       "6": {
-        "asset": "assets/footage/scene_024_630c047f0475b22170fad093.mp4",
+        "asset": "assets/footage/scene_024_6e3717bc50f72c547e42e539.mp4",
         "trimInRatio": 0,
         "motion": "push",
         "role": "context",
@@ -39,21 +39,21 @@
     },
     "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT": {
       "0": {
-        "asset": "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+        "asset": "assets/footage/scene_002_c4c90d72f299c6b6917d1d5e.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
         "role": "context",
         "reuse_reason": "The rough-ocean vessel first establishes exposed surface logistics during the supply-chain setup and returns during Japan's technical milestone at a distinct trim window to close that test on real offshore operating conditions."
       },
       "2": {
-        "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
+        "asset": "assets/footage/scene_006_c073342f5780c6939e8dff0a.mp4",
         "trimInRatio": 0.1,
         "motion": "hold",
         "role": "context",
         "reuse_reason": "This processing and supply-chain image is introduced under China's material chokepoint and returns under the unfinished mining-code section to contrast physical industrial concentration with unresolved governance; each occurrence uses a distinct trim window."
       },
       "4": {
-        "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+        "asset": "assets/footage/scene_010_9f0c1cd965d27101f9e31b3d.mp4",
         "trimInRatio": 0.15,
         "motion": "push",
         "role": "context",
@@ -62,14 +62,14 @@
     },
     "CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK": {
       "0": {
-        "asset": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
+        "asset": "assets/footage/scene_003_433610a0ff3a79cb9ea16cee.mp4",
         "trimInRatio": 0.16,
         "motion": "drift_left",
         "role": "context",
         "reuse_reason": "This trade-and-supply image is introduced when export controls become a physical shortage and returns under common heritage at a distinct trim window, contrasting controlled national supply with resources governed as a shared domain."
       },
       "2": {
-        "asset": "assets/footage/scene_023_dec1c9dd3eb30f2bb3b60f4d.mp4",
+        "asset": "assets/footage/scene_023_4657186c63891d299864f46d.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_left",
         "role": "human_context",
@@ -80,20 +80,11 @@
     },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "0": {
-        "asset": "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
+        "asset": "assets/footage/scene_004_a8d00eae8b2843138618e4e4.mp4",
         "trimInRatio": 0.24,
         "motion": "drift_right",
         "role": "context",
         "reuse_reason": "This industrial-operation image returns from the technical-milestone section at a distinct trim window, deliberately connecting demonstrated lifting capability with the larger production-chain sequence that remains to be proven."
-      },
-      "5": {
-        "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
-        "trimInRatio": 0.44,
-        "motion": "drift_right",
-        "role": "human_context",
-        "semantic_anchor": "A completed lift test is only one link in a larger industrial chain that still has to be built and operated.",
-        "semantic_rationale": "Technicians maintaining energy infrastructure make the downstream industrial chain visible without presenting the generic footage as a Japanese mine, vessel or named project.",
-        "reuse_reason": "The wind-energy maintenance image first appears while separating U.S. permitting from commercial operation and returns here at a distinct trim window to connect the planned mineral supply chain with downstream infrastructure."
       },
       "2": {
         "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
@@ -103,14 +94,23 @@
         "reuse_reason": "This processing-chain image is introduced while separating Japan's test milestones and returns under the refining-bottleneck claim at a distinct trim window, connecting extraction hardware to the downstream gate that determines usable supply."
       },
       "4": {
-        "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+        "asset": "assets/footage/scene_009_8846f61745140cdcd70c4150.mp4",
         "trimInRatio": 0.15,
         "motion": "drift_left",
         "role": "human_context",
         "reuse_reason": "This human industrial-work image is introduced while describing the planned production chain and returns under the industry's counterargument at a distinct trim window, keeping real workers and operators present on both sides of the trade-off."
       },
+      "5": {
+        "asset": "assets/footage/scene_008_7213b781b65b45d131fce401.mp4",
+        "trimInRatio": 0.44,
+        "motion": "drift_right",
+        "role": "human_context",
+        "semantic_anchor": "A completed lift test is only one link in a larger industrial chain that still has to be built and operated.",
+        "semantic_rationale": "Technicians maintaining energy infrastructure make the downstream industrial chain visible without presenting the generic footage as a Japanese mine, vessel or named project.",
+        "reuse_reason": "The wind-energy maintenance image first appears while separating U.S. permitting from commercial operation and returns here at a distinct trim window to connect the planned mineral supply chain with downstream infrastructure."
+      },
       "6": {
-        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "asset": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
         "trimInRatio": 0.12,
         "motion": "drift_right",
         "role": "context",
@@ -129,28 +129,28 @@
     },
     "CLM_005_COMMON_HERITAGE_PRINCIPLE": {
       "0": {
-        "asset": "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4",
+        "asset": "assets/footage/scene_005_ac07b77f7d29af70fd0b9410.mp4",
         "trimInRatio": 0.32,
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The shared-ocean image introduced in the hook returns under the common-heritage claim at a distinct trim window, converting the opening question into its legal context."
       },
       "2": {
-        "asset": "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
+        "asset": "assets/footage/scene_003_433610a0ff3a79cb9ea16cee.mp4",
         "trimInRatio": 0.15,
         "motion": "pull",
         "role": "context",
         "reuse_reason": "This trade-and-supply image returns from the export-control claim at a distinct trim window, deliberately setting national restriction against the common-heritage principle without presenting the stock footage as primary evidence."
       },
       "4": {
-        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
         "trimInRatio": 0.02,
         "motion": "hold",
         "role": "context",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       },
       "6": {
-        "asset": "assets/footage/scene_031_2af46d9e65ecdb9af461ed01.mp4",
+        "asset": "assets/footage/scene_031_48cfc78463916f8222590c3f.mp4",
         "trimInRatio": 0.34,
         "motion": "pull",
         "role": "human_context",
@@ -161,7 +161,7 @@
     },
     "CLM_006_MINING_CODE_UNFINISHED": {
       "0": {
-        "asset": "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
+        "asset": "assets/footage/scene_006_c073342f5780c6939e8dff0a.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
@@ -170,21 +170,21 @@
     },
     "CLM_007_US_PARALLEL_ROUTE": {
       "0": {
-        "asset": "assets/footage/scene_007_7051fd0f969c083415562212.mp4",
+        "asset": "assets/footage/scene_007_34b3f4906a6eee7e10be8f10.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
         "role": "context",
         "reuse_reason": "The rulebook image returns from the opening hook under the U.S. parallel-route claim at a different trim window, a deliberate geopolitical callback rather than an incidental repeat."
       },
       "2": {
-        "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
+        "asset": "assets/footage/scene_014_b522c138c9f570cc3e2efb78.mp4",
         "trimInRatio": 0.15,
         "motion": "drift_left",
         "role": "context",
         "reuse_reason": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure."
       },
       "4": {
-        "asset": "assets/footage/scene_050_9c7d0944b7216fa51b882fe6.mp4",
+        "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "human_context",
@@ -192,7 +192,7 @@
         "semantic_rationale": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden."
       },
       "5": {
-        "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
+        "asset": "assets/footage/scene_018_96d43c499a78d6f760df9b5c.mp4",
         "trimInRatio": 0.12,
         "motion": "drift_right",
         "role": "context",
@@ -201,14 +201,14 @@
     },
     "CLM_008_NO_US_COMMERCIAL_PERMIT": {
       "0": {
-        "asset": "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
+        "asset": "assets/footage/scene_008_7213b781b65b45d131fce401.mp4",
         "trimInRatio": 0.16,
         "motion": "drift_left",
         "role": "context",
         "reuse_reason": "The wind-energy maintenance image first appears while separating U.S. permitting from commercial operation and returns during Japan's industrial-timeline claim at a distinct trim window to connect the planned mineral supply chain with downstream infrastructure."
       },
       "2": {
-        "asset": "assets/footage/scene_045_c6366c1aa2475db288e5321b.mp4",
+        "asset": "assets/footage/scene_045_3cfaea76e4faea730fa72c95.mp4",
         "trimInRatio": 0.5,
         "motion": "hold",
         "role": "human_context",
@@ -219,28 +219,28 @@
     },
     "CLM_009_INDUSTRY_COUNTERARGUMENT": {
       "0": {
-        "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+        "asset": "assets/footage/scene_009_8846f61745140cdcd70c4150.mp4",
         "trimInRatio": 0.24,
         "motion": "drift_right",
         "role": "human_context",
         "reuse_reason": "This human industrial-work image returns from Japan's production timeline at a distinct trim window, deliberately grounding the industry's supply-security argument in the same real-world operational context rather than a new generic cutaway."
       },
       "2": {
-        "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+        "asset": "assets/footage/scene_016_direct.mp4",
         "trimInRatio": 0.12,
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       },
       "3": {
-        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
         "trimInRatio": 0,
         "motion": "drift_right",
         "role": "context",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       },
       "5": {
-        "asset": "assets/footage/scene_027_6360650ef098b77bd45a5e4a.mp4",
+        "asset": "assets/footage/scene_027_cee752d61ab26eeb024d411f.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_right",
         "role": "human_context",
@@ -258,7 +258,7 @@
     },
     "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC": {
       "0": {
-        "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+        "asset": "assets/footage/scene_010_9f0c1cd965d27101f9e31b3d.mp4",
         "trimInRatio": 0.32,
         "motion": "pull",
         "role": "context",
@@ -267,7 +267,7 @@
     },
     "CLM_011_REFINING_BOTTLENECK": {
       "0": {
-        "asset": "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
+        "asset": "assets/footage/scene_021_ae5f55f29751c09f1caf07c7.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
@@ -275,7 +275,7 @@
         "semantic_rationale": "A verified battery-materials research environment will support the changing-chemistry mechanism; the LFP composition claim remains carried by the source figure."
       },
       "2": {
-        "asset": "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
+        "asset": "assets/footage/scene_021_ae5f55f29751c09f1caf07c7.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_left",
         "role": "context",
@@ -286,21 +286,21 @@
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
       "0": {
-        "asset": "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4",
+        "asset": "assets/footage/scene_012_ec6502dabba5a0b8fcc82796.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
         "role": "context",
         "reuse_reason": "The seabed-consequence image that closes the hook returns under the 44-year persistence claim at a distinct trim window, deliberately resolving the opening warning with measured evidence."
       },
       "3": {
-        "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+        "asset": "assets/footage/scene_020_03bac3343d1e376ae6fcd335.mp4",
         "trimInRatio": 0,
         "motion": "pull",
         "role": "human_context",
         "reuse_reason": "The same contemplative human figure returns at a distinct trim window, marking the film's two most reflective beats -- strategic insurance and the closing line -- without introducing a new, unrelated face."
       },
       "5": {
-        "asset": "assets/footage/scene_032_f10cb9672a549d811445b8ac.mp4",
+        "asset": "assets/footage/scene_032_a54db8725eae6a260d2ac329.mp4",
         "trimInRatio": 0.34,
         "motion": "hold",
         "role": "context",
@@ -311,21 +311,21 @@
     },
     "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY": {
       "0": {
-        "asset": "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4",
+        "asset": "assets/footage/scene_013_direct.mp4",
         "trimInRatio": 0.16,
         "motion": "drift_left",
         "role": "human_context",
         "reuse_reason": "The intervention image introduced briefly in the hook returns under the industrial-trial biodiversity claim at a different trim window, where the film supplies the measured ecological result."
       },
       "2": {
-        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "asset": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
         "reuse_reason": "This ecological-impact image is introduced with the measured biodiversity result and returns under midwater-discharge risk at a distinct trim window, carrying the film's evidence-led ecological consequence motif from seabed disturbance into the water column."
       },
       "5": {
-        "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
+        "asset": "assets/footage/scene_001_direct.mp4",
         "trimInRatio": 0.4,
         "motion": "hold",
         "role": "human_context",
@@ -334,7 +334,7 @@
     },
     "CLM_014_PLUME_SCALE_IS_COMPLEX": {
       "0": {
-        "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
+        "asset": "assets/footage/scene_014_b522c138c9f570cc3e2efb78.mp4",
         "trimInRatio": 0.24,
         "motion": "drift_right",
         "role": "context",
@@ -343,7 +343,7 @@
     },
     "CLM_015_MIDWATER_DISCHARGE_RISK": {
       "0": {
-        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "asset": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
         "trimInRatio": 0.32,
         "motion": "pull",
         "role": "context",
@@ -352,7 +352,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "2": {
-        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
+        "asset": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
         "trimInRatio": 0,
         "motion": "push",
         "role": "context",
@@ -361,7 +361,7 @@
         "reuse_reason": "Midwater life first grounds the discharge-risk mechanism and returns near the conclusion at a distinct trim window to make the ecological inheritance behind precedent physically visible."
       },
       "4": {
-        "asset": "assets/footage/scene_028_b80f573815b17d407797b00e.mp4",
+        "asset": "assets/footage/scene_028_b925e4019f461a8eb547df63.mp4",
         "trimInRatio": 0,
         "motion": "drift_left",
         "role": "context",
@@ -369,7 +369,7 @@
         "semantic_rationale": "A real ocean-floor view restores physical scale while measured plume behaviour remains source-backed."
       },
       "5": {
-        "asset": "assets/footage/scene_026_71ea74981b42d2a3f2d10def.mp4",
+        "asset": "assets/footage/scene_026_97d48c08884e7cc7965aad6d.mp4",
         "trimInRatio": 0,
         "motion": "drift_right",
         "role": "human_context",
@@ -377,7 +377,7 @@
         "semantic_rationale": "A scientist handling a laboratory sample represents measurement and uncertainty without claiming a particular experiment."
       },
       "8": {
-        "asset": "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
+        "asset": "assets/footage/scene_018_96d43c499a78d6f760df9b5c.mp4",
         "trimInRatio": 0.34,
         "motion": "hold",
         "role": "context",
@@ -388,7 +388,7 @@
     },
     "CLM_016_DECISION_UNDER_UNCERTAINTY": {
       "0": {
-        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
+        "asset": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
         "trimInRatio": 0,
         "motion": "pull",
         "role": "context",
@@ -396,7 +396,7 @@
         "semantic_rationale": "Verified midwater organisms will keep the qualified ecological mechanism visible while the cited study figures carry the measured scientific claim."
       },
       "1": {
-        "asset": "assets/footage/scene_036_7b62d0b33b1487ebb9a46e65.mp4",
+        "asset": "assets/footage/scene_036_44ae569942147848854a5fc6.mp4",
         "trimInRatio": 0,
         "motion": "drift_left",
         "role": "human_context",
@@ -404,7 +404,7 @@
         "semantic_rationale": "A real decision table gives the trade-off a human setting without identifying a specific government."
       },
       "2": {
-        "asset": "assets/footage/scene_039_de91134364b90fba1873073d.mp4",
+        "asset": "assets/footage/scene_039_d90b361d5f06560506e648bb.mp4",
         "trimInRatio": 0,
         "motion": "push",
         "role": "human_context",
@@ -422,7 +422,7 @@
         "semantic_rationale": "A real recycling process represents one partial alternative without presenting it as harmless or complete."
       },
       "1": {
-        "asset": "assets/footage/scene_024_630c047f0475b22170fad093.mp4",
+        "asset": "assets/footage/scene_024_6e3717bc50f72c547e42e539.mp4",
         "trimInRatio": 0.34,
         "motion": "push",
         "role": "context",
@@ -431,7 +431,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "2": {
-        "asset": "assets/footage/scene_036_7b62d0b33b1487ebb9a46e65.mp4",
+        "asset": "assets/footage/scene_036_44ae569942147848854a5fc6.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_left",
         "role": "human_context",
@@ -449,7 +449,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "4": {
-        "asset": "assets/footage/scene_037_07dfc3d4c5df2973fb6c7573.mp4",
+        "asset": "assets/footage/scene_037_77974e64872de8e33bf15db5.mp4",
         "trimInRatio": 0,
         "motion": "push",
         "role": "context",
@@ -457,7 +457,7 @@
         "semantic_rationale": "A textile-production machine represents operating industry rather than a speculative prototype."
       },
       "5": {
-        "asset": "assets/footage/scene_041_259c14857d7832b1f75e4c44.mp4",
+        "asset": "assets/footage/scene_041_fb568a7886ffc7b5209cc5de.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "human_context",
@@ -465,7 +465,7 @@
         "semantic_rationale": "A professional roundtable gives the unresolved policy process a neutral human setting."
       },
       "6": {
-        "asset": "assets/footage/scene_038_81d2a079a3215512636719f0.mp4",
+        "asset": "assets/footage/scene_038_5ba21dca84b5a5e191c5b9eb.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "human_context",
@@ -475,7 +475,7 @@
     },
     "CLM_018_CAPABILITY_IS_NOT_OBLIGATION": {
       "0": {
-        "asset": "assets/footage/scene_039_de91134364b90fba1873073d.mp4",
+        "asset": "assets/footage/scene_039_d90b361d5f06560506e648bb.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_right",
         "role": "human_context",
@@ -493,7 +493,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "3": {
-        "asset": "assets/footage/scene_023_dec1c9dd3eb30f2bb3b60f4d.mp4",
+        "asset": "assets/footage/scene_023_4657186c63891d299864f46d.mp4",
         "trimInRatio": 0,
         "motion": "drift_left",
         "role": "human_context",
@@ -502,7 +502,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "4": {
-        "asset": "assets/footage/scene_041_259c14857d7832b1f75e4c44.mp4",
+        "asset": "assets/footage/scene_041_fb568a7886ffc7b5209cc5de.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_left",
         "role": "human_context",
@@ -511,7 +511,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "5": {
-        "asset": "assets/footage/scene_027_6360650ef098b77bd45a5e4a.mp4",
+        "asset": "assets/footage/scene_027_cee752d61ab26eeb024d411f.mp4",
         "trimInRatio": 0.34,
         "motion": "hold",
         "role": "human_context",
@@ -520,7 +520,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "6": {
-        "asset": "assets/footage/scene_043_318e94bb748025b47f615f48.mp4",
+        "asset": "assets/footage/scene_043_3274a7b8bb8853043b341006.mp4",
         "trimInRatio": 0,
         "motion": "pull",
         "role": "context",
@@ -528,7 +528,7 @@
         "semantic_rationale": "A working port shows preparation and positioning before any mine is represented."
       },
       "8": {
-        "asset": "assets/footage/scene_044_5a72d9bad24ae074bf1566f9.mp4",
+        "asset": "assets/footage/scene_044_60259233df0534e7673a42ef.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
@@ -538,7 +538,7 @@
     },
     "CLM_019_DISTRIBUTED_RISK_SYNTHESIS": {
       "0": {
-        "asset": "assets/footage/scene_044_5a72d9bad24ae074bf1566f9.mp4",
+        "asset": "assets/footage/scene_044_60259233df0534e7673a42ef.mp4",
         "trimInRatio": 0.34,
         "motion": "push",
         "role": "context",
@@ -547,7 +547,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "1": {
-        "asset": "assets/footage/scene_037_07dfc3d4c5df2973fb6c7573.mp4",
+        "asset": "assets/footage/scene_037_77974e64872de8e33bf15db5.mp4",
         "trimInRatio": 0.34,
         "motion": "pull",
         "role": "context",
@@ -556,7 +556,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "2": {
-        "asset": "assets/footage/scene_050_9c7d0944b7216fa51b882fe6.mp4",
+        "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_right",
         "role": "human_context",
@@ -565,7 +565,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "3": {
-        "asset": "assets/footage/scene_038_81d2a079a3215512636719f0.mp4",
+        "asset": "assets/footage/scene_038_5ba21dca84b5a5e191c5b9eb.mp4",
         "trimInRatio": 0.34,
         "motion": "hold",
         "role": "human_context",
@@ -574,7 +574,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "4": {
-        "asset": "assets/footage/scene_026_71ea74981b42d2a3f2d10def.mp4",
+        "asset": "assets/footage/scene_026_97d48c08884e7cc7965aad6d.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_right",
         "role": "human_context",
@@ -583,7 +583,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "6": {
-        "asset": "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+        "asset": "assets/footage/scene_020_03bac3343d1e376ae6fcd335.mp4",
         "trimInRatio": 0.34,
         "motion": "pull",
         "role": "human_context",
@@ -594,7 +594,7 @@
     },
     "CLM_020_PRECEDENT_SYNTHESIS": {
       "0": {
-        "asset": "assets/footage/scene_045_c6366c1aa2475db288e5321b.mp4",
+        "asset": "assets/footage/scene_045_3cfaea76e4faea730fa72c95.mp4",
         "trimInRatio": 0,
         "motion": "drift_right",
         "role": "human_context",
@@ -602,17 +602,8 @@
         "semantic_rationale": "A formal institutional room frames precedent as a decision passed forward rather than a sentimental portrait.",
         "reuse_reason": "The institutional room first separates application review from approval and returns near the conclusion at a distinct trim window to frame precedent as a decision passed forward."
       },
-      "7": {
-        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
-        "trimInRatio": 0.5,
-        "motion": "pull",
-        "role": "context",
-        "semantic_anchor": "Future generations may inherit both the legal precedent and the environmental consequences.",
-        "semantic_rationale": "A distinct view of real midwater life makes the ecological inheritance behind precedent visible without assigning a measured effect to the generic animal footage.",
-        "reuse_reason": "Midwater life first grounds the discharge-risk mechanism and returns near the conclusion at a distinct trim window to make the ecological inheritance behind precedent physically visible."
-      },
       "2": {
-        "asset": "assets/footage/scene_043_318e94bb748025b47f615f48.mp4",
+        "asset": "assets/footage/scene_043_3274a7b8bb8853043b341006.mp4",
         "trimInRatio": 0.34,
         "motion": "push",
         "role": "context",
@@ -621,7 +612,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "3": {
-        "asset": "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
+        "asset": "assets/footage/scene_021_ae5f55f29751c09f1caf07c7.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_right",
         "role": "context",
@@ -639,7 +630,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "5": {
-        "asset": "assets/footage/scene_031_2af46d9e65ecdb9af461ed01.mp4",
+        "asset": "assets/footage/scene_031_48cfc78463916f8222590c3f.mp4",
         "trimInRatio": 0,
         "motion": "pull",
         "role": "human_context",
@@ -648,7 +639,7 @@
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       "6": {
-        "asset": "assets/footage/scene_028_b80f573815b17d407797b00e.mp4",
+        "asset": "assets/footage/scene_028_b925e4019f461a8eb547df63.mp4",
         "trimInRatio": 0.34,
         "motion": "drift_left",
         "role": "context",
@@ -656,8 +647,17 @@
         "semantic_rationale": "A distinct seabed trim returns the conclusion to physical depth without claiming a mining site.",
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
+      "7": {
+        "asset": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
+        "trimInRatio": 0.5,
+        "motion": "pull",
+        "role": "context",
+        "semantic_anchor": "Future generations may inherit both the legal precedent and the environmental consequences.",
+        "semantic_rationale": "A distinct view of real midwater life makes the ecological inheritance behind precedent visible without assigning a measured effect to the generic animal footage.",
+        "reuse_reason": "Midwater life first grounds the discharge-risk mechanism and returns near the conclusion at a distinct trim window to make the ecological inheritance behind precedent physically visible."
+      },
       "8": {
-        "asset": "assets/footage/scene_032_f10cb9672a549d811445b8ac.mp4",
+        "asset": "assets/footage/scene_032_a54db8725eae6a260d2ac329.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
@@ -747,10 +747,10 @@
     }
   },
   "full_footage_pool": [
-    "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
-    "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
-    "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4",
-    "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4"
+    "assets/footage/scene_001_direct.mp4",
+    "assets/footage/scene_002_c4c90d72f299c6b6917d1d5e.mp4",
+    "assets/footage/scene_005_ac07b77f7d29af70fd0b9410.mp4",
+    "assets/footage/scene_012_ec6502dabba5a0b8fcc82796.mp4"
   ],
   "hook_preloaded_usage": {
     "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4": 1,
@@ -761,18 +761,46 @@
   },
   "slice_count_overrides": {},
   "last_supplemental_footage_materialization": {
-    "generated_at": "2026-07-30T07:57:11.129Z",
-    "assignments": 30,
-    "replaced_graphics": 2,
+    "generated_at": "2026-07-30T20:50:04.399Z",
+    "assignments": 0,
+    "replaced_graphics": 0,
     "retired_paths": [
-      "assets/footage/scene_022_bcbf8b5226c8c67a6a8f69c4.mp4",
-      "assets/footage/scene_024_3dc214aa78ef74a87d889b24.mp4",
-      "assets/footage/scene_025_107d17e3997ce7577dc709ae.mp4",
-      "assets/footage/scene_026_dce0f8aa2af200e5eeadd37d.mp4",
-      "assets/footage/scene_029_f96aaf3562a374104dc35a79.mp4",
-      "assets/footage/scene_030_946dd964a29609c0ea0e2d71.mp4",
-      "assets/footage/scene_031_a58536c6de79635bbccf0ff4.mp4",
-      "assets/footage/scene_032_d22df2b2e63b366f674b49e7.mp4"
+      "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+      "assets/footage/scene_004_94497b23d9f5212d899bf67f.mp4",
+      "assets/footage/scene_002_81bd477109c57e2a4baa7ee6.mp4",
+      "assets/footage/scene_024_630c047f0475b22170fad093.mp4",
+      "assets/footage/scene_006_c306e2e528d386a84596574e.mp4",
+      "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+      "assets/footage/scene_003_ed89a9313c4e1a821001cc52.mp4",
+      "assets/footage/scene_023_dec1c9dd3eb30f2bb3b60f4d.mp4",
+      "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+      "assets/footage/scene_008_bf355b453888f5cca085d6b3.mp4",
+      "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+      "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4",
+      "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+      "assets/footage/scene_031_2af46d9e65ecdb9af461ed01.mp4",
+      "assets/footage/scene_007_7051fd0f969c083415562212.mp4",
+      "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
+      "assets/footage/scene_050_9c7d0944b7216fa51b882fe6.mp4",
+      "assets/footage/scene_018_95f9401e3c39996e7fce6a92.mp4",
+      "assets/footage/scene_045_c6366c1aa2475db288e5321b.mp4",
+      "assets/footage/scene_027_6360650ef098b77bd45a5e4a.mp4",
+      "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
+      "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4",
+      "assets/footage/scene_020_d921b4e36c9223a57260799c.mp4",
+      "assets/footage/scene_032_f10cb9672a549d811445b8ac.mp4",
+      "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4",
+      "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
+      "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
+      "assets/footage/scene_028_b80f573815b17d407797b00e.mp4",
+      "assets/footage/scene_026_71ea74981b42d2a3f2d10def.mp4",
+      "assets/footage/scene_036_7b62d0b33b1487ebb9a46e65.mp4",
+      "assets/footage/scene_039_de91134364b90fba1873073d.mp4",
+      "assets/footage/scene_037_07dfc3d4c5df2973fb6c7573.mp4",
+      "assets/footage/scene_041_259c14857d7832b1f75e4c44.mp4",
+      "assets/footage/scene_038_81d2a079a3215512636719f0.mp4",
+      "assets/footage/scene_043_318e94bb748025b47f615f48.mp4",
+      "assets/footage/scene_044_5a72d9bad24ae074bf1566f9.mp4"
     ]
   }
 }

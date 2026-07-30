@@ -1,0 +1,56 @@
+{
+  "stable_asset_id": "1afa54c1675477e23709be8a",
+  "scene_id": "scene_012",
+  "provider": "pexels",
+  "provider_asset_id": "10910575",
+  "source_page_url": "https://www.pexels.com/video/island-in-blue-sea-10910575/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Glenn Langhorst",
+  "attribution_required": false,
+  "search_query": "remote Pacific island aerial open ocean",
+  "editorial_role": "context",
+  "editorial_note": "Geographic isolation motif; never label as Minamitorishima without official imagery.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "island"
+      ],
+      [
+        "ocean",
+        "pacific",
+        "sea",
+        "remote"
+      ]
+    ],
+    "forbidden_terms": [
+      "resort",
+      "tourist",
+      "city",
+      "coastline-only",
+      "beach-party"
+    ]
+  },
+  "duration": 9.6,
+  "actual_duration_seconds": 9.6,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 6919677,
+  "sha256": "c9a5d337c7538f575cb876b64202a2f94d744004be6b903bd2957c25ef51ff0a",
+  "actual_sha256": "c9a5d337c7538f575cb876b64202a2f94d744004be6b903bd2957c25ef51ff0a",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "11276802",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T20:41:35.193Z"
+}
