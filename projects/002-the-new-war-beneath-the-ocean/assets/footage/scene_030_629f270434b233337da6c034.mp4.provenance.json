@@ -1,0 +1,53 @@
+{
+  "stable_asset_id": "5bb871a610e26102f6f527c2",
+  "scene_id": "scene_030",
+  "provider": "pexels",
+  "provider_asset_id": "14059424",
+  "source_page_url": "https://www.pexels.com/video/moody-sky-over-ships-on-seashore-14059424/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Edward Rode",
+  "attribution_required": false,
+  "search_query": "research ships at sea aerial",
+  "editorial_role": "context",
+  "editorial_note": "Multiple working vessels at sea give the strategic race a physical, non-sensational scale without inventing a confrontation or identifying the ships as specific national programmes.",
+  "narration_anchor": "The race is real.",
+  "target_claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+  "target_slice_index": 38,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "ship",
+        "vessel",
+        "boat"
+      ]
+    ],
+    "forbidden_terms": [
+      "ferry",
+      "cargo",
+      "freight",
+      "cruise",
+      "icebreaker",
+      "frozen"
+    ]
+  },
+  "duration": 14.014,
+  "actual_duration_seconds": 14.014,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 4244624,
+  "sha256": "d1ba1ee8c050bd723fdc444ac54832b906bfdef1abf9c505e73544098d893e61",
+  "actual_sha256": "d1ba1ee8c050bd723fdc444ac54832b906bfdef1abf9c505e73544098d893e61",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "11326635",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:50:51.873Z"
+}

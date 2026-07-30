@@ -1,26 +1,31 @@
 name: ORVYQ Candidate Validation
 
-# Default-branch copy required so GitHub can dispatch this workflow against
-# the canonical candidate branch. The ref selected at dispatch time supplies
-# the actual workflow and source bytes used by the run.
+# Builds and validates one explicitly selected project without rendering video.
+# No repository branch, project id, asset, or creative choice is implicit.
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "claude/orvyq-canonical-candidate-parity-bl7w0u"
-    paths-ignore:
-      - "docs/**"
-      - "**/*.md"
+    inputs:
+      project_id:
+        description: "Project directory id under projects/ (for example 002-my-film)"
+        type: string
+        required: true
+  workflow_call:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
 
 permissions:
   contents: read
 
 concurrency:
-  group: orvyq-candidate-validation-${{ github.ref }}
+  group: orvyq-candidate-validation-${{ inputs.project_id }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  PROJECT_ID: 001-the-ai-race-no-one-can-afford-to-win
+  PROJECT_ID: ${{ inputs.project_id }}
+  SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
   validate:
@@ -29,13 +34,14 @@ jobs:
       - name: Checkout exact source
         uses: actions/checkout@v4
         with:
+          ref: ${{ env.SOURCE_SHA }}
           lfs: true
 
       - name: Lock exact source commit
         run: |
           set -euo pipefail
           ACTUAL_SHA="$(git rev-parse HEAD)"
-          test "$ACTUAL_SHA" = "$GITHUB_SHA"
+          test "$ACTUAL_SHA" = "$SOURCE_SHA"
           printf '%s\n' "$ACTUAL_SHA" | tee validation-source-sha.txt
 
       - name: Set up Node
@@ -44,7 +50,19 @@ jobs:
           node-version: "20"
           cache: npm
 
-      - name: Materialize real footage and evidence from the pinned source commit
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Validate selected project and production profile
+        run: |
+          set -euo pipefail
+          node --input-type=module -e "
+            import { loadProductionPolicy } from './scripts/lib/orvyq-project-profile.mjs';
+            const policy = await loadProductionPolicy(process.env.PROJECT_ID);
+            console.log(JSON.stringify({ project_id: policy.project.project_id, profile: policy.project.creative_profile, status: policy.project.status }, null, 2));
+          "
+
+      - name: Validate repository-local footage and provenance
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
 
       - name: Verify narration was not overwritten by footage materialization
@@ -58,13 +76,32 @@ jobs:
       - name: Install media, PDF and speech tooling
         run: |
           set -euo pipefail
-          npm ci
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg poppler-utils
           python -m pip install --disable-pip-version-check faster-whisper==1.2.0 requests==2.32.5
 
+      - name: Run full-duration narration QA for canonical alignment
+        run: |
+          set +e
+          python scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" \
+            --media "projects/$PROJECT_ID/assets/audio/final_voice.mp3" \
+            --output-name full_narration_speech_qa.json \
+            --model tiny.en > alignment-speech-qa.log 2>&1
+          echo $? > alignment-speech-qa.status
+          cat alignment-speech-qa.log
+          exit 0
+
+      - name: Stop when canonical narration QA failed
+        run: test "$(cat alignment-speech-qa.status)" = "0"
+
+      - name: Build canonical narration alignment
+        run: node scripts/orvyq_narration_alignment.mjs --project-id="$PROJECT_ID"
+
       - name: Run the unit test suite
         run: npm test
+
+      - name: Resolve the canonical editorial pause plan
+        run: node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
 
       - name: Build the canonical full production shot list from real data
         run: node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
@@ -73,16 +110,22 @@ jobs:
         run: npm run validate:canonical
 
       - name: Fetch and verify official primary evidence
-        run: node scripts/orvyq_fetch_primary_evidence.mjs
+        run: node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID"
+
+      - name: Promote verified evidence assets to ready
+        run: node scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID"
 
       - name: Report real footage clip durations
         if: always()
         run: node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
 
-      - name: Build the canonical candidate edit plan (full length, no truncation)
+      - name: Build the canonical candidate edit plan
         run: node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full
 
-      - name: Resolve the canonical candidate duration (single timeline source)
+      - name: Apply project-authored creative polish
+        run: node scripts/orvyq_creative_polish.mjs --project-id="$PROJECT_ID"
+
+      - name: Resolve the canonical candidate duration
         run: |
           set -euo pipefail
           node -e "
@@ -93,13 +136,13 @@ jobs:
             console.log('HOOK_DURATION_SECONDS=' + hookDuration);
           " | tee -a "$GITHUB_ENV"
 
-      - name: Resolve canonical music (no network)
+      - name: Resolve canonical music
         run: node scripts/orvyq_music_resolve.mjs --project-id="$PROJECT_ID" --mode=full --target-duration-seconds="$CANDIDATE_DURATION_SECONDS"
 
-      - name: Build the full candidate narration/music mix
+      - name: Build the full candidate narration and music mix
         run: node scripts/orvyq_audio_mix.mjs --project-id="$PROJECT_ID" --mode=candidate --duration-seconds="$CANDIDATE_DURATION_SECONDS" --head-silence-seconds="$HOOK_DURATION_SECONDS"
 
-      - name: Verify narration and capture diagnostics
+      - name: Verify mixed narration and capture diagnostics
         run: |
           set +e
           python scripts/orvyq_speech_qa.py --project-id "$PROJECT_ID" > narration-qa.log 2>&1
@@ -107,7 +150,7 @@ jobs:
           cat narration-qa.log
           exit 0
 
-      - name: Stop when narration verification failed
+      - name: Stop when mixed narration verification failed
         run: test "$(cat narration-qa.status)" = "0"
 
       - name: Build canonical captions
@@ -117,10 +160,7 @@ jobs:
         run: node scripts/orvyq_asset_registry.mjs --project-id="$PROJECT_ID"
 
       - name: Build render-ready project
-        run: |
-          set -euo pipefail
-          node scripts/remotion_build.mjs derive-configs --project-id="$PROJECT_ID"
-          node scripts/remotion_build.mjs build-project --project-id="$PROJECT_ID"
+        run: node scripts/orvyq_pipeline_cli.mjs build-render-project --project-id="$PROJECT_ID"
 
       - name: Install Remotion dependencies and type-check
         working-directory: projects/${{ env.PROJECT_ID }}/remotion/render_ready_project
@@ -128,21 +168,23 @@ jobs:
           npm ci --no-audit --no-fund
           npx tsc --noEmit
 
-      - name: Compute frozen candidate manifest (after render-ready build)
+      - name: Compute frozen candidate manifest
         run: |
           node scripts/orvyq_frozen_candidate.mjs --project-id="$PROJECT_ID"
-          echo "--- frozen_candidate.json ---"
           cat "projects/$PROJECT_ID/qa/frozen_candidate.json"
 
-      - name: Upload the immutable validated candidate bundle (consumed by review, unchanged, never rebuilt)
+      - name: Upload immutable validated candidate bundle
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-validated-candidate-bundle-${{ github.run_id }}
+          name: orvyq-validated-candidate-${{ inputs.project_id }}-${{ github.run_id }}
           retention-days: 90
           include-hidden-files: true
           path: |
             validation-source-sha.txt
             projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
+            projects/${{ env.PROJECT_ID }}/qa/full_narration_speech_qa.json
+            projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
+            projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
             projects/${{ env.PROJECT_ID }}/assets/**
@@ -151,10 +193,10 @@ jobs:
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
             !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion
 
-      - name: Run full pre-render QA chain (creative + technical)
+      - name: Run full pre-render QA chain
         run: |
           set +e
-          npm run orvyq:qa > qa-chain.log 2>&1
+          npm run orvyq:qa -- --project-id="$PROJECT_ID" > qa-chain.log 2>&1
           echo $? > qa-chain.status
           cat qa-chain.log
           exit 0
@@ -163,15 +205,19 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-candidate-validation-reports-${{ github.run_id }}
+          name: orvyq-candidate-validation-${{ inputs.project_id }}-${{ github.run_id }}
           retention-days: 30
           path: |
             validation-source-sha.txt
+            alignment-speech-qa.log
+            alignment-speech-qa.status
             narration-qa.log
             narration-qa.status
             qa-chain.log
             qa-chain.status
             projects/${{ env.PROJECT_ID }}/qa/*.json
+            projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
+            projects/${{ env.PROJECT_ID }}/config/production_profile.json
             projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
             projects/${{ env.PROJECT_ID }}/remotion/captions.json
             projects/${{ env.PROJECT_ID }}/assets/asset_registry.json

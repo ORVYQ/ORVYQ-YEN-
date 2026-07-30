@@ -1,0 +1,53 @@
+{
+  "stable_asset_id": "e28f18e2f7034258704b5ebf",
+  "scene_id": "scene_036",
+  "provider": "pexels",
+  "provider_asset_id": "3192306",
+  "source_page_url": "https://www.pexels.com/video/group-of-people-having-a-meeting-3192306/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Pressmaster",
+  "attribution_required": false,
+  "search_query": "government policy experts meeting",
+  "editorial_role": "human_context",
+  "editorial_note": "A real policy table represents economics, technology, law and ecology moving at once without identifying a specific institution.",
+  "narration_anchor": "Instead, governments are being asked to make a precedent-setting decision while the economics, technology, law and ecology are all still moving.",
+  "target_claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+  "target_slice_index": 2,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "meeting",
+        "conference",
+        "committee",
+        "roundtable",
+        "discussion"
+      ]
+    ],
+    "forbidden_terms": [
+      "party",
+      "wedding",
+      "restaurant",
+      "celebration"
+    ]
+  },
+  "duration": 16,
+  "actual_duration_seconds": 16,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 3708657,
+  "sha256": "da67a40feec918cca3688b268f1be60b76c22d475911e302ee67f734a9fdce01",
+  "actual_sha256": "da67a40feec918cca3688b268f1be60b76c22d475911e302ee67f734a9fdce01",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "9292866",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:52:53.737Z"
+}

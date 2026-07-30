@@ -1,0 +1,57 @@
+{
+  "stable_asset_id": "c9bd0c9d2255b617dea2ae4c",
+  "scene_id": "scene_043",
+  "provider": "pexels",
+  "provider_asset_id": "12903923",
+  "source_page_url": "https://www.pexels.com/video/people-working-at-night-in-port-12903923/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "K",
+  "attribution_required": false,
+  "search_query": "industrial port workers ships",
+  "editorial_role": "human_context",
+  "editorial_note": "Visible industrial momentum at a port supports the warning that preparation can be mistaken for inevitability.",
+  "narration_anchor": "And the danger is that the world may mistake momentum for inevitability.",
+  "target_claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+  "target_slice_index": 8,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "port",
+        "harbor",
+        "harbour",
+        "ship",
+        "vessel",
+        "dock",
+        "worker",
+        "crane"
+      ]
+    ],
+    "forbidden_terms": [
+      "cruise",
+      "tourist",
+      "beach",
+      "marina",
+      "yacht"
+    ]
+  },
+  "duration": 15.015,
+  "actual_duration_seconds": 15.015,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 7925529,
+  "sha256": "23ab87ddc7a4e57a878eb98bb4cc390b9735138ebc4c4ee703de75488c4452e1",
+  "actual_sha256": "23ab87ddc7a4e57a878eb98bb4cc390b9735138ebc4c4ee703de75488c4452e1",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "11294315",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:54:42.851Z"
+}

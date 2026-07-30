@@ -1,39 +1,26 @@
-name: ORVYQ Full Edit Plan Validate
+name: ORVYQ Edit Plan Validation
 
-# Validates that buildCanonicalEditPlan(mode="full") -- the SAME function
-# and schema proof mode uses, just reading direction/editorial_blueprint.json
-# instead of direction/cinematic_proof_cut.json -- actually produces a valid,
-# schema-conformant full-length edit plan against real data. This is NOT a
-# render: no video frame is ever produced here, no remotion command runs,
-# and this workflow is entirely separate from orvyq-full-render.yml (the
-# gated, human-approval-only final render workflow this task must never
-# trigger). Manual dispatch only -- it never runs automatically, so it never
-# competes with or blocks the proof workflow.
+# Manual, project-scoped, pre-render validation. No video frame is produced.
 on:
-  # GitHub only allows an API workflow_dispatch call to target a workflow
-  # already indexed by some real event -- this file has never run, so it
-  # isn't dispatchable yet. This self-referential push (scoped to this
-  # file's own path, same guarded pattern as orvyq-music-intake.yml) exists
-  # only to index the workflow the first time; the job itself only runs the
-  # real dry-run checks on workflow_dispatch (see the job-level `if` below),
-  # so a push here never performs the actual validation work.
-  push:
-    branches:
-      - "claude/orvyq-rebuild-canonical-udc3rx"
-      - "claude/orvyq-assets-soundtrack-port-noz6bi"
-    paths:
-      - ".github/workflows/orvyq-full-plan-validate.yml"
   workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
 
 permissions:
   contents: read
 
+concurrency:
+  group: orvyq-edit-plan-${{ inputs.project_id }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
-  PROJECT_ID: 001-the-ai-race-no-one-can-afford-to-win
+  PROJECT_ID: ${{ inputs.project_id }}
 
 jobs:
   validate-full-plan:
-    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout exact source
@@ -50,21 +37,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Materializes the real, licensed footage set (motion hook + full
-      # contextual body footage) from the single immutable source commit
-      # pinned in projects/*/migration/external_assets.json -- the same
-      # mechanism orvyq-proof.yml uses, with per-file Git LFS pointer
-      # verification. See scripts/orvyq_materialize_footage.mjs.
-      - name: Materialize real footage from the pinned source commit
+      - name: Validate selected project profile
+        run: |
+          node --input-type=module -e "
+            import { loadProductionPolicy } from './scripts/lib/orvyq-project-profile.mjs';
+            await loadProductionPolicy(process.env.PROJECT_ID);
+          "
+
+      - name: Validate repository-local footage and provenance
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
 
-      # scripts/orvyq_music_intake.test.mjs generates a real tiny audio
-      # fixture and probes it via ffprobe -- the same ffmpeg install
-      # orvyq-proof.yml and orvyq-full-render.yml already run before `npm
-      # test`/`npm run orvyq:qa`, just missing here since this workflow
-      # previously never ran `npm test` for real (workflow_dispatch was
-      # never indexed until now).
-      - name: Install ffmpeg (test fixture generation and duration/codec probing)
+      - name: Install ffmpeg
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
@@ -75,11 +58,29 @@ jobs:
       - name: Validate canonical schemas and project data
         run: npm run validate:canonical
 
-      - name: Regenerate the full production shot list from real data
+      - name: Resolve project editorial pauses
+        run: node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
+
+      - name: Regenerate project production shot list
         run: node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
 
-      - name: Build and validate the full canonical edit plan (no render)
+      - name: Build canonical edit plan without rendering
         run: node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full
 
-      - name: Restore editorial_blueprint.json (this run's footage recovery is validation-only, not a data change)
-        run: git checkout -- "projects/$PROJECT_ID/direction/editorial_blueprint.json"
+      - name: Apply project-authored creative polish
+        run: node scripts/orvyq_creative_polish.mjs --project-id="$PROJECT_ID"
+
+      - name: Run project-scoped creative and technical audits
+        run: npm run orvyq:audits -- --project-id="$PROJECT_ID"
+
+      - name: Upload edit-plan validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-edit-plan-${{ inputs.project_id }}-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            projects/${{ env.PROJECT_ID }}/config/production_profile.json
+            projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
+            projects/${{ env.PROJECT_ID }}/qa/*.json
+          if-no-files-found: warn

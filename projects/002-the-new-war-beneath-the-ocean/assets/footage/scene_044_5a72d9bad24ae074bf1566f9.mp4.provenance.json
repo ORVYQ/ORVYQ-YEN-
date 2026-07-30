@@ -1,0 +1,56 @@
+{
+  "stable_asset_id": "9df8985d4d715ea85b0e4f4d",
+  "scene_id": "scene_044",
+  "provider": "pexels",
+  "provider_asset_id": "31529056",
+  "source_page_url": "https://www.pexels.com/video/efficient-blue-collar-team-in-textile-production-31529056/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "EqualStock IN",
+  "attribution_required": false,
+  "search_query": "factory production delay workers",
+  "editorial_role": "context",
+  "editorial_note": "A disrupted production environment gives concentrated mineral supply risk a human and industrial scale without claiming a specific outage.",
+  "narration_anchor": "But delay is not neutral either.",
+  "target_claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+  "target_slice_index": 0,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "factory",
+        "manufacturing",
+        "industrial",
+        "production",
+        "machine",
+        "machinery",
+        "worker"
+      ]
+    ],
+    "forbidden_terms": [
+      "food",
+      "kitchen",
+      "farm",
+      "agriculture",
+      "toy"
+    ]
+  },
+  "duration": 16,
+  "actual_duration_seconds": 16,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 8800336,
+  "sha256": "092d582cdf9003857a4abb9aa9e0cbf88892f815f62db5307f67a019fe2d6aeb",
+  "actual_sha256": "092d582cdf9003857a4abb9aa9e0cbf88892f815f62db5307f67a019fe2d6aeb",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "13439065",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:55:06.984Z"
+}

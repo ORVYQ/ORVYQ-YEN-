@@ -1,0 +1,188 @@
+name: ORVYQ Footage Acquisition
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+  push:
+    branches:
+      - "agent/**"
+      - "claude/**"
+    paths:
+      - ".github/workflows/orvyq-footage-acquisition.yml"
+      - "scripts/orvyq_acquire_footage.mjs"
+      - "scripts/orvyq_acquire_footage_demand.mjs"
+      - "projects/*/research/footage_acquisition_plan.json"
+      - "projects/*/research/footage_semantic_constraints.json"
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: orvyq-footage-acquisition-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 2
+
+      - name: Resolve selected project
+        id: project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PROJECT_ID="${{ inputs.project_id }}"
+          else
+            CHANGED_INPUT="$(
+              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
+                grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints)\.json$' |
+                head -n 1 || true
+            )"
+            if [ -n "$CHANGED_INPUT" ]; then
+              PROJECT_ID="$(jq -r '.project_id' "$CHANGED_INPUT")"
+              if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
+                echo "::error::Changed footage input $CHANGED_INPUT does not declare a valid project_id."
+                exit 1
+              fi
+            else
+              mapfile -t CANDIDATES < <(
+                find projects -path '*/research/footage_acquisition_plan.json' -type f -print0 |
+                  while IFS= read -r -d '' plan; do
+                    root="${plan%/research/footage_acquisition_plan.json}"
+                    runtime="$root/assets/footage_acquisition.runtime.json"
+                    semantic="$root/research/footage_semantic_constraints.json"
+                    planned="$(jq '.assets | length' "$plan")"
+                    actual="$(test -f "$runtime" && jq '.records | length' "$runtime" || echo 0)"
+                    if [ "$actual" -lt "$planned" ] || [ -f "$semantic" ]; then jq -r '.project_id' "$plan"; fi
+                  done | sort -u
+              )
+              if [ "${#CANDIDATES[@]}" -ne 1 ]; then
+                echo "::error::Could not resolve exactly one project needing footage acquisition or semantic revalidation; found ${#CANDIDATES[@]}."
+                exit 1
+              fi
+              PROJECT_ID="${CANDIDATES[0]}"
+            fi
+          fi
+          test -f "projects/$PROJECT_ID/research/footage_acquisition_plan.json"
+          echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+          echo "Resolved project: $PROJECT_ID"
+
+      - name: Verify Pexels credential exists
+        run: |
+          set -euo pipefail
+          test -n "$PEXELS_API_KEY" || { echo "::error::Repository secret PEXELS_API_KEY is missing."; exit 1; }
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies and media probe
+        run: |
+          set -euo pipefail
+          npm ci
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Acquire missing licensed contextual footage and resolve editorial targets
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_acquire_footage_demand.mjs --project-id="$PROJECT_ID" 2>&1 | tee footage-acquisition.log
+
+      - name: Validate every acquired or reused clip and provenance record
+        run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
+
+      - name: Verify compact footage is stored as normal Git media
+        shell: bash
+        run: |
+          set -euo pipefail
+          while IFS= read -r -d '' media; do
+            attr="$(git check-attr filter -- "$media")"
+            if grep -q 'filter: lfs$' <<<"$attr"; then
+              echo "::error::$media is still routed through Git LFS: $attr"
+              exit 1
+            fi
+            bytes="$(stat -c '%s' "$media")"
+            if [ "$bytes" -ge 95000000 ]; then
+              echo "::error::$media is $bytes bytes; compact normal-Git footage must stay below 95 MB."
+              exit 1
+            fi
+          done < <(find "projects/$PROJECT_ID/assets/footage" -maxdepth 1 -type f -name '*.mp4' -print0)
+
+      - name: Commit acquired footage and resolved editorial plan
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -f \
+            "projects/$PROJECT_ID/assets/footage" \
+            "projects/$PROJECT_ID/assets/local_assets.json" \
+            "projects/$PROJECT_ID/assets/footage_acquisition.runtime.json" \
+            "projects/$PROJECT_ID/qa/local_assets.provenance.json"
+          git add \
+            "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
+            "projects/$PROJECT_ID/config/editorial_asset_plan.json"
+          git config user.name "orvyq-footage-bot"
+          git config user.email "orvyq-footage-bot@users.noreply.github.com"
+          if git diff --cached --quiet; then
+            echo "Footage set and editorial assignments unchanged; nothing to commit."
+            exit 0
+          fi
+          git commit -m "Acquire demand-led licensed footage for $PROJECT_ID"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+      - name: Upload acquisition diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-footage-acquisition-${{ steps.project.outputs.project_id }}-${{ github.run_id }}
+          retention-days: 14
+          path: |
+            footage-acquisition.log
+            projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
+            projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
+            projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
+            projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
+            projects/${{ steps.project.outputs.project_id }}/assets/footage/*.provenance.json
+            projects/${{ steps.project.outputs.project_id }}/qa/local_assets.provenance.json
+          if-no-files-found: warn
+
+      - name: Report acquisition result on the active pull request
+        if: always()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+          PROJECT_ID: ${{ steps.project.outputs.project_id }}
+        run: |
+          PROJECT_LABEL="${PROJECT_ID:-unresolved}"
+          DETAILS="$(tail -n 20 footage-acquisition.log 2>/dev/null || true)"
+          BODY="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${{ github.ref_name }}\`."
+          if [ -n "$DETAILS" ]; then
+            BODY="${BODY}"$'\n\n```text\n'"${DETAILS}"$'\n```'
+          fi
+          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$PR_NUMBER" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
+              echo "::warning::Could not post the acquisition result to PR #$PR_NUMBER; the uploaded diagnostics remain authoritative."
+          else
+            echo "No active pull request found for $GITHUB_REF_NAME; skipping PR report."
+          fi

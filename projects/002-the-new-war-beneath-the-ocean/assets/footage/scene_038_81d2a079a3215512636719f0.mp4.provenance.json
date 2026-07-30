@@ -1,0 +1,54 @@
+{
+  "stable_asset_id": "3f5e40a48a8d193b4e2088ed",
+  "scene_id": "scene_038",
+  "provider": "pexels",
+  "provider_asset_id": "6952133",
+  "source_page_url": "https://www.pexels.com/video/man-speaking-in-the-conference-podium-6952133/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Werner Pfennig",
+  "attribution_required": false,
+  "search_query": "international assembly delegates meeting",
+  "editorial_role": "human_context",
+  "editorial_note": "An international assembly provides human governance context for common heritage; UNCLOS and ISA documents remain the legal evidence.",
+  "narration_anchor": "And it will test whether the phrase common heritage of mankind has practical meaning when the resource beneath it becomes strategically valuable.",
+  "target_claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+  "target_slice_index": 6,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "delegate",
+        "official",
+        "assembly",
+        "conference",
+        "government"
+      ]
+    ],
+    "forbidden_terms": [
+      "party",
+      "concert",
+      "wedding",
+      "walking",
+      "leaving"
+    ]
+  },
+  "duration": 15,
+  "actual_duration_seconds": 15,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 1791873,
+  "sha256": "c828584e66ed8e80ac0f3cfdafe7dbee274eb66d7ec8c9bae69f5ba7f1884bcf",
+  "actual_sha256": "c828584e66ed8e80ac0f3cfdafe7dbee274eb66d7ec8c9bae69f5ba7f1884bcf",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "10245070",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:53:17.854Z"
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "evidence_kind_overrides": {
+    "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
+      "kind": "official_figure",
+      "evidence_asset_ids": [
+        "EVID_JAMSTEC_FIRST_MUD_SAMPLE",
+        "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM",
+        "EVID_JAMSTEC_MINING_MACHINE",
+        "EVID_JAMSTEC_MACHINE_ON_SEAFLOOR"
+      ],
+      "image_assets": [
+        "assets/evidence/jamstec_first_mud_sample.jpg",
+        "assets/evidence/jamstec_mining_system_diagram.png",
+        "assets/evidence/jamstec_mining_machine.jpg",
+        "assets/evidence/jamstec_machine_on_seafloor.jpg"
+      ],
+      "distinct_image_per_occurrence": true,
+      "editorial_rationale": "Open the post-hook evidence body with two official JAMSTEC captures together, satisfying the project profile's explicit two-asset official-figure requirement. Later native evidence slices rotate one real image at a time, starting after the opening pair and wrapping only when needed, so each source remains within the two-use cap while the film still moves from recovered material to system architecture and seabed hardware.",
+      "first_occurrence_asset_count": 2
+    },
+    "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
+      "kind": "official_figure",
+      "evidence_asset_ids": [
+        "EVID_JAMSTEC_2027_TRIAL_DIAGRAM",
+        "EVID_JAMSTEC_CHIKYU_DEPARTURE"
+      ],
+      "image_assets": [
+        "assets/evidence/jamstec_2027_trial_diagram.png",
+        "assets/evidence/jamstec_chikyu_departure.jpg"
+      ],
+      "distinct_image_per_occurrence": true,
+      "editorial_rationale": "Use JAMSTEC's own 2027 integrated-trial figure, the claim's direct visual subject, for this claim's native evidence slices. This claim now has 3 native evidence slices (not 2), because its earlier illustrative graphic cards at two of those slice positions were since removed by later footage authoring without a replacement being assigned; giving those slices back to native evidence rather than inventing a graphic keeps the fix inside real evidence, per the semantic-relevance rule. Attaching only EVID_JAMSTEC_2027_TRIAL_DIAGRAM to all 3 slices would exceed the film's 2-use-per-source cap, and EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM is unavailable here (CLM_001_JAPAN_TECHNICAL_MILESTONE already reaches its own 2-use cap on that image). EVID_JAMSTEC_CHIKYU_DEPARTURE is a real, already-fetched-and-verified official JAMSTEC image from the exact same source press release, entirely unused by any other claim, and directly on-topic (the vessel departing for the very test this claim's industrial timeline covers). distinct_image_per_occurrence cycles the two images across the 3 slices (2027 trial diagram twice, Chikyu departure once), keeping both within cap."
+    },
+    "CLM_006_MINING_CODE_UNFINISHED": {
+      "kind": "split_documents",
+      "evidence_asset_ids": [
+        "EVID_ISA_REV3_COVER",
+        "EVID_ISA_OUTSTANDING_ISSUES_COVER"
+      ],
+      "image_assets": [
+        "assets/evidence/isa_exploitation_regulations_rev3_cover.png",
+        "assets/evidence/isa_outstanding_issues_cover.png"
+      ],
+      "distinct_image_per_occurrence": true,
+      "editorial_rationale": "This claim's real narration needs 2 native evidence slices, each showing a different one of the 2 declared documents in sequence -- the revised regulations text first, then the dated outstanding-issues document -- rather than both slices duplicating the same pair, which scripts/orvyq_semantic_visual_audit.mjs correctly rejects as an identical-evidence repeat."
+    }
+  }
+}

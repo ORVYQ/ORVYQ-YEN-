@@ -1,0 +1,56 @@
+{
+  "stable_asset_id": "a30c800500d58f360cbbf84f",
+  "scene_id": "scene_033",
+  "provider": "pexels",
+  "provider_asset_id": "7056633",
+  "source_page_url": "https://www.pexels.com/video/jellyfish-swimming-under-the-water-7056633/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "ROMAN ODINTSOV",
+  "attribution_required": false,
+  "search_query": "deep sea plankton organisms",
+  "editorial_role": "context",
+  "editorial_note": "Real midwater life restores physical ecological context after the discharge evidence; it does not claim to depict organisms from a specific trial.",
+  "narration_anchor": "The strongest case for moving ahead is not that the damage will be harmless.",
+  "target_claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
+  "target_slice_index": 0,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "plankton",
+        "organism",
+        "jellyfish",
+        "marine-life",
+        "marine life",
+        "creature"
+      ]
+    ],
+    "forbidden_terms": [
+      "aquarium",
+      "pool",
+      "diver",
+      "scuba",
+      "snorkel",
+      "coral-reef"
+    ]
+  },
+  "duration": 16.016,
+  "actual_duration_seconds": 16.016,
+  "width": 1920,
+  "height": 926,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 926,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 9553563,
+  "sha256": "4bfaf0e1e5e330cf43448cb697db2f75b5bfc3d56e7e3805e7f28a41cfe3186f",
+  "actual_sha256": "4bfaf0e1e5e330cf43448cb697db2f75b5bfc3d56e7e3805e7f28a41cfe3186f",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "10290704",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:51:50.726Z"
+}
