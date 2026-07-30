@@ -21,6 +21,7 @@ on:
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
       - "scripts/orvyq_fail_closed_pending_footage.mjs"
+      - "scripts/orvyq_resolve_pauses.mjs"
       - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
@@ -44,6 +45,7 @@ on:
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
       - "scripts/orvyq_fail_closed_pending_footage.mjs"
+      - "scripts/orvyq_resolve_pauses.mjs"
       - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
@@ -58,6 +60,7 @@ on:
 permissions:
   contents: write
   issues: write
+  pull-requests: write
 
 concurrency:
   group: orvyq-footage-acquisition-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
@@ -139,6 +142,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
 
@@ -210,11 +214,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
           if [ -f "projects/$PROJECT_ID/research/footage_visual_decisions.json" ]; then
             node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee -a footage-decisions.log
           fi
+          node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
 
@@ -276,14 +282,15 @@ jobs:
             "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
             "projects/$PROJECT_ID/research/footage_semantic_constraints.json" \
             "projects/$PROJECT_ID/research/footage_constraint_overrides.json" \
-            "projects/$PROJECT_ID/research/footage_visual_decisions.json" \
             "projects/$PROJECT_ID/research/visual_asset_requests.json" \
             "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
             "projects/$PROJECT_ID/config/editorial_asset_plan.json" \
             "projects/$PROJECT_ID/direction/motion_hook.json" \
             "projects/$PROJECT_ID/direction/visual_rebalance_plan.json" \
+            "projects/$PROJECT_ID/direction/resolved_pause_plan.json" \
             "projects/$PROJECT_ID/direction/editorial_blueprint.json" \
             "projects/$PROJECT_ID/direction/editorial_pause_map.json"
+          test ! -f "projects/$PROJECT_ID/research/footage_visual_decisions.json" || git add "projects/$PROJECT_ID/research/footage_visual_decisions.json"
           test ! -f "projects/$PROJECT_ID/qa/footage_semantic_review_audit.json" || git add "projects/$PROJECT_ID/qa/footage_semantic_review_audit.json"
           git config user.name "orvyq-footage-bot"
           git config user.email "orvyq-footage-bot@users.noreply.github.com"
@@ -318,6 +325,7 @@ jobs:
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
             projects/${{ steps.project.outputs.project_id }}/direction/motion_hook.json
             projects/${{ steps.project.outputs.project_id }}/direction/visual_rebalance_plan.json
+            projects/${{ steps.project.outputs.project_id }}/direction/resolved_pause_plan.json
             projects/${{ steps.project.outputs.project_id }}/direction/editorial_blueprint.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
             projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
