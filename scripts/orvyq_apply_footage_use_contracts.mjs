@@ -110,13 +110,6 @@ export async function applyFootageUseContracts(projectId) {
   editorial.full_footage_pool = [...new Set(activeRecords.map((record) => record.path))];
   editorial.generation_policy =
     "claim-bound footage use contracts; one scene may appear only at explicitly listed claim/slice targets; current runtime paths are resolved by scene id; no automatic backfill or scene-id-wide reassignment";
-  editorial.last_footage_use_contract_application = {
-    generated_at: new Date().toISOString(),
-    managed_scene_count: managedScenes.size,
-    pruned_scene_count: prunedScenes.size,
-    assignment_count: assignments.length,
-    removed_previous_assignments: removedAssignments,
-  };
 
   const nextShots = clone(shots);
   const nextShotsByTarget = new Map();
@@ -129,6 +122,7 @@ export async function applyFootageUseContracts(projectId) {
   }
 
   let materializedShotCount = 0;
+  const deferredTargets = [];
   for (const [key, assignment] of assignmentByTarget.entries()) {
     const targetShots = nextShotsByTarget.get(key) || [];
     const provenance = provenanceByScene.get(assignment.scene_id);
@@ -136,7 +130,13 @@ export async function applyFootageUseContracts(projectId) {
     const totalShotDuration = targetShots.reduce((sum, shot) => sum + Number(shot.duration || 0), 0);
     if (!(sourceDuration > 0)) throw new Error(`${assignment.scene_id}: provenance has no valid duration`);
     if (totalShotDuration > sourceDuration + 0.001) {
-      throw new Error(`${key}: ${totalShotDuration}s target exceeds ${assignment.scene_id} source duration ${sourceDuration}s`);
+      deferredTargets.push({
+        target: key,
+        scene_id: assignment.scene_id,
+        required_seconds: totalShotDuration,
+        available_seconds: sourceDuration,
+      });
+      continue;
     }
     const requestedStart = Number(assignment.trim_in_ratio || 0) * sourceDuration;
     let trimCursor = Math.max(0, Math.min(requestedStart, sourceDuration - totalShotDuration));
@@ -161,6 +161,15 @@ export async function applyFootageUseContracts(projectId) {
   }
   blueprint.full_production.shots = nextShots;
 
+  editorial.last_footage_use_contract_application = {
+    generated_at: new Date().toISOString(),
+    managed_scene_count: managedScenes.size,
+    pruned_scene_count: prunedScenes.size,
+    assignment_count: assignments.length,
+    removed_previous_assignments: removedAssignments,
+    deferred_targets: deferredTargets,
+  };
+
   const originalPlanCount = (plan.assets || []).length;
   plan.assets = (plan.assets || []).filter((item) => !prunedScenes.has(item.scene_id));
   plan.planned_asset_count = plan.assets.length;
@@ -175,6 +184,7 @@ export async function applyFootageUseContracts(projectId) {
     project_id: projectId,
     assignment_count: assignments.length,
     materialized_shot_count: materializedShotCount,
+    deferred_target_count: deferredTargets.length,
     removed_previous_assignments: removedAssignments,
     pruned_plan_assets: originalPlanCount - plan.assets.length,
     active_plan_assets: plan.assets.length,
