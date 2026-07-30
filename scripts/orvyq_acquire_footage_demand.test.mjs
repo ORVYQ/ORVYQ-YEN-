@@ -17,6 +17,7 @@ function assignedItem(overrides = {}) {
       claim_id: "CLM_TEST",
       slice_index: 20,
       narration_anchor: "There is another possibility.",
+      semantic_rationale: "The selected physical process directly carries the meaning of this narration anchor.",
       replace_graphic_break: true,
       expected_replacement_seconds: 8,
       motion: "hold",

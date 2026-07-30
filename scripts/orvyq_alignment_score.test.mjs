@@ -7,7 +7,7 @@ import { PROJECTS_DIR } from "./lib/fs-utils.mjs";
 
 // A synthetic but internally-consistent stand-in for a canonical full-film
 // candidate: source-backed evidence coverage and fraction both comfortably
-// clear their minimums, contextual footage sits inside the 35-60% band, the
+// clear their minimums, contextual footage sits inside the 60-70% band, the
 // uninterrupted-evidence run is under the 15s cap, and every upstream audit
 // passes. Individual fields are overridden per test to isolate one rule at a
 // time.
@@ -23,8 +23,9 @@ function baselineInputs(overrides = {}) {
     assetAudit: { pass: true, legacy_footage_count: 0, ...overrides.assetAudit },
     semantic: {
       pass: true,
-      evidence_archive_fraction: 0.44,
-      contextual_body_footage_fraction: 0.45,
+      primary_evidence_fraction: 0.22,
+      contextual_footage_fraction: 0.65,
+      graphic_card_fraction: 0.13,
       maximum_uninterrupted_evidence_seconds: 12,
       official_primary_capture_fraction: 0.28,
       generic_stock_fraction: 0.05,
@@ -48,7 +49,7 @@ test("the current valid canonical full candidate passes the readiness formula", 
 });
 
 test("zero source-backed evidence fails source_backed_visual_evidence and overall pass", () => {
-  const result = computeAlignmentReadiness(baselineInputs({ semantic: { evidence_archive_fraction: 0 } }));
+  const result = computeAlignmentReadiness(baselineInputs({ semantic: { primary_evidence_fraction: 0 } }));
   assert.equal(result.categories.source_backed_visual_evidence.score, 0);
   assert.equal(result.pass, false);
 });
@@ -60,14 +61,14 @@ test("evidence coverage below the required minimum fails the category floor", ()
   assert.equal(result.pass, false);
 });
 
-test("contextual footage below 35% fails motion_hook_discipline", () => {
-  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_body_footage_fraction: 0.3 } }));
+test("contextual footage below 60% fails motion_hook_discipline", () => {
+  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_footage_fraction: 0.59 } }));
   assert.equal(result.categories.motion_hook_discipline.score, 0);
   assert.equal(result.pass, false);
 });
 
-test("contextual footage above 60% fails motion_hook_discipline", () => {
-  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_body_footage_fraction: 0.65 } }));
+test("contextual footage above 70% fails motion_hook_discipline", () => {
+  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_footage_fraction: 0.71 } }));
   assert.equal(result.categories.motion_hook_discipline.score, 0);
   assert.equal(result.pass, false);
 });
@@ -96,9 +97,9 @@ test("a failing semantic audit fails motion_hook_discipline even if the individu
   assert.equal(result.pass, false);
 });
 
-test("official capture fraction and generic stock fraction stay diagnostic-only and never independently fail the category", () => {
+test("generic stock fraction stays diagnostic-only once exclusive media gates pass", () => {
   const result = computeAlignmentReadiness(
-    baselineInputs({ semantic: { official_primary_capture_fraction: 0.02, generic_stock_fraction: 0.3 } })
+    baselineInputs({ semantic: { generic_stock_fraction: 0.3 } })
   );
   assert.equal(result.categories.motion_hook_discipline.score, 10);
   assert.equal(result.categories.motion_hook_discipline.diagnostics.generic_stock_fraction, 0.3);
@@ -123,8 +124,9 @@ test("buildAlignmentReadiness keeps human review mandatory and the final Apertur
       write("qa/evidence_asset_audit.json", { pass: true, legacy_footage_count: 0 }),
       write("qa/semantic_visual_audit.json", {
         pass: true,
-        evidence_archive_fraction: 0.44,
-        contextual_body_footage_fraction: 0.35,
+        primary_evidence_fraction: 0.22,
+        contextual_footage_fraction: 0.65,
+        graphic_card_fraction: 0.13,
         maximum_uninterrupted_evidence_seconds: 12,
         official_primary_capture_fraction: 0.28,
         generic_stock_fraction: 0.05

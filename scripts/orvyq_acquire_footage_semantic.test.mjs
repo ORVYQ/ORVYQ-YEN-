@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { promises as fs } from "node:fs";
 import {
+  collectRejectedProviderAssetIds,
   matchesSemanticText,
   materializeAssignments,
 } from "./orvyq_acquire_footage_demand.mjs";
@@ -28,6 +29,14 @@ test("semantic metadata constraints reject fuzzy but visibly different provider 
     matchesSemanticText("https://www.pexels.com/video/underwater-diver-beside-a-robot-123/", constrained),
     false,
   );
+});
+
+test("a rejected provider asset is globally barred from every backfill scene", () => {
+  const rejected = collectRejectedProviderAssetIds(
+    { scenes: { scene_001: { rejected_provider_asset_ids: ["111"] } } },
+    { rejected_assets: [{ scene_id: "scene_002", provider_asset_id: "222" }] },
+  );
+  assert.deepEqual([...rejected].sort(), ["111", "222"]);
 });
 
 test("semantic reacquisition may replace the same narration-anchored footage target", async () => {
@@ -59,6 +68,7 @@ test("semantic reacquisition may replace the same narration-anchored footage tar
           claim_id: "CLM_TEST",
           slice_index: 28,
           narration_anchor: "The ability to reach a resource does not create an obligation to extract it.",
+          semantic_rationale: "Directly shows the verified machine operation named by this narration anchor.",
           replace_graphic_break: true,
         },
       }],

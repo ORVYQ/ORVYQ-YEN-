@@ -158,7 +158,16 @@ export function expandFootageAssignments(claimId, sliceDurations, assetDurationS
       if (expanded.has(sliceIndex)) throw new Error(`${claimId}: slice ${sliceIndex} has more than one footage assignment covering it`);
       const latestTrimIn = Math.max(0, assetDuration - sliceDuration - 0.3);
       const trimIn = Math.round(Math.min(assignment.trimInRatio * assetDuration, latestTrimIn) * 1000) / 1000;
-      expanded.set(sliceIndex, { asset: assignment.asset, trimInSec: trimIn, trimOutSec: Math.round((trimIn + sliceDuration) * 1000) / 1000, motion: assignment.motion, role: assignment.role, reuseReason: assignment.reuse_reason || null });
+      expanded.set(sliceIndex, {
+        asset: assignment.asset,
+        trimInSec: trimIn,
+        trimOutSec: Math.round((trimIn + sliceDuration) * 1000) / 1000,
+        motion: assignment.motion,
+        role: assignment.role,
+        reuseReason: assignment.reuse_reason || null,
+        semanticRationale: assignment.semantic_rationale || assignment.reuse_reason || null,
+        semanticLink: assignment.semantic_link || (assignment.role === "human_context" ? "physical" : "conceptual")
+      });
       continue;
     }
 
@@ -175,7 +184,16 @@ export function expandFootageAssignments(claimId, sliceDurations, assetDurationS
           `${claimId}: footage span starting at slice ${startIndex} (asset ${assignment.asset}, real duration ${assetDuration}s) overruns that real duration at slice ${sliceIndex} (would need ${trimOut}s) -- ` +
             "shorten the span or pick a longer source clip"
         );
-      expanded.set(sliceIndex, { asset: assignment.asset, trimInSec: trimIn, trimOutSec: trimOut, motion: assignment.motion, role: assignment.role, reuseReason: assignment.reuse_reason || null });
+      expanded.set(sliceIndex, {
+        asset: assignment.asset,
+        trimInSec: trimIn,
+        trimOutSec: trimOut,
+        motion: assignment.motion,
+        role: assignment.role,
+        reuseReason: assignment.reuse_reason || null,
+        semanticRationale: assignment.semantic_rationale || assignment.reuse_reason || null,
+        semanticLink: assignment.semantic_link || (assignment.role === "human_context" ? "physical" : "conceptual")
+      });
       trimCursor = trimOut;
     }
   }
@@ -238,6 +256,25 @@ export function titleCase(sectionId) {
     .split("_")
     .map((word) => word[0] + word.slice(1).toLowerCase())
     .join(" ");
+}
+
+export function narrationForRange(tokens, start, end, fallback) {
+  if (!Number.isFinite(start) || !Number.isFinite(end)) return String(fallback || "").trim();
+  const words = tokens.filter((token) => token.end > start - 0.04 && token.start < end + 0.04).map((token) => token.raw);
+  const anchor = words.join(" ").replace(/\s+([,.;:!?])/g, "$1").trim();
+  return anchor || String(fallback || "").trim();
+}
+
+function semanticLinkForEvidenceKind(kind) {
+  return new Set(["official_document", "official_figure", "official_screen", "split_documents", "image_sequence", "recap"]).has(kind)
+    ? "direct_evidence"
+    : "conceptual";
+}
+
+function rationaleForEvidence(claimId, kind) {
+  return semanticLinkForEvidenceKind(kind) === "direct_evidence"
+    ? `Shows the verified primary-source region that directly supports ${claimId} at this narration beat.`
+    : `Explains the relationship asserted by ${claimId}; this source-derived visual is used only where footage cannot show the mechanism precisely.`;
 }
 
 const MIN_CLAIM_MATCH_RATIO = 0.4;
@@ -1094,7 +1131,14 @@ export async function buildFullProductionPlan(projectId) {
           claim_id: sectionFirstClaim.get(currentSection),
           start: window.coverStart,
           end: window.coverStart + FIRST_SECTION_TITLE_SECONDS,
-          graphic: { type: "section_title", mode: "brand", title: sectionTitle, subtitle: null },
+          graphic: {
+            type: "section_title",
+            mode: "brand",
+            title: sectionTitle,
+            subtitle: null,
+            template_id: "orvyq_section_sting",
+            necessity: "critical_result"
+          },
           role: "graphic"
         };
       } else {
@@ -1134,14 +1178,25 @@ export async function buildFullProductionPlan(projectId) {
           claim_id: window.claim.claim_id,
           start: slice.start,
           end: slice.end,
+          sourceSliceIndex: sliceIndex,
           role: "graphic",
+          semanticRationale: `Summarizes the precise comparison in ${window.claim.claim_id}; retained because the relationship cannot be read as quickly from footage alone.`,
+          semanticLink: "conceptual",
           // mode: "brand" -- see the section_title graphic above for why
           // this is now explicit rather than relying on modeFor()'s
           // whitelist. A recap card that wants a real illustrative panel
           // instead of a plain title layout gets that as an explicit
           // graphicBreak.mode + labels (direction/sequence_plan.json's
           // graphic_mode_directives), never inferred.
-          graphic: { type: "claim_recap_card", mode: graphicBreak.mode || "brand", ...(graphicBreak.labels ? { labels: graphicBreak.labels } : {}), title: graphicBreak.title, subtitle: graphicBreak.subtitle ?? null },
+          graphic: {
+            type: "claim_recap_card",
+            mode: graphicBreak.mode || "brand",
+            ...(graphicBreak.labels ? { labels: graphicBreak.labels } : {}),
+            title: graphicBreak.title,
+            subtitle: graphicBreak.subtitle ?? null,
+            template_id: graphicBreak.template_id || "orvyq_critical_result",
+            necessity: graphicBreak.necessity || "critical_result"
+          },
           dissolveIn: isFirstWindowOverall && sliceIndex === 0
         });
         if (deferTitleCard && sliceIndex === 0) rawShots.push(titleCardShot);
@@ -1155,8 +1210,11 @@ export async function buildFullProductionPlan(projectId) {
           claim_id: window.claim.claim_id,
           start: slice.start,
           end: slice.end,
+          sourceSliceIndex: sliceIndex,
           role: footageAssignment.role || "context",
           reuseReason: footageAssignment.reuseReason,
+          semanticRationale: footageAssignment.semanticRationale,
+          semanticLink: footageAssignment.semanticLink,
           asset: footageAssignment.asset,
           trimInSec: footageAssignment.trimInSec,
           trimOutSec: footageAssignment.trimOutSec,
@@ -1176,6 +1234,7 @@ export async function buildFullProductionPlan(projectId) {
         claim_id: window.claim.claim_id,
         start: slice.start,
         end: slice.end,
+        sourceSliceIndex: sliceIndex,
         role: "evidence",
         // Carries through to the shot spec's transition_in so it dissolves
         // directly out of the motion hook rather than defaulting to "cut".
@@ -1232,6 +1291,9 @@ export async function buildFullProductionPlan(projectId) {
         section_id: raw.section_id,
         claim_id: raw.claim_id,
         role: raw.role,
+        sourceSliceIndex: raw.sourceSliceIndex ?? null,
+        semanticRationale: raw.semanticRationale || null,
+        semanticLink: raw.semanticLink || null,
         // A footage-kind pause hold becomes its own shot immediately
         // continuing the SAME clip from exactly where the enclosing shot's
         // trim (or the previous pause's own trim, if this is not the first
@@ -1288,6 +1350,12 @@ export async function buildFullProductionPlan(projectId) {
   const evidenceOccurrenceByClaimKind = new Map();
   const shots = finalShots.map((shot, index) => {
     const duration = Math.round((shot.outputEnd - shot.outputStart) * 1000) / 1000;
+    const narrationAnchor = narrationForRange(
+      tokens,
+      shot.start,
+      shot.end,
+      shot.emphasis?.anchor_text || (shot.kind === "graphic" ? shot.graphic?.title : shot.claim_id)
+    );
     const base = {
       duration,
       claim_id: shot.claim_id,
@@ -1297,6 +1365,8 @@ export async function buildFullProductionPlan(projectId) {
       editorial_purpose: shot.emphasis
         ? `Editorial pause beat: ${shot.emphasis.purpose || "emphasis hold"}.`.slice(0, 200)
         : `Present ${shot.claim_id.replace(/^CLM_\d+_/, "").replace(/_/g, " ").toLowerCase()} evidence for this section.`,
+      narration_anchor: narrationAnchor,
+      source_slice_index: shot.sourceSliceIndex ?? null,
       ...(shot.emphasis
         ? {
             emphasis_card: { eyebrow: (shot.emphasis.purpose || "EMPHASIS").toUpperCase().slice(0, 60), title: shot.emphasis.anchor_text, accent: null },
@@ -1316,7 +1386,16 @@ export async function buildFullProductionPlan(projectId) {
       ...(shot.overlay ? { overlay: shot.overlay } : {})
     };
     if (shot.kind === "graphic") {
-      return { ...base, asset_type: "graphic", graphic: shot.graphic, visual_role: "graphic" };
+      return {
+        ...base,
+        asset_type: "graphic",
+        graphic: shot.graphic,
+        visual_role: "graphic",
+        semantic_rationale:
+          shot.semanticRationale ||
+          `Marks the ${shot.section_id} transition without introducing a new factual claim; the card remains deliberately brief.`,
+        semantic_link: shot.semanticLink || "conceptual"
+      };
     }
     if (shot.kind === "footage") {
       return {
@@ -1329,6 +1408,10 @@ export async function buildFullProductionPlan(projectId) {
         hook_footage: false,
         contextual_footage: true,
         generic_stock: true,
+        semantic_rationale:
+          shot.semanticRationale ||
+          `Shows the physical context named by ${shot.claim_id}; this assignment requires direct frame review before it may enter a candidate.`,
+        semantic_link: shot.semanticLink || "physical",
         ...(shot.reuseReason ? { reuse_reason: shot.reuseReason } : {})
       };
     }
@@ -1363,12 +1446,23 @@ export async function buildFullProductionPlan(projectId) {
     return {
       ...base,
       asset_type: "evidence",
+      semantic_rationale: rationaleForEvidence(shot.claim_id, shot.evidenceKind),
+      semantic_link: semanticLinkForEvidenceKind(shot.evidenceKind),
       evidence: {
         kind: shot.evidenceKind,
         source_ids: sourceIds,
         source_label: isRecap ? "Multiple verified sources (recap)" : evidenceMap.source_catalog.find((s) => s.source_id === ownSourceIds[0])?.publisher || "Source",
         font_px: DEFAULT_FONT_PX,
         ...content,
+        template_id: `orvyq_${shot.evidenceKind}`,
+        necessity:
+          shot.evidenceKind === "source_timeline"
+            ? "timeline"
+            : shot.evidenceKind === "evidence_chain"
+              ? "mechanism"
+              : shot.evidenceKind === "comparison"
+                ? "comparison"
+                : "critical_result",
         ...overrideAssets
       }
     };
@@ -1444,6 +1538,12 @@ export async function buildFullProductionPlan(projectId) {
     scene_id: "scene_001",
     visual_role: hookShot.visual_role,
     editorial_purpose: hookShot.editorial_purpose,
+    narration_anchor: hookShot.narration_anchor || "Opening visual premise before the first narrated sentence.",
+    semantic_rationale:
+      hookShot.semantic_rationale ||
+      "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
+    semantic_link: hookShot.semantic_link || "physical",
+    source_slice_index: null,
     asset_type: "footage",
     asset: hookShot.video_asset,
     trim_in_sec: hookShot.trim_in_sec,
@@ -1465,8 +1565,19 @@ export async function buildFullProductionPlan(projectId) {
     scene_id: lastShot.scene_id,
     visual_role: "graphic",
     editorial_purpose: "Terminal end card: hold on the film's closing line before the picture fades to black.",
+    narration_anchor: "The final narrated conclusion and its immediate closing hold.",
+    semantic_rationale: "Provides a restrained editorial close after the final claim; it conveys no additional evidence.",
+    semantic_link: "conceptual",
+    source_slice_index: null,
     asset_type: "graphic",
-    graphic: { type: "end_card", mode: "brand", title: END_CARD_CONTENT.title, subtitle: END_CARD_CONTENT.subtitle ?? null },
+    graphic: {
+      type: "end_card",
+      mode: "brand",
+      title: END_CARD_CONTENT.title,
+      subtitle: END_CARD_CONTENT.subtitle ?? null,
+      template_id: "orvyq_end_sting",
+      necessity: "critical_result"
+    },
     transition_in: "fade"
   };
 
@@ -1484,8 +1595,20 @@ export async function writeFullProductionPlan(projectId) {
   const blueprint = await readJson(blueprintPath);
   const { shots, totalDuration, claimCount, pauseCount } = await buildFullProductionPlan(projectId);
   const durationSeconds = Math.round(totalDuration * 1000) / 1000;
-  blueprint.full_production.status = "ready";
+  const [rebalancePlan, visualRequests] = await Promise.all([
+    readJsonSafe(path.join(dir, "direction", "visual_rebalance_plan.json"), null),
+    readJsonSafe(path.join(dir, "research", "visual_asset_requests.json"), { requests: [] }),
+  ]);
+  const pendingVisualRequestIds = (visualRequests.requests || [])
+    .filter((request) => request.status !== "ready")
+    .map((request) => request.asset_request_id);
+  const rebalanceMaterialized = !rebalancePlan || rebalancePlan.status === "materialized";
+  blueprint.full_production.status = rebalanceMaterialized && pendingVisualRequestIds.length === 0
+    ? "ready"
+    : "blocked_pending_visual_assets";
   blueprint.full_production.blocking_claim_ids = [];
+  blueprint.full_production.blocking_visual_asset_request_ids = pendingVisualRequestIds;
+  if (rebalancePlan) blueprint.full_production.visual_rebalance_plan = "direction/visual_rebalance_plan.json";
   blueprint.full_production.shots = shots;
   blueprint.full_production.generated_at = new Date().toISOString();
   blueprint.full_production.generated_total_duration_seconds = durationSeconds;

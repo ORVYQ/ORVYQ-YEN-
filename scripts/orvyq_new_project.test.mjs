@@ -33,6 +33,8 @@ test("new project scaffold contains only generic, isolated intake data", () => {
   assert.equal(production.hook.first_shot_asset, null);
   assert.equal(production.art_direction.topic, null);
   assert.equal(production.end_card.title, null);
+  assert.equal(production.visual_medium_balance.graphic_card_fraction_max, 0.15);
+  assert.equal(production.visual_medium_balance.full_screen_text_card_fraction_max, 0.03);
 
   const assets = manifest["config/editorial_asset_plan.json"];
   assert.equal(assets.project_id, "003-isolation-probe");
@@ -44,6 +46,10 @@ test("new project scaffold contains only generic, isolated intake data", () => {
   assert.equal(music.status, "needs_music_selection");
   assert.deepEqual(music.tracks, []);
   assert.equal(music.artist, null);
+
+  const visualReviews = manifest["research/visual_asset_reviews.json"];
+  assert.equal(visualReviews.policy.rejected_asset_global_reentry_forbidden, true);
+  assert.deepEqual(visualReviews.approved_assets, []);
 });
 
 test("editorial rhythm scales with target duration inside system boundaries", () => {

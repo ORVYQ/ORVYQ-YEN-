@@ -68,7 +68,17 @@ export function validateAssignment(item) {
   if (!/^CLM_[A-Z0-9_]+$/.test(claimId)) throw new Error(`${item.scene_id}: invalid editorial claim_id`);
   if (!Number.isInteger(sliceIndex) || sliceIndex < 0) throw new Error(`${item.scene_id}: invalid editorial slice_index`);
   if (!String(a.narration_anchor || "").trim()) throw new Error(`${item.scene_id}: narration_anchor is required`);
+  if (String(a.semantic_rationale || item.editorial_note || "").trim().length < 24) {
+    throw new Error(`${item.scene_id}: claim-specific semantic_rationale is required`);
+  }
   return { claimId, sliceIndex };
+}
+
+export function collectRejectedProviderAssetIds(semantic, reviews = {}) {
+  return new Set([
+    ...Object.values(semantic.scenes || {}).flatMap((scene) => scene.rejected_provider_asset_ids || []),
+    ...(reviews.rejected_assets || []).map((asset) => asset.provider_asset_id),
+  ].map(String));
 }
 
 export function validateCapacityTarget(plan) {
@@ -94,22 +104,33 @@ async function loadPlan(dir, projectId) {
     path.join(dir, "research", "footage_semantic_constraints.json"),
     { project_id: projectId, scenes: {} },
   );
+  const reviews = await readOptionalJson(
+    path.join(dir, "research", "visual_asset_reviews.json"),
+    { project_id: projectId, rejected_assets: [] },
+  );
   if (semantic.project_id !== projectId) {
     throw new Error("footage_semantic_constraints project_id mismatch");
   }
+  if (reviews.project_id !== projectId) {
+    throw new Error("visual_asset_reviews project_id mismatch");
+  }
+  const globallyRejected = collectRejectedProviderAssetIds(semantic, reviews);
   plan.assets = plan.assets.map((item) => {
     const constraint = semantic.scenes?.[item.scene_id];
-    if (!constraint) return item;
     return {
       ...item,
-      queries: constraint.queries || item.queries,
-      fallback_queries: constraint.fallback_queries || item.fallback_queries,
-      rejected_provider_asset_ids: constraint.rejected_provider_asset_ids || [],
-      force_reacquire: true,
-      semantic_title_constraints: {
-        required_any_groups: constraint.required_any_groups || [],
-        forbidden_terms: constraint.forbidden_terms || [],
-      },
+      ...(constraint
+        ? {
+            queries: constraint.queries || item.queries,
+            fallback_queries: constraint.fallback_queries || item.fallback_queries,
+            force_reacquire: true,
+            semantic_title_constraints: {
+              required_any_groups: constraint.required_any_groups || [],
+              forbidden_terms: constraint.forbidden_terms || [],
+            },
+          }
+        : {}),
+      rejected_provider_asset_ids: [...globallyRejected],
     };
   });
   return plan;
@@ -269,8 +290,8 @@ async function acquireOne(projectId, dir, item, key, usedIds, policy) {
     selected_reason: semanticVerified
       ? "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED"
       : "NARRATION_ANCHORED_UNIQUE_HD_CONTEXT",
-    approved_for_final_edit: true,
-    human_review_status: "PENDING_FULL_LENGTH_REVIEW",
+    approved_for_final_edit: false,
+    human_review_status: "PENDING_FRAME_REVIEW",
     downloaded_at: new Date().toISOString(),
   };
   await writeJsonAtomic(`${output}.provenance.json`, provenance);
@@ -343,6 +364,7 @@ export async function materializeAssignments(dir, plan, records) {
       role: item.editorial_assignment.role || item.role || "context",
       semantic_anchor: item.editorial_assignment.narration_anchor,
       semantic_rationale: item.editorial_assignment.semantic_rationale || item.editorial_note || null,
+      semantic_link: item.editorial_assignment.semantic_link || "physical",
     };
     if (oldGraphic) {
       delete editorial.graphic_break_assignments[claimId][index];

@@ -41,6 +41,9 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
   const allowedHosts = manifest.policy?.allowed_hosts || [];
   const downloadGroups = new Map();
   for (const asset of manifest.assets || []) {
+    for (const field of ["source_institution", "source_title", "source_date", "content_identity"]) {
+      if (!String(asset[field] || "").trim()) throw new Error(`${asset.evidence_asset_id} requires ${field}`);
+    }
     const existing = downloadGroups.get(asset.download_asset);
     if (existing && existing.source_url !== asset.source_url) throw new Error(`Conflicting URLs for ${asset.download_asset}`);
     downloadGroups.set(asset.download_asset, asset);
@@ -74,6 +77,10 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
       evidence_asset_id: asset.evidence_asset_id,
       source_ids: asset.source_ids,
       source_url: asset.source_url,
+      source_institution: asset.source_institution,
+      source_title: asset.source_title,
+      source_date: asset.source_date,
+      content_identity: asset.content_identity,
       final_url: downloadRecords.get(asset.download_asset)?.final_url || asset.source_url,
       local_asset: asset.local_asset,
       download_asset: asset.download_asset,

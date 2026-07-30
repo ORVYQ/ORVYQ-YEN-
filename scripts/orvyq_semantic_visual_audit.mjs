@@ -6,12 +6,24 @@ import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
-import { auditSectionVisualBalance, auditVisualMediumBalance } from "./lib/orvyq-visual-balance.mjs";
+import { loadProductionPolicy } from "./lib/orvyq-project-profile.mjs";
+import {
+  auditSectionVisualBalance,
+  auditGraphicCardDesign,
+  auditVisualMediumBalance,
+  classifyVisualMedium,
+} from "./lib/orvyq-visual-balance.mjs";
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const VALID_ROLES = new Set(["evidence", "archive", "context", "human_context", "metaphor", "graphic"]);
 const OFFICIAL = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
 const DERIVED = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
 const CRITICAL = 5;
+const SEMANTIC_LINKS = new Set([
+  "physical",
+  "historical",
+  "conceptual",
+  "direct_evidence",
+]);
 
 function canonicalText(value) {
   return typeof value === "string" ? value.replace(/\s+/g, " ").trim() : "";
@@ -51,32 +63,31 @@ export function presentationMotifKey(shot) {
 
 export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
-  const [plan, blueprint, evidenceMap] = await Promise.all([
+  const [plan, blueprint, evidenceMap, policy] = await Promise.all([
     readJson(path.join(dir, "direction", "edit_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
-    loadResolvedEvidenceMap(dir)
+    loadResolvedEvidenceMap(dir),
+    loadProductionPolicy(projectId),
   ]);
-  const rules = blueprint.global_rules;
+  const rules = {
+    ...blueprint.global_rules,
+    ...(policy.project.visual_medium_balance || {}),
+  };
   const failures = [];
   const warnings = [];
   let footageFrames = 0, genericStockFrames = 0, contextualBodyFrames = 0, officialFrames = 0, derivedFrames = 0, pureGraphicFrames = 0, emphasisBeats = 0, currentEvidenceRunFrames = 0, maximumEvidenceRunFrames = 0;
   const roleFrames = {};
   const repeatedPresentationMotifs = new Map();
   const imageUses = new Map();
-  const sectionFrames = {};
 
   for (const shot of plan.shots) {
     const frames = shot.end_frame - shot.start_frame;
-    const section = sectionFrames[shot.section_id] ||= {
-      durationFrames: 0,
-      contextualBodyFrames: 0,
-      derivedFrames: 0,
-      pureGraphicFrames: 0,
-      officialFrames: 0,
-    };
-    section.durationFrames += frames;
     if (!VALID_ROLES.has(shot.visual_role)) failures.push(`${shot.shot_id} invalid visual_role`);
     if (!shot.editorial_purpose || shot.editorial_purpose.length < 18) failures.push(`${shot.shot_id} lacks editorial purpose`);
+    if (!shot.claim_id) failures.push(`${shot.shot_id} lacks claim_id`);
+    if (!canonicalText(shot.narration_anchor)) failures.push(`${shot.shot_id} lacks narration_anchor`);
+    if (canonicalText(shot.semantic_rationale).length < 24) failures.push(`${shot.shot_id} lacks a specific semantic_rationale`);
+    if (!SEMANTIC_LINKS.has(shot.semantic_link)) failures.push(`${shot.shot_id} has invalid semantic_link ${shot.semantic_link || "(missing)"}`);
     roleFrames[shot.visual_role] = (roleFrames[shot.visual_role] || 0) + frames;
     // Counted once per shot regardless of asset_type: an emphasis beat is a
     // pause-driven text overlay, and now that contextual footage can host
@@ -85,12 +96,14 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
     // undercount full mode, whose pauses land on a mix of evidence, graphic,
     // and footage shots.
     if (shot.emphasis_card) emphasisBeats += 1;
+    if (shot.editorial_overlay?.type === "email_recreation") {
+      failures.push(`${shot.shot_id} uses a decorative document recreation; real evidence or a non-document explanation is required`);
+    }
     if (shot.asset_type === "footage") {
       footageFrames += frames;
       if (shot.generic_stock === true) genericStockFrames += frames;
       if (shot.contextual_footage === true) {
         contextualBodyFrames += frames;
-        section.contextualBodyFrames += frames;
       }
       // Applies to both modes now: hook footage is always allowed, and any
       // other footage shot (proof or full) must be approved contextual
@@ -108,19 +121,17 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
       const kind = shot.evidence?.kind;
       if (OFFICIAL.has(kind)) {
         officialFrames += frames;
-        section.officialFrames += frames;
       } else if (DERIVED.has(kind)) {
         derivedFrames += frames;
-        section.derivedFrames += frames;
       }
       else failures.push(`${shot.shot_id} unknown evidence kind ${kind}`);
       if (!(shot.evidence?.source_ids || []).length) failures.push(`${shot.shot_id} evidence has no source IDs`);
       for (const image of shot.evidence?.image_assets || []) imageUses.set(image, (imageUses.get(image) || 0) + 1);
     } else if (shot.asset_type === "graphic") {
       pureGraphicFrames += frames;
-      section.pureGraphicFrames += frames;
       currentEvidenceRunFrames = 0;
     }
+    if (classifyVisualMedium(shot) === "invalid") failures.push(`${shot.shot_id} cannot be assigned to one exclusive visual-medium category`);
     // A source title is not a visual identity. The same JAMSTEC page can
     // legitimately introduce different captured figures, and one IEA
     // source can support several distinct boundary comparisons. Count a
@@ -134,13 +145,11 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   const genericFraction = genericStockFrames / duration;
   const totalFootageFraction = footageFrames / duration;
   const visualMediumBalance = auditVisualMediumBalance({
+    shots: plan.shots,
     durationFrames: duration,
-    contextualBodyFrames,
-    derivedFrames,
-    pureGraphicFrames,
-    officialFrames,
   }, rules);
-  const sectionVisualBalance = auditSectionVisualBalance(sectionFrames, rules);
+  const sectionVisualBalance = auditSectionVisualBalance(plan.shots, rules);
+  const graphicCardDesign = auditGraphicCardDesign(plan.shots);
   const motionHook = auditMotionHook(plan);
   // cinematic_body_footage is unconditionally true for both modes (see
   // scripts/orvyq_edit_plan.mjs) -- proof is now a genuine frame-prefix of
@@ -155,6 +164,7 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   if (cinematicCandidate) {
     failures.push(...visualMediumBalance.failures);
     failures.push(...sectionVisualBalance.failures);
+    failures.push(...graphicCardDesign.failures);
   }
   if (cinematicCandidate && emphasisBeats < 4) failures.push(`cinematic candidate contains ${emphasisBeats} emphasis beats; 4 required`);
   if (cinematicCandidate && maximumEvidenceRunFrames / plan.fps > Number(plan.quality_policy?.maximum_uninterrupted_evidence_seconds || 15) + 0.001)
@@ -183,14 +193,26 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
     role_fractions: Object.fromEntries(Object.entries(roleFrames).map(([role, frames]) => [role, frames / duration])),
     generic_stock_fraction: genericFraction,
     total_footage_fraction: totalFootageFraction,
-    contextual_body_footage_fraction: visualMediumBalance.contextual_body_footage_fraction,
-    official_primary_capture_fraction: visualMediumBalance.official_primary_capture_fraction,
-    source_derived_graphic_fraction: visualMediumBalance.source_derived_graphic_fraction,
-    evidence_archive_fraction: visualMediumBalance.evidence_archive_fraction,
-    full_screen_graphic_fraction: visualMediumBalance.full_screen_graphic_fraction,
-    card_like_visual_fraction: visualMediumBalance.card_like_visual_fraction,
+    contextual_footage_fraction: visualMediumBalance.contextual_footage_fraction,
+    primary_evidence_fraction: visualMediumBalance.primary_evidence_fraction,
+    graphic_card_fraction: visualMediumBalance.graphic_card_fraction,
+    full_screen_text_card_fraction: visualMediumBalance.full_screen_text_card_fraction,
+    exclusive_visual_medium_frame_total: visualMediumBalance.exclusive_frame_total,
+    invalid_visual_medium_frames: visualMediumBalance.invalid_frames,
+    maximum_consecutive_graphic_card_shots: visualMediumBalance.maximum_consecutive_graphic_card_shots,
+    graphic_template_uses: visualMediumBalance.graphic_template_uses,
+    // Transitional aliases for downstream reports. They now mirror the
+    // exclusive categories and cannot be added together as overlapping
+    // metadata-defined buckets.
+    contextual_body_footage_fraction: visualMediumBalance.contextual_footage_fraction,
+    official_primary_capture_fraction: visualMediumBalance.primary_evidence_fraction,
+    source_derived_graphic_fraction: derivedFrames / duration,
+    evidence_archive_fraction: visualMediumBalance.primary_evidence_fraction,
+    full_screen_graphic_fraction: visualMediumBalance.full_screen_text_card_fraction,
+    card_like_visual_fraction: visualMediumBalance.graphic_card_fraction,
     visual_medium_balance_thresholds: visualMediumBalance.thresholds,
     section_visual_balance: sectionVisualBalance.sections,
+    graphic_card_design: graphicCardDesign,
     emphasis_beat_count: emphasisBeats,
     maximum_uninterrupted_evidence_seconds: maximumEvidenceRunFrames / plan.fps,
     image_uses: Object.fromEntries([...imageUses.entries()].sort((a, b) => b[1] - a[1])),

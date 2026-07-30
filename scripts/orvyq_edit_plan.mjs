@@ -23,6 +23,7 @@ import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs, printJson
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 import { loadProductionPolicy, resolveProjectId } from "./lib/orvyq-project-profile.mjs";
+import { summarizeExclusiveVisualMedia } from "./lib/orvyq-visual-balance.mjs";
 
 const FPS = 30;
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
@@ -45,13 +46,16 @@ function fractionSummary(shots, totalFrames) {
   const framesOf = (predicate) => shots.filter(predicate).reduce((sum, shot) => sum + shot.end_frame - shot.start_frame, 0);
   const roleFrames = {};
   for (const shot of shots) roleFrames[shot.visual_role] = (roleFrames[shot.visual_role] || 0) + (shot.end_frame - shot.start_frame);
+  const exclusive = summarizeExclusiveVisualMedia(shots, totalFrames);
   return {
     actual_generic_stock_fraction: round(framesOf((shot) => shot.generic_stock === true) / totalFrames),
     actual_motion_hook_fraction: round(framesOf((shot) => shot.hook_footage === true) / totalFrames),
     actual_total_footage_fraction: round(framesOf((shot) => shot.asset_type === "footage") / totalFrames),
-    actual_contextual_body_footage_fraction: round(framesOf((shot) => shot.contextual_footage === true) / totalFrames),
-    actual_primary_evidence_fraction: round(framesOf((shot) => shot.asset_type === "evidence") / totalFrames),
-    actual_full_screen_graphic_fraction: round(framesOf((shot) => shot.asset_type === "graphic") / totalFrames),
+    actual_contextual_body_footage_fraction: round(exclusive.contextual_footage_fraction),
+    actual_primary_evidence_fraction: round(exclusive.primary_evidence_fraction),
+    actual_graphic_card_fraction: round(exclusive.graphic_card_fraction),
+    actual_full_screen_text_card_fraction: round(exclusive.full_screen_text_card_fraction),
+    visual_medium_balance: exclusive,
     role_fractions: Object.fromEntries(Object.entries(roleFrames).map(([role, frames]) => [role, round(frames / totalFrames)]))
   };
 }
@@ -120,6 +124,10 @@ async function buildFullPlan(dir, projectId, blueprint) {
     if (!claimIds.has(spec.claim_id)) throw new Error(`full_production.shots[${index}] has unknown or removed claim_id ${spec.claim_id}`);
     if (!ALLOWED_ROLES.has(spec.visual_role)) throw new Error(`full_production.shots[${index}] has invalid visual_role ${spec.visual_role}`);
     if (!spec.editorial_purpose || spec.editorial_purpose.length < 18) throw new Error(`full_production.shots[${index}] needs a specific editorial_purpose`);
+    if (!spec.narration_anchor || spec.narration_anchor.length < 8) throw new Error(`full_production.shots[${index}] needs an exact narration_anchor`);
+    if (!spec.semantic_rationale || spec.semantic_rationale.length < 24) throw new Error(`full_production.shots[${index}] needs a specific semantic_rationale`);
+    if (!["physical", "historical", "conceptual", "direct_evidence"].includes(spec.semantic_link))
+      throw new Error(`full_production.shots[${index}] has invalid semantic_link ${spec.semantic_link}`);
 
     const startFrame = Math.round(cursor * FPS);
     cursor += duration;
@@ -139,6 +147,10 @@ async function buildFullPlan(dir, projectId, blueprint) {
       visual_role: spec.visual_role,
       generic_stock: spec.generic_stock === true,
       editorial_purpose: spec.editorial_purpose,
+      narration_anchor: spec.narration_anchor,
+      semantic_rationale: spec.semantic_rationale,
+      semantic_link: spec.semantic_link,
+      source_slice_index: spec.source_slice_index ?? null,
       editorial_overlay: spec.overlay || null,
       motif: spec.motif || spec.asset || spec.graphic?.type,
       transition_in: transitionIn,
@@ -316,6 +328,7 @@ export async function buildCanonicalEditPlan(projectId, { mode = "candidate", fr
     art_direction: { principle: strategy, ...policy.project.art_direction },
     quality_policy: {
       ...blueprint.global_rules,
+      ...(policy.project.visual_medium_balance || {}),
       keyword_only_visual_matching_forbidden: true,
       fake_data_graphics_forbidden: true,
       automatic_asset_fallback_forbidden: true,

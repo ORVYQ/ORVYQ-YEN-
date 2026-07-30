@@ -121,6 +121,17 @@ function validateReadyProject(project) {
       check(`${project.id}/${relativePath}`, schemaFile, readJson(absolute), { kind: "real generated" });
     }
   }
+  const optionalVisualContracts = [
+    ["direction/visual_rebalance_plan.json", "visual_rebalance_plan.schema.json"],
+    ["research/visual_asset_requests.json", "visual_asset_requests.schema.json"],
+    ["research/visual_asset_reviews.json", "visual_asset_reviews.schema.json"],
+  ];
+  for (const [relativePath, schemaFile] of optionalVisualContracts) {
+    const absolute = path.join(project.directory, relativePath);
+    if (fs.existsSync(absolute)) {
+      check(`${project.id}/${relativePath}`, schemaFile, readJson(absolute), { kind: "real visual contract" });
+    }
+  }
 }
 
 for (const project of readyProjects()) validateReadyProject(project);
@@ -134,6 +145,12 @@ const fixtureFootageShot = {
   transition_in: "cut",
   transition_out: "cut",
   text_overlay: null,
+  claim_id: "CLM_FIXTURE_CONTEXT",
+  visual_role: "context",
+  editorial_purpose: "Establish the physical setting for the narrated claim.",
+  narration_anchor: "The documented setting establishes the physical context.",
+  semantic_rationale: "The visible working environment directly establishes the physical context named by narration.",
+  semantic_link: "physical",
   asset_type: "footage",
   video_asset: "assets/footage/context-a.mp4",
   trim_in_sec: 1,
@@ -149,6 +166,12 @@ const fixtureGraphicShot = {
   transition_in: "fade",
   transition_out: "cut",
   text_overlay: null,
+  claim_id: "CLM_FIXTURE_QUESTION",
+  visual_role: "graphic",
+  editorial_purpose: "State the central question before the evidence sequence.",
+  narration_anchor: "The film opens by asking one unresolved question.",
+  semantic_rationale: "The concise question card states the exact conceptual problem that the narration introduces.",
+  semantic_link: "conceptual",
   asset_type: "graphic",
   graphic: {
     type: "brand_open",

@@ -15,9 +15,10 @@
 // policy that contextual footage must occupy 25-45% of the full composition.
 // Both categories are replaced below with checks against the current
 // canonical semantic/evidence/asset audits, which remain the sole source of
-// truth for the underlying thresholds (25-45% contextual footage, 40%
-// source-backed evidence minimum, 20% graphics ceiling, 15s max uninterrupted
-// evidence run, etc. -- see scripts/orvyq_semantic_visual_audit.mjs). This is
+// truth for the underlying exclusive thresholds (60-70% contextual footage,
+// at least 20% primary evidence, at most 15% graphics/cards, at most 3%
+// full-screen text, and a 15s max uninterrupted evidence run -- see
+// scripts/orvyq_semantic_visual_audit.mjs). This is
 // a correction of duplicated stale scoring logic, not a relaxation of any of
 // those gates: category weights, the 90-point automated ceiling, the 82-point
 // minimum, the 65%-of-weight per-category floor, and the mandatory human
@@ -40,8 +41,12 @@ export function computeAlignmentReadiness({ evidence, assetAudit, semantic, paci
     ...DEFAULT_VISUAL_MEDIUM_BALANCE,
     ...(semantic.visual_medium_balance_thresholds || {}),
   };
-  const sourceBackedFractionMinimum = thresholds.evidence_archive_fraction_min;
-  const sourceBackedFractionReadiness = clamp01(semantic.evidence_archive_fraction / sourceBackedFractionMinimum);
+  const sourceBackedFractionMinimum = thresholds.primary_evidence_fraction_min;
+  const primaryEvidenceFraction =
+    semantic.primary_evidence_fraction ??
+    semantic.official_primary_capture_fraction ??
+    0;
+  const sourceBackedFractionReadiness = clamp01(primaryEvidenceFraction / sourceBackedFractionMinimum);
   // assetAudit.pass keeps the evidence/asset/semantic audits authoritative --
   // graphics existing is never sufficient on its own -- and
   // metadata_only_evidence_rejected / evidence audit failures already flow
@@ -50,15 +55,13 @@ export function computeAlignmentReadiness({ evidence, assetAudit, semantic, paci
   const sourceBackedVisualEvidenceScore = assetAudit.pass ? Math.min(evidenceCoverageReadiness, sourceBackedFractionReadiness) * 25 : 0;
 
   const contextualFractionInRange =
-    semantic.contextual_body_footage_fraction >= thresholds.contextual_body_footage_fraction_min &&
-    semantic.contextual_body_footage_fraction <= thresholds.contextual_body_footage_fraction_max;
+    (semantic.contextual_footage_fraction ?? semantic.contextual_body_footage_fraction) >= thresholds.contextual_footage_fraction_min &&
+    (semantic.contextual_footage_fraction ?? semantic.contextual_body_footage_fraction) <= thresholds.contextual_footage_fraction_max;
   const evidenceRunWithinPolicy = semantic.maximum_uninterrupted_evidence_seconds <= MAX_UNINTERRUPTED_EVIDENCE_SECONDS + 0.001;
-  // Official capture fraction and generic stock fraction stay visible below
-  // as diagnostics only -- neither independently fails this category once
-  // the current canonical semantic policy (contextual-footage range,
-  // uninterrupted-evidence cap, and the semantic/asset audits themselves)
-  // passes, since that policy is what actually replaced the retired
-  // proof-cut-specific 12% whole-film stock ceiling.
+  // Generic stock remains a diagnostic because contextual footage is already
+  // claim-specific and byte-bound by the semantic review gate. Primary
+  // evidence is not diagnostic-only: it directly earns this category through
+  // the exclusive 20% floor above.
   const motionHookDisciplinePass =
     motionHook.pass === true &&
     assetAudit.legacy_footage_count === 0 &&
@@ -83,11 +86,11 @@ export function computeAlignmentReadiness({ evidence, assetAudit, semantic, paci
       weight: 10,
       score: motionHookDisciplinePass ? 10 : 0,
       diagnostics: {
-        // Retained for visibility only -- see note above; neither fraction
-        // independently fails this category anymore.
-        official_primary_capture_fraction: semantic.official_primary_capture_fraction,
+        // Retained for visibility; the primary-evidence fraction also drives
+        // source_backed_visual_evidence above.
+        primary_evidence_fraction: primaryEvidenceFraction,
         generic_stock_fraction: semantic.generic_stock_fraction,
-        contextual_body_footage_fraction: semantic.contextual_body_footage_fraction,
+        contextual_footage_fraction: semantic.contextual_footage_fraction ?? semantic.contextual_body_footage_fraction,
         maximum_uninterrupted_evidence_seconds: semantic.maximum_uninterrupted_evidence_seconds
       }
     },

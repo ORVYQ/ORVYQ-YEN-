@@ -31,6 +31,8 @@
     "orvyq:verify-approval": "node scripts/orvyq_verify_approval.mjs",
     "orvyq:build-render-project": "node scripts/orvyq_pipeline_cli.mjs build-render-project",
     "orvyq:duplicate-footage-audit": "node scripts/orvyq_duplicate_footage_audit.mjs",
+    "orvyq:footage-semantic-review-audit": "node scripts/orvyq_footage_semantic_review_audit.mjs",
+    "orvyq:visual-rebalance-audit": "node scripts/orvyq_visual_rebalance_audit.mjs",
     "orvyq:tension-card-audit": "node scripts/orvyq_tension_card_audit.mjs",
     "orvyq:generic-card-audit": "node scripts/orvyq_generic_card_audit.mjs",
     "orvyq:leaked-instruction-audit": "node scripts/orvyq_leaked_instruction_audit.mjs",

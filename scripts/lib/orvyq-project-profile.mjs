@@ -46,6 +46,37 @@ export function validateProductionProfile(profile, systemProfile, { requireReady
   const limits = systemProfile?.creative_limits;
   if (!limits) throw new CliError("System creative limits are missing", "INVALID_SYSTEM_PROFILE");
 
+  const systemBalance = limits.visual_medium_balance;
+  const projectBalance = profile.visual_medium_balance;
+  if (projectBalance && systemBalance) {
+    const minimumKeys = [
+      "contextual_footage_fraction_min",
+      "primary_evidence_fraction_min",
+    ];
+    const maximumKeys = [
+      "contextual_footage_fraction_max",
+      "graphic_card_fraction_max",
+      "full_screen_text_card_fraction_max",
+      "section_graphic_card_fraction_max",
+      "maximum_consecutive_graphic_card_shots",
+      "maximum_graphic_template_uses",
+      "maximum_full_screen_template_uses",
+    ];
+    for (const key of minimumKeys) {
+      if (Number(projectBalance[key]) < Number(systemBalance[key])) {
+        throw new CliError(`visual_medium_balance.${key} may only be tightened`, "INVALID_PRODUCTION_PROFILE");
+      }
+    }
+    for (const key of maximumKeys) {
+      if (Number(projectBalance[key]) > Number(systemBalance[key])) {
+        throw new CliError(`visual_medium_balance.${key} may only be tightened`, "INVALID_PRODUCTION_PROFILE");
+      }
+    }
+    if (Number(projectBalance.contextual_footage_fraction_min) > Number(projectBalance.contextual_footage_fraction_max)) {
+      throw new CliError("visual_medium_balance footage minimum exceeds maximum", "INVALID_PRODUCTION_PROFILE");
+    }
+  }
+
   const hook = profile.hook || {};
   assertIntegerInRange(
     hook.target_cut_count,
