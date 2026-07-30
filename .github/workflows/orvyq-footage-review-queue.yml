@@ -12,6 +12,17 @@ on:
       - "agent/**"
       - "claude/**"
     paths:
+      - ".github/workflows/orvyq-footage-review-queue.yml"
+      - "scripts/orvyq_prepare_footage_review_queue.mjs"
+      - "projects/*/assets/footage_acquisition.runtime.json"
+      - "projects/*/qa/footage_contact_sheets.json"
+      - "projects/*/config/editorial_asset_plan.json"
+      - "projects/*/direction/visual_rebalance_plan.json"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/orvyq-footage-review-queue.yml"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
       - "projects/*/assets/footage_acquisition.runtime.json"
       - "projects/*/qa/footage_contact_sheets.json"
@@ -22,16 +33,20 @@ permissions:
   contents: write
 
 concurrency:
-  group: orvyq-footage-review-queue-${{ github.ref }}
+  group: orvyq-footage-review-queue-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
   prepare:
+    if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
     steps:
       - name: Checkout exact branch
         uses: actions/checkout@v4
         with:
+          ref: ${{ env.TARGET_BRANCH }}
           lfs: false
           fetch-depth: 2
 
@@ -42,11 +57,15 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PROJECT_ID="${{ inputs.project_id }}"
           else
-            CHANGED="$(
-              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                grep -E '^projects/[^/]+/(assets/footage_acquisition\.runtime|qa/footage_contact_sheets|config/editorial_asset_plan|direction/visual_rebalance_plan)\.json$' |
-                head -n 1 || true
-            )"
+            if [ "${{ github.event_name }}" = "push" ]; then
+              CHANGED="$(
+                git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
+                  grep -E '^projects/[^/]+/(assets/footage_acquisition\.runtime|qa/footage_contact_sheets|config/editorial_asset_plan|direction/visual_rebalance_plan)\.json$' |
+                  head -n 1 || true
+              )"
+            else
+              CHANGED=""
+            fi
             if [ -n "$CHANGED" ]; then
               PROJECT_ID="$(cut -d/ -f2 <<<"$CHANGED")"
             else
@@ -82,8 +101,8 @@ jobs:
           git config user.name "orvyq-footage-review-bot"
           git config user.email "orvyq-footage-review-bot@users.noreply.github.com"
           git commit -m "Prepare claim-bound footage review queue"
-          git pull --rebase origin "${{ github.ref_name }}"
-          git push origin "HEAD:${{ github.ref_name }}"
+          git pull --rebase origin "$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
 
       - name: Upload review queue and contact sheets
         uses: actions/upload-artifact@v4
