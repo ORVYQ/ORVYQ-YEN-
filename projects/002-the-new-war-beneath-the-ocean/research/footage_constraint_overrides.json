@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "scenes": {
+    "scene_007": {
+      "queries": [
+        "government conference delegates",
+        "international conference audience",
+        "parliament assembly officials"
+      ],
+      "fallback_queries": [
+        "conference speaker audience",
+        "official delegates meeting",
+        "public policy conference"
+      ],
+      "required_any_groups": [
+        ["conference", "meeting", "assembly", "summit", "parliament", "government"],
+        ["delegate", "official", "speaker", "audience", "people", "participants"]
+      ],
+      "forbidden_terms": ["wedding", "classroom", "party", "sales", "product launch"]
+    },
+    "scene_008": {
+      "queries": [
+        "wind farm engineers workers",
+        "wind turbine maintenance crew",
+        "technicians working wind turbine"
+      ],
+      "fallback_queries": [
+        "renewable energy engineers wind farm",
+        "workers near wind turbines",
+        "wind turbine installation team"
+      ],
+      "required_any_groups": [
+        ["wind", "turbine", "wind-farm", "wind farm", "renewable"],
+        ["worker", "engineer", "technician", "crew", "maintenance", "installation", "working"]
+      ],
+      "forbidden_terms": ["sunset", "silhouette", "scenic", "timelapse", "animation"]
+    }
+  }
+}
