@@ -3,13 +3,13 @@
   "project_id": "002-the-new-war-beneath-the-ocean",
   "scenes": {
     "scene_002": {
-      "queries": ["research vessel at sea", "offshore work vessel operations", "scientific ship deck"],
-      "fallback_queries": ["ocean research ship", "working vessel rough sea", "marine expedition vessel"],
+      "queries": ["research vessel ocean crew", "offshore support vessel deck", "marine workboat operations"],
+      "fallback_queries": ["ocean expedition ship", "working vessel crew at sea", "scientific marine vessel"],
       "required_any_groups": [
-        ["research", "scientific", "expedition", "offshore", "work", "working"],
-        ["vessel", "ship", "boat", "deck", "crew"]
+        ["research", "scientific", "expedition", "offshore", "marine", "support", "work", "working", "operations"],
+        ["vessel", "ship", "boat", "workboat", "deck", "crew"]
       ],
-      "forbidden_terms": ["cargo", "container", "tanker", "oil", "ferry", "cruise", "yacht", "sailboat"]
+      "forbidden_terms": ["cargo", "container", "tanker", "oil", "ferry", "cruise", "yacht", "sailboat", "fishing", "shipyard", "welding", "dry dock", "dockyard"]
     },
     "scene_003": {
       "queries": ["dark deep seabed", "deep ocean floor lights", "abyssal seafloor underwater"],
