@@ -212,7 +212,7 @@
       "status": "pending_frame_review",
       "claim_ids": ["CLM_016_DECISION_UNDER_UNCERTAINTY"],
       "required_content": "A real marine-science assessment or field-decision process where competing evidence is physically present.",
-      "acceptance": "Participants, instruments/documents, and setting establish the decision context; provenance does not claim a named meeting unless verified.",
+      "acceptance": "Participants or documented field operations, instruments, and expedition setting establish the decision context; provenance does not claim a named meeting unless verified.",
       "forbidden_substitutes": ["generic boardroom", "sales presentation", "unrelated conference"],
       "resolved_asset_paths": ["assets/footage/scene_054_direct.mp4"]
     },
