@@ -19,6 +19,7 @@ on:
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
+      - "projects/*/research/footage_constraint_overrides.json"
       - "projects/*/research/visual_asset_reviews.json"
   pull_request:
     branches:
@@ -31,6 +32,7 @@ on:
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
+      - "projects/*/research/footage_constraint_overrides.json"
       - "projects/*/research/visual_asset_reviews.json"
 
 permissions:
@@ -68,7 +70,7 @@ jobs:
             if [ "${{ github.event_name }}" = "push" ]; then
               CHANGED_INPUT="$(
                 git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                  grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints|visual_asset_reviews)\.json$' |
+                  grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|visual_asset_reviews)\.json$' |
                   head -n 1 || true
               )"
             else
@@ -104,6 +106,20 @@ jobs:
           echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
           echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
           echo "Resolved project: $PROJECT_ID"
+
+      - name: Apply project-authored footage constraint overrides
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="projects/$PROJECT_ID/research/footage_semantic_constraints.json"
+          OVERRIDE="projects/$PROJECT_ID/research/footage_constraint_overrides.json"
+          if [ ! -f "$OVERRIDE" ]; then
+            echo "No project-authored footage constraint overrides."
+            exit 0
+          fi
+          test "$(jq -r '.project_id' "$OVERRIDE")" = "$PROJECT_ID"
+          jq --slurpfile override "$OVERRIDE" '.scenes = (.scenes * $override[0].scenes) | .request_revision = ((.request_revision // 0) + 1)' "$BASE" > "$BASE.tmp"
+          mv "$BASE.tmp" "$BASE"
 
       - name: Verify Pexels credential exists
         run: |
@@ -167,6 +183,8 @@ jobs:
             "projects/$PROJECT_ID/qa/footage-contact-sheets"
           git add \
             "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
+            "projects/$PROJECT_ID/research/footage_semantic_constraints.json" \
+            "projects/$PROJECT_ID/research/footage_constraint_overrides.json" \
             "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
             "projects/$PROJECT_ID/config/editorial_asset_plan.json" \
             "projects/$PROJECT_ID/qa/footage_contact_sheets.json"
@@ -190,6 +208,7 @@ jobs:
             footage-acquisition.log
             projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_constraint_overrides.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_reviews.json
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
