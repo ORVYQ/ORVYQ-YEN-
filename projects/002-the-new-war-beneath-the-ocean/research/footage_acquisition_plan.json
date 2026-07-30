@@ -14,16 +14,6 @@
     "maximum_output_clip_seconds": 18,
     "incremental_reuse_existing_assets": true
   },
-  "capacity_target": {
-    "source": "Candidate Validation semantic visual audit after commit a5f033f1a3b8415e27cb019e6567e1365d7a81c1",
-    "candidate_duration_seconds": 1037.68,
-    "baseline_pure_graphics_fraction": 0.274,
-    "maximum_pure_graphics_fraction": 0.2,
-    "minimum_graphic_seconds_to_replace": 77.0,
-    "planned_graphic_replacement_seconds": 90.0,
-    "maximum_uses_per_clip": 2,
-    "strategy": "Acquire unique narration-anchored clips and replace only the named generic graphic breaks; do not lower quality gates or raise reuse limits."
-  },
   "assets": [
     {
       "scene_id": "scene_001",
@@ -318,18 +308,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A real research environment supports the narrated possibility that new technologies and changing chemistry can reduce future mineral demand; it is contextual footage, not proof of a specific breakthrough.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 20,
-        "narration_anchor": "There is another possibility.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "context",
-        "semantic_rationale": "A real research environment supports the narrated possibility that new technologies and changing chemistry can reduce future mineral demand; it is contextual footage, not proof of a specific breakthrough."
-      }
+      "editorial_note": "A real research environment supports the narrated possibility that new technologies and changing chemistry can reduce future mineral demand; it is contextual footage, not proof of a specific breakthrough."
     },
     {
       "scene_id": "scene_022",
@@ -344,18 +323,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Engineers testing pilot-scale industrial equipment directly visualise costly strategic capacity that may be built as an option rather than immediately used.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 22,
-        "narration_anchor": "Governments may spend billions to create options they never fully use.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "context",
-        "semantic_rationale": "Engineers testing pilot-scale industrial equipment directly visualise costly strategic capacity that may be built as an option rather than immediately used."
-      }
+      "editorial_note": "Engineers testing pilot-scale industrial equipment directly visualise costly strategic capacity that may be built as an option rather than immediately used."
     },
     {
       "scene_id": "scene_023",
@@ -370,18 +338,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A real negotiation setting supports the sentence about bargaining power created by a credible alternative source; no specific country or institution is asserted.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 24,
-        "narration_anchor": "But even an unused option changes power.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_left",
-        "role": "human_context",
-        "semantic_rationale": "A real negotiation setting supports the sentence about bargaining power created by a credible alternative source; no specific country or institution is asserted."
-      }
+      "editorial_note": "A real negotiation setting supports the sentence about bargaining power created by a credible alternative source; no specific country or institution is asserted."
     },
     {
       "scene_id": "scene_024",
@@ -396,18 +353,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 26,
-        "narration_anchor": "Survey ships, permits, pilot systems, processing research and legal claims are all ways of reserving a place in a future that may or may not arrive.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "context",
-        "semantic_rationale": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere."
-      }
+      "editorial_note": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere."
     },
     {
       "scene_id": "scene_025",
@@ -422,18 +368,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 28,
-        "narration_anchor": "The ability to reach a resource does not create an obligation to extract it.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "pull",
-        "role": "context",
-        "semantic_rationale": "A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine."
-      }
+      "editorial_note": "A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine."
     },
     {
       "scene_id": "scene_026",
@@ -448,18 +383,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Scientists collecting baseline samples directly support the need for pre-disturbance ecological measurement without claiming a specific expedition or result.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 30,
-        "narration_anchor": "Every year without baseline ecological research makes it harder to know what was lost after industrial activity begins.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "human_context",
-        "semantic_rationale": "Scientists collecting baseline samples directly support the need for pre-disturbance ecological measurement without claiming a specific expedition or result."
-      }
+      "editorial_note": "Scientists collecting baseline samples directly support the need for pre-disturbance ecological measurement without claiming a specific expedition or result."
     },
     {
       "scene_id": "scene_027",
@@ -474,18 +398,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A multidisciplinary decision meeting reflects the narrated trade-off among technological, ecological and social risks rather than presenting a simplistic pro- or anti-mining image.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 32,
-        "narration_anchor": "The decision is not between progress and preservation. It is between different forms of risk.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "hold",
-        "role": "human_context",
-        "semantic_rationale": "A multidisciplinary decision meeting reflects the narrated trade-off among technological, ecological and social risks rather than presenting a simplistic pro- or anti-mining image."
-      }
+      "editorial_note": "A multidisciplinary decision meeting reflects the narrated trade-off among technological, ecological and social risks rather than presenting a simplistic pro- or anti-mining image."
     },
     {
       "scene_id": "scene_028",
@@ -500,18 +413,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Dark seabed and suspended sediment provide restrained physical context for distant, hard-to-observe impacts; measured plume claims remain source-backed graphics and documents.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 34,
-        "narration_anchor": "The deep ocean may carry damage that cannot be seen from shore.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_left",
-        "role": "context",
-        "semantic_rationale": "Dark seabed and suspended sediment provide restrained physical context for distant, hard-to-observe impacts; measured plume claims remain source-backed graphics and documents."
-      }
+      "editorial_note": "Dark seabed and suspended sediment provide restrained physical context for distant, hard-to-observe impacts; measured plume claims remain source-backed graphics and documents."
     },
     {
       "scene_id": "scene_029",
@@ -526,18 +428,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A working research-vessel deck supports the announced return to field operations while avoiding any claim that generic footage depicts Chikyu or the 2027 trial itself.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 36,
-        "narration_anchor": "In 2027, Japan plans to return to the Pacific for a longer production-chain test.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "human_context",
-        "semantic_rationale": "A working research-vessel deck supports the announced return to field operations while avoiding any claim that generic footage depicts Chikyu or the 2027 trial itself."
-      }
+      "editorial_note": "A working research-vessel deck supports the announced return to field operations while avoiding any claim that generic footage depicts Chikyu or the 2027 trial itself."
     },
     {
       "scene_id": "scene_030",
@@ -552,18 +443,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Multiple working vessels at sea give the strategic race a physical, non-sensational scale without inventing a confrontation or identifying the ships as specific national programmes.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 38,
-        "narration_anchor": "The race is real.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "context",
-        "semantic_rationale": "Multiple working vessels at sea give the strategic race a physical, non-sensational scale without inventing a confrontation or identifying the ships as specific national programmes."
-      }
+      "editorial_note": "Multiple working vessels at sea give the strategic race a physical, non-sensational scale without inventing a confrontation or identifying the ships as specific national programmes."
     },
     {
       "scene_id": "scene_031",
@@ -578,18 +458,7 @@
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "An international rulemaking setting directly supports the contest over governance; ISA and UNCLOS documents remain the factual legal evidence.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 40,
-        "narration_anchor": "It is a race to decide which rules will exist when extraction becomes possible.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "pull",
-        "role": "human_context",
-        "semantic_rationale": "An international rulemaking setting directly supports the contest over governance; ISA and UNCLOS documents remain the factual legal evidence."
-      }
+      "editorial_note": "An international rulemaking setting directly supports the contest over governance; ISA and UNCLOS documents remain the factual legal evidence."
     },
     {
       "scene_id": "scene_032",
@@ -604,378 +473,277 @@
       ],
       "min_duration_seconds": 14,
       "max_duration_seconds": 120,
-      "editorial_note": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits.",
-      "editorial_assignment": {
-        "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-        "slice_index": 42,
-        "narration_anchor": "The deepest part of this story is not the distance from the surface to the seabed.",
-        "replace_graphic_break": true,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "hold",
-        "role": "context",
-        "semantic_rationale": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits."
-      }
+      "editorial_note": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits."
     },
     {
       "scene_id": "scene_033",
       "role": "context",
-      "queries": ["deep sea plankton organisms darkness", "midwater marine life underwater"],
-      "fallback_queries": ["deep ocean organisms", "underwater plankton particles"],
+      "queries": [
+        "deep sea plankton organisms darkness",
+        "midwater marine life underwater"
+      ],
+      "fallback_queries": [
+        "deep ocean organisms",
+        "underwater plankton particles"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Real midwater life restores physical ecological context after the discharge evidence; it does not claim to depict organisms from a specific trial.",
-      "editorial_assignment": {
-        "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
-        "slice_index": 0,
-        "narration_anchor": "The strongest case for moving ahead is not that the damage will be harmless.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "context",
-        "semantic_rationale": "Real midwater life restores physical ecological context after the discharge evidence; it does not claim to depict organisms from a specific trial."
-      }
+      "editorial_note": "Real midwater life restores physical ecological context after the discharge evidence; it does not claim to depict organisms from a specific trial."
     },
     {
       "scene_id": "scene_034",
       "role": "human_context",
-      "queries": ["environmental scientists reviewing ocean data", "marine researchers meeting data"],
-      "fallback_queries": ["scientists reviewing research data", "environmental research team meeting"],
+      "queries": [
+        "environmental scientists reviewing ocean data",
+        "marine researchers meeting data"
+      ],
+      "fallback_queries": [
+        "scientists reviewing research data",
+        "environmental research team meeting"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A multidisciplinary review setting embodies a decision made with incomplete evidence without implying that the people shown advise a named government.",
-      "editorial_assignment": {
-        "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
-        "slice_index": 2,
-        "narration_anchor": "That is what makes the decision dangerous.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "human_context",
-        "semantic_rationale": "A multidisciplinary review setting embodies a decision made with incomplete evidence without implying that the people shown advise a named government."
-      }
+      "editorial_note": "A multidisciplinary review setting embodies a decision made with incomplete evidence without implying that the people shown advise a named government."
     },
     {
       "scene_id": "scene_035",
       "role": "human_context",
-      "queries": ["community near industrial mine landscape", "workers mining town environment"],
-      "fallback_queries": ["open pit mine workers", "industrial mine community"],
+      "queries": [
+        "community near industrial mine landscape",
+        "workers mining town environment"
+      ],
+      "fallback_queries": [
+        "open pit mine workers",
+        "industrial mine community"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Terrestrial mining and nearby people give the alternative forms of damage a human scale; the scene is not evidence for a named mine or quantified impact.",
-      "editorial_assignment": {
-        "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
-        "slice_index": 0,
-        "narration_anchor": "It is that the alternatives also carry damage, and that mineral dependence can become a national-security risk.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "pull",
-        "role": "human_context",
-        "semantic_rationale": "Terrestrial mining and nearby people give the alternative forms of damage a human scale; the scene is not evidence for a named mine or quantified impact."
-      }
+      "editorial_note": "Terrestrial mining and nearby people give the alternative forms of damage a human scale; the scene is not evidence for a named mine or quantified impact."
     },
     {
       "scene_id": "scene_036",
       "role": "human_context",
-      "queries": ["government policy science roundtable", "officials scientists policy meeting"],
-      "fallback_queries": ["public policy committee meeting", "experts government conference table"],
+      "queries": [
+        "government policy science roundtable",
+        "officials scientists policy meeting"
+      ],
+      "fallback_queries": [
+        "public policy committee meeting",
+        "experts government conference table"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A real policy table represents economics, technology, law and ecology moving at once without identifying a specific institution.",
-      "editorial_assignment": {
-        "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
-        "slice_index": 2,
-        "narration_anchor": "Instead, governments are being asked to make a precedent-setting decision while the economics, technology, law and ecology are all still moving.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_left",
-        "role": "human_context",
-        "semantic_rationale": "A real policy table represents economics, technology, law and ecology moving at once without identifying a specific institution."
-      }
+      "editorial_note": "A real policy table represents economics, technology, law and ecology moving at once without identifying a specific institution."
     },
     {
       "scene_id": "scene_037",
       "role": "context",
-      "queries": ["engineers evaluating industrial prototype", "industrial technology testing engineers"],
-      "fallback_queries": ["engineers inspecting machinery", "prototype testing laboratory team"],
+      "queries": [
+        "engineers evaluating industrial prototype",
+        "industrial technology testing engineers"
+      ],
+      "fallback_queries": [
+        "engineers inspecting machinery",
+        "prototype testing laboratory team"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Engineers evaluating a prototype distinguish technical capability from the threshold for an industrial decision.",
-      "editorial_assignment": {
-        "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
-        "slice_index": 4,
-        "narration_anchor": "It will answer what kind of uncertainty is enough to stop an industry.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "context",
-        "semantic_rationale": "Engineers evaluating a prototype distinguish technical capability from the threshold for an industrial decision."
-      }
+      "editorial_note": "Engineers evaluating a prototype distinguish technical capability from the threshold for an industrial decision."
     },
     {
       "scene_id": "scene_038",
       "role": "human_context",
-      "queries": ["international assembly delegates voting", "global governance conference delegates"],
-      "fallback_queries": ["international policy conference", "delegates government assembly"],
+      "queries": [
+        "international assembly delegates voting",
+        "global governance conference delegates"
+      ],
+      "fallback_queries": [
+        "international policy conference",
+        "delegates government assembly"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "An international assembly provides human governance context for common heritage; UNCLOS and ISA documents remain the legal evidence.",
-      "editorial_assignment": {
-        "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
-        "slice_index": 6,
-        "narration_anchor": "And it will test whether the phrase common heritage of mankind has practical meaning when the resource beneath it becomes strategically valuable.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "hold",
-        "role": "human_context",
-        "semantic_rationale": "An international assembly provides human governance context for common heritage; UNCLOS and ISA documents remain the legal evidence."
-      }
+      "editorial_note": "An international assembly provides human governance context for common heritage; UNCLOS and ISA documents remain the legal evidence."
     },
     {
       "scene_id": "scene_039",
       "role": "context",
-      "queries": ["battery materials science laboratory", "magnet technology research scientists"],
-      "fallback_queries": ["advanced materials laboratory", "battery research engineers"],
+      "queries": [
+        "battery materials science laboratory",
+        "magnet technology research scientists"
+      ],
+      "fallback_queries": [
+        "advanced materials laboratory",
+        "battery research engineers"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Materials research gives physical context to technology-driven demand uncertainty without asserting a particular breakthrough.",
-      "editorial_assignment": {
-        "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
-        "slice_index": 0,
-        "narration_anchor": "The most important outcome of this race may not be a mine.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "context",
-        "semantic_rationale": "Materials research gives physical context to technology-driven demand uncertainty without asserting a particular breakthrough."
-      }
+      "editorial_note": "Materials research gives physical context to technology-driven demand uncertainty without asserting a particular breakthrough."
     },
     {
       "scene_id": "scene_040",
       "role": "context",
-      "queries": ["industrial metal recycling processing", "electronics recycling factory metals"],
-      "fallback_queries": ["metal sorting recycling plant", "industrial recycling conveyor"],
+      "queries": [
+        "industrial metal recycling processing",
+        "electronics recycling factory metals"
+      ],
+      "fallback_queries": [
+        "metal sorting recycling plant",
+        "industrial recycling conveyor"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A real recycling process represents one partial alternative in the narration, not a complete substitute for new supply.",
-      "editorial_assignment": {
-        "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
-        "slice_index": 2,
-        "narration_anchor": "Recycling and diversified refining could weaken the security argument.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "context",
-        "semantic_rationale": "A real recycling process represents one partial alternative in the narration, not a complete substitute for new supply."
-      }
+      "editorial_note": "A real recycling process represents one partial alternative in the narration, not a complete substitute for new supply."
     },
     {
       "scene_id": "scene_041",
       "role": "human_context",
-      "queries": ["diplomatic trade negotiation meeting", "government officials negotiation table"],
-      "fallback_queries": ["international negotiation delegates", "policy bargaining meeting"],
+      "queries": [
+        "diplomatic trade negotiation meeting",
+        "government officials negotiation table"
+      ],
+      "fallback_queries": [
+        "international negotiation delegates",
+        "policy bargaining meeting"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Negotiators embody the bargaining leverage created by an unused option without assigning the scene to a named state.",
-      "editorial_assignment": {
-        "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
-        "slice_index": 4,
-        "narration_anchor": "But even an unused option changes power.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_left",
-        "role": "human_context",
-        "semantic_rationale": "Negotiators embody the bargaining leverage created by an unused option without assigning the scene to a named state."
-      }
+      "editorial_note": "Negotiators embody the bargaining leverage created by an unused option without assigning the scene to a named state."
     },
     {
       "scene_id": "scene_042",
       "role": "context",
-      "queries": ["ocean survey vessel mapping equipment", "marine research ship sonar survey"],
-      "fallback_queries": ["scientific vessel ocean mapping", "survey ship control room"],
+      "queries": [
+        "ocean survey vessel mapping equipment",
+        "marine research ship sonar survey"
+      ],
+      "fallback_queries": [
+        "scientific vessel ocean mapping",
+        "survey ship control room"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition.",
-      "editorial_assignment": {
-        "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
-        "slice_index": 6,
-        "narration_anchor": "That is why the contest is beginning before commercial production.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "pull",
-        "role": "context",
-        "semantic_rationale": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition."
-      }
+      "editorial_note": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition."
     },
     {
       "scene_id": "scene_043",
       "role": "human_context",
-      "queries": ["working ships busy industrial port", "maritime crews port operations"],
-      "fallback_queries": ["vessels harbor workers", "ships industrial harbor"],
+      "queries": [
+        "working ships busy industrial port",
+        "maritime crews port operations"
+      ],
+      "fallback_queries": [
+        "vessels harbor workers",
+        "ships industrial harbor"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Visible industrial momentum at a port supports the warning that preparation can be mistaken for inevitability.",
-      "editorial_assignment": {
-        "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
-        "slice_index": 8,
-        "narration_anchor": "And the danger is that the world may mistake momentum for inevitability.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "hold",
-        "role": "human_context",
-        "semantic_rationale": "Visible industrial momentum at a port supports the warning that preparation can be mistaken for inevitability."
-      }
+      "editorial_note": "Visible industrial momentum at a port supports the warning that preparation can be mistaken for inevitability."
     },
     {
       "scene_id": "scene_044",
       "role": "context",
-      "queries": ["factory production line stopped workers", "industrial supply disruption factory"],
-      "fallback_queries": ["factory workers machinery delay", "manufacturing plant idle"],
+      "queries": [
+        "factory production line stopped workers",
+        "industrial supply disruption factory"
+      ],
+      "fallback_queries": [
+        "factory workers machinery delay",
+        "manufacturing plant idle"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A disrupted production environment gives concentrated mineral supply risk a human and industrial scale without claiming a specific outage.",
-      "editorial_assignment": {
-        "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
-        "slice_index": 0,
-        "narration_anchor": "But delay is not neutral either.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "context",
-        "semantic_rationale": "A disrupted production environment gives concentrated mineral supply risk a human and industrial scale without claiming a specific outage."
-      }
+      "editorial_note": "A disrupted production environment gives concentrated mineral supply risk a human and industrial scale without claiming a specific outage."
     },
     {
       "scene_id": "scene_045",
       "role": "human_context",
-      "queries": ["international law delegates rulemaking meeting", "government officials treaty negotiation"],
-      "fallback_queries": ["international policy delegates conference", "officials legal negotiation"],
+      "queries": [
+        "international law delegates rulemaking meeting",
+        "government officials treaty negotiation"
+      ],
+      "fallback_queries": [
+        "international policy delegates conference",
+        "officials legal negotiation"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Delegates in a formal negotiation provide governance context for the cost of delayed common rules.",
-      "editorial_assignment": {
-        "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
-        "slice_index": 2,
-        "narration_anchor": "Every year without agreed international rules gives national alternatives more room to become the default.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "human_context",
-        "semantic_rationale": "Delegates in a formal negotiation provide governance context for the cost of delayed common rules."
-      }
+      "editorial_note": "Delegates in a formal negotiation provide governance context for the cost of delayed common rules."
     },
     {
       "scene_id": "scene_046",
       "role": "human_context",
-      "queries": ["marine biologists collecting ocean samples", "research vessel scientists water sampling"],
-      "fallback_queries": ["ocean scientists sample collection", "marine ecology field research"],
+      "queries": [
+        "marine biologists collecting ocean samples",
+        "research vessel scientists water sampling"
+      ],
+      "fallback_queries": [
+        "ocean scientists sample collection",
+        "marine ecology field research"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Baseline field sampling directly visualises the work required before disturbance without claiming a specific expedition or result.",
-      "editorial_assignment": {
-        "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
-        "slice_index": 4,
-        "narration_anchor": "And every year without baseline ecological research makes it harder to know what was lost after industrial activity begins.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "pull",
-        "role": "human_context",
-        "semantic_rationale": "Baseline field sampling directly visualises the work required before disturbance without claiming a specific expedition or result."
-      }
+      "editorial_note": "Baseline field sampling directly visualises the work required before disturbance without claiming a specific expedition or result."
     },
     {
       "scene_id": "scene_047",
       "role": "human_context",
-      "queries": ["coastal industrial community workers", "port town people industry"],
-      "fallback_queries": ["industrial community people", "coastal workers harbor"],
+      "queries": [
+        "coastal industrial community workers",
+        "port town people industry"
+      ],
+      "fallback_queries": [
+        "industrial community people",
+        "coastal workers harbor"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "People living and working near industry give the distribution of risk a grounded human context without standing for a named affected community.",
-      "editorial_assignment": {
-        "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
-        "slice_index": 6,
-        "narration_anchor": "It is between different forms of risk, distributed across different people, places and generations.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_left",
-        "role": "human_context",
-        "semantic_rationale": "People living and working near industry give the distribution of risk a grounded human context without standing for a named affected community."
-      }
+      "editorial_note": "People living and working near industry give the distribution of risk a grounded human context without standing for a named affected community."
     },
     {
       "scene_id": "scene_048",
       "role": "human_context",
-      "queries": ["young marine scientists ocean research", "students marine biology fieldwork"],
-      "fallback_queries": ["young researchers ocean science", "marine science students laboratory"],
+      "queries": [
+        "young marine scientists ocean research",
+        "students marine biology fieldwork"
+      ],
+      "fallback_queries": [
+        "young researchers ocean science",
+        "marine science students laboratory"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A new generation doing ocean research provides a restrained image for inherited precedent without sentimentalising the claim.",
-      "editorial_assignment": {
-        "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
-        "slice_index": 0,
-        "narration_anchor": "And future generations may inherit the precedent.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "drift_right",
-        "role": "human_context",
-        "semantic_rationale": "A new generation doing ocean research provides a restrained image for inherited precedent without sentimentalising the claim."
-      }
+      "editorial_note": "A new generation doing ocean research provides a restrained image for inherited precedent without sentimentalising the claim."
     },
     {
       "scene_id": "scene_049",
       "role": "context",
-      "queries": ["research vessel departing open ocean", "scientific ship sailing sea"],
-      "fallback_queries": ["ocean expedition vessel departure", "survey ship open ocean"],
+      "queries": [
+        "research vessel departing open ocean",
+        "scientific ship sailing sea"
+      ],
+      "fallback_queries": [
+        "ocean expedition vessel departure",
+        "survey ship open ocean"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A research vessel returning to the ocean supports the announced 2027 return while remaining explicitly generic contextual footage.",
-      "editorial_assignment": {
-        "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
-        "slice_index": 2,
-        "narration_anchor": "In 2027, Japan plans to return to the Pacific for a longer production-chain test.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "push",
-        "role": "context",
-        "semantic_rationale": "A research vessel returning to the ocean supports the announced 2027 return while remaining explicitly generic contextual footage."
-      }
+      "editorial_note": "A research vessel returning to the ocean supports the announced 2027 return while remaining explicitly generic contextual footage."
     },
     {
       "scene_id": "scene_050",
       "role": "human_context",
-      "queries": ["government maritime regulatory hearing", "officials public policy hearing table"],
-      "fallback_queries": ["government committee officials meeting", "regulatory agency hearing"],
+      "queries": [
+        "government maritime regulatory hearing",
+        "officials public policy hearing table"
+      ],
+      "fallback_queries": [
+        "government committee officials meeting",
+        "regulatory agency hearing"
+      ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden.",
-      "editorial_assignment": {
-        "claim_id": "CLM_007_US_PARALLEL_ROUTE",
-        "slice_index": 4,
-        "narration_anchor": "In 2026, NOAA revised its process so exploration and commercial recovery applications could move through a consolidated review structure.",
-        "replace_graphic_break": false,
-        "expected_replacement_seconds": 7.5,
-        "trim_in_ratio": 0,
-        "motion": "hold",
-        "role": "human_context",
-        "semantic_rationale": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden."
-      }
+      "editorial_note": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden."
     },
     {
       "scene_id": "scene_051",
