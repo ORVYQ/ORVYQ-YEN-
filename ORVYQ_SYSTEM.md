@@ -257,7 +257,7 @@ After every meaningful discovery, update the live acceptance record and change l
 
 Project: `002-the-new-war-beneath-the-ocean`
 
-Branch: `agent/002-deep-sea-cold-war`
+Branch: `main`
 
 Current status (last verified 2026-07-30):
 
@@ -300,6 +300,10 @@ Current status (last verified 2026-07-30):
 - Commit `5430b0e` contains the corrected asset plan and shared regression
   gate. A new immutable Candidate Validation artifact for this commit is still
   required before another review can be dispatched.
+- PR `#4` joined the previously divergent histories without rewriting either
+  one and merged the complete working system into `main` as `59e608d`. The
+  default branch now contains the real pipeline rather than the placeholder
+  README-only tree.
 - A blank `003-isolation-probe` scaffold was generated twice in clean
   temporary roots. Both runs produced the same 19 generic files after
   normalising the creation timestamp, with no Project 001 or Project 002
