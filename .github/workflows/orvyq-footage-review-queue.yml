@@ -13,12 +13,12 @@ on:
       - "claude/**"
     paths:
       - ".github/workflows/orvyq-footage-review-queue.yml"
-      - "scripts/orvyq_resolve_pauses.mjs"
-      - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
       - "projects/*/assets/footage_acquisition.runtime.json"
       - "projects/*/qa/footage_contact_sheets.json"
       - "projects/*/config/editorial_asset_plan.json"
+      - "projects/*/direction/motion_hook.json"
+      - "projects/*/direction/editorial_blueprint.json"
       - "projects/*/direction/visual_rebalance_plan.json"
       - "projects/*/research/visual_asset_requests.json"
   pull_request:
@@ -26,12 +26,12 @@ on:
       - main
     paths:
       - ".github/workflows/orvyq-footage-review-queue.yml"
-      - "scripts/orvyq_resolve_pauses.mjs"
-      - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
       - "projects/*/assets/footage_acquisition.runtime.json"
       - "projects/*/qa/footage_contact_sheets.json"
       - "projects/*/config/editorial_asset_plan.json"
+      - "projects/*/direction/motion_hook.json"
+      - "projects/*/direction/editorial_blueprint.json"
       - "projects/*/direction/visual_rebalance_plan.json"
       - "projects/*/research/visual_asset_requests.json"
 
@@ -66,7 +66,7 @@ jobs:
             if [ "${{ github.event_name }}" = "push" ]; then
               CHANGED="$(
                 git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                  grep -E '^projects/[^/]+/(assets/footage_acquisition\.runtime|qa/footage_contact_sheets|config/editorial_asset_plan|direction/visual_rebalance_plan|research/visual_asset_requests)\.json$' |
+                  grep -E '^projects/[^/]+/(assets/footage_acquisition\.runtime|qa/footage_contact_sheets|config/editorial_asset_plan|direction/(motion_hook|editorial_blueprint|visual_rebalance_plan)|research/visual_asset_requests)\.json$' |
                   head -n 1 || true
               )"
             else
@@ -92,27 +92,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Resolve pauses and regenerate full-production blueprint
-        shell: bash
-        run: |
-          set -euo pipefail
-          node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
-          node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
-
       - name: Build claim-bound footage review queue
         run: node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
 
-      - name: Commit regenerated blueprint and review queue
+      - name: Commit review queue
         shell: bash
         run: |
           set -euo pipefail
-          git add \
-            "projects/$PROJECT_ID/direction/resolved_pause_plan.json" \
-            "projects/$PROJECT_ID/direction/editorial_blueprint.json" \
-            "projects/$PROJECT_ID/direction/editorial_pause_map.json"
           git add -f "projects/$PROJECT_ID/qa/footage_review_queue.json"
           if git diff --cached --quiet; then
-            echo "Blueprint and review queue unchanged."
+            echo "Review queue unchanged."
             exit 0
           fi
           git config user.name "orvyq-footage-review-bot"
@@ -127,8 +116,6 @@ jobs:
           name: orvyq-footage-review-queue-${{ env.PROJECT_ID }}-${{ github.run_id }}
           retention-days: 30
           path: |
-            projects/${{ env.PROJECT_ID }}/direction/resolved_pause_plan.json
-            projects/${{ env.PROJECT_ID }}/direction/editorial_blueprint.json
             projects/${{ env.PROJECT_ID }}/qa/footage_review_queue.json
             projects/${{ env.PROJECT_ID }}/qa/footage_contact_sheets.json
             projects/${{ env.PROJECT_ID }}/qa/footage-contact-sheets/*.jpg
