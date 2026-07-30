@@ -1,0 +1,97 @@
+name: ORVYQ Footage Review Queue
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+  push:
+    branches:
+      - "agent/**"
+      - "claude/**"
+    paths:
+      - "scripts/orvyq_prepare_footage_review_queue.mjs"
+      - "projects/*/assets/footage_acquisition.runtime.json"
+      - "projects/*/qa/footage_contact_sheets.json"
+      - "projects/*/config/editorial_asset_plan.json"
+      - "projects/*/direction/visual_rebalance_plan.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: orvyq-footage-review-queue-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          lfs: false
+          fetch-depth: 2
+
+      - name: Resolve selected project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PROJECT_ID="${{ inputs.project_id }}"
+          else
+            CHANGED="$(
+              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
+                grep -E '^projects/[^/]+/(assets/footage_acquisition\.runtime|qa/footage_contact_sheets|config/editorial_asset_plan|direction/visual_rebalance_plan)\.json$' |
+                head -n 1 || true
+            )"
+            if [ -n "$CHANGED" ]; then
+              PROJECT_ID="$(cut -d/ -f2 <<<"$CHANGED")"
+            else
+              mapfile -t CANDIDATES < <(find projects -path '*/qa/footage_contact_sheets.json' -type f | cut -d/ -f2 | sort -u)
+              test "${#CANDIDATES[@]}" -eq 1 || { echo "::error::Could not resolve exactly one footage review project."; exit 1; }
+              PROJECT_ID="${CANDIDATES[0]}"
+            fi
+          fi
+          test -f "projects/$PROJECT_ID/qa/footage_contact_sheets.json"
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build claim-bound footage review queue
+        run: node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
+
+      - name: Commit review queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add "projects/$PROJECT_ID/qa/footage_review_queue.json"
+          if git diff --cached --quiet; then
+            echo "Review queue unchanged."
+            exit 0
+          fi
+          git config user.name "orvyq-footage-review-bot"
+          git config user.email "orvyq-footage-review-bot@users.noreply.github.com"
+          git commit -m "Prepare claim-bound footage review queue"
+          git pull --rebase origin "${{ github.ref_name }}"
+          git push origin "HEAD:${{ github.ref_name }}"
+
+      - name: Upload review queue and contact sheets
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-footage-review-queue-${{ env.PROJECT_ID }}-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            projects/${{ env.PROJECT_ID }}/qa/footage_review_queue.json
+            projects/${{ env.PROJECT_ID }}/qa/footage_contact_sheets.json
+            projects/${{ env.PROJECT_ID }}/qa/footage-contact-sheets/*.jpg
+          if-no-files-found: error
