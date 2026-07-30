@@ -20,25 +20,40 @@ on:
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
       - "projects/*/research/visual_asset_reviews.json"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/orvyq-footage-acquisition.yml"
+      - "scripts/orvyq_acquire_footage.mjs"
+      - "scripts/orvyq_acquire_footage_demand.mjs"
+      - "scripts/orvyq_fail_closed_pending_footage.mjs"
+      - "scripts/orvyq_generate_footage_contact_sheets.mjs"
+      - "projects/*/research/footage_acquisition_plan.json"
+      - "projects/*/research/footage_semantic_constraints.json"
+      - "projects/*/research/visual_asset_reviews.json"
 
 permissions:
   contents: write
   issues: write
 
 concurrency:
-  group: orvyq-footage-acquisition-${{ github.ref }}
+  group: orvyq-footage-acquisition-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
   acquire:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
       PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+      TARGET_BRANCH: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
     steps:
       - name: Checkout exact branch
         uses: actions/checkout@v4
         with:
+          ref: ${{ env.TARGET_BRANCH }}
           lfs: false
           fetch-depth: 2
 
@@ -50,11 +65,15 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PROJECT_ID="${{ inputs.project_id }}"
           else
-            CHANGED_INPUT="$(
-              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints|visual_asset_reviews)\.json$' |
-                head -n 1 || true
-            )"
+            if [ "${{ github.event_name }}" = "push" ]; then
+              CHANGED_INPUT="$(
+                git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
+                  grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints|visual_asset_reviews)\.json$' |
+                  head -n 1 || true
+              )"
+            else
+              CHANGED_INPUT=""
+            fi
             if [ -n "$CHANGED_INPUT" ]; then
               PROJECT_ID="$(jq -r '.project_id' "$CHANGED_INPUT")"
               if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
@@ -158,8 +177,8 @@ jobs:
             exit 0
           fi
           git commit -m "Acquire demand-led licensed footage for $PROJECT_ID"
-          git pull --rebase origin "${{ github.ref_name }}"
-          git push origin "HEAD:${{ github.ref_name }}"
+          git pull --rebase origin "$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
 
       - name: Upload acquisition diagnostics
         if: always()
@@ -191,14 +210,14 @@ jobs:
         run: |
           PROJECT_LABEL="${PROJECT_ID:-unresolved}"
           DETAILS="$(tail -n 20 footage-acquisition.log 2>/dev/null || true)"
-          BODY="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${{ github.ref_name }}\`."
+          BODY="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${TARGET_BRANCH}\`."
           if [ -n "$DETAILS" ]; then
             BODY="${BODY}"$'\n\n```text\n'"${DETAILS}"$'\n```'
           fi
-          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
+          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$TARGET_BRANCH" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$PR_NUMBER" ]; then
             gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
               echo "::warning::Could not post the acquisition result to PR #$PR_NUMBER; the uploaded diagnostics remain authoritative."
           else
-            echo "No active pull request found for $GITHUB_REF_NAME; skipping PR report."
+            echo "No active pull request found for $TARGET_BRANCH; skipping PR report."
           fi
