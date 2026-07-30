@@ -13,12 +13,18 @@ on:
       - "claude/**"
     paths:
       - ".github/workflows/orvyq-footage-acquisition.yml"
+      - "schemas/footage_visual_decisions.schema.json"
+      - "scripts/lib/orvyq-footage-visual-decisions.mjs"
+      - "scripts/lib/orvyq-footage-visual-decisions.test.mjs"
+      - "scripts/orvyq_apply_footage_visual_decisions.mjs"
+      - "scripts/orvyq_footage_visual_decisions.schema.test.mjs"
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
       - "scripts/orvyq_fail_closed_pending_footage.mjs"
       - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
+      - "projects/*/direction/motion_hook.json"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
       - "projects/*/research/footage_constraint_overrides.json"
@@ -30,12 +36,18 @@ on:
       - main
     paths:
       - ".github/workflows/orvyq-footage-acquisition.yml"
+      - "schemas/footage_visual_decisions.schema.json"
+      - "scripts/lib/orvyq-footage-visual-decisions.mjs"
+      - "scripts/lib/orvyq-footage-visual-decisions.test.mjs"
+      - "scripts/orvyq_apply_footage_visual_decisions.mjs"
+      - "scripts/orvyq_footage_visual_decisions.schema.test.mjs"
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
       - "scripts/orvyq_fail_closed_pending_footage.mjs"
       - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
+      - "projects/*/direction/motion_hook.json"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
       - "projects/*/research/footage_constraint_overrides.json"
@@ -78,7 +90,7 @@ jobs:
             if [ "${{ github.event_name }}" = "push" ]; then
               CHANGED_INPUT="$(
                 git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                  grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|footage_visual_decisions|visual_asset_requests|visual_asset_reviews)\.json$' |
+                  grep -E '^projects/[^/]+/(direction/motion_hook|research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|footage_visual_decisions|visual_asset_requests|visual_asset_reviews))\.json$' |
                   head -n 1 || true
               )"
             else
@@ -86,10 +98,6 @@ jobs:
             fi
             if [ -n "$CHANGED_INPUT" ]; then
               PROJECT_ID="$(jq -r '.project_id' "$CHANGED_INPUT")"
-              if [ -z "$PROJECT_ID" ] || [ "$PROJECT_ID" = "null" ]; then
-                echo "::error::Changed footage input $CHANGED_INPUT does not declare a valid project_id."
-                exit 1
-              fi
             else
               mapfile -t CANDIDATES < <(
                 find projects -path '*/research/footage_acquisition_plan.json' -type f -print0 |
@@ -99,14 +107,17 @@ jobs:
                     reviews="$root/research/visual_asset_reviews.json"
                     planned="$(jq '.assets | length' "$plan")"
                     actual="$(test -f "$runtime" && jq '.records | length' "$runtime" || echo 0)"
-                    pending="$(test -f "$reviews" && jq '.pending_frame_review_scene_ids | length' "$reviews" || echo 0)"
-                    if [ "$actual" -lt "$planned" ] || [ "$pending" -gt 0 ]; then jq -r '.project_id' "$plan"; fi
+                    rejected="$(test -f "$reviews" && jq '.summary.rejected_from_metadata // 0' "$reviews" || echo 0)"
+                    pending="$(test -f "$reviews" && jq '.summary.pending_frame_review // 0' "$reviews" || echo 0)"
+                    if [ "$actual" -lt "$planned" ] || [ "$rejected" -gt 0 ] || [ "$pending" -gt 0 ]; then
+                      jq -r '.project_id' "$plan"
+                    fi
                   done | sort -u
               )
-              if [ "${#CANDIDATES[@]}" -ne 1 ]; then
-                echo "::error::Could not resolve exactly one project needing footage acquisition or semantic revalidation; found ${#CANDIDATES[@]}."
+              test "${#CANDIDATES[@]}" -eq 1 || {
+                echo "::error::Could not resolve exactly one project needing footage work; found ${#CANDIDATES[@]}."
                 exit 1
-              fi
+              }
               PROJECT_ID="${CANDIDATES[0]}"
             fi
           fi
@@ -115,27 +126,51 @@ jobs:
           echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
           echo "Resolved project: $PROJECT_ID"
 
-      - name: Determine acquisition or review-only mode
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build current claim-bound review queue
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
+
+      - name: Apply byte-bound visual decisions
+        shell: bash
+        run: |
+          set -euo pipefail
+          DECISIONS="projects/$PROJECT_ID/research/footage_visual_decisions.json"
+          if [ -f "$DECISIONS" ]; then
+            node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee footage-decisions.log
+          else
+            echo "No byte-bound visual decisions exist yet." | tee footage-decisions.log
+          fi
+
+      - name: Determine acquisition requirement
         shell: bash
         run: |
           set -euo pipefail
           ROOT="projects/$PROJECT_ID"
-          PLAN="$ROOT/research/footage_acquisition_plan.json"
-          RUNTIME="$ROOT/assets/footage_acquisition.runtime.json"
-          CONTACTS="$ROOT/qa/footage_contact_sheets.json"
-          DECISIONS="$ROOT/research/footage_visual_decisions.json"
-          PLANNED="$(jq '.assets | length' "$PLAN")"
-          ACTUAL="$(test -f "$RUNTIME" && jq '.records | length' "$RUNTIME" || echo 0)"
-          if [ "${{ github.event_name }}" != "workflow_dispatch" ] && [ -f "$CONTACTS" ] && [ "$ACTUAL" -eq "$PLANNED" ] && [ ! -f "$DECISIONS" ]; then
-            echo "REVIEW_ONLY=true" >> "$GITHUB_ENV"
-            echo "Existing complete footage pool detected; regenerating blueprint/review queue without reacquisition."
+          PLANNED="$(jq '.assets | length' "$ROOT/research/footage_acquisition_plan.json")"
+          ACTUAL="$(jq '.records | length' "$ROOT/assets/footage_acquisition.runtime.json")"
+          REJECTED="$(jq '.summary.rejected_from_metadata // 0' "$ROOT/research/visual_asset_reviews.json")"
+          if [ "$ACTUAL" -lt "$PLANNED" ] || [ "$REJECTED" -gt 0 ]; then
+            echo "NEEDS_ACQUISITION=true" >> "$GITHUB_ENV"
+            echo "Reacquisition required: planned=$PLANNED actual=$ACTUAL rejected=$REJECTED"
           else
-            echo "REVIEW_ONLY=false" >> "$GITHUB_ENV"
-            echo "Acquisition/reacquisition mode selected."
+            echo "NEEDS_ACQUISITION=false" >> "$GITHUB_ENV"
+            echo "No reacquisition required; only review reconciliation will run."
           fi
 
       - name: Apply project-authored footage constraint overrides
-        if: env.REVIEW_ONLY != 'true'
+        if: env.NEEDS_ACQUISITION == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -150,50 +185,65 @@ jobs:
           mv "$BASE.tmp" "$BASE"
 
       - name: Verify Pexels credential exists
-        if: env.REVIEW_ONLY != 'true'
+        if: env.NEEDS_ACQUISITION == 'true'
         run: |
           set -euo pipefail
           test -n "$PEXELS_API_KEY" || { echo "::error::Repository secret PEXELS_API_KEY is missing."; exit 1; }
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
       - name: Install media probe
-        if: env.REVIEW_ONLY != 'true'
+        if: env.NEEDS_ACQUISITION == 'true'
         run: |
           set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends ffmpeg
 
-      - name: Acquire missing licensed contextual footage and resolve editorial targets
-        if: env.REVIEW_ONLY != 'true'
+      - name: Reacquire rejected licensed contextual footage
+        if: env.NEEDS_ACQUISITION == 'true'
         shell: bash
         run: |
           set -euo pipefail
           node scripts/orvyq_acquire_footage_demand.mjs --project-id="$PROJECT_ID" 2>&1 | tee footage-acquisition.log
+          node scripts/orvyq_fail_closed_pending_footage.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_generate_footage_contact_sheets.mjs --project-id="$PROJECT_ID"
 
-      - name: Fail closed every pending footage approval
-        if: env.REVIEW_ONLY != 'true'
-        run: node scripts/orvyq_fail_closed_pending_footage.mjs --project-id="$PROJECT_ID"
+      - name: Rebuild queue from replacement bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
+          if [ -f "projects/$PROJECT_ID/research/footage_visual_decisions.json" ]; then
+            node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee -a footage-decisions.log
+          fi
+          node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
 
-      - name: Generate byte-bound footage contact sheets
-        if: env.REVIEW_ONLY != 'true'
-        run: node scripts/orvyq_generate_footage_contact_sheets.mjs --project-id="$PROJECT_ID"
+      - name: Resolve static semantic QA state
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="projects/$PROJECT_ID"
+          REJECTED="$(jq '.summary.rejected_from_metadata // 0' "$ROOT/research/visual_asset_reviews.json")"
+          PENDING="$(jq '.summary.pending_frame_review // 0' "$ROOT/research/visual_asset_reviews.json")"
+          BLOCKED_REQUESTS="$(jq '[.requests[] | select(.status != "ready")] | length' "$ROOT/research/visual_asset_requests.json")"
+          PLAN_STATUS="$(jq -r '.status' "$ROOT/direction/visual_rebalance_plan.json")"
+          if [ "$REJECTED" -eq 0 ] && [ "$PENDING" -eq 0 ] && [ "$BLOCKED_REQUESTS" -eq 0 ] && [ "$PLAN_STATUS" = "materialized" ]; then
+            echo "READY_FOR_STATIC_QA=true" >> "$GITHUB_ENV"
+          else
+            echo "READY_FOR_STATIC_QA=false" >> "$GITHUB_ENV"
+          fi
+          printf 'rejected=%s pending=%s blocked_requests=%s plan=%s\n' "$REJECTED" "$PENDING" "$BLOCKED_REQUESTS" "$PLAN_STATUS" | tee footage-review-state.log
 
-      - name: Regenerate full-production blueprint from current asset assignments
-        run: node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
-
-      - name: Build claim-bound footage review queue
-        run: node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
+      - name: Run final local footage and semantic audits
+        if: env.READY_FOR_STATIC_QA == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_validate_local_footage.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_footage_semantic_review_audit.mjs --project-id="$PROJECT_ID"
 
       - name: Verify compact footage is stored as normal Git media
-        if: env.REVIEW_ONLY != 'true'
+        if: env.NEEDS_ACQUISITION == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -210,7 +260,7 @@ jobs:
             fi
           done < <(find "projects/$PROJECT_ID/assets/footage" -maxdepth 1 -type f -name '*.mp4' -print0)
 
-      - name: Commit footage state, regenerated blueprint and review queue
+      - name: Commit footage state and review queue
         shell: bash
         run: |
           set -euo pipefail
@@ -226,21 +276,25 @@ jobs:
             "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
             "projects/$PROJECT_ID/research/footage_semantic_constraints.json" \
             "projects/$PROJECT_ID/research/footage_constraint_overrides.json" \
+            "projects/$PROJECT_ID/research/footage_visual_decisions.json" \
             "projects/$PROJECT_ID/research/visual_asset_requests.json" \
             "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
             "projects/$PROJECT_ID/config/editorial_asset_plan.json" \
+            "projects/$PROJECT_ID/direction/motion_hook.json" \
+            "projects/$PROJECT_ID/direction/visual_rebalance_plan.json" \
             "projects/$PROJECT_ID/direction/editorial_blueprint.json" \
             "projects/$PROJECT_ID/direction/editorial_pause_map.json"
+          test ! -f "projects/$PROJECT_ID/qa/footage_semantic_review_audit.json" || git add "projects/$PROJECT_ID/qa/footage_semantic_review_audit.json"
           git config user.name "orvyq-footage-bot"
           git config user.email "orvyq-footage-bot@users.noreply.github.com"
           if git diff --cached --quiet; then
             echo "Footage state and review queue unchanged; nothing to commit."
             exit 0
           fi
-          if [ "$REVIEW_ONLY" = "true" ]; then
-            git commit -m "Regenerate claim-bound footage review queue"
+          if [ "$NEEDS_ACQUISITION" = "true" ]; then
+            git commit -m "Reacquire rejected claim-bound footage for $PROJECT_ID"
           else
-            git commit -m "Acquire demand-led licensed footage for $PROJECT_ID"
+            git commit -m "Reconcile byte-bound footage review for $PROJECT_ID"
           fi
           git pull --rebase origin "$TARGET_BRANCH"
           git push origin "HEAD:$TARGET_BRANCH"
@@ -253,12 +307,17 @@ jobs:
           retention-days: 30
           path: |
             footage-acquisition.log
+            footage-decisions.log
+            footage-review-state.log
             projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_constraint_overrides.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_visual_decisions.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_requests.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_reviews.json
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
+            projects/${{ steps.project.outputs.project_id }}/direction/motion_hook.json
+            projects/${{ steps.project.outputs.project_id }}/direction/visual_rebalance_plan.json
             projects/${{ steps.project.outputs.project_id }}/direction/editorial_blueprint.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
             projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
@@ -266,10 +325,11 @@ jobs:
             projects/${{ steps.project.outputs.project_id }}/qa/local_assets.provenance.json
             projects/${{ steps.project.outputs.project_id }}/qa/footage_contact_sheets.json
             projects/${{ steps.project.outputs.project_id }}/qa/footage_review_queue.json
+            projects/${{ steps.project.outputs.project_id }}/qa/footage_semantic_review_audit.json
             projects/${{ steps.project.outputs.project_id }}/qa/footage-contact-sheets/*.jpg
           if-no-files-found: warn
 
-      - name: Report acquisition result on the active pull request
+      - name: Report footage preparation on the active pull request
         if: always()
         shell: bash
         env:
@@ -278,15 +338,13 @@ jobs:
           PROJECT_ID: ${{ steps.project.outputs.project_id }}
         run: |
           PROJECT_LABEL="${PROJECT_ID:-unresolved}"
-          DETAILS="$(tail -n 20 footage-acquisition.log 2>/dev/null || true)"
-          BODY="Footage preparation finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${TARGET_BRANCH}\`. Mode: \`${REVIEW_ONLY:-unknown}\`."
+          DETAILS="$(cat footage-review-state.log 2>/dev/null || tail -n 20 footage-acquisition.log 2>/dev/null || true)"
+          BODY="Footage preparation finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${TARGET_BRANCH}\`. Reacquisition: \`${NEEDS_ACQUISITION:-unknown}\`."
           if [ -n "$DETAILS" ]; then
             BODY="${BODY}"$'\n\n```text\n'"${DETAILS}"$'\n```'
           fi
           PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$TARGET_BRANCH" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$PR_NUMBER" ]; then
             gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
-              echo "::warning::Could not post the footage preparation result to PR #$PR_NUMBER; the uploaded diagnostics remain authoritative."
-          else
-            echo "No active pull request found for $TARGET_BRANCH; skipping PR report."
+              echo "::warning::Could not post the footage preparation result to PR #$PR_NUMBER."
           fi
