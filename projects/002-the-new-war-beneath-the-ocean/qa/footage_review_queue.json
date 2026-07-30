@@ -1,0 +1,1308 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "generated_at": "2026-07-30T21:07:53.630Z",
+  "pending_review_count": 49,
+  "entries_with_exact_uses": 27,
+  "entries": [
+    {
+      "scene_id": "scene_001",
+      "asset_path": "assets/footage/scene_001_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_WALTON_SMITH_ROV_DEPLOYMENT_2024",
+      "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/24pr-usvi-biotech-features-perfect-dive/",
+      "creator": "Exploration of Deepwater Habitats off Puerto Rico and the U.S. Virgin Islands for Biotechnology Potential",
+      "asset_sha256": "42e20b2d517bafd26316bb036873f2a6b062cd1776f4d74583304e8a8ca07d51",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_001.jpg",
+      "contact_sheet_sha256": "347abb37ebd1b5988416369358d852055045caac0d2f0c8b2c218662d7abfbc6",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.051367,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Verified scientists launching an ROV from Research Vessel F.G. Walton Smith; use only for human-scale field operations and never identify it as Chikyu.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_002",
+      "asset_path": "assets/footage/scene_002_c4c90d72f299c6b6917d1d5e.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "32780340",
+      "source_page_url": "https://www.pexels.com/video/tugboat-assisting-cargo-ship-in-scenic-seascape-32780340/",
+      "creator": "Sururi Ballıdağ Director",
+      "asset_sha256": "8601753e6261d429160862b420a5bf7f437d4ca2cf30c16065caa41ab225dcf4",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_002.jpg",
+      "contact_sheet_sha256": "ade49b47268252c313da1203c73b7b5522f94b0458930678fa210b01ede00ad7",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 14,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Surface scale and isolation.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "The expedition proved a difficult offshore lift, not a complete commercial mine.",
+          "semantic_rationale": "A rough-ocean working boat restores surface scale and operational exposure without identifying the generic vessel as Chikyu or as a mining ship."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_003",
+      "asset_path": "assets/footage/scene_003_433610a0ff3a79cb9ea16cee.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "11240197",
+      "source_page_url": "https://www.pexels.com/video/drone-footage-of-a-speedboat-in-the-ocean-11240197/",
+      "creator": "Marian Croitoru",
+      "asset_sha256": "c02e65c8fd7546d5cdcca80997caa7c75e41eb4708028346e8286105012002c1",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_003.jpg",
+      "contact_sheet_sha256": "05c11b86178b51a98184aef9bb32f343c56777f635db8d063be58f7821aeeb01",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Deep-ocean atmosphere only; do not label as the Clarion-Clipperton Zone.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_004",
+      "asset_path": "assets/footage/scene_004_a8d00eae8b2843138618e4e4.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "9654558",
+      "source_page_url": "https://www.pexels.com/video/an-oil-tanker-traveling-across-the-sea-9654558/",
+      "creator": "Zahid Nisar",
+      "asset_sha256": "1989d00f1fb48a02221d791c0e87e77fac4e6510aa3adce9de9606b7a8f85219",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_004.jpg",
+      "contact_sheet_sha256": "205a02b7b0d1056481eae8382e304c723b39a447c219f8afc1d3364005800dc4",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 9.926583,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Visible offshore industrial hardware establishes physical scale without claiming that the depicted platform or system is Japan's riser.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_005",
+      "asset_path": "assets/footage/scene_005_ac07b77f7d29af70fd0b9410.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "31751360",
+      "source_page_url": "https://www.pexels.com/video/operator-uses-industrial-control-panel-for-machinery-31751360/",
+      "creator": "Dominik Zítka",
+      "asset_sha256": "71006188aee0f3e4f07bbfa23fb19084731ee2d35fd4c8184493ff2fe252ab35",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_005.jpg",
+      "contact_sheet_sha256": "526a76776a443cc448925621fb8a05b4d781f94acab70309d5b3ce70eeefbeb2",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Human monitoring and technical decision-making.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_006",
+      "asset_path": "assets/footage/scene_006_c073342f5780c6939e8dff0a.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "32305283",
+      "source_page_url": "https://www.pexels.com/video/efficient-motorcycle-engine-assembly-in-factory-32305283/",
+      "creator": "Emrul Kausar Emon",
+      "asset_sha256": "14210bcf91653dc34fcd98c343f6ff296f3d974b26411ae0bca3f1ea939d2ee1",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_006.jpg",
+      "contact_sheet_sha256": "d41fdec4af80b7c228e5e51d8d9dfe5de785a12d51d30da5889a2d3f6f3be511",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 8,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Connect rare-earth magnets to physical technology.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_007",
+      "asset_path": "assets/footage/scene_007_34b3f4906a6eee7e10be8f10.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "6952047",
+      "source_page_url": "https://www.pexels.com/video/people-talking-in-the-conference-room-6952047/",
+      "creator": "Werner Pfennig",
+      "asset_sha256": "d9d845194d60b2819c5c5055ec578dc121e0e034e555f9942ae03f79da404169",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_007.jpg",
+      "contact_sheet_sha256": "fa6c0804cabbf8c49ccd698323a0d74962f9a43cd7db492fa97e50b07aa46ba9",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12,
+      "editorial_role": "governance_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Use only if the source metadata and frame review verify a real international assembly; official legal documents retain the factual burden.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_008",
+      "asset_path": "assets/footage/scene_008_7213b781b65b45d131fce401.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "35440558",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-wind-turbines-at-sunrise-35440558/",
+      "creator": "Tom Schönmann",
+      "asset_sha256": "fed0dd79c78356a10b95a674a38033051f80b01fb70f7b2c1cee3c8dcab57f3c",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_008.jpg",
+      "contact_sheet_sha256": "1c4278d39ac2657bf62843fe2f67e1c70d3b3315ba4a886588034df438a8234b",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Rare-earth end-use context.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "A completed lift test is only one link in a larger industrial chain that still has to be built and operated.",
+          "semantic_rationale": "Technicians maintaining energy infrastructure make the downstream industrial chain visible without presenting the generic footage as a Japanese mine, vessel or named project."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_009",
+      "asset_path": "assets/footage/scene_009_8846f61745140cdcd70c4150.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "4468754",
+      "source_page_url": "https://www.pexels.com/video/pedestal-shot-of-a-car-manufacturing-facility-4468754/",
+      "creator": "Engin Altundağ",
+      "asset_sha256": "105e28383db6835b61361ace2ae4c3b9d4583f30b5c7eee760c5ce255d31208f",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_009.jpg",
+      "contact_sheet_sha256": "9225d0108f4ef8fc3299e22fca3f44578d259ec68f9d1500e274b40d7b29eef7",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 9,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Technology demand context without claiming all EVs use the same chemistry.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_010",
+      "asset_path": "assets/footage/scene_010_9f0c1cd965d27101f9e31b3d.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "33938964",
+      "source_page_url": "https://www.pexels.com/video/molten-metal-glowing-in-a-foundry-furnace-33938964/",
+      "creator": "aksinfo7 universe",
+      "asset_sha256": "345b462d2f6f0704b384ccbe4bd0f075e2d0186e82d2919f1e59283bd43c768e",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_010.jpg",
+      "contact_sheet_sha256": "990a9629f0bd5ff7c8668d90bf7ffe03a354b9d4c7c7884d0d4f4a70b2fa0afd",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12.001667,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Processing and refining chokepoint.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_012",
+      "asset_path": "assets/footage/scene_012_ec6502dabba5a0b8fcc82796.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "10910575",
+      "source_page_url": "https://www.pexels.com/video/island-in-blue-sea-10910575/",
+      "creator": "Glenn Langhorst",
+      "asset_sha256": "c9a5d337c7538f575cb876b64202a2f94d744004be6b903bd2957c25ef51ff0a",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_012.jpg",
+      "contact_sheet_sha256": "4b6ceef5d8738c795144ac609e247e3875d7e641c47fb698800cecf97b393efc",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 9.6,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Geographic isolation motif; never label as Minamitorishima without official imagery.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_013",
+      "asset_path": "assets/footage/scene_013_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_SEASCAPE_ALASKA_DIVE07_BIODIVERSITY_2023",
+      "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/okeanos-seascape-alaska-ex2304-features-summary/",
+      "creator": "NOAA Ocean Exploration, Seascape Alaska",
+      "asset_sha256": "8b64b1ca31c4eac4528af74798279fef4b09ee3614d3e64c856f794b0aca17cf",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_013.jpg",
+      "contact_sheet_sha256": "c9134c8484ae8142061e65dd9ed36b35be7d3117907de46f6b42f161e73723f7",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.189,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Verified deep-sea biodiversity footage supports the statement that a disturbed site was not lifeless; the cited Nature figures carry the measured industrial-trial result.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_014",
+      "asset_path": "assets/footage/scene_014_b522c138c9f570cc3e2efb78.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "6101321",
+      "source_page_url": "https://www.pexels.com/video/lawyer-writing-on-a-document-6101321/",
+      "creator": "KATRIN  BOLOVTSOVA",
+      "asset_sha256": "2b2f91c13b6d9233b298affc378f664b4915b49b9ca5dbacdd91d0115af30145",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_014.jpg",
+      "contact_sheet_sha256": "dbb00dc9c1c29f9a7511184834cfe0a9527d83608de32112fcc8037716cac2d6",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Law and competing rulebooks.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_015",
+      "asset_path": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "33082707",
+      "source_page_url": "https://www.pexels.com/video/breathtaking-underwater-ocean-floor-exploration-33082707/",
+      "creator": "JUN HO LEE",
+      "asset_sha256": "98bb625d8c50829237c5bd0a2de7cac626435006357923477e832d77a6427f33",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_015.jpg",
+      "contact_sheet_sha256": "13aac3475cd9338de5e877b4b9b54b3bb7531965a659474aeab00f5f9083200c",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Sediment and plume atmosphere; charts carry measured plume claims.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "The deposit contains rare earth elements in fine sediment beneath the seabed.",
+          "semantic_rationale": "A verified dark seabed-sediment view will carry the physical location and material form named in the sentence; the specific Japanese deposit remains established by primary evidence."
+        },
+        {
+          "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+          "narration_anchor": "Discharge particles may alter the food available to midwater organisms.",
+          "semantic_rationale": "A previously established ecological-impact image returns to connect observed biological change with the broader discharge-risk mechanism."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_016",
+      "asset_path": "assets/footage/scene_016_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_NORTH_ATLANTIC_DIVE08_WALL_2021",
+      "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/okeanos-ex2104-features-summary/",
+      "creator": "NOAA Ocean Exploration, 2021 North Atlantic Stepping Stones",
+      "asset_sha256": "97c905c19aa7fc1889ac67dd7602af90ef467d228abc5a75b00cfa000d37c255",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_016.jpg",
+      "contact_sheet_sha256": "97383e399f385b5607eb721407cf857acd88fc5e7796e373f41b00cc5292f34e",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.088,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Verified deep-ocean imagery supports the physical conditions of darkness, cold and crushing pressure; it is not footage of Japan's operation.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_018",
+      "asset_path": "assets/footage/scene_018_96d43c499a78d6f760df9b5c.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "33880535",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-industrial-facility-with-scrap-yard-33880535/",
+      "creator": "K",
+      "asset_sha256": "55ad650b3673990cce00086f1262477c840017f45b9390b9db656eb13a7d2c53",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_018.jpg",
+      "contact_sheet_sha256": "f783ab2a1ba611174ee7ad4c1c2f7debf94362fddd8ec71aa8dbe93b65e48551",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12.012,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Recycling as a partial supply response, not a complete near-term substitute.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+          "narration_anchor": "The studies identify a plausible risk, not an observed commercial-scale collapse.",
+          "semantic_rationale": "A distinct industrial-recycling trim returns to the processing context while the narration preserves the difference between a plausible mechanism and an observed collapse."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_019",
+      "asset_path": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "36123915",
+      "source_page_url": "https://www.pexels.com/video/majestic-ocean-waves-at-sunset-36123915/",
+      "creator": "Salim Da",
+      "asset_sha256": "f503777bfea6b85c50628e26d998688b434ce9380c19a0f78e0cdeabbbc970e3",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_019.jpg",
+      "contact_sheet_sha256": "ac3f26b07e5696922d2b0a186fd25f15c01b937bfec911b01f66571a03f49e3b",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 14,
+      "editorial_role": "metaphor",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Restrained frontier metaphor and transition bed.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_020",
+      "asset_path": "assets/footage/scene_020_03bac3343d1e376ae6fcd335.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "16993709",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-the-port-of-person-16993709/",
+      "creator": "DeLuca G",
+      "asset_sha256": "5054b8d1bbdb51e9ab135e82358d527a152981bd6802a4a39c491d10ddeb590e",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_020.jpg",
+      "contact_sheet_sha256": "61e5f0083015d1acc898efe0cbb3c103ed2b37ccb2be72a0da55c7f94e54b14b",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 12.012,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Real workers in a visible port or cargo setting ground the distributed strategic benefits in people; do not use a generic contemplative horizon shot.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+          "narration_anchor": "Risk is distributed across different people, places and generations.",
+          "semantic_rationale": "A distinct contemplative human image keeps the closing trade-off grounded in people rather than abstract systems."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_021",
+      "asset_path": "assets/footage/scene_021_ae5f55f29751c09f1caf07c7.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "5121701",
+      "source_page_url": "https://www.pexels.com/video/video-of-molten-metal-in-a-factory-5121701/",
+      "creator": "ArtHouse Studio",
+      "asset_sha256": "712b3f2faddaba33f8396de88f91c2542946193188aefab2bd90ea3c3683d028",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_021.jpg",
+      "contact_sheet_sha256": "1b00cb942c02959e40886843c93cf14f760986b77696a7f2c748d3bb2d7d1061",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 13.92,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A visible refinery or mineral-processing environment supports the narrated bottleneck between extraction and usable material; source evidence carries all quantitative claims.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_011_REFINING_BOTTLENECK",
+          "narration_anchor": "Battery chemistry is changing; lithium iron phosphate batteries use neither nickel nor cobalt.",
+          "semantic_rationale": "A verified battery-materials research environment will support the changing-chemistry mechanism; the LFP composition claim remains carried by the source figure."
+        },
+        {
+          "claim_id": "CLM_011_REFINING_BOTTLENECK",
+          "narration_anchor": "The strategic bottleneck may lie in processing and refining rather than extraction alone.",
+          "semantic_rationale": "A real technical research environment supports downstream processing and materials-development work; it is contextual footage, while the specific refining claim remains source-backed."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "That decision will not settle the larger questions.",
+          "semantic_rationale": "A distinct research-environment trim keeps unresolved technology and evidence present."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_023",
+      "asset_path": "assets/footage/scene_023_4657186c63891d299864f46d.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "1474411",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-a-bulk-carrier-1474411/",
+      "creator": "Ruvim M",
+      "asset_sha256": "2e9a7c33817e9d1767cdcf0e182b27017c802c31b8bb9aff16f1e8c7207e36ef",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_023.jpg",
+      "contact_sheet_sha256": "d61dec2b0f21b62540ce2eba9c818009b60663a465c7f37b2189c423b82634bd",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16.016,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A real negotiation setting supports the sentence about bargaining power created by a credible alternative source; no specific country or institution is asserted.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK",
+          "narration_anchor": "Export controls turned concentration into bargaining power and physical supply risk.",
+          "semantic_rationale": "A real negotiation setting visualises the bargaining and policy dimension of export controls without claiming that the generic meeting depicts a named government or transaction."
+        },
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "Even an unused option changes power.",
+          "semantic_rationale": "A distinct negotiation setting represents bargaining leverage without identifying a country or transaction."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_024",
+      "asset_path": "assets/footage/scene_024_6e3717bc50f72c547e42e539.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "36664946",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-boat-on-open-water-36664946/",
+      "creator": "Efrem  Efre",
+      "asset_sha256": "810f0e64186f60f9fce5f357cbed3bf94066cd47ac85185d1c1dec22e0b6b452",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_024.jpg",
+      "contact_sheet_sha256": "0e8dcc621f4db9c418e24c3d86d2edb50d718edaafb750db8ceb508f1d990d7b",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 15.015,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "A technical result is not yet a commercial mine.",
+          "semantic_rationale": "An offshore working vessel keeps the distinction physical without identifying the generic ship as Chikyu or a mining operation."
+        },
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "Mineral dependence can become a national-security risk.",
+          "semantic_rationale": "A distinct offshore trim makes strategic preparation tangible without naming the generic ship."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_025",
+      "asset_path": "assets/footage/scene_025_2737793b94a1f0bf09cc46af.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "8084626",
+      "source_page_url": "https://www.pexels.com/video/a-moving-toy-robot-8084626/",
+      "creator": "Pavel Danilyuk",
+      "asset_sha256": "a1a2222157eba43ee9e0f923fb486df3f100a528ac183938d85fd9b4d5fe930d",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_025.jpg",
+      "contact_sheet_sha256": "a271407ed5c8fed2d101a31a6325bceec7e9d001334dd44b1d661fe981799678",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 13.68,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_026",
+      "asset_path": "assets/footage/scene_026_97d48c08884e7cc7965aad6d.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "6290535",
+      "source_page_url": "https://www.pexels.com/video/a-woman-holding-looking-at-vials-in-a-medical-lab-6290535/",
+      "creator": "Gustavo Fring",
+      "asset_sha256": "0ab85c3f51655623d2ecd89e98f65cfebb010307ab01f5b8488f2ee1efb07a7a",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_026.jpg",
+      "contact_sheet_sha256": "58cd64dca811a0eea22bbc9854841dad0359f3e37926474f2e3b13bff8d14064",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16.016,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Scientists collecting baseline samples directly support the need for pre-disturbance ecological measurement without claiming a specific expedition or result.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+          "narration_anchor": "Research suggests the particles may be nutritionally poor.",
+          "semantic_rationale": "A scientist handling a laboratory sample represents measurement and uncertainty without claiming a particular experiment."
+        },
+        {
+          "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+          "narration_anchor": "Without baseline ecological research it becomes harder to know what was lost.",
+          "semantic_rationale": "A distinct laboratory-sample trim directly represents baseline measurement."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_027",
+      "asset_path": "assets/footage/scene_027_cee752d61ab26eeb024d411f.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "8829012",
+      "source_page_url": "https://www.pexels.com/video/colleagues-wearing-face-mask-while-talking-8829012/",
+      "creator": "Gustavo Fring",
+      "asset_sha256": "c8c3fb30e95ee3d14025b7fcea84a087e8b94826e6dac8bd483355f3430dc360",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_027.jpg",
+      "contact_sheet_sha256": "dfc29f47f9f6e1e8bb26df8709ac358b32f1010cb45aca31344925ece3b70328",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A multidisciplinary decision meeting reflects the narrated trade-off among technological, ecological and social risks rather than presenting a simplistic pro- or anti-mining image.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+          "narration_anchor": "The industry argument is a trade-off among supply security, cost and ecological uncertainty.",
+          "semantic_rationale": "A multidisciplinary decision meeting directly expresses the competing technological, economic and ecological considerations rather than reducing the argument to generic industrial imagery."
+        },
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "Capability is not obligation.",
+          "semantic_rationale": "Engineers reading plans keep the distinction between building capacity and authorising extraction physical."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_028",
+      "asset_path": "assets/footage/scene_028_b925e4019f461a8eb547df63.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "31795058",
+      "source_page_url": "https://www.pexels.com/video/underwater-marine-life-on-sandy-ocean-floor-31795058/",
+      "creator": "Thomas Judge",
+      "asset_sha256": "e93480573e0c2088b9281bae7ccb362ecd4541af1105eb0ab900f89e3ba6f150",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_028.jpg",
+      "contact_sheet_sha256": "d1b7355b5b91c03596f54b15d902bc8b0266ef2c02b8299eb32023b37d33ec13",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16.016,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Dark seabed and suspended sediment provide restrained physical context for distant, hard-to-observe impacts; measured plume claims remain source-backed graphics and documents.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+          "narration_anchor": "The danger depends on concentration, exposure and repeated operation.",
+          "semantic_rationale": "A real ocean-floor view restores physical scale while measured plume behaviour remains source-backed."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "The deepest part of the story is the distance between capability and agreed limits.",
+          "semantic_rationale": "A distinct seabed trim returns the conclusion to physical depth without claiming a mining site."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_029",
+      "asset_path": "assets/footage/scene_029_c6a6b0701d5dbc06d4d322d3.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "10904397",
+      "source_page_url": "https://www.pexels.com/video/sea-seen-from-ship-10904397/",
+      "creator": "Glenn Langhorst",
+      "asset_sha256": "3090e2b4c461801f4689a6dea5313ff506cbf5a2f8d831a5e7e652d9f2ec72f9",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_029.jpg",
+      "contact_sheet_sha256": "82e331461934650c92e242f1a1e1a52d4b138567616432d5f76b79749b93980e",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A working research-vessel deck supports the announced return to field operations while avoiding any claim that generic footage depicts Chikyu or the 2027 trial itself.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_030",
+      "asset_path": "assets/footage/scene_030_a012165da3440b8daec92f8d.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "19264828",
+      "source_page_url": "https://www.pexels.com/video/a-boat-is-seen-in-the-water-near-a-ship-19264828/",
+      "creator": "DeLuca G",
+      "asset_sha256": "2fc3eec76f1b0171f183a1689ccd4f7ddf1164b34f2ff99a18e411290a81ba41",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_030.jpg",
+      "contact_sheet_sha256": "f153eaf3b030fa0e01426906c96c077ac996406cf6c975f5796ed604d669ca2b",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 14.014,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Multiple working vessels at sea give the strategic race a physical, non-sensational scale without inventing a confrontation or identifying the ships as specific national programmes.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_031",
+      "asset_path": "assets/footage/scene_031_48cfc78463916f8222590c3f.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "8716589",
+      "source_page_url": "https://www.pexels.com/video/a-woman-sitting-while-talking-inside-the-conference-room-8716589/",
+      "creator": "Pavel Danilyuk",
+      "asset_sha256": "30064be56e69d769cc14a74807bdcaeca86399d696ed287d80a054b7a5e3bd67",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_031.jpg",
+      "contact_sheet_sha256": "8ad8f6864c301585587e44f098ccdc549acbf46972eec718e933f6b8d04aef32",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "An international rulemaking setting directly supports the contest over governance; ISA and UNCLOS documents remain the factual legal evidence.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "The seabed beyond national jurisdiction is governed through international rules rather than a single national claim.",
+          "semantic_rationale": "An international rulemaking setting directly reinforces the common-heritage principle while the ISA and UNCLOS documents remain the primary legal evidence."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "It is a race to decide which rules will exist.",
+          "semantic_rationale": "A separate formal meeting trim provides governance context while primary legal sources remain on screen elsewhere."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_032",
+      "asset_path": "assets/footage/scene_032_a54db8725eae6a260d2ac329.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "17471486",
+      "source_page_url": "https://www.pexels.com/video/drone-view-of-a-small-yacht-on-calm-sea-waters-17471486/",
+      "creator": "Engin Akyurt",
+      "asset_sha256": "20a6ffd1514a4c307aed79fc37cac06af1f13b4e50c07edb67a3a7fd4ef74a78",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_032.jpg",
+      "contact_sheet_sha256": "78762aec83304fafbf259194774ee2216af0f615c8860c194ffaac2be8a122f8",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.018,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "Physical disturbance on the deep seabed can remain visible for decades.",
+          "semantic_rationale": "A restrained descent into the dark seabed keeps attention on physical depth and persistence without substituting for the official 1979-to-2023 evidence."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "The real distance is between what humanity can do and what it has agreed not to destroy.",
+          "semantic_rationale": "A long, restrained descent into open water carries the final editorial pause on real footage and closes on the gap between capability and agreed limits."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_033",
+      "asset_path": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "34748647",
+      "source_page_url": "https://www.pexels.com/video/serene-jellyfish-gliding-in-tranquil-waters-34748647/",
+      "creator": "Townsend Walton",
+      "asset_sha256": "44bc6d8ef52d1502a9cb0289b263146684c6446a63b26edfce805c1e861508ba",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_033.jpg",
+      "contact_sheet_sha256": "92329be8df434217ae07518258365875f52117bf115a5795bdb2e7550264f359",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 13.013,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Real midwater life restores physical ecological context after the discharge evidence; it does not claim to depict organisms from a specific trial.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+          "narration_anchor": "Many midwater organisms normally consume naturally sinking particles.",
+          "semantic_rationale": "Real midwater life grounds the food-web mechanism without claiming that the jellyfish came from a cited trial."
+        },
+        {
+          "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
+          "narration_anchor": "The studies identify a plausible mechanism of harm, not proof of commercial-scale ecosystem collapse.",
+          "semantic_rationale": "Verified midwater organisms will keep the qualified ecological mechanism visible while the cited study figures carry the measured scientific claim."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "Future generations may inherit both the legal precedent and the environmental consequences.",
+          "semantic_rationale": "A distinct view of real midwater life makes the ecological inheritance behind precedent visible without assigning a measured effect to the generic animal footage."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_034",
+      "asset_path": "assets/footage/scene_034_fc87c3b06122ce58c389727c.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "4121354",
+      "source_page_url": "https://www.pexels.com/video/lab-laboratory-medical-medicine-4121354/",
+      "creator": "Edward Jenner",
+      "asset_sha256": "8cfa01c0b64792b9551d5b9dfe34b1ae4ce60cff9f42dc8d92474f88508046a1",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_034.jpg",
+      "contact_sheet_sha256": "156df6084d611ed702f99d8d0f42d96d7d488a8177d3249233cc2a61f3a07702",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A multidisciplinary review setting embodies a decision made with incomplete evidence without implying that the people shown advise a named government.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_036",
+      "asset_path": "assets/footage/scene_036_44ae569942147848854a5fc6.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "6951506",
+      "source_page_url": "https://www.pexels.com/video/people-voting-in-the-conference-room-6951506/",
+      "creator": "Werner Pfennig",
+      "asset_sha256": "9e2d7ec31ec67c8142992b18cc9f3dab001e30b8adfda11508d1b97363d08dd1",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_036.jpg",
+      "contact_sheet_sha256": "73f220594f4b03f2c936cc8b18f65542c30f256c712fb2c5d4d5bc1859b22cb8",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 13.88,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A real policy table represents economics, technology, law and ecology moving at once without identifying a specific institution.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
+          "narration_anchor": "The alternatives also carry damage and mineral dependence can become a security risk.",
+          "semantic_rationale": "A real decision table gives the trade-off a human setting without identifying a specific government."
+        },
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "Governments face a precedent-setting decision while economics, technology, law and ecology are moving.",
+          "semantic_rationale": "The decision table returns at a distinct moment to connect uncertainty with institutional choice."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_037",
+      "asset_path": "assets/footage/scene_037_77974e64872de8e33bf15db5.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "30295544",
+      "source_page_url": "https://www.pexels.com/video/worker-operating-industrial-control-panel-efficiently-30295544/",
+      "creator": "aksinfo7 universe",
+      "asset_sha256": "0ca016562a304da49f888669de1ac3313d16de5e6f5a436f36a95683d6ecefd8",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_037.jpg",
+      "contact_sheet_sha256": "a9729a62b1449e7f7cbe6b62cf299003368dc4a873c9e0a2d57af2a77d67ef43",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Engineers evaluating a prototype distinguish technical capability from the threshold for an industrial decision.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "The decision will help define what uncertainty is enough to stop an industry.",
+          "semantic_rationale": "A textile-production machine represents operating industry rather than a speculative prototype."
+        },
+        {
+          "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+          "narration_anchor": "Supply delays carry costs through existing industry.",
+          "semantic_rationale": "A separated machine-operation trim connects mineral supply with downstream production."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_038",
+      "asset_path": "assets/footage/scene_038_5ba21dca84b5a5e191c5b9eb.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "6951297",
+      "source_page_url": "https://www.pexels.com/video/a-tilt-down-shot-of-and-empty-conference-room-6951297/",
+      "creator": "Werner Pfennig",
+      "asset_sha256": "d38cf7ca096d2fb196b8842836f6851e62ef31f0cbb5f665f9c2ae0c08a5ee67",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_038.jpg",
+      "contact_sheet_sha256": "00d0c8007310f5fd02bbf51a89781a455ec552fb6ccab0904871007371277432",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "An international assembly provides human governance context for common heritage; UNCLOS and ISA documents remain the legal evidence.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "Common heritage must acquire practical meaning when the resource becomes strategic.",
+          "semantic_rationale": "A formal international podium provides governance context while UNCLOS and ISA documents remain the legal evidence."
+        },
+        {
+          "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+          "narration_anchor": "International rules remain unfinished.",
+          "semantic_rationale": "The international podium returns at a separate moment to connect delay with multilateral governance."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_039",
+      "asset_path": "assets/footage/scene_039_d90b361d5f06560506e648bb.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "4121351",
+      "source_page_url": "https://www.pexels.com/video/scientists-talking-and-looking-at-laptop-screen-4121351/",
+      "creator": "Edward Jenner",
+      "asset_sha256": "9089e6766777c90aaf3ee90a3f55d393d442ca9685e0dd40ed1ce3b83b43c918",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_039.jpg",
+      "contact_sheet_sha256": "3009044af6a65c07daf52d03f16ea370047e5f13adf949bd69a063f1e573a29f",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Materials research gives physical context to technology-driven demand uncertainty without asserting a particular breakthrough.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
+          "narration_anchor": "The strongest case against rushing is that science does not know every consequence.",
+          "semantic_rationale": "A scientist at a microscope directly supports the knowledge gap while cited research carries the factual burden."
+        },
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "The most important outcome of this race may not be a mine.",
+          "semantic_rationale": "A distinct laboratory trim connects technical alternatives with uncertainty about whether extraction becomes necessary."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_041",
+      "asset_path": "assets/footage/scene_041_fb568a7886ffc7b5209cc5de.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "8426043",
+      "source_page_url": "https://www.pexels.com/video/businessmen-in-a-meeting-8426043/",
+      "creator": "Kampus Production",
+      "asset_sha256": "5fd48f9540b06f2ec2342543f4a00fd6a2d69f1398ea3c140d36da9c78c8abaf",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_041.jpg",
+      "contact_sheet_sha256": "57f938a0234c0612206ecfe9d49d0345870d03df204d49a6eccc6c0a500c529c",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Negotiators embody the bargaining leverage created by an unused option without assigning the scene to a named state.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "Law and policy are still moving.",
+          "semantic_rationale": "A professional roundtable gives the unresolved policy process a neutral human setting."
+        },
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "The ability to reach a resource does not create an obligation to extract it.",
+          "semantic_rationale": "A separate roundtable trim visualises deliberate choice after capability exists."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_042",
+      "asset_path": "assets/footage/scene_042_6a942e35ba4594b93acedc5d.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "20256990",
+      "source_page_url": "https://www.pexels.com/video/a-boat-is-traveling-across-the-water-20256990/",
+      "creator": "K",
+      "asset_sha256": "80e0acd520967a8c18dac32a6d6577089274b17b5f63c0f37303711bb78b5846",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_042.jpg",
+      "contact_sheet_sha256": "b1d9429b032b3ddea0b6ef13239c31ac1b5f7a3320d52f3973ea1086bf9f1fc1",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 14.014,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_043",
+      "asset_path": "assets/footage/scene_043_3274a7b8bb8853043b341006.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "37914269",
+      "source_page_url": "https://www.pexels.com/video/automated-container-terminal-at-webb-dock-37914269/",
+      "creator": "Joolsmagools  ®️",
+      "asset_sha256": "64a2d56a3b4349156bc18adbbfa1e372e7453f8bb64984b63ad74df3996a18d1",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_043.jpg",
+      "contact_sheet_sha256": "c96a51cacd187182867860a9a4e18af6048aa4a548e4eac3d91f70582211467b",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 15,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Visible industrial momentum at a port supports the warning that preparation can be mistaken for inevitability.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "The contest begins before commercial production.",
+          "semantic_rationale": "A working port shows preparation and positioning before any mine is represented."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "In 2027 Japan plans to return to the Pacific for a longer production-chain test.",
+          "semantic_rationale": "A distinct working-port trim supports renewed field activity without identifying the generic boat as Chikyu."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_044",
+      "asset_path": "assets/footage/scene_044_60259233df0534e7673a42ef.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "32243765",
+      "source_page_url": "https://www.pexels.com/video/fabric-inspection-in-modern-textile-factory-32243765/",
+      "creator": "Usman AbdulrasheedGambo",
+      "asset_sha256": "39d30fcf358faf880885fd153d3b0e6a61ab02b4bca43c8374a51df83585c22f",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_044.jpg",
+      "contact_sheet_sha256": "35a31a0eaf5afc302bc5a9db84a897cb489f6c1f4ad3ba2a06ee29614a22142d",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 15,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A disrupted production environment gives concentrated mineral supply risk a human and industrial scale without claiming a specific outage.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "The world may mistake momentum for inevitability.",
+          "semantic_rationale": "An active production line gives industrial momentum a visible form without implying deep-sea output."
+        },
+        {
+          "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+          "narration_anchor": "Delay is not neutral either.",
+          "semantic_rationale": "A distinct production-line trim gives concentrated supply risk an industrial scale."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_045",
+      "asset_path": "assets/footage/scene_045_3cfaea76e4faea730fa72c95.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "8426045",
+      "source_page_url": "https://www.pexels.com/video/men-shaking-hands-in-a-business-meeting-8426045/",
+      "creator": "Kampus Production",
+      "asset_sha256": "7dc649fdf42aff33fd2486762b2aa747b0f1529cfb0e5e2be80c6c4599cb3a2d",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_045.jpg",
+      "contact_sheet_sha256": "1ad74fafc0e59e87e2d38246651e7d24a7acc7a80fa738aea71902a81eafcf46",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Delegates in a formal negotiation provide governance context for the cost of delayed common rules.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_008_NO_US_COMMERCIAL_PERMIT",
+          "narration_anchor": "An application entering review is not the same as a commercial recovery permit being issued.",
+          "semantic_rationale": "A formal institutional room keeps the distinction grounded in a decision process without identifying the generic delegates as NOAA officials or a permit hearing."
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "Future generations may inherit the precedent.",
+          "semantic_rationale": "A formal institutional room frames precedent as a decision passed forward rather than a sentimental portrait."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_046",
+      "asset_path": "assets/footage/scene_046_530322e62a7ae940833f995b.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "3191247",
+      "source_page_url": "https://www.pexels.com/video/scientist-getting-a-sample-for-research-3191247/",
+      "creator": "Pressmaster",
+      "asset_sha256": "a18c3ac095c77295d923b55a269f4891b0b16415cb12933ad62b726b13a43513",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_046.jpg",
+      "contact_sheet_sha256": "941ddca8f4f8d1766af878eb90d7e055fd83fdc2122a077774709fdf6e05e689",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Baseline field sampling directly visualises the work required before disturbance without claiming a specific expedition or result.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_047",
+      "asset_path": "assets/footage/scene_047_6d980da4ab70813ccd9cc651.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "15894768",
+      "source_page_url": "https://www.pexels.com/video/fishing-boats-in-the-sea-with-people-on-them-15894768/",
+      "creator": "khanhhoangminh",
+      "asset_sha256": "757354a66a159c00899b8c89194745bacf59d199d98eae9898aeff85cbf1172f",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_047.jpg",
+      "contact_sheet_sha256": "68b5dcec6c17d7f3403e49932c1d5542bc45223c6f9225a5c4c8e8fbc8585919",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "People living and working near industry give the distribution of risk a grounded human context without standing for a named affected community.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_048",
+      "asset_path": "assets/footage/scene_048_87a2d6bf6d9c4687fa01bcb5.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "8327175",
+      "source_page_url": "https://www.pexels.com/video/a-mad-scientist-experimenting-with-chemicals-8327175/",
+      "creator": "Kindel Media",
+      "asset_sha256": "7c423673cd1d700b17d7b478b9d6bed7e431d94594a3a4d81adb1bd0ae0c36a6",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_048.jpg",
+      "contact_sheet_sha256": "d7909cc46d7b7d4b1d219284e8f66cc1ebf95d95fbb88c2ac7ef504b9f3389d0",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A new generation doing ocean research provides a restrained image for inherited precedent without sentimentalising the claim.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_049",
+      "asset_path": "assets/footage/scene_049_c5eb5aacb586b8b9950cdd7a.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "5417209",
+      "source_page_url": "https://www.pexels.com/video/bow-part-of-a-boat-5417209/",
+      "creator": "cottonbro studio",
+      "asset_sha256": "69f62363c8390e767241978b589a01a8779320be6b5b112c36da6a345cfe9b83",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_049.jpg",
+      "contact_sheet_sha256": "d6803e886944d0a0dcca607f9c37c0773dec0b0665b220d620a1bcf40120f99c",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 16,
+      "editorial_role": "context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A research vessel returning to the ocean supports the announced 2027 return while remaining explicitly generic contextual footage.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [],
+      "review_blockers": [
+        "No exact claim-specific use could be resolved for this asset."
+      ]
+    },
+    {
+      "scene_id": "scene_050",
+      "asset_path": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
+      "provider": "pexels",
+      "provider_asset_id": "6951601",
+      "source_page_url": "https://www.pexels.com/video/man-speaking-in-conference-room-6951601/",
+      "creator": "Werner Pfennig",
+      "asset_sha256": "3f75e1c6e9e2cce6aa69bb1003268f2dc1a491698898f5e551a5f385f5e545a9",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_050.jpg",
+      "contact_sheet_sha256": "c2b37844943989267124367c70e0c81f2b7130bce9880aa863a254326d1d953a",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 13.52,
+      "editorial_role": "human_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_007_US_PARALLEL_ROUTE",
+          "narration_anchor": "In 2026, NOAA revised its process so exploration and commercial recovery applications could move through a consolidated review structure.",
+          "semantic_rationale": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden."
+        },
+        {
+          "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+          "narration_anchor": "Every year without agreed international rules gives national alternatives more room.",
+          "semantic_rationale": "A distinct formal hearing trim represents regulatory delay while source documents retain the factual burden."
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_051",
+      "asset_path": "assets/footage/scene_051_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_D2_2018_TECHNOLOGY",
+      "source_page_url": "https://oceanexplorer.noaa.gov/technology/subs-deep-discoverer/",
+      "creator": "NOAA Ocean Exploration",
+      "asset_sha256": "e150e3f07369e617aac5ca192d6717f2c88f5ec3298520b4f8e254e3cc10f933",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_051.jpg",
+      "contact_sheet_sha256": "f24a4985008373f37a0a9a3b7a888312de75d30fafb17754c5e26494281ab357",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.155,
+      "editorial_role": "scientific_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Official NOAA ROV operations provide direct scientific observation context for examining persistent deep-seabed tracks; the cited 1979-to-2023 figures retain the evidentiary burden.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "inside or around the sediment. Some attached to nodules that took millions of years to form. Remove the nodules and the hard",
+          "semantic_rationale": "Break the document sequence with scientifically relevant ROV/track observation footage, never a recreational dive.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 8
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_052",
+      "asset_path": "assets/footage/scene_052_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_CASCADIA_SEDIMENT_CORING_2020",
+      "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/20cascadia-seeps-logs-sept29/",
+      "creator": "Oregon State University, NOAA OER, NOAA OCNMS, Ocean Exploration Trust, NA-121",
+      "asset_sha256": "ec47cb4db426066cc46db457bcae6242e1b59252dc24962de047cc456afad28d",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_052.jpg",
+      "contact_sheet_sha256": "a6c089f09e788331569e722ded808151114662229bd160cd101447d9c0fd24da",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.151467,
+      "editorial_role": "scientific_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Official expedition footage of sediment coring provides the visible physical measurement link for the plume-sampling sentence without being used as the numerical plume evidence.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_014_PLUME_SCALE_IS_COMPLEX",
+          "narration_anchor": "species changed. Again, the result is not a slogan. The clearest near -term damage was where the machine physically",
+          "semantic_rationale": "Remove the redundant slogan card and show actual sampling/monitoring context tied to plume measurement.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 7
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_053",
+      "asset_path": "assets/footage/scene_053_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_WATER_COLUMN_2012",
+      "source_page_url": "https://oceanexplorer.noaa.gov/ocean-fact/water-column/",
+      "creator": "NOAA Ocean Exploration, Deep-Sea Symphony: Exploring the Musicians Seamounts",
+      "asset_sha256": "6f529f94ac20d4b65828af8ac17f8479ccb000f4d0dc1f58f886f8dbd7cb2fe2",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_053.jpg",
+      "contact_sheet_sha256": "111999a43362b07ffb220ab99bb6f42e28ac59bd02f56c6edde6967ce12c9fd4",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.155,
+      "editorial_role": "scientific_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Official NOAA water-column footage directly grounds the midwater food-web mechanism and marine-snow context while the cited paper supplies the experiment and result.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+          "narration_anchor": "uncertainty. Material brought to the surface must be separated from seawater and sediment. If waste particles are discharged back",
+          "semantic_rationale": "Remove the biodiversity-number card because those values belong to CLM_013, not this midwater claim.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 7.833333333333333
+        }
+      ],
+      "review_blockers": []
+    },
+    {
+      "scene_id": "scene_054",
+      "asset_path": "assets/footage/scene_054_direct.mp4",
+      "provider": "noaa_ocean_exploration",
+      "provider_asset_id": "NOAA_DEEP_SEARCH_LEG1_HIGHLIGHTS_2019",
+      "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/19deepsearch-logs-apr19/",
+      "creator": "Ivan Hurzeler and DEEP SEARCH 2019 – BOEM, USGS, NOAA, ROV Jason, Woods Hole Oceanographic Institution",
+      "asset_sha256": "c4c5f1ca82696e5310327d31a562503053a0ead6b5675b4ac3dd7fd3a2f403ab",
+      "contact_sheet_path": "qa/footage-contact-sheets/scene_054.jpg",
+      "contact_sheet_sha256": "7466e0e0598ead35a7af90cede2419a27fc372ac683c688fd6fa86e3e386fe07",
+      "reviewed_frame_count": 12,
+      "duration_seconds": 18.065,
+      "editorial_role": "scientific_context",
+      "narration_anchor": null,
+      "claim_id": null,
+      "semantic_rationale": "Official expedition operations footage provides a real field-assessment setting for decision under uncertainty, with mission objectives, weather, sampling and dive choices physically connected.",
+      "status": "pending_visual_review",
+      "approved_uses_if_visually_valid": [
+        {
+          "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
+          "narration_anchor": "consequence. It is that science does not. The strongest case for moving ahead is not that the damage will be harmless. It",
+          "semantic_rationale": "Replace the generic JAMSTEC comparison with a directly related scientific decision/field-assessment moment.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 7.033333333333333
+        }
+      ],
+      "review_blockers": []
+    }
+  ]
+}
