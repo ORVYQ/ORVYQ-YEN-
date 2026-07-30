@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "request_revision": 3,
+  "request_revision": 4,
   "policy": {
     "selection_basis": "Pexels source-page title/slug must satisfy explicit positive and negative terms before download; the Full-Length Review remains the frame-level human verification gate.",
     "blind_keyword_acceptance_forbidden": true
@@ -26,9 +26,9 @@
       "forbidden_terms": ["coral beauty", "squid", "diver", "scuba", "snorkel", "aquarium"]
     },
     "scene_004": {
-      "queries": ["offshore industrial pipe operation vessel", "marine riser pipe installation ship"],
-      "fallback_queries": ["offshore engineering pipe vessel", "subsea pipe operation"],
-      "required_any_groups": [["pipe", "riser", "subsea", "offshore"], ["industrial", "engineering", "operation", "installation"]],
+      "queries": ["offshore oil rig ocean", "industrial platform at sea"],
+      "fallback_queries": ["offshore drilling platform", "oil rig ocean waves"],
+      "required_any_groups": [["offshore", "oil", "rig", "platform"], ["ocean", "sea", "water", "marine"]],
       "forbidden_terms": ["tug", "tow", "fishing", "yacht", "recreational"]
     },
     "scene_005": {
@@ -44,15 +44,15 @@
       "forbidden_terms": ["grinding", "welding-only", "repair", "toy"]
     },
     "scene_007": {
-      "queries": ["industrial magnet manufacturing", "permanent magnet factory production"],
-      "fallback_queries": ["magnet components production", "rare earth magnet manufacturing"],
-      "required_any_groups": [["magnet", "magnetic"], ["factory", "manufacturing", "production", "assembly"]],
-      "forbidden_terms": ["building exterior", "toy", "fridge", "school"]
+      "queries": ["international assembly delegates conference", "united nations delegates meeting"],
+      "fallback_queries": ["multilateral conference delegates", "international government assembly"],
+      "required_any_groups": [["international", "united-nations", "multilateral", "government"], ["assembly", "conference", "delegate", "meeting"]],
+      "forbidden_terms": ["business", "corporate", "wedding", "classroom", "party"]
     },
     "scene_008": {
-      "queries": ["wind turbine maintenance technicians", "wind turbine factory assembly"],
-      "fallback_queries": ["wind energy technicians turbine", "wind turbine manufacturing"],
-      "required_any_groups": [["wind", "turbine"], ["maintenance", "technician", "factory", "manufacturing", "assembly"]],
+      "queries": ["wind turbine technicians maintenance", "workers installing wind turbine"],
+      "fallback_queries": ["wind turbine factory workers", "renewable energy technicians"],
+      "required_any_groups": [["wind", "turbine"], ["maintenance", "technician", "worker", "install", "factory", "manufacturing", "assembly"]],
       "forbidden_terms": ["sunset", "silhouette", "scenic", "timelapse"]
     },
     "scene_009": {
@@ -122,16 +122,16 @@
       "forbidden_terms": ["city", "skyline", "beach", "coast", "harbor"]
     },
     "scene_020": {
-      "queries": ["scientist research vessel ocean deck", "ocean researcher ship horizon"],
-      "fallback_queries": ["marine scientist vessel deck", "expedition crew looking ocean"],
-      "required_any_groups": [["scientist", "researcher", "expedition", "crew"], ["ship", "vessel", "deck", "ocean"]],
-      "forbidden_terms": ["beach", "tourist", "vacation", "romantic", "Tenerife"]
+      "queries": ["industrial port workers harbor", "dock workers cargo terminal"],
+      "fallback_queries": ["harbor workers shipping", "port community workers"],
+      "required_any_groups": [["port", "harbor", "dock", "cargo", "shipping"], ["worker", "crew", "people", "person"]],
+      "forbidden_terms": ["tourist", "vacation", "yacht", "cruise", "beach", "marina"]
     },
     "scene_021": {
-      "queries": ["battery materials research laboratory", "electrochemistry laboratory researchers"],
-      "fallback_queries": ["advanced battery research lab", "materials science laboratory engineers"],
-      "required_any_groups": [["battery", "electrochemistry", "materials"], ["laboratory", "lab", "research", "scientist", "engineer"]],
-      "forbidden_terms": ["medical", "test-tube-only", "phone repair", "car repair", "school"]
+      "queries": ["industrial metal refinery processing", "mineral processing factory"],
+      "fallback_queries": ["metal smelter industrial plant", "refinery factory machinery"],
+      "required_any_groups": [["metal", "mineral", "smelter", "refinery", "processing"], ["industrial", "factory", "plant", "machinery"]],
+      "forbidden_terms": ["jewelry", "blacksmith", "craft", "repair", "office"]
     },
     "scene_022": {
       "rejected_provider_asset_ids": ["35548139"],

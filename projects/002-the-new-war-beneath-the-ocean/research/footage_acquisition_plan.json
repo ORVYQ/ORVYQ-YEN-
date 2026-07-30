@@ -74,15 +74,15 @@
       "scene_id": "scene_004",
       "role": "context",
       "queries": [
-        "industrial pipe ocean ship",
-        "offshore pipe operation"
+        "offshore oil rig ocean",
+        "industrial platform at sea"
       ],
       "fallback_queries": [
-        "offshore drilling equipment",
-        "ship machinery"
+        "offshore drilling platform",
+        "oil rig ocean waves"
       ],
       "min_duration_seconds": 8,
-      "editorial_note": "Mechanical extraction context without claiming the depicted system is Japan's riser."
+      "editorial_note": "Visible offshore industrial hardware establishes physical scale without claiming that the depicted platform or system is Japan's riser."
     },
     {
       "scene_id": "scene_005",
@@ -114,28 +114,28 @@
     },
     {
       "scene_id": "scene_007",
-      "role": "context",
+      "role": "governance_context",
       "queries": [
-        "magnet manufacturing factory",
-        "metal components production"
+        "international assembly delegates conference",
+        "united nations delegates meeting"
       ],
       "fallback_queries": [
-        "industrial components factory",
-        "precision metal factory"
+        "multilateral conference delegates",
+        "international government assembly"
       ],
       "min_duration_seconds": 8,
-      "editorial_note": "Magnet supply-chain context; source-derived graphics carry the factual percentages."
+      "editorial_note": "Use only if the source metadata and frame review verify a real international assembly; official legal documents retain the factual burden."
     },
     {
       "scene_id": "scene_008",
       "role": "context",
       "queries": [
-        "wind turbine maintenance",
-        "wind turbine factory"
+        "wind turbine technicians maintenance",
+        "workers installing wind turbine"
       ],
       "fallback_queries": [
-        "wind turbines close up",
-        "renewable energy machinery"
+        "wind turbine factory workers",
+        "renewable energy technicians"
       ],
       "min_duration_seconds": 8,
       "editorial_note": "Rare-earth end-use context."
@@ -207,8 +207,21 @@
         "government conference hall",
         "diplomatic meeting"
       ],
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_SEASCAPE_ALASKA_DIVE07_BIODIVERSITY_2023",
+        "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/okeanos-seascape-alaska-ex2304-features-summary/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2023/09/dive07-biodiversity-1920x1080-2.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration, Seascape Alaska",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted expedition media; preserve the Seascape Alaska credit and do not present this site as the cited industrial trial.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 4,
+        "output_duration_seconds": 18
+      },
       "min_duration_seconds": 8,
-      "editorial_note": "International negotiation context; official documents provide the legal evidence."
+      "editorial_note": "Verified deep-sea biodiversity footage supports the statement that a disturbed site was not lifeless; the cited Nature figures carry the measured industrial-trial result."
     },
     {
       "scene_id": "scene_014",
@@ -249,8 +262,21 @@
         "scientist microscope marine",
         "environmental science lab"
       ],
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_NORTH_ATLANTIC_DIVE08_WALL_2021",
+        "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/okeanos-ex2104-features-summary/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2021/09/dive08-wall-1280x720-2.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration, 2021 North Atlantic Stepping Stones",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted expedition media; preserve the expedition credit and use only as verified deep-ocean context.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 3,
+        "output_duration_seconds": 18
+      },
       "min_duration_seconds": 8,
-      "editorial_note": "Ecological uncertainty and field science."
+      "editorial_note": "Verified deep-ocean imagery supports the physical conditions of darkness, cold and crushing pressure; it is not footage of Japan's operation."
     },
     {
       "scene_id": "scene_017",
@@ -298,30 +324,30 @@
       "scene_id": "scene_020",
       "role": "human_context",
       "queries": [
-        "person looking at ocean horizon",
-        "scientist ocean deck"
+        "industrial port workers harbor",
+        "dock workers cargo terminal"
       ],
       "fallback_queries": [
-        "ship crew horizon",
-        "human ocean contemplation"
+        "harbor workers shipping",
+        "port community workers"
       ],
       "min_duration_seconds": 8,
-      "editorial_note": "Human-scale ending; avoid sentimental stock clichés where possible."
+      "editorial_note": "Real workers in a visible port or cargo setting ground the distributed strategic benefits in people; do not use a generic contemplative horizon shot."
     },
     {
       "scene_id": "scene_021",
       "role": "context",
       "queries": [
-        "battery technology research laboratory",
-        "magnet materials research scientists"
+        "industrial metal refinery processing",
+        "mineral processing factory"
       ],
       "fallback_queries": [
-        "materials science laboratory engineers",
-        "advanced battery research lab"
+        "metal smelter industrial plant",
+        "refinery factory machinery"
       ],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "A real research environment supports the narrated possibility that new technologies and changing chemistry can reduce future mineral demand; it is contextual footage, not proof of a specific breakthrough."
+      "editorial_note": "A visible refinery or mineral-processing environment supports the narrated bottleneck between extraction and usable material; source evidence carries all quantitative claims."
     },
     {
       "scene_id": "scene_022",
