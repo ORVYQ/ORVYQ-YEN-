@@ -431,7 +431,7 @@ async function reusable(dir, record, id, item, approvedByProviderId = new Map())
   if ((provenance.approved_for_final_edit !== true && !reviewApproved) || provenance.scene_id !== id) return null;
   const rejected = new Set((item.rejected_provider_asset_ids || []).map(String));
   if (rejected.has(String(provenance.provider_asset_id))) return null;
-  if (!matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;
+  if (!reviewApproved && !matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;
   return {
     path: record.path,
     scene_id: id,

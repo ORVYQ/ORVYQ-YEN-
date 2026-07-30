@@ -28,27 +28,7 @@
     "status": "blocked_pending_visual_assets",
     "blocking_claim_ids": [],
     "visual_rebalance_plan": "direction/visual_rebalance_plan.json",
-    "blocking_visual_asset_request_ids": [
-      "REQ_EVD_IEA_MAGNET_SHARE",
-      "REQ_EVD_IEA_EXPORT_TIMELINE",
-      "REQ_EVD_JAMSTEC_SCHEDULE",
-      "REQ_EVD_UNCLOS_ARTICLES",
-      "REQ_EVD_US_EO_NOAA",
-      "REQ_EVD_TMC_LIFECYCLE",
-      "REQ_EVD_IEA_MINERAL_CHEMISTRY",
-      "REQ_EVD_NATURE_44_YEAR_TRACK",
-      "REQ_EVD_NATURE_BIODIVERSITY",
-      "REQ_EVD_PLUME_MEASUREMENTS",
-      "REQ_EVD_MIDWATER_FOODWEB",
-      "REQ_EVD_JAMSTEC_OPTIONALITY",
-      "REQ_EVD_IEA_DISTRIBUTED_CHAIN",
-      "REQ_FTG_TMC_PROCESS",
-      "REQ_FTG_DEEPSEA_TRACK_ROV",
-      "REQ_FTG_PLUME_SAMPLING",
-      "REQ_FTG_MIDWATER_RESEARCH",
-      "REQ_FTG_UNCERTAINTY_DECISION",
-      "REQ_FTG_CHIKYU_EXPEDITION"
-    ],
+    "blocking_visual_asset_request_ids": [],
     "generated_total_duration_seconds": 1037.68,
     "sections": [
       {

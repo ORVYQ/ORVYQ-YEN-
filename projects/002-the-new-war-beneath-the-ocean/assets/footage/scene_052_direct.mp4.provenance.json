@@ -30,8 +30,10 @@
   "actual_sha256": "ec47cb4db426066cc46db457bcae6242e1b59252dc24962de047cc456afad28d",
   "transformed_for_edit": false,
   "selected_reason": "OFFICIAL_SOURCE_NARRATION_ANCHORED_DIRECT_CLIP",
-  "approved_for_final_edit": false,
-  "human_review_status": "PENDING_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "approved_for_final_edit": true,
+  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
   "downloaded_at": "2026-07-30T20:50:03.677Z",
-  "fail_closed_reason": "Byte-bound contact-sheet and claim-specific semantic review are required before final-edit approval."
+  "reviewed_asset_sha256": "ec47cb4db426066cc46db457bcae6242e1b59252dc24962de047cc456afad28d",
+  "reviewed_contact_sheet_sha256": "a6c089f09e788331569e722ded808151114662229bd160cd101447d9c0fd24da",
+  "human_review_reason": "Official source metadata and the twelve-frame contact sheet confirm the stated scientific context; numerical claims remain with primary evidence."
 }

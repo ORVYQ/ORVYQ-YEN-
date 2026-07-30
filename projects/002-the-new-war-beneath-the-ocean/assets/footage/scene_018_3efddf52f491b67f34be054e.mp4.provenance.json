@@ -1,0 +1,58 @@
+{
+  "stable_asset_id": "a09ab2c5451136c161ef048c",
+  "scene_id": "scene_018",
+  "provider": "pexels",
+  "provider_asset_id": "32268488",
+  "source_page_url": "https://www.pexels.com/video/industrial-paper-recycling-process-overview-32268488/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Usman AbdulrasheedGambo",
+  "attribution_required": false,
+  "search_query": "industrial metal recycling factory",
+  "editorial_role": "context",
+  "editorial_note": "Recycling as a partial supply response, not a complete near-term substitute.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "recycling",
+        "recycle",
+        "scrap"
+      ],
+      [
+        "metal",
+        "industrial",
+        "factory",
+        "processing"
+      ]
+    ],
+    "forbidden_terms": [
+      "plastic",
+      "household",
+      "compost",
+      "aerial-only",
+      "fashion"
+    ]
+  },
+  "duration": 12.012,
+  "actual_duration_seconds": 12.012,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 5811210,
+  "sha256": "35cd5d33b1c6f57ab90de9d0cfe8188d7389ff261e3f11f00a2d93c838dab702",
+  "actual_sha256": "35cd5d33b1c6f57ab90de9d0cfe8188d7389ff261e3f11f00a2d93c838dab702",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "13762678",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:53:02.768Z"
+}

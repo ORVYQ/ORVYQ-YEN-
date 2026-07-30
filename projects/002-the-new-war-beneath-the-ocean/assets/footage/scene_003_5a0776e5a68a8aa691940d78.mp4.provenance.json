@@ -1,0 +1,73 @@
+{
+  "stable_asset_id": "87865571b54d052591b84306",
+  "scene_id": "scene_003",
+  "provider": "pexels",
+  "provider_asset_id": "5853030",
+  "source_page_url": "https://www.pexels.com/video/dark-blue-sea-close-up-5853030/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "ROMAN ODINTSOV",
+  "attribution_required": false,
+  "search_query": "dark deep seabed",
+  "editorial_role": "context",
+  "editorial_note": "Deep-ocean atmosphere only; do not label as the Clarion-Clipperton Zone.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "underwater",
+        "ocean",
+        "sea",
+        "seabed",
+        "seafloor",
+        "ocean-floor",
+        "ocean floor"
+      ],
+      [
+        "deep",
+        "dark",
+        "abyssal",
+        "submersible",
+        "lights",
+        "exploration",
+        "floor"
+      ]
+    ],
+    "forbidden_terms": [
+      "ray",
+      "fish",
+      "shark",
+      "whale",
+      "dolphin",
+      "coral",
+      "reef",
+      "diver",
+      "scuba",
+      "snorkel",
+      "aquarium",
+      "tropical",
+      "clear blue"
+    ]
+  },
+  "duration": 12.012,
+  "actual_duration_seconds": 12.012,
+  "width": 1920,
+  "height": 1012,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1012,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 7040049,
+  "sha256": "9348c03f31e83b3e6312e51a94cf9fe23468b2fed5c456e666d990d41469d5f4",
+  "actual_sha256": "9348c03f31e83b3e6312e51a94cf9fe23468b2fed5c456e666d990d41469d5f4",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "9827015",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:51:07.048Z"
+}

@@ -1,0 +1,55 @@
+{
+  "stable_asset_id": "6bbe6a0cf5d2ad64b9b8abfa",
+  "scene_id": "scene_042",
+  "provider": "pexels",
+  "provider_asset_id": "15833305",
+  "source_page_url": "https://www.pexels.com/video/a-blue-and-white-boat-is-traveling-on-the-water-15833305/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "wowi allinsky",
+  "attribution_required": false,
+  "search_query": "scientific research vessel ocean survey",
+  "editorial_role": "context",
+  "editorial_note": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "ship",
+        "vessel",
+        "boat",
+        "ocean",
+        "sea"
+      ]
+    ],
+    "forbidden_terms": [
+      "cargo",
+      "freight",
+      "ferry",
+      "cruise",
+      "yacht",
+      "fishing"
+    ]
+  },
+  "duration": 16.016,
+  "actual_duration_seconds": 16.016,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 16036279,
+  "sha256": "65d242f6e3a9f8a60c556159c6fbe3dcd103790f13b97e7960280762c66ba2ed",
+  "actual_sha256": "65d242f6e3a9f8a60c556159c6fbe3dcd103790f13b97e7960280762c66ba2ed",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "11362326",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:56:13.337Z"
+}

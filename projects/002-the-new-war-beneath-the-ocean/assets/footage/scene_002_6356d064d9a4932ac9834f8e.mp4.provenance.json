@@ -1,0 +1,65 @@
+{
+  "stable_asset_id": "0e02ac0dc4d4540687184fb3",
+  "scene_id": "scene_002",
+  "provider": "pexels",
+  "provider_asset_id": "38415766",
+  "source_page_url": "https://www.pexels.com/video/shipyard-welding-work-near-large-ship-38415766/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Somogro Bangladesh",
+  "attribution_required": false,
+  "search_query": "offshore work vessel operations",
+  "editorial_role": "context",
+  "editorial_note": "Surface scale and isolation.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "research",
+        "scientific",
+        "expedition",
+        "offshore",
+        "work",
+        "working"
+      ],
+      [
+        "vessel",
+        "ship",
+        "boat",
+        "deck",
+        "crew"
+      ]
+    ],
+    "forbidden_terms": [
+      "cargo",
+      "container",
+      "tanker",
+      "oil",
+      "ferry",
+      "cruise",
+      "yacht",
+      "sailboat"
+    ]
+  },
+  "duration": 14.014,
+  "actual_duration_seconds": 14.014,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 8752369,
+  "sha256": "bc5851e15f1acb7dadc08c0b45b6b8490ec4d7dca486e4fdae212454e8607697",
+  "actual_sha256": "bc5851e15f1acb7dadc08c0b45b6b8490ec4d7dca486e4fdae212454e8607697",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "16313181",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:50:51.329Z"
+}

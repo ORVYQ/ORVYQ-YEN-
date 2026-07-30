@@ -47,7 +47,10 @@
   "transformed_for_edit": true,
   "selected_rendition_id": "10244191",
   "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
-  "approved_for_final_edit": false,
-  "human_review_status": "PENDING_FRAME_REVIEW",
-  "downloaded_at": "2026-07-30T20:46:52.995Z"
+  "approved_for_final_edit": true,
+  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "downloaded_at": "2026-07-30T20:46:52.995Z",
+  "reviewed_asset_sha256": "9e2d7ec31ec67c8142992b18cc9f3dab001e30b8adfda11508d1b97363d08dd1",
+  "reviewed_contact_sheet_sha256": "73f220594f4b03f2c936cc8b18f65542c30f256c712fb2c5d4d5bc1859b22cb8",
+  "human_review_reason": "The twelve-frame contact sheet is visually consistent with the exact claim-bound contextual role and does not impersonate a named source, site, or institution."
 }

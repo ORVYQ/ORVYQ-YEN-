@@ -1,0 +1,67 @@
+{
+  "stable_asset_id": "bc360d7c64ca4a5058fdc011",
+  "scene_id": "scene_032",
+  "provider": "pexels",
+  "provider_asset_id": "38704048",
+  "source_page_url": "https://www.pexels.com/video/underwater-shipwreck-exploration-with-diving-fish-38704048/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "marius jensen-ringstad",
+  "attribution_required": false,
+  "search_query": "submersible deep sea floor",
+  "editorial_role": "context",
+  "editorial_note": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "underwater",
+        "deep sea",
+        "ocean",
+        "seabed",
+        "seafloor",
+        "submersible"
+      ],
+      [
+        "dark",
+        "darkness",
+        "lights",
+        "descent",
+        "exploration",
+        "floor"
+      ]
+    ],
+    "forbidden_terms": [
+      "city",
+      "rooftop",
+      "robot",
+      "android",
+      "futuristic",
+      "science fiction",
+      "sci-fi",
+      "building",
+      "street"
+    ]
+  },
+  "duration": 18.018,
+  "actual_duration_seconds": 18.018,
+  "width": 1440,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1440,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 8911751,
+  "sha256": "4a453774ae6e6594e528e8ed55d53fe751d104ab299241ba1c6a1dc4fa79b93c",
+  "actual_sha256": "4a453774ae6e6594e528e8ed55d53fe751d104ab299241ba1c6a1dc4fa79b93c",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "16441118",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:55:29.857Z"
+}

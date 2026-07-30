@@ -1,0 +1,65 @@
+{
+  "stable_asset_id": "c70a51cee438df1f1a568ec8",
+  "scene_id": "scene_024",
+  "provider": "pexels",
+  "provider_asset_id": "10972175",
+  "source_page_url": "https://www.pexels.com/video/fishermen-working-on-fishing-boat-10972175/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "James Anthony",
+  "attribution_required": false,
+  "search_query": "research vessel survey equipment",
+  "editorial_role": "context",
+  "editorial_note": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "research",
+        "survey",
+        "scientific",
+        "work",
+        "offshore",
+        "operations"
+      ],
+      [
+        "vessel",
+        "ship",
+        "boat",
+        "equipment",
+        "crew",
+        "deck"
+      ]
+    ],
+    "forbidden_terms": [
+      "yacht",
+      "leisure",
+      "speedboat",
+      "sailboat",
+      "tourist",
+      "recreation",
+      "tiny boat"
+    ]
+  },
+  "duration": 13.013,
+  "actual_duration_seconds": 13.013,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 13551855,
+  "sha256": "fd515a7046aae66dd12945f23faceaadbc508a6bbe6ee50627dfa3042f5de0e4",
+  "actual_sha256": "fd515a7046aae66dd12945f23faceaadbc508a6bbe6ee50627dfa3042f5de0e4",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "11279180",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:54:06.217Z"
+}

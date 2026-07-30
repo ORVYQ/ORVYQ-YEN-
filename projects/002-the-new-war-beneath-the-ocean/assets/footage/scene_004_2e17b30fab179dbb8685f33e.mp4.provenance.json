@@ -1,0 +1,65 @@
+{
+  "stable_asset_id": "6f472dbfb1efe876ba2524a6",
+  "scene_id": "scene_004",
+  "provider": "pexels",
+  "provider_asset_id": "37931415",
+  "source_page_url": "https://www.pexels.com/video/container-ship-operations-at-melbourne-dock-37931415/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Joolsmagools  ®️",
+  "attribution_required": false,
+  "search_query": "marine industrial pipe handling",
+  "editorial_role": "context",
+  "editorial_note": "Visible offshore industrial hardware establishes physical scale without claiming that the depicted platform or system is Japan's riser.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "offshore",
+        "marine",
+        "ship",
+        "vessel",
+        "deck"
+      ],
+      [
+        "equipment",
+        "machinery",
+        "industrial",
+        "pipe",
+        "crane",
+        "operation",
+        "working"
+      ]
+    ],
+    "forbidden_terms": [
+      "oil",
+      "petroleum",
+      "tanker",
+      "fuel",
+      "gas",
+      "drilling rig",
+      "refinery"
+    ]
+  },
+  "duration": 9,
+  "actual_duration_seconds": 9,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 4033727,
+  "sha256": "a32a5a330a04407c27d9d00fe0ffa840538a744c3054d10a3d707008a52c5573",
+  "actual_sha256": "a32a5a330a04407c27d9d00fe0ffa840538a744c3054d10a3d707008a52c5573",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "16094808",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:51:15.940Z"
+}

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "request_revision": 5,
+  "request_revision": 6,
   "policy": {
     "selection_basis": "Pexels source-page title/slug must satisfy explicit positive and negative terms before download; the Full-Length Review remains the frame-level human verification gate.",
     "blind_keyword_acceptance_forbidden": true
@@ -42,161 +42,211 @@
     },
     "scene_002": {
       "queries": [
-        "working ship rough ocean waves",
-        "large vessel heavy sea"
+        "research vessel at sea",
+        "offshore work vessel operations",
+        "scientific ship deck"
       ],
       "fallback_queries": [
-        "cargo ship rough sea waves",
-        "working boat open ocean"
+        "ocean research ship",
+        "working vessel rough sea",
+        "marine expedition vessel"
       ],
       "required_any_groups": [
         [
-          "working",
-          "cargo",
-          "commercial",
-          "industrial",
-          "large"
+          "research",
+          "scientific",
+          "expedition",
+          "offshore",
+          "work",
+          "working"
         ],
         [
-          "ship",
           "vessel",
-          "boat"
-        ],
-        [
-          "ocean",
-          "sea",
-          "wave",
-          "water"
+          "ship",
+          "boat",
+          "deck",
+          "crew"
         ]
       ],
       "forbidden_terms": [
-        "fishing",
-        "yacht",
-        "sailboat",
+        "cargo",
+        "container",
+        "tanker",
+        "oil",
+        "ferry",
         "cruise",
-        "tourist"
+        "yacht",
+        "sailboat"
       ]
     },
     "scene_003": {
       "queries": [
-        "underwater ROV robot deep sea",
-        "deep sea submersible vehicle"
+        "dark deep seabed",
+        "deep ocean floor lights",
+        "abyssal seafloor underwater"
       ],
       "fallback_queries": [
-        "underwater robot ocean floor",
-        "ROV dark ocean"
+        "submersible lights ocean floor",
+        "dark underwater seabed",
+        "deep sea floor exploration"
       ],
       "required_any_groups": [
         [
-          "rov",
-          "robot",
-          "submersible",
-          "vehicle",
-          "drone"
+          "underwater",
+          "ocean",
+          "sea",
+          "seabed",
+          "seafloor",
+          "ocean-floor",
+          "ocean floor"
         ],
         [
-          "underwater",
-          "deep-sea",
-          "deep sea",
-          "ocean"
+          "deep",
+          "dark",
+          "abyssal",
+          "submersible",
+          "lights",
+          "exploration",
+          "floor"
         ]
       ],
       "forbidden_terms": [
-        "coral beauty",
-        "squid",
+        "ray",
+        "fish",
+        "shark",
+        "whale",
+        "dolphin",
+        "coral",
+        "reef",
         "diver",
         "scuba",
         "snorkel",
-        "aquarium"
+        "aquarium",
+        "tropical",
+        "clear blue"
       ]
     },
     "scene_004": {
       "queries": [
-        "offshore oil rig ocean",
-        "industrial platform at sea"
+        "offshore vessel deck equipment",
+        "marine industrial pipe handling",
+        "work ship machinery deck"
       ],
       "fallback_queries": [
-        "offshore drilling platform",
-        "oil rig ocean waves"
+        "offshore equipment operation",
+        "industrial marine deck",
+        "ship deck crane machinery"
       ],
       "required_any_groups": [
         [
           "offshore",
-          "oil",
-          "rig",
-          "platform"
+          "marine",
+          "ship",
+          "vessel",
+          "deck"
         ],
         [
-          "ocean",
-          "sea",
-          "water",
-          "marine"
+          "equipment",
+          "machinery",
+          "industrial",
+          "pipe",
+          "crane",
+          "operation",
+          "working"
         ]
       ],
       "forbidden_terms": [
-        "tug",
-        "tow",
-        "fishing",
-        "yacht",
-        "recreational"
+        "oil",
+        "petroleum",
+        "tanker",
+        "fuel",
+        "gas",
+        "drilling rig",
+        "refinery"
       ]
     },
     "scene_005": {
       "queries": [
-        "ship control room operators",
-        "offshore operations control room"
+        "industrial control room operators",
+        "ship control room crew",
+        "engineers monitoring control center"
       ],
       "fallback_queries": [
-        "marine vessel control room crew",
-        "industrial operators monitoring screens"
+        "operators monitoring screens",
+        "technical operations control room",
+        "workers control center"
       ],
       "required_any_groups": [
         [
-          "control-room",
-          "control room",
+          "control",
           "operator",
-          "monitoring"
+          "monitoring",
+          "engineer",
+          "technician",
+          "operations"
         ],
         [
-          "ship",
-          "marine",
-          "offshore",
-          "industrial"
+          "room",
+          "center",
+          "screens",
+          "console",
+          "crew",
+          "team",
+          "workers"
         ]
       ],
       "forbidden_terms": [
-        "empty panel",
-        "close-up panel",
-        "arcade",
-        "gaming"
+        "interview",
+        "recording",
+        "camera",
+        "film",
+        "studio",
+        "television",
+        "podcast",
+        "gaming",
+        "smartphone",
+        "empty"
       ]
     },
     "scene_006": {
       "queries": [
-        "electric motor factory assembly",
-        "industrial motor manufacturing"
+        "industrial robotics factory assembly",
+        "precision machinery manufacturing",
+        "automated factory production line"
       ],
       "fallback_queries": [
-        "electric motor production line",
-        "motor components factory"
+        "electric motor factory assembly",
+        "robotic manufacturing line",
+        "precision industrial production"
       ],
       "required_any_groups": [
         [
           "motor",
+          "robot",
+          "robotic",
+          "automation",
+          "automated",
+          "precision",
+          "machinery",
+          "engine",
           "electric"
         ],
         [
           "factory",
           "manufacturing",
           "assembly",
-          "production"
+          "production",
+          "industrial",
+          "line"
         ]
       ],
       "forbidden_terms": [
-        "grinding",
-        "welding-only",
+        "motorcycle",
+        "bicycle",
         "repair",
-        "toy"
+        "toy",
+        "grinding",
+        "welding-only"
       ]
     },
     "scene_007": {
@@ -370,30 +420,43 @@
     },
     "scene_012": {
       "queries": [
-        "remote Pacific island aerial open ocean",
-        "isolated ocean island aerial"
+        "deep seabed survey",
+        "benthic ocean floor research",
+        "deep sea track seafloor"
       ],
       "fallback_queries": [
-        "remote island vast ocean",
-        "small Pacific island aerial"
+        "dark seabed observation",
+        "underwater ocean floor survey",
+        "deep sea benthic exploration"
       ],
       "required_any_groups": [
         [
-          "island"
+          "seabed",
+          "seafloor",
+          "ocean floor",
+          "benthic",
+          "underwater",
+          "deep sea"
         ],
         [
-          "ocean",
-          "pacific",
-          "sea",
-          "remote"
+          "survey",
+          "research",
+          "observation",
+          "track",
+          "disturbance",
+          "exploration",
+          "dark"
         ]
       ],
       "forbidden_terms": [
+        "island",
+        "coast",
+        "coastline",
+        "beach",
+        "tropical",
         "resort",
-        "tourist",
-        "city",
-        "coastline-only",
-        "beach-party"
+        "coral",
+        "reef"
       ]
     },
     "scene_013": {
@@ -707,28 +770,41 @@
         "35844496"
       ],
       "queries": [
-        "scientific research vessel at sea",
-        "ocean survey ship",
-        "marine research vessel"
+        "research vessel survey equipment",
+        "offshore work boat equipment",
+        "scientific vessel operations"
       ],
       "fallback_queries": [
-        "expedition vessel ocean",
-        "survey boat marine"
+        "survey ship at sea",
+        "marine work vessel crew",
+        "ocean research boat equipment"
       ],
       "required_any_groups": [
         [
-          "ship",
+          "research",
+          "survey",
+          "scientific",
+          "work",
+          "offshore",
+          "operations"
+        ],
+        [
           "vessel",
-          "boat"
+          "ship",
+          "boat",
+          "equipment",
+          "crew",
+          "deck"
         ]
       ],
       "forbidden_terms": [
-        "cargo",
-        "freight",
-        "ferry",
-        "cruise",
         "yacht",
-        "fishing"
+        "leisure",
+        "speedboat",
+        "sailboat",
+        "tourist",
+        "recreation",
+        "tiny boat"
       ]
     },
     "scene_025": {
@@ -834,27 +910,42 @@
         "29541109"
       ],
       "queries": [
-        "research vessel deck crew",
-        "ocean expedition ship crew equipment",
-        "scientific vessel deck operations"
+        "international assembly delegates",
+        "government conference podium",
+        "official policy meeting audience"
       ],
       "fallback_queries": [
-        "marine research ship crew",
-        "survey vessel equipment deployment"
+        "international conference participants",
+        "delegates formal meeting",
+        "public policy assembly"
       ],
       "required_any_groups": [
         [
-          "ship",
-          "vessel",
-          "boat"
+          "international",
+          "government",
+          "official",
+          "policy",
+          "delegate",
+          "assembly"
+        ],
+        [
+          "conference",
+          "meeting",
+          "podium",
+          "audience",
+          "participants",
+          "delegates"
         ]
       ],
       "forbidden_terms": [
-        "icebreaker",
-        "frozen",
-        "cargo",
-        "ferry",
-        "cruise"
+        "ship",
+        "boat",
+        "ocean",
+        "sea",
+        "empty",
+        "wedding",
+        "party",
+        "sales"
       ]
     },
     "scene_030": {
@@ -920,29 +1011,43 @@
         "9338834"
       ],
       "queries": [
-        "deep sea submersible underwater",
-        "ROV descending deep ocean",
-        "underwater robot dark ocean"
+        "deep underwater darkness lights",
+        "submersible deep sea floor",
+        "dark ocean seabed descent"
       ],
       "fallback_queries": [
-        "underwater drone darkness",
-        "submersible vehicle sea"
+        "deep sea exploration lights",
+        "underwater vehicle ocean floor",
+        "abyssal underwater darkness"
       ],
       "required_any_groups": [
         [
-          "submersible",
-          "rov",
-          "robot",
-          "drone",
-          "vehicle"
+          "underwater",
+          "deep sea",
+          "ocean",
+          "seabed",
+          "seafloor",
+          "submersible"
+        ],
+        [
+          "dark",
+          "darkness",
+          "lights",
+          "descent",
+          "exploration",
+          "floor"
         ]
       ],
       "forbidden_terms": [
-        "diver",
-        "divers",
-        "scuba",
-        "swimmer",
-        "snorkel"
+        "city",
+        "rooftop",
+        "robot",
+        "android",
+        "futuristic",
+        "science fiction",
+        "sci-fi",
+        "building",
+        "street"
       ]
     },
     "scene_033": {

@@ -1,0 +1,58 @@
+{
+  "stable_asset_id": "3e29d95d53e9e1969f15f46a",
+  "scene_id": "scene_046",
+  "provider": "pexels",
+  "provider_asset_id": "34494379",
+  "source_page_url": "https://www.pexels.com/video/fishing-boat-on-the-atlantic-ocean-at-sunset-34494379/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "K",
+  "attribution_required": false,
+  "search_query": "marine scientists collecting water samples",
+  "editorial_role": "human_context",
+  "editorial_note": "Baseline field sampling directly visualises the work required before disturbance without claiming a specific expedition or result.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "scientist",
+        "researcher",
+        "biologist",
+        "sample",
+        "marine",
+        "ocean",
+        "water",
+        "laboratory",
+        "lab"
+      ]
+    ],
+    "forbidden_terms": [
+      "diver",
+      "scuba",
+      "snorkel",
+      "aquarium",
+      "swimming-pool"
+    ]
+  },
+  "duration": 13.013,
+  "actual_duration_seconds": 13.013,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 37859870,
+  "sha256": "568e9cc97899475bbc98603f5b0db85050578668cb042ccdfc2cbc3554c6b5d2",
+  "actual_sha256": "568e9cc97899475bbc98603f5b0db85050578668cb042ccdfc2cbc3554c6b5d2",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "14615965",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-30T22:56:36.065Z"
+}
