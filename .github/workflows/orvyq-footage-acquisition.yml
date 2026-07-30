@@ -16,6 +16,8 @@ on:
       - "schemas/footage_visual_decisions.schema.json"
       - "scripts/lib/orvyq-footage-visual-decisions.mjs"
       - "scripts/lib/orvyq-footage-visual-decisions.test.mjs"
+      - "scripts/orvyq_apply_footage_use_contracts.mjs"
+      - "scripts/orvyq_prune_orphan_footage.mjs"
       - "scripts/orvyq_apply_footage_visual_decisions.mjs"
       - "scripts/orvyq_footage_visual_decisions.schema.test.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
@@ -26,28 +28,8 @@ on:
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
       - "projects/*/research/footage_constraint_overrides.json"
-      - "projects/*/research/footage_visual_decisions.json"
-      - "projects/*/research/visual_asset_requests.json"
-      - "projects/*/research/visual_asset_reviews.json"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - ".github/workflows/orvyq-footage-acquisition.yml"
-      - "schemas/footage_visual_decisions.schema.json"
-      - "scripts/lib/orvyq-footage-visual-decisions.mjs"
-      - "scripts/lib/orvyq-footage-visual-decisions.test.mjs"
-      - "scripts/orvyq_apply_footage_visual_decisions.mjs"
-      - "scripts/orvyq_footage_visual_decisions.schema.test.mjs"
-      - "scripts/orvyq_acquire_footage_demand.mjs"
-      - "scripts/orvyq_fail_closed_pending_footage.mjs"
-      - "scripts/orvyq_generate_footage_contact_sheets.mjs"
-      - "scripts/orvyq_prepare_footage_review_queue.mjs"
-      - "projects/*/direction/motion_hook.json"
-      - "projects/*/research/footage_acquisition_plan.json"
-      - "projects/*/research/footage_semantic_constraints.json"
-      - "projects/*/research/footage_constraint_overrides.json"
-      - "projects/*/research/footage_visual_decisions.json"
+      - "projects/*/research/footage_use_contracts.json"
+      - "projects/*/research/footage_visual_decisions*.json"
       - "projects/*/research/visual_asset_requests.json"
       - "projects/*/research/visual_asset_reviews.json"
 
@@ -57,17 +39,17 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: orvyq-footage-acquisition-${{ github.event_name == 'pull_request' && github.head_ref || github.ref }}
+  group: orvyq-footage-acquisition-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
   acquire:
-    if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && github.actor != 'github-actions[bot]'
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     env:
       PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-      TARGET_BRANCH: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+      TARGET_BRANCH: ${{ github.ref_name }}
     steps:
       - name: Checkout exact branch
         uses: actions/checkout@v4
@@ -84,15 +66,11 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             PROJECT_ID="${{ inputs.project_id }}"
           else
-            if [ "${{ github.event_name }}" = "push" ]; then
-              CHANGED_INPUT="$(
-                git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                  grep -E '^projects/[^/]+/(direction/motion_hook|research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|footage_visual_decisions|visual_asset_requests|visual_asset_reviews))\.json$' |
-                  head -n 1 || true
-              )"
-            else
-              CHANGED_INPUT=""
-            fi
+            CHANGED_INPUT="$(
+              git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
+                grep -E '^projects/[^/]+/(direction/motion_hook|research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|footage_use_contracts|footage_visual_decisions[^/]*|visual_asset_requests|visual_asset_reviews))\.json$' |
+                head -n 1 || true
+            )"
             if [ -n "$CHANGED_INPUT" ]; then
               PROJECT_ID="$(jq -r '.project_id' "$CHANGED_INPUT")"
             else
@@ -106,7 +84,7 @@ jobs:
                     actual="$(test -f "$runtime" && jq '.records | length' "$runtime" || echo 0)"
                     rejected="$(test -f "$reviews" && jq '.summary.rejected_from_metadata // 0' "$reviews" || echo 0)"
                     pending="$(test -f "$reviews" && jq '.summary.pending_frame_review // 0' "$reviews" || echo 0)"
-                    if [ "$actual" -lt "$planned" ] || [ "$rejected" -gt 0 ] || [ "$pending" -gt 0 ]; then
+                    if [ "$actual" -ne "$planned" ] || [ "$rejected" -gt 0 ] || [ "$pending" -gt 0 ]; then
                       jq -r '.project_id' "$plan"
                     fi
                   done | sort -u
@@ -119,6 +97,7 @@ jobs:
             fi
           fi
           test -f "projects/$PROJECT_ID/research/footage_acquisition_plan.json"
+          test -f "projects/$PROJECT_ID/research/footage_use_contracts.json"
           echo "project_id=$PROJECT_ID" >> "$GITHUB_OUTPUT"
           echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
           echo "Resolved project: $PROJECT_ID"
@@ -142,24 +121,23 @@ jobs:
           text = source.read_text()
           old = '  if (!matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;'
           new = '  if (!reviewApproved && !matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;'
-          if text.count(old) != 1:
-              raise SystemExit("Expected exactly one reusable semantic guard to patch")
-          source.write_text(text.replace(old, new))
+          if old in text:
+              source.write_text(text.replace(old, new))
+          elif new not in text:
+              raise SystemExit("Could not find the reusable semantic guard")
           PY
+
+      - name: Apply claim-bound footage use contracts
+        run: node scripts/orvyq_apply_footage_use_contracts.mjs --project-id="$PROJECT_ID"
 
       - name: Build current claim-bound review queue
         run: node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
 
-      - name: Apply byte-bound visual decisions
+      - name: Apply all byte-bound visual decision rounds
         shell: bash
         run: |
           set -euo pipefail
-          DECISIONS="projects/$PROJECT_ID/research/footage_visual_decisions.json"
-          if [ -f "$DECISIONS" ]; then
-            node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee footage-decisions.log
-          else
-            echo "No byte-bound visual decisions exist yet." | tee footage-decisions.log
-          fi
+          node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee footage-decisions.log
 
       - name: Determine acquisition requirement
         shell: bash
@@ -169,12 +147,12 @@ jobs:
           PLANNED="$(jq '.assets | length' "$ROOT/research/footage_acquisition_plan.json")"
           ACTUAL="$(jq '.records | length' "$ROOT/assets/footage_acquisition.runtime.json")"
           REJECTED="$(jq '.summary.rejected_from_metadata // 0' "$ROOT/research/visual_asset_reviews.json")"
-          if [ "$ACTUAL" -lt "$PLANNED" ] || [ "$REJECTED" -gt 0 ]; then
+          if [ "$ACTUAL" -ne "$PLANNED" ] || [ "$REJECTED" -gt 0 ]; then
             echo "NEEDS_ACQUISITION=true" >> "$GITHUB_ENV"
             echo "Reacquisition required: planned=$PLANNED actual=$ACTUAL rejected=$REJECTED"
           else
             echo "NEEDS_ACQUISITION=false" >> "$GITHUB_ENV"
-            echo "No reacquisition required; only review reconciliation will run."
+            echo "No reacquisition required; review reconciliation only."
           fi
 
       - name: Apply project-authored footage constraint overrides
@@ -211,21 +189,20 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/orvyq_acquire_footage_demand.mjs --project-id="$PROJECT_ID" 2>&1 | tee footage-acquisition.log
+          node scripts/orvyq_apply_footage_use_contracts.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_fail_closed_pending_footage.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_generate_footage_contact_sheets.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_prune_orphan_footage.mjs --project-id="$PROJECT_ID"
 
       - name: Reconcile decisions against replacement bytes
         shell: bash
         run: |
           set -euo pipefail
+          node scripts/orvyq_apply_footage_use_contracts.mjs --project-id="$PROJECT_ID"
           node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
-          if [ -f "projects/$PROJECT_ID/research/footage_visual_decisions.json" ]; then
-            node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee -a footage-decisions.log
-          fi
+          node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee -a footage-decisions.log
           node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
-          if [ -f "projects/$PROJECT_ID/research/footage_visual_decisions.json" ]; then
-            node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee -a footage-decisions.log
-          fi
+          node scripts/orvyq_apply_footage_visual_decisions.mjs --project-id="$PROJECT_ID" | tee -a footage-decisions.log
 
       - name: Resolve static semantic QA state
         shell: bash
@@ -275,7 +252,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git add "scripts/orvyq_acquire_footage_demand.mjs"
+          git add \
+            "scripts/orvyq_acquire_footage_demand.mjs" \
+            "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
+            "projects/$PROJECT_ID/research/footage_semantic_constraints.json" \
+            "projects/$PROJECT_ID/research/footage_constraint_overrides.json" \
+            "projects/$PROJECT_ID/research/footage_use_contracts.json" \
+            "projects/$PROJECT_ID/research/visual_asset_requests.json" \
+            "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
+            "projects/$PROJECT_ID/config/editorial_asset_plan.json" \
+            "projects/$PROJECT_ID/direction/motion_hook.json" \
+            "projects/$PROJECT_ID/direction/visual_rebalance_plan.json" \
+            "projects/$PROJECT_ID/direction/editorial_blueprint.json"
+          git add "projects/$PROJECT_ID/research"/footage_visual_decisions*.json
           git add -f \
             "projects/$PROJECT_ID/assets/footage" \
             "projects/$PROJECT_ID/assets/local_assets.json" \
@@ -284,17 +273,6 @@ jobs:
             "projects/$PROJECT_ID/qa/footage-contact-sheets" \
             "projects/$PROJECT_ID/qa/footage_contact_sheets.json" \
             "projects/$PROJECT_ID/qa/footage_review_queue.json"
-          git add \
-            "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
-            "projects/$PROJECT_ID/research/footage_semantic_constraints.json" \
-            "projects/$PROJECT_ID/research/footage_constraint_overrides.json" \
-            "projects/$PROJECT_ID/research/visual_asset_requests.json" \
-            "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
-            "projects/$PROJECT_ID/config/editorial_asset_plan.json" \
-            "projects/$PROJECT_ID/direction/motion_hook.json" \
-            "projects/$PROJECT_ID/direction/visual_rebalance_plan.json" \
-            "projects/$PROJECT_ID/direction/editorial_blueprint.json"
-          test ! -f "projects/$PROJECT_ID/research/footage_visual_decisions.json" || git add "projects/$PROJECT_ID/research/footage_visual_decisions.json"
           test ! -f "projects/$PROJECT_ID/qa/footage_semantic_review_audit.json" || git add "projects/$PROJECT_ID/qa/footage_semantic_review_audit.json"
           git config user.name "orvyq-footage-bot"
           git config user.email "orvyq-footage-bot@users.noreply.github.com"
@@ -303,9 +281,9 @@ jobs:
             exit 0
           fi
           if [ "$NEEDS_ACQUISITION" = "true" ]; then
-            git commit -m "Reacquire rejected claim-bound footage for $PROJECT_ID"
+            git commit -m "Reacquire claim-bound footage for $PROJECT_ID"
           else
-            git commit -m "Reconcile byte-bound footage review for $PROJECT_ID"
+            git commit -m "Reconcile claim-bound footage review for $PROJECT_ID"
           fi
           git pull --rebase origin "$TARGET_BRANCH"
           git push origin "HEAD:$TARGET_BRANCH"
@@ -323,7 +301,8 @@ jobs:
             projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_constraint_overrides.json
-            projects/${{ steps.project.outputs.project_id }}/research/footage_visual_decisions.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_use_contracts.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_visual_decisions*.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_requests.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_reviews.json
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
