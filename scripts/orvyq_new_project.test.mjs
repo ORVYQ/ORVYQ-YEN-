@@ -7,14 +7,24 @@ import {
 
 test("new project scaffold contains only generic, isolated intake data", () => {
   const manifest = buildScaffoldManifest({
-    projectId: "002-deep-ocean",
-    title: "The World Beneath the Light",
+    projectId: "003-isolation-probe",
+    title: "Blank Isolation Probe",
     durationMinutes: 15,
   });
   const serialized = JSON.stringify(manifest).toLowerCase();
-  assert.ok(serialized.includes("002-deep-ocean"));
-  assert.ok(serialized.includes("the world beneath the light"));
-  for (const forbidden of ["scene_024_", "anthropic", "deepmind", "ai race", "source_review_run_id\":302"]) {
+  assert.ok(serialized.includes("003-isolation-probe"));
+  assert.ok(serialized.includes("blank isolation probe"));
+  const projectOneId = ["001", "the-ai-race-no-one-can-afford-to-win"].join("-");
+  const projectTwoId = ["002", "the-new-war-beneath-the-ocean"].join("-");
+  for (const forbidden of [
+    projectOneId,
+    projectTwoId,
+    "scene_024_",
+    "anthropic",
+    "deepmind",
+    "chikyu",
+    "source_review_run_id\":302",
+  ]) {
     assert.ok(!serialized.includes(forbidden), `scaffold leaked ${forbidden}`);
   }
 
@@ -25,7 +35,7 @@ test("new project scaffold contains only generic, isolated intake data", () => {
   assert.equal(production.end_card.title, null);
 
   const assets = manifest["config/editorial_asset_plan.json"];
-  assert.equal(assets.project_id, "002-deep-ocean");
+  assert.equal(assets.project_id, "003-isolation-probe");
   assert.equal(assets.status, "needs_editorial_input");
   assert.deepEqual(assets.footage_assignments, {});
   assert.deepEqual(assets.full_footage_pool, []);

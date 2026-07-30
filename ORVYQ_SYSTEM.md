@@ -33,7 +33,9 @@ Until then, every ambiguity, wrong assumption, missing automation, infrastructur
 - finding, downloading and validating footage, images, official documents and music
 - source, licence, authorship, hash, duration and resolution records
 - edit-plan generation, captions, audio mix, rendering and QA
-- continuing automatically through Full-Length Review whenever required inputs exist
+- producing an immutable validated candidate before any review render
+- requiring an explicit workflow dispatch for the Full-Length Review so a
+  branch push cannot silently start a costly full-film render
 
 ### The user is responsible for
 
@@ -54,11 +56,16 @@ The user must **not** be asked to find footage, images, documents, music or lice
 6. **Wait only for `final_voice.mp3` when genuinely missing**
 7. **Audio Alignment and Final Edit-Plan Materialisation**
 8. **Candidate Validation**
-9. **720p Full-Length Review Encode**
+9. **Explicitly Dispatched 720p Full-Length Review Encode**
 10. **User Review and Explicit Approval**
 11. **1080p Final Encode**
 
 The system must not stop merely to report progress, cross an internal phase boundary or request an unnecessary approval. It continues until a real external dependency or blocking validation failure exists.
+
+Candidate Validation may run automatically because it renders no video.
+Full-Length Review must never be dispatched merely because a branch was
+pushed or Candidate Validation passed. It requires an intentional dispatch
+that names the selected project and successful validation run.
 
 ## 4. Removed concept: proof
 
@@ -78,7 +85,9 @@ Before waiting for narration, the system must provide:
 - output format requirements
 - split/join instructions only when platform limits require them
 
-After `final_voice.mp3` is supplied, the pipeline resumes automatically. No second user command should be required to continue toward review.
+After `final_voice.mp3` is supplied, the pipeline resumes automatically
+through Candidate Validation. Full-Length Review remains an intentional,
+auditable dispatch of the selected validated candidate.
 
 ## 6. Asset acquisition
 
@@ -139,12 +148,22 @@ It must verify at minimum:
 - audio integrity
 - renderability
 - absence of placeholders and unapproved fallbacks
+- whole-film visual-medium balance, including a 35–60% contextual-footage
+  range, no more than 30% source-derived graphics and no more than 35%
+  combined card-like presentation
+- per-section card/graphic clustering, so healthy whole-film averages cannot
+  hide a local slideshow
+- repeated evidence/card presentation motifs
 
 A failed candidate is repaired internally. It is not presented to the user as review-ready.
 
 ## 8. Full-Length Review
 
 The review is the complete film, not a sample.
+
+It is started only from `.github/workflows/orvyq-review.yml` with an explicit
+`project_id` and the run ID of a successful Candidate Validation. A normal
+push must not dispatch it.
 
 It must use the same:
 
@@ -218,21 +237,21 @@ After every meaningful discovery, update the live acceptance record and change l
 
 ## 13. Definition of done
 
-- [ ] Research and narration pass factual QA
+- [x] Research and narration pass factual QA
 - [x] ElevenLabs handoff script and settings are available
-- [ ] User narration is ingested and aligned
+- [x] User narration is ingested and aligned
 - [ ] Footage acquisition completes without manual hunting or push failure
-- [ ] Official evidence acquisition completes
-- [ ] Music acquisition and licensing complete
-- [ ] Provenance and licence audits pass
+- [x] Official evidence acquisition completes
+- [x] Music acquisition and licensing complete
+- [x] Provenance and licence audits pass for the last validated candidate
 - [ ] Candidate Validation passes on the complete film
-- [ ] A 720p Full-Length Review is generated
+- [x] A 720p Full-Length Review is generated
 - [ ] User corrections are collected and applied
 - [ ] Reusable defects discovered during review are fixed system-wide
 - [ ] A corrected Full-Length Review passes again
 - [ ] The user explicitly approves the candidate
 - [ ] The 1080p Final Encode succeeds
-- [ ] A fresh blank project proves isolation and repeatability
+- [x] A fresh blank project proves scaffold isolation and deterministic repeatability
 
 ## 14. Live acceptance record — Project 002
 
@@ -240,21 +259,55 @@ Project: `002-the-new-war-beneath-the-ocean`
 
 Branch: `agent/002-deep-sea-cold-war`
 
-Current status (last verified 2026-07-27, mid full-film coverage/validation pass):
+Current status (last verified 2026-07-30):
 
-- Research dossier, source catalog and claim map: complete
-- English narration (~2,216 words) and ElevenLabs-ready script: complete
-- `final_voice.mp3` (~16m35s): supplied by the user, present at `assets/audio/final_voice.mp3`
-- Contextual footage acquisition: PASS (run `30227021870`) — 20 licensed compact Pexels clips, runtime/provenance manifests committed
-- Official evidence acquisition: PASS (run `30228891705`) — JAMSTEC and ISA official evidence assets present and marked ready
-- Full-film semantic visual coverage: hand-authored and verified. Every new footage break was assigned only after the real clip content was frame-inspected (contact sheets, all 20 clips) and matched to the claim it interrupts; break placement is computed from the real per-slice durations in the last verified narration alignment (run `30257567458`), not guessed. `node scripts/orvyq_full_production_plan.mjs` now returns `ok:true` (147 shots, 1037.68s) — run `30269505202` — with zero unresolved creative-coverage gaps
-- Reusable defects found and fixed while reaching that point: `orvyq_full_production_plan.mjs`'s graphic-recap `maxSeconds` shrink logic threw against fixed/near-full slice neighbors (two real failures, both root-caused and fixed by only capping cards with real donor room); `resolved_pause_plan.schema.json` rejected the real `question` field `orvyq-pause-resolver.mjs` has always written; `editorial_pauses.schema.json` required a positive legacy `proof_duration_seconds` even for a project built entirely after proof's retirement; `orvyq-music-acquisition.yml` was hardcoded to project 001 despite its underlying script already being project-agnostic
-- Music: Project 002 had no `music_cue_sheet.json` at all (candidate validation had never previously reached that stage). Authored one hand-built from the shared, already-licensed `music_library/registry.json` (`sb_undertow`, Scott Buckley, CC BY 4.0) as a single tonal world across all seven editorial sections, matching `config/music_acquisition.json`'s own creative direction — no new external fetch required
-- Candidate Validation: in progress on this entry — do not treat as passed until a specific run ID is recorded here with conclusion `success`
-- Full-Length Review: not started
-- Final Encode: forbidden until explicit user approval of a completed Full-Length Review
+- Research dossier, 15 sourced factual claims, narration (~2,216 words),
+  ElevenLabs handoff and `final_voice.mp3` are complete.
+- Canonical narration alignment contains 390 captions and the last full-film
+  speech comparison measured 95.23% similarity.
+- Candidate Validation run `30490654916` passed all 247 tests then present,
+  built 147 shots and uploaded an immutable validated candidate.
+- Full-Length Review run `30491571952` successfully rendered the complete
+  1280×720, 31,127-frame, 17:17.59 film. Its final media-QA step failed
+  because `orvyq_media_qa.mjs` contained Project 001's literal opening
+  sentence. Recovery run `30446043722` proves the same rendered media passes
+  when the opening is derived from the selected project's script.
+- The media-QA opening is now project-derived and covered by cross-project
+  regression tests. The existing review artifact is the render-free
+  regression evidence; no replacement render is required for this defect.
+- Shared visual-balance gates now reject the old candidate: its 38.85%
+  source-derived and 46.84% card-like fractions exceed the new 30% and 35%
+  ceilings, and section-level clustering is checked independently.
+- Project 002's long closing claim was split into six narration-anchored
+  synthesis claims so the last 5m46s is no longer one 47-shot claim. Balanced
+  contextual footage acquisition is in progress; a corrected Candidate
+  Validation must pass before another review can be dispatched.
+- The complete unit suite passes 255/255 serially on the corrected source.
+- A blank `003-isolation-probe` scaffold was generated twice in clean
+  temporary roots. Both runs produced the same 19 generic files after
+  normalising the creation timestamp, with no Project 001 or Project 002
+  identifiers or assets.
+- Full-Length Review remains explicitly dispatched. Final Encode remains
+  forbidden until the user reviews and approves the corrected candidate.
 
 ## 15. Change log
+
+### 2026-07-30 — Project-independent QA and visual-balance hardening
+
+- Removed automatic Candidate Validation → Full-Length Review orchestration
+  from branch pushes.
+- Repaired invalid workflow YAML and restricted ordinary CI to read-only
+  repository permissions.
+- Made post-render opening/caption verification derive its requirement from
+  the selected project's `voice_script.txt`; added Project 001/002 leakage
+  regression tests.
+- Added shared whole-film and per-section visual-medium balance rules used by
+  semantic audit, alignment scoring and edit-plan tests.
+- Added repeated presentation-motif rejection and reduced evidence headings
+  to the mobile-safe 76-character limit.
+- Split Project 002's oversized closing claim and requested narration-specific
+  replacement footage.
+- Proved a fresh Project 003 scaffold is isolated and deterministic.
 
 ### 2026-07-27 — Authoritative contract established
 

@@ -7,7 +7,7 @@ import { PROJECTS_DIR } from "./lib/fs-utils.mjs";
 
 // A synthetic but internally-consistent stand-in for a canonical full-film
 // candidate: source-backed evidence coverage and fraction both comfortably
-// clear their minimums, contextual footage sits inside the 25-45% band, the
+// clear their minimums, contextual footage sits inside the 35-60% band, the
 // uninterrupted-evidence run is under the 15s cap, and every upstream audit
 // passes. Individual fields are overridden per test to isolate one rule at a
 // time.
@@ -24,7 +24,7 @@ function baselineInputs(overrides = {}) {
     semantic: {
       pass: true,
       evidence_archive_fraction: 0.44,
-      contextual_body_footage_fraction: 0.35,
+      contextual_body_footage_fraction: 0.45,
       maximum_uninterrupted_evidence_seconds: 12,
       official_primary_capture_fraction: 0.28,
       generic_stock_fraction: 0.05,
@@ -60,14 +60,14 @@ test("evidence coverage below the required minimum fails the category floor", ()
   assert.equal(result.pass, false);
 });
 
-test("contextual footage below 25% fails motion_hook_discipline", () => {
-  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_body_footage_fraction: 0.2 } }));
+test("contextual footage below 35% fails motion_hook_discipline", () => {
+  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_body_footage_fraction: 0.3 } }));
   assert.equal(result.categories.motion_hook_discipline.score, 0);
   assert.equal(result.pass, false);
 });
 
-test("contextual footage above 45% fails motion_hook_discipline", () => {
-  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_body_footage_fraction: 0.5 } }));
+test("contextual footage above 60% fails motion_hook_discipline", () => {
+  const result = computeAlignmentReadiness(baselineInputs({ semantic: { contextual_body_footage_fraction: 0.65 } }));
   assert.equal(result.categories.motion_hook_discipline.score, 0);
   assert.equal(result.pass, false);
 });

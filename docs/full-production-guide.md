@@ -1,64 +1,108 @@
 # Full-Production Pipeline Guide
 
-This documents the full-mode (~857.29s) pipeline. Proof and full now share
-one edit-plan data model end to end: `buildCanonicalEditPlan()` always
-builds from `direction/editorial_blueprint.json`'s `full_production.shots`
-(`scripts/orvyq_edit_plan.mjs`'s `buildFullPlan`), the same
-`edit_plan.schema.json`, the same per-shot validation rules, and the same
-`quality_policy`. Proof mode differs only in `frame_range.end_frame` — it is
-a genuine frame-prefix of the full candidate (see `resolveProofBoundaryFrame`
-in `scripts/orvyq_edit_plan.mjs`), not a separately-authored cut. There is no
-second renderer, composition, edit-plan schema, or content model for full
-mode.
+This guide describes the active full-film pipeline. `ORVYQ_SYSTEM.md` is the
+authoritative contract if this guide ever becomes stale.
+
+There is no active short-proof stage. Candidate Validation builds and freezes
+the complete render-ready candidate without rendering video. Full-Length
+Review renders that exact complete candidate at 720p only after an intentional
+workflow dispatch. Final Encode reuses the approved candidate at 1080p.
 
 ## 1. Pipeline overview
 
-| Stage | Script | What it does |
+| Stage | Implementation | Result |
 |---|---|---|
-| Narration alignment | `scripts/orvyq_narration_alignment.mjs` | Real per-word ASR timestamps for the full 804.36s narration recording, committed as `voice/narration_alignment.json`. |
-| Claim resolution | `scripts/lib/orvyq-evidence.mjs` (`loadResolvedEvidenceMap`) | Merges `research/evidence_map.json` with `research/evidence_resolutions.json`. All claims resolve through this merge with real, independently-verified sources. |
-| Editorial pause resolution | `scripts/lib/orvyq-pause-resolver.mjs` (`resolveFullFilmPauses`) | Resolves `direction/editorial_pause_map.json`'s `full_film_pause_anchors` (text-anchored) against the real ASR words, into real `source_time_seconds` values. |
-| Footage validation | `scripts/orvyq_materialize_footage.mjs` + `projects/*/assets/local_assets.json` | Validates the repository-owned licensed footage set against each companion provenance record's SHA-256, byte size, and final-edit approval. No workflow clones or reads another repository. |
-| Full production shot list | `scripts/orvyq_full_production_plan.mjs` | Builds `full_production.shots` from real data: every claim's real spoken window, section title cards, resolved pause shots, the shared motion hook as the cold open, and contextual footage placed across the whole film (`FOOTAGE_ASSIGNMENTS` + an automated run-length-breaking backfill pass, `FULL_FOOTAGE_POOL`). Zero placeholder shots; zero unplanned time gaps. |
-| Edit plan | `scripts/orvyq_edit_plan.mjs` (`buildCanonicalEditPlan`) | Both modes call `buildFullPlan` unconditionally. `mode: "proof"` additionally resolves a real shot boundary (`resolveProofBoundaryFrame`) and truncates only `frame_range.end_frame`; `duration_frames`, `shots`, and `quality_policy` are identical in both modes. |
-| Music resolution | `scripts/orvyq_music_resolve.mjs` | Full mode resolves nine distinct per-cue tracks (`direction/music_cue_sheet.json`'s `full_cues`, each with its own `track_id`) against `music_library/registry.json`, trims each to its cue's real duration with a short edge fade at cue boundaries, and concatenates them into one physical `assets/music/approved_bed.mp3`. No network fetch at render time. |
-| Audio mix | `scripts/orvyq_audio_mix.mjs` | Uses `resolveFullFilmPauses()` for real pause timing and `music_cue_sheet.json`'s real per-cue sections (real absolute seconds, no proportional rescaling). A proof run builds the exact same full mix and truncates only the final output to the proof boundary (`--allow-prefix-truncation`) — there is no separate proof-only soundtrack. |
-| Parity check | `scripts/orvyq_parity_check.mjs` | Static check that `buildProofPlan` has not been reintroduced and that `buildCanonicalEditPlan` still calls `buildFullPlan` unconditionally for both modes — guards the frame-prefix architecture, not proof/full data isolation (which no longer applies). |
-| Approval hardening | `scripts/orvyq_verify_approval.mjs` | The approval's `frozen_candidate_hash` must match the sha256 of the currently committed `qa/frozen_candidate.json`, the candidate's `mode` must match what's expected, its `source_commit_sha` must match the commit being rendered, and (stage `late`) every hash must still match a freshly recomputed candidate. |
+| Project selection | Explicit `project_id` workflow input | No implicit project or branch fallback |
+| Footage validation | `scripts/orvyq_materialize_footage.mjs` | Repository-owned footage and provenance hashes verified |
+| Narration alignment | `scripts/orvyq_narration_alignment.mjs` | Per-word ASR timing for the selected project's complete narration |
+| Pause resolution | `scripts/orvyq_resolve_pauses.mjs` | Authored text anchors resolved against the real narration |
+| Shot architecture | `scripts/orvyq_full_production_plan.mjs` | Complete narration-timed production shot list |
+| Candidate edit | `scripts/orvyq_edit_plan.mjs` and `scripts/orvyq_creative_polish.mjs` | Canonical full edit plan |
+| Music and mix | `scripts/orvyq_music_resolve.mjs` and `scripts/orvyq_audio_mix.mjs` | Licensed continuous music bed and narration mix |
+| Captions and registry | `scripts/orvyq_caption_build.mjs` and `scripts/orvyq_asset_registry.mjs` | Canonical captions and hash-addressed asset registry |
+| Render package | `scripts/orvyq_pipeline_cli.mjs build-render-project` | Type-checked, network-free Remotion project |
+| Candidate identity | `scripts/orvyq_frozen_candidate.mjs` | Immutable candidate and render-bundle hashes |
+| Pre-render QA | `npm run orvyq:qa` | Factual, technical, semantic and visual-balance gates |
+| Review render | `.github/workflows/orvyq-review.yml` | Explicitly dispatched 1280×720 complete film |
+| Final render | `.github/workflows/orvyq-final-encode.yml` | Explicitly approved 1920×1080 delivery |
 
-## 2. Current state (re-verify against a real CI run, not this file)
+## 2. Candidate Validation
 
-1. **Footage:** real and wired in. All 25 contextual clips + the motion hook
-   are stored in this repository and validated by
-   `scripts/orvyq_materialize_footage.mjs` in every workflow that needs them.
-2. **Music:** partially real. `sb_signal_to_noise` (CUE_06_REGULATION_PARADOX,
-   "Signal to Noise" Full Mix) is vendored, hash-verified, and
-   `approved_for_full: true`. The other eight cues (CUE_01, 02, 03, 04, 05,
-   07, 08, 09) declare their real intended `track_id`s in
-   `direction/music_cue_sheet.json` but remain `status:
-   "spec_ready_asset_pending"` until `.github/workflows/orvyq-music-acquisition.yml`
-   downloads, verifies, and vendors them (real network access, GitHub-hosted
-   runner only — never from this sandbox). `orvyq_audio_mix.mjs` /
-   `orvyq_music_resolve.mjs` correctly refuse to build a full-mode mix until
-   `full_render_requires_all_cues_ready` is satisfied.
-3. **Approval:** no full-mode (or new proof-mode) frozen candidate has been
-   approved yet. `orvyq_verify_approval.mjs --mode=full` correctly fails
-   until one is recorded.
+Run `.github/workflows/orvyq-candidate-validation.yml` with the exact
+`project_id`. It renders no frames. It:
 
-## 3. Validating the full edit plan without rendering
+1. locks the source SHA;
+2. verifies local footage and narration;
+3. builds alignment, pauses and the full production plan;
+4. runs the complete unit and canonical schema suites;
+5. fetches and verifies primary evidence;
+6. builds the edit, music, mix, captions and asset registry;
+7. type-checks the render-ready project;
+8. freezes the candidate identity;
+9. runs the complete pre-render QA chain; and
+10. uploads the immutable validated candidate and diagnostics.
 
-`.github/workflows/orvyq-full-plan-validate.yml` (manual `workflow_dispatch`
-only) validates the real footage set, regenerates `full_production.shots`,
-and runs `buildCanonicalEditPlan({ mode: "full" })` — no video frame is ever
-rendered, and this is entirely separate from `orvyq-full-render.yml` (the
-gated, human-approval-only final render workflow).
+A candidate is eligible for review only if this workflow concludes
+`success`. A failed candidate is repaired and revalidated; its artifact must
+not be rendered.
 
-## 4. What a human needs to do next
+## 3. Visual-balance policy
 
-1. Run `.github/workflows/orvyq-music-acquisition.yml` (if not already run)
-   to vendor the remaining eight tracks and flip their cues to `status:
-   "ready"`.
-2. Review a rendered proof artifact from `orvyq-proof.yml` and record a
-   matching `qa/proof_approval.json`.
-3. Once a `mode: "full"` frozen candidate exists and is approved,
-   `orvyq-full-render.yml` can pass its `--stage=early` gate.
+The shared balance policy is enforced by the semantic visual audit, alignment
+score and edit-plan tests:
+
+- contextual footage: 35–60% of the complete timeline;
+- source-derived graphics: at most 30%;
+- full-screen generic graphics: at most 8%;
+- all card-like presentation combined: at most 35%;
+- official primary evidence: at least 5%;
+- contextual footage plus real evidence/archive: at least 30%;
+- per section, source-derived graphics: at most 48%;
+- per section, all card-like presentation: at most 50%.
+
+Project profiles may tighten these limits but cannot loosen them. Repeated
+evidence/card motifs and section-local clusters fail even when whole-film
+averages appear healthy.
+
+## 4. Full-Length Review
+
+Dispatch `.github/workflows/orvyq-review.yml` with:
+
+- the selected `project_id`; and
+- `approved_validation_run_id`, identifying a successful Candidate
+  Validation for the exact branch and candidate.
+
+The workflow downloads and verifies that immutable candidate, renders the
+complete film at 1280×720 and runs post-render speech, caption, duration,
+black-frame, loudness and integrity checks. Opening verification is derived
+from the selected project's own `voice/voice_script.txt`; it contains no
+Project 001 or Project 002 literal.
+
+Normal branch pushes and Candidate Validation success do not dispatch this
+workflow.
+
+## 5. Approval and Final Encode
+
+The user reviews the complete Full-Length Review. Approval records the exact
+candidate and successful review artifact. Any editorial or asset change
+invalidates that approval and requires a new review.
+
+Only then may `.github/workflows/orvyq-final-encode.yml` render the exact
+approved candidate at 1920×1080. Final Encode must not introduce creative
+changes.
+
+## 6. Project isolation
+
+Create a project with:
+
+```bash
+npm run orvyq:new-project -- --project-id=003-example
+```
+
+The scaffold must contain only generic intake data. Project-specific research,
+assets, claims, narration, runtime manifests, QA reports and approvals remain
+under `projects/<project-id>/`. Shared scripts and workflows must not contain a
+literal project ID, asset path or review-run dependency.
+
+The current isolation regression creates a fresh project and verifies that no
+Project 001 or Project 002 identifiers or assets leak into it.

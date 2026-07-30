@@ -25,9 +25,9 @@
 import path from "node:path";
 import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
+import { DEFAULT_VISUAL_MEDIUM_BALANCE } from "./lib/orvyq-visual-balance.mjs";
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const clamp01 = (value) => Math.max(0, Math.min(1, Number(value) || 0));
-const SOURCE_BACKED_FRACTION_MINIMUM = 0.4;
 const MAX_UNINTERRUPTED_EVIDENCE_SECONDS = 15;
 
 // Pure scoring function -- takes already-loaded audit reports and returns the
@@ -36,7 +36,12 @@ const MAX_UNINTERRUPTED_EVIDENCE_SECONDS = 15;
 export function computeAlignmentReadiness({ evidence, assetAudit, semantic, pacing, mobile, speech, audio, motionHook }) {
   const requiredEvidenceCoverage = Number(evidence.minimum_required ?? 0.9);
   const evidenceCoverageReadiness = clamp01(evidence.weighted_visual_evidence_coverage / requiredEvidenceCoverage);
-  const sourceBackedFractionReadiness = clamp01(semantic.evidence_archive_fraction / SOURCE_BACKED_FRACTION_MINIMUM);
+  const thresholds = {
+    ...DEFAULT_VISUAL_MEDIUM_BALANCE,
+    ...(semantic.visual_medium_balance_thresholds || {}),
+  };
+  const sourceBackedFractionMinimum = thresholds.evidence_archive_fraction_min;
+  const sourceBackedFractionReadiness = clamp01(semantic.evidence_archive_fraction / sourceBackedFractionMinimum);
   // assetAudit.pass keeps the evidence/asset/semantic audits authoritative --
   // graphics existing is never sufficient on its own -- and
   // metadata_only_evidence_rejected / evidence audit failures already flow
@@ -44,7 +49,9 @@ export function computeAlignmentReadiness({ evidence, assetAudit, semantic, paci
   // earn these points either.
   const sourceBackedVisualEvidenceScore = assetAudit.pass ? Math.min(evidenceCoverageReadiness, sourceBackedFractionReadiness) * 25 : 0;
 
-  const contextualFractionInRange = semantic.contextual_body_footage_fraction >= 0.25 && semantic.contextual_body_footage_fraction <= 0.45;
+  const contextualFractionInRange =
+    semantic.contextual_body_footage_fraction >= thresholds.contextual_body_footage_fraction_min &&
+    semantic.contextual_body_footage_fraction <= thresholds.contextual_body_footage_fraction_max;
   const evidenceRunWithinPolicy = semantic.maximum_uninterrupted_evidence_seconds <= MAX_UNINTERRUPTED_EVIDENCE_SECONDS + 0.001;
   // Official capture fraction and generic stock fraction stay visible below
   // as diagnostics only -- neither independently fails this category once
@@ -68,7 +75,7 @@ export function computeAlignmentReadiness({ evidence, assetAudit, semantic, paci
         evidence_coverage_readiness: evidenceCoverageReadiness,
         source_backed_fraction_readiness: sourceBackedFractionReadiness,
         required_evidence_coverage: requiredEvidenceCoverage,
-        source_backed_fraction_minimum: SOURCE_BACKED_FRACTION_MINIMUM
+        source_backed_fraction_minimum: sourceBackedFractionMinimum
       }
     },
     source_coverage: { weight: 15, score: clamp01(Math.min(evidence.weighted_supported_coverage, evidence.weighted_visual_evidence_coverage)) * 15 },

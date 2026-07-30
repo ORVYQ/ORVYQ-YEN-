@@ -24,7 +24,10 @@
 // back to the full (non-rotated) fact pool rather than inventing content.
 
 const MAX_EYEBROW = 60;
-const MAX_TITLE = 90;
+// The mobile-legibility audit warns above 76 characters. Author inside the
+// same bound so the renderer never receives a title that QA already knows is
+// too dense for a phone-sized review.
+const MAX_TITLE = 76;
 
 function truncateWords(text, max) {
   const clean = String(text || "").replace(/\s+/g, " ").trim();

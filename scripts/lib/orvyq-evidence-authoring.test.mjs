@@ -69,12 +69,12 @@ test("comparison: a claim with only a positive requirement still gets truthful l
   assert.ok(result.right);
 });
 
-test("eyebrow is uppercase, non-generic, and within 60 characters; title is within 90 and not the raw claim id", () => {
+test("eyebrow is uppercase, non-generic, and within 60 characters; title is mobile-safe and not the raw claim id", () => {
   const c = claim();
   const result = buildEvidenceContent({ claim: c, kind: "concept_map", role: "evidence", displaySources: [SOURCE_A], ownSources: [SOURCE_A], section: SECTION, occurrence: 0 });
   assert.equal(result.eyebrow, result.eyebrow.toUpperCase());
   assert.ok(result.eyebrow.length <= 60);
-  assert.ok(result.title.length <= 90);
+  assert.ok(result.title.length <= 76);
   assert.notEqual(result.title, c.claim_id);
   assert.notEqual(result.title.toLowerCase(), "evidence");
 });

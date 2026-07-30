@@ -21,6 +21,7 @@ import path from "node:path";
 import { projectDir, readJson, pathExists } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
+import { resolveVisualBalanceThresholds } from "./lib/orvyq-visual-balance.mjs";
 const run = promisify(execFile);
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const VALID_ROLES = new Set(["evidence", "archive", "context", "human_context", "metaphor", "graphic"]);
@@ -191,18 +192,17 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
   const graphicFraction = pureGraphicFrames / plan.duration_frames;
   const evidenceFraction = evidenceFrames / plan.duration_frames;
   const contextualFootageFraction = contextualFootageFrames / plan.duration_frames;
+  const visualBalanceThresholds = resolveVisualBalanceThresholds(blueprint.global_rules);
   // Proof is now a genuine frame-prefix of the full candidate: both modes
   // share the exact same plan.shots/duration_frames (see
   // scripts/orvyq_edit_plan.mjs), so there is only one real fraction profile
-  // to check regardless of plan.mode -- matching the same recalibrated
-  // thresholds scripts/orvyq_semantic_visual_audit.mjs applies (measured
-  // against the real full_production shot list: ~44.1% evidence, ~17.1%
-  // graphics, ~37.5% contextual footage, 8 emphasis beats).
-  assert.ok(graphicFraction <= 0.2);
+  // to check regardless of plan.mode -- matching the same shared thresholds
+  // scripts/orvyq_semantic_visual_audit.mjs applies.
+  assert.ok(graphicFraction <= visualBalanceThresholds.full_screen_graphic_fraction_max);
   if (plan.quality_policy?.cinematic_body_footage) {
-    assert.ok(evidenceFraction >= 0.4);
-    assert.ok(contextualFootageFraction >= 0.25);
-    assert.ok(contextualFootageFraction <= 0.45);
+    assert.ok(evidenceFraction >= visualBalanceThresholds.evidence_archive_fraction_min);
+    assert.ok(contextualFootageFraction >= visualBalanceThresholds.contextual_body_footage_fraction_min);
+    assert.ok(contextualFootageFraction <= visualBalanceThresholds.contextual_body_footage_fraction_max);
     assert.ok(emphasisBeats >= 4);
   }
   assert.ok(shotDurations.size >= 5);
