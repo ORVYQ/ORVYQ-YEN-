@@ -13,6 +13,7 @@ on:
       - "claude/**"
     paths:
       - ".github/workflows/orvyq-footage-review-queue.yml"
+      - "scripts/orvyq_resolve_pauses.mjs"
       - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
       - "projects/*/assets/footage_acquisition.runtime.json"
@@ -25,6 +26,7 @@ on:
       - main
     paths:
       - ".github/workflows/orvyq-footage-review-queue.yml"
+      - "scripts/orvyq_resolve_pauses.mjs"
       - "scripts/orvyq_full_production_plan.mjs"
       - "scripts/orvyq_prepare_footage_review_queue.mjs"
       - "projects/*/assets/footage_acquisition.runtime.json"
@@ -90,8 +92,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Regenerate full-production blueprint from current asset assignments
-        run: node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+      - name: Resolve pauses and regenerate full-production blueprint
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
+          node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
 
       - name: Build claim-bound footage review queue
         run: node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
@@ -101,6 +107,7 @@ jobs:
         run: |
           set -euo pipefail
           git add \
+            "projects/$PROJECT_ID/direction/resolved_pause_plan.json" \
             "projects/$PROJECT_ID/direction/editorial_blueprint.json" \
             "projects/$PROJECT_ID/direction/editorial_pause_map.json"
           git add -f "projects/$PROJECT_ID/qa/footage_review_queue.json"
@@ -120,6 +127,7 @@ jobs:
           name: orvyq-footage-review-queue-${{ env.PROJECT_ID }}-${{ github.run_id }}
           retention-days: 30
           path: |
+            projects/${{ env.PROJECT_ID }}/direction/resolved_pause_plan.json
             projects/${{ env.PROJECT_ID }}/direction/editorial_blueprint.json
             projects/${{ env.PROJECT_ID }}/qa/footage_review_queue.json
             projects/${{ env.PROJECT_ID }}/qa/footage_contact_sheets.json
