@@ -2,6 +2,57 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "scenes": {
+    "scene_003": {
+      "queries": [
+        "dark underwater ocean floor",
+        "underwater exploration lights",
+        "deep ocean seabed"
+      ],
+      "fallback_queries": [
+        "underwater cave darkness",
+        "ocean floor exploration",
+        "deep underwater landscape"
+      ],
+      "required_any_groups": [
+        ["underwater", "ocean", "sea", "seabed", "ocean-floor", "ocean floor"],
+        ["deep", "dark", "exploration", "submersible", "robot", "vehicle", "lights", "floor"]
+      ],
+      "forbidden_terms": ["coral", "reef", "diver", "scuba", "snorkel", "aquarium", "speedboat", "yacht"]
+    },
+    "scene_005": {
+      "queries": [
+        "people monitoring control room",
+        "engineer monitoring screens",
+        "industrial control room workers"
+      ],
+      "fallback_queries": [
+        "operator at computer screens",
+        "technician operating control system",
+        "workers control center"
+      ],
+      "required_any_groups": [
+        ["control", "operator", "monitoring", "engineer", "technician", "operations"],
+        ["person", "people", "worker", "workers", "man", "woman", "crew", "team"]
+      ],
+      "forbidden_terms": ["empty", "panel close-up", "close-up panel", "arcade", "gaming", "smartphone"]
+    },
+    "scene_006": {
+      "queries": [
+        "industrial robotics factory assembly",
+        "precision machinery manufacturing",
+        "automated factory production line"
+      ],
+      "fallback_queries": [
+        "electric motor factory assembly",
+        "robotic manufacturing line",
+        "precision industrial production"
+      ],
+      "required_any_groups": [
+        ["motor", "robot", "robotic", "automation", "automated", "precision", "machinery", "engine", "electric"],
+        ["factory", "manufacturing", "assembly", "production", "industrial", "line"]
+      ],
+      "forbidden_terms": ["motorcycle", "bicycle", "repair", "toy", "grinding", "welding-only"]
+    },
     "scene_007": {
       "queries": [
         "government conference delegates",
