@@ -7,6 +7,7 @@ import {
   useCurrentFrame,
 } from "remotion";
 import type { PrimaryEvidenceSpec } from "./types/evidence";
+import { ORVYQ_DESIGN } from "./designSystem";
 
 const clamp = {
   extrapolateLeft: "clamp" as const,
@@ -18,6 +19,7 @@ export const DocumentEvidenceSequence: React.FC<{
   durationInFrames: number;
 }> = ({ spec, durationInFrames }) => {
   const frame = useCurrentFrame();
+  const { color, type, safe } = ORVYQ_DESIGN;
   const images = spec.image_assets || [];
   if (!images.length) return null;
 
@@ -33,19 +35,14 @@ export const DocumentEvidenceSequence: React.FC<{
     interpolate(localProgress, [0.88, 1], [1, 0], clamp);
   const scale = interpolate(localProgress, [0, 1], [1.015, 1.07], clamp);
   const activeImage = images[activeIndex];
-  const sourceNames = [
-    "ANTHROPIC — RESPONSIBLE SCALING POLICY",
-    "ANTHROPIC — EXECUTIVE SUMMARY",
-    "GOOGLE DEEPMIND — FRONTIER SAFETY FRAMEWORK",
-  ];
-  const activeSourceName = sourceNames[activeIndex] || spec.source_label;
+  const activeSourceName = spec.source_labels?.[activeIndex] || spec.source_label;
 
   return (
     <AbsoluteFill
       style={{
         background: "#050A11",
         overflow: "hidden",
-        fontFamily: "Arial, Helvetica, sans-serif",
+        fontFamily: type.family,
       }}
     >
       <Img
@@ -70,15 +67,15 @@ export const DocumentEvidenceSequence: React.FC<{
       <div
         style={{
           position: "absolute",
-          left: 70,
-          top: 58,
+          left: safe.x,
+          top: safe.top,
           zIndex: 12,
           display: "flex",
           alignItems: "center",
           gap: 12,
-          color: "#F6F2E9",
+          color: color.ink,
           fontSize: 21,
-          fontWeight: 850,
+          fontWeight: type.labelWeight,
           letterSpacing: ".23em",
         }}
       >
@@ -87,7 +84,7 @@ export const DocumentEvidenceSequence: React.FC<{
             width: 9,
             height: 9,
             borderRadius: 99,
-            background: "#E06A63",
+            background: color.signal,
           }}
         />
         ORVYQ
@@ -96,7 +93,7 @@ export const DocumentEvidenceSequence: React.FC<{
       <div
         style={{
           position: "absolute",
-          left: 70,
+          left: safe.x,
           top: 146,
           width: 430,
           zIndex: 12,
@@ -104,9 +101,9 @@ export const DocumentEvidenceSequence: React.FC<{
       >
         <div
           style={{
-            color: "#8CB5DC",
+            color: color.information,
             fontSize: 21,
-            fontWeight: 900,
+            fontWeight: type.labelWeight,
             letterSpacing: ".16em",
             lineHeight: 1.15,
           }}
@@ -115,9 +112,9 @@ export const DocumentEvidenceSequence: React.FC<{
         </div>
         <div
           style={{
-            color: "#F6F2E9",
+            color: color.ink,
             fontSize: 43,
-            fontWeight: 840,
+            fontWeight: type.displayWeight,
             letterSpacing: "-.035em",
             lineHeight: 1.03,
             marginTop: 15,
@@ -127,7 +124,7 @@ export const DocumentEvidenceSequence: React.FC<{
         </div>
         <div
           style={{
-            color: "#C8CED5",
+            color: color.muted,
             fontSize: 27,
             fontWeight: 590,
             lineHeight: 1.28,
@@ -138,7 +135,7 @@ export const DocumentEvidenceSequence: React.FC<{
         </div>
         <div
           style={{
-            color: "#E06A63",
+            color: color.signal,
             fontSize: 22,
             fontWeight: 850,
             letterSpacing: ".12em",
@@ -182,21 +179,21 @@ export const DocumentEvidenceSequence: React.FC<{
       <div
         style={{
           position: "absolute",
-          left: 70,
+          left: safe.x,
           right: 72,
           bottom: 155,
           zIndex: 14,
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          color: "#C8CED5",
+          color: color.muted,
           fontSize: 23,
           fontWeight: 760,
           letterSpacing: ".035em",
         }}
       >
         <span>{activeSourceName}</span>
-        <span style={{ color: "rgba(246,242,233,.6)" }}>REAL PDF PAGE CAPTURE</span>
+        <span style={{ color: "rgba(246,242,233,.6)" }}>VERIFIED PRIMARY SOURCE</span>
       </div>
     </AbsoluteFill>
   );

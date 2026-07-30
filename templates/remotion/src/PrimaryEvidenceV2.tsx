@@ -13,12 +13,14 @@ import type {
   EvidenceItem,
   PrimaryEvidenceSpec,
 } from "./types/evidence";
+import { ORVYQ_DESIGN } from "./designSystem";
 
-const INK = "#F6F2E9";
-const MUTED = "#C7CED6";
-const BLUE = "#8CB5DC";
-const RED = "#E06A63";
-const GROUND = "#060D16";
+const { color, type, safe } = ORVYQ_DESIGN;
+const INK = color.ink;
+const MUTED = color.muted;
+const BLUE = color.information;
+const RED = color.signal;
+const GROUND = color.canvasLift;
 const clamp = {
   extrapolateLeft: "clamp" as const,
   extrapolateRight: "clamp" as const,
@@ -37,16 +39,16 @@ const FrameMark: React.FC = () => (
   <div
     style={{
       position: "absolute",
-      left: 68,
-      top: 48,
+      left: safe.x,
+      top: safe.top,
       zIndex: 20,
       display: "flex",
       alignItems: "center",
       gap: 12,
       color: INK,
-      fontFamily: "Arial, Helvetica, sans-serif",
+      fontFamily: type.family,
       fontSize: 22,
-      fontWeight: 850,
+      fontWeight: type.labelWeight,
       letterSpacing: ".24em",
     }}
   >
@@ -70,11 +72,11 @@ const Header: React.FC<{
   <div
     style={{
       position: "absolute",
-      left: 68,
-      right: 68,
-      top: 92,
+      left: safe.x,
+      right: safe.x,
+      top: 104,
       zIndex: 12,
-      fontFamily: "Arial, Helvetica, sans-serif",
+      fontFamily: type.family,
     }}
   >
     <div
@@ -94,7 +96,7 @@ const Header: React.FC<{
         fontSize: Math.max(44, (spec.font_px || 36) + 10),
         lineHeight: 1.01,
         letterSpacing: "-.034em",
-        fontWeight: 860,
+        fontWeight: type.displayWeight,
         marginTop: 11,
         maxWidth: compact ? 1160 : 1680,
       }}
@@ -122,18 +124,18 @@ const SourceFooter: React.FC<{ spec: PrimaryEvidenceSpec }> = ({ spec }) => (
   <div
     style={{
       position: "absolute",
-      left: 68,
-      right: 68,
-      bottom: 126,
+      left: safe.x,
+      right: safe.x,
+      bottom: safe.bottom,
       zIndex: 18,
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
       gap: 24,
-      fontFamily: "Arial, Helvetica, sans-serif",
+      fontFamily: type.family,
       fontSize: 24,
       lineHeight: 1.15,
-      fontWeight: 800,
+      fontWeight: type.labelWeight,
       letterSpacing: ".04em",
       color: MUTED,
     }}
@@ -153,7 +155,7 @@ const SourceFooter: React.FC<{ spec: PrimaryEvidenceSpec }> = ({ spec }) => (
       </span>
     </div>
     <span style={{ color: "rgba(246,242,233,.55)", whiteSpace: "nowrap" }}>
-      SOURCE-DERIVED
+      {IMAGE_KINDS.has(spec.kind) ? "VERIFIED PRIMARY SOURCE" : "SOURCE-DERIVED EXPLANATION"}
     </span>
   </div>
 );

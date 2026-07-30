@@ -16,9 +16,13 @@ type BaseShot = {
   scene_id: string;
   start_frame: number;
   end_frame: number;
-  claim_id?: string;
+  claim_id: string;
   visual_role?: string;
   editorial_purpose?: string;
+  narration_anchor: string;
+  semantic_rationale: string;
+  semantic_link: "physical" | "historical" | "conceptual" | "direct_evidence";
+  source_slice_index?: number | null;
   editorial_overlay?: EditorialOverlaySpec | null;
   emphasis_card?: EmphasisCardSpec | null;
   hook_question?: HookQuestionSpec | null;

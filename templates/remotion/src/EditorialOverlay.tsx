@@ -1,6 +1,7 @@
 import React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { EvidenceDataPoint, EvidenceMatrixRow, EvidenceNode, EvidenceVisual, EvidenceVisualSpec } from "./EvidenceVisual";
+import { ORVYQ_DESIGN } from "./designSystem";
 
 export type EditorialOverlaySpec = {
   type: "source_mosaic" | "comparison" | "document" | "stat" | "process" | "email_recreation" | "quote" | "boundary" | "timeline" | "bar_evidence" | "matrix" | "evidence_chain" | "node_map";
@@ -24,10 +25,11 @@ export type EditorialOverlaySpec = {
   unit?: string;
 };
 
-const ink = "#F5F0E7";
-const muted = "#C9C4BA";
-const accent = "#D95B53";
-const blue = "#86A9CC";
+const { color, type, safe } = ORVYQ_DESIGN;
+const ink = color.ink;
+const muted = color.muted;
+const accent = color.signal;
+const blue = color.information;
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 const EVIDENCE_TYPES = new Set(["timeline", "bar_evidence", "matrix", "evidence_chain", "node_map"]);
 
@@ -102,11 +104,11 @@ export const EditorialOverlay: React.FC<{ spec: EditorialOverlaySpec; durationIn
   const width = isEvidenceVisual ? 980 : 760;
 
   return (
-    <div style={{ position: "absolute", left: 70, top: 62, width, maxHeight: 790, opacity, transform: `translateY(${(1 - reveal) * 24}px)`, fontFamily: "Arial, Helvetica, sans-serif", zIndex: 8 }}>
-      <div style={{ position: "absolute", inset: -18, background: "linear-gradient(135deg,rgba(5,10,16,.94),rgba(12,22,32,.84))", border: "1px solid rgba(245,240,231,.2)", boxShadow: "0 28px 90px rgba(0,0,0,.52)", backdropFilter: "blur(15px)" }} />
-      <div style={{ position: "relative", padding: "22px 25px 23px" }}>
-        <div style={{ color: blue, fontSize: 18, lineHeight: 1.15, fontWeight: 800, letterSpacing: ".17em" }}>{spec.eyebrow}</div>
-        {!titleIsRepeatedInside ? <div style={{ color: ink, fontSize: Math.max(34, (spec.font_px || 30) + 5), lineHeight: 1.04, fontWeight: 820, letterSpacing: "-.025em", marginTop: 13 }}>{spec.title}</div> : null}
+    <div style={{ position: "absolute", left: safe.x, top: safe.top, width, maxHeight: 790, opacity, transform: `translateY(${(1 - reveal) * 18}px)`, fontFamily: type.family, zIndex: 8 }}>
+      <div style={{ position: "absolute", inset: -18, background: "linear-gradient(90deg,rgba(5,9,14,.92),rgba(5,9,14,.68) 76%,rgba(5,9,14,0))", boxShadow: "0 28px 90px rgba(0,0,0,.42)", backdropFilter: "blur(12px)" }} />
+      <div style={{ position: "relative", padding: "22px 25px 23px", borderTop: `2px solid ${color.hairline}` }}>
+        <div style={{ color: blue, fontSize: 18, lineHeight: 1.15, fontWeight: type.labelWeight, letterSpacing: ".17em" }}>{spec.eyebrow}</div>
+        {!titleIsRepeatedInside ? <div style={{ color: ink, fontSize: Math.max(36, (spec.font_px || 30) + 5), lineHeight: 1.06, fontWeight: type.displayWeight, letterSpacing: "-.025em", marginTop: 13 }}>{spec.title}</div> : null}
         {spec.type === "source_mosaic" ? <SourceMosaic spec={spec} /> : null}
         {spec.type === "comparison" ? <Comparison spec={spec} /> : null}
         {spec.type === "process" ? <Process spec={spec} /> : null}
