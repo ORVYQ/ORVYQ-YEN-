@@ -67,10 +67,11 @@ jobs:
                   while IFS= read -r -d '' plan; do
                     root="${plan%/research/footage_acquisition_plan.json}"
                     runtime="$root/assets/footage_acquisition.runtime.json"
-                    semantic="$root/research/footage_semantic_constraints.json"
+                    reviews="$root/research/visual_asset_reviews.json"
                     planned="$(jq '.assets | length' "$plan")"
                     actual="$(test -f "$runtime" && jq '.records | length' "$runtime" || echo 0)"
-                    if [ "$actual" -lt "$planned" ] || [ -f "$semantic" ]; then jq -r '.project_id' "$plan"; fi
+                    pending="$(test -f "$reviews" && jq '.pending_frame_review_scene_ids | length' "$reviews" || echo 0)"
+                    if [ "$actual" -lt "$planned" ] || [ "$pending" -gt 0 ]; then jq -r '.project_id' "$plan"; fi
                   done | sort -u
               )
               if [ "${#CANDIDATES[@]}" -ne 1 ]; then
