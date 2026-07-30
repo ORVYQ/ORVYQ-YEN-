@@ -13,6 +13,42 @@ const OFFICIAL = new Set(["split_documents", "official_document", "official_figu
 const DERIVED = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
 const CRITICAL = 5;
 
+function canonicalText(value) {
+  return typeof value === "string" ? value.replace(/\s+/g, " ").trim() : "";
+}
+
+export function presentationMotifKey(shot) {
+  if (shot.asset_type === "evidence") {
+    const evidence = shot.evidence || {};
+    const imageIdentity = [...(evidence.image_assets || [])].sort().join("|");
+    const contentIdentity = [
+      canonicalText(evidence.left),
+      canonicalText(evidence.left_detail),
+      canonicalText(evidence.right),
+      canonicalText(evidence.right_detail),
+      canonicalText(evidence.body),
+      canonicalText(evidence.limitation),
+    ].join("|");
+    return [
+      "evidence",
+      evidence.kind || "",
+      canonicalText(evidence.title),
+      imageIdentity ? `images:${imageIdentity}` : `content:${contentIdentity}`,
+    ].join(":");
+  }
+  if (shot.asset_type === "graphic") {
+    const graphic = shot.graphic || {};
+    return [
+      "graphic",
+      graphic.type || "",
+      canonicalText(graphic.title),
+      canonicalText(graphic.subtitle),
+      ...(graphic.labels || []).map(canonicalText),
+    ].join(":");
+  }
+  return null;
+}
+
 export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
   const [plan, blueprint, evidenceMap] = await Promise.all([
@@ -85,11 +121,12 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
       section.pureGraphicFrames += frames;
       currentEvidenceRunFrames = 0;
     }
-    const motif = shot.asset_type === "evidence"
-      ? `evidence:${shot.evidence?.kind}:${shot.evidence?.title}`
-      : shot.asset_type === "graphic"
-        ? `graphic:${shot.graphic?.type}:${shot.graphic?.title}`
-        : null;
+    // A source title is not a visual identity. The same JAMSTEC page can
+    // legitimately introduce different captured figures, and one IEA
+    // source can support several distinct boundary comparisons. Count a
+    // repeat only when the reader-facing image/content is the same, not
+    // merely when its citation title matches.
+    const motif = presentationMotifKey(shot);
     if (motif) repeatedPresentationMotifs.set(motif, (repeatedPresentationMotifs.get(motif) || 0) + 1);
   }
 
