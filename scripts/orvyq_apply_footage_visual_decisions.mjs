@@ -22,11 +22,18 @@ function matches(entry, decision) {
   );
 }
 
+function decisionRoundOrder(name) {
+  if (name === "footage_visual_decisions.json") return 0;
+  const numbered = name.match(/^footage_visual_decisions_round([0-9]+)\.json$/);
+  if (numbered) return Number(numbered[1]);
+  return Number.MAX_SAFE_INTEGER;
+}
+
 async function loadDecisionRounds(dir, projectId) {
   const researchDir = path.join(dir, "research");
   const names = (await fs.readdir(researchDir))
     .filter((name) => /^footage_visual_decisions(?:_[a-z0-9-]+)?\.json$/.test(name))
-    .sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+    .sort((a, b) => decisionRoundOrder(a) - decisionRoundOrder(b) || a.localeCompare(b));
   if (!names.length) throw new Error(`No footage_visual_decisions*.json files exist for ${projectId}`);
   const byScene = new Map();
   const bases = [];
