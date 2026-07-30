@@ -15,6 +15,7 @@ on:
       - ".github/workflows/orvyq-footage-acquisition.yml"
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
+      - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
       - "projects/*/research/visual_asset_reviews.json"
@@ -110,6 +111,9 @@ jobs:
       - name: Validate every acquired or reused clip and provenance record
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
 
+      - name: Generate byte-bound footage contact sheets
+        run: node scripts/orvyq_generate_footage_contact_sheets.mjs --project-id="$PROJECT_ID"
+
       - name: Verify compact footage is stored as normal Git media
         shell: bash
         run: |
@@ -135,11 +139,13 @@ jobs:
             "projects/$PROJECT_ID/assets/footage" \
             "projects/$PROJECT_ID/assets/local_assets.json" \
             "projects/$PROJECT_ID/assets/footage_acquisition.runtime.json" \
-            "projects/$PROJECT_ID/qa/local_assets.provenance.json"
+            "projects/$PROJECT_ID/qa/local_assets.provenance.json" \
+            "projects/$PROJECT_ID/qa/footage-contact-sheets"
           git add \
             "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
             "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
-            "projects/$PROJECT_ID/config/editorial_asset_plan.json"
+            "projects/$PROJECT_ID/config/editorial_asset_plan.json" \
+            "projects/$PROJECT_ID/qa/footage_contact_sheets.json"
           git config user.name "orvyq-footage-bot"
           git config user.email "orvyq-footage-bot@users.noreply.github.com"
           if git diff --cached --quiet; then
@@ -166,6 +172,8 @@ jobs:
             projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage/*.provenance.json
             projects/${{ steps.project.outputs.project_id }}/qa/local_assets.provenance.json
+            projects/${{ steps.project.outputs.project_id }}/qa/footage_contact_sheets.json
+            projects/${{ steps.project.outputs.project_id }}/qa/footage-contact-sheets/*.jpg
           if-no-files-found: warn
 
       - name: Report acquisition result on the active pull request
