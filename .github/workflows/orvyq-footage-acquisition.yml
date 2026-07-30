@@ -181,7 +181,8 @@ jobs:
           fi
           PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$PR_NUMBER" ]; then
-            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY"
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
+              echo "::warning::Could not post the acquisition result to PR #$PR_NUMBER; the uploaded diagnostics remain authoritative."
           else
             echo "No active pull request found for $GITHUB_REF_NAME; skipping PR report."
           fi

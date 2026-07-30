@@ -107,9 +107,9 @@
       "forbidden_terms": ["party", "concert", "wedding", "walking", "leaving"]
     },
     "scene_039": {
-      "queries": ["battery materials laboratory scientists", "magnet technology research laboratory", "materials science engineers"],
-      "fallback_queries": ["battery research engineers", "advanced materials laboratory"],
-      "required_any_groups": [["battery", "material", "magnet", "chemistry"]],
+      "queries": ["materials science laboratory researchers", "metallurgy laboratory scientist", "electronics research laboratory engineers", "chemistry laboratory technology"],
+      "fallback_queries": ["advanced materials research", "technology laboratory scientists", "engineers testing materials"],
+      "required_any_groups": [["laboratory", "lab", "scientist", "research", "engineer", "technology"]],
       "forbidden_terms": ["car-battery-repair", "phone-repair", "toy", "kitchen"]
     },
     "scene_040": {
