@@ -26,8 +26,21 @@
         "ocean research ship",
         "cargo ship crew"
       ],
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_WALTON_SMITH_ROV_DEPLOYMENT_2024",
+        "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/24pr-usvi-biotech-features-perfect-dive/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2024/07/rov-deployment-1920x1080-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "Exploration of Deepwater Habitats off Puerto Rico and the U.S. Virgin Islands for Biotechnology Potential",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted expedition media; preserve the complete expedition credit in provenance and do not imply that the vessel is Chikyu.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 0,
+        "output_duration_seconds": 18
+      },
       "min_duration_seconds": 10,
-      "editorial_note": "Human-scale opening aboard a working vessel; never identify it as Chikyu unless the source is official JAMSTEC footage."
+      "editorial_note": "Verified scientists launching an ROV from Research Vessel F.G. Walton Smith; use only for human-scale field operations and never identify it as Chikyu."
     },
     {
       "scene_id": "scene_002",
