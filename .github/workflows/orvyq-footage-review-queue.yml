@@ -74,7 +74,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git add "projects/$PROJECT_ID/qa/footage_review_queue.json"
+          git add -f "projects/$PROJECT_ID/qa/footage_review_queue.json"
           if git diff --cached --quiet; then
             echo "Review queue unchanged."
             exit 0
