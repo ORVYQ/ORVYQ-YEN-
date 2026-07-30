@@ -23,11 +23,12 @@ function sceneIdFromAsset(assetPath) {
 
 export async function prepareFootageReviewQueue(projectId) {
   const dir = projectDir(projectId);
-  const [manifest, editorial, rebalance, blueprint] = await Promise.all([
+  const [manifest, editorial, rebalance, blueprint, motionHook] = await Promise.all([
     readJson(path.join(dir, "qa", "footage_contact_sheets.json")),
     readJson(path.join(dir, "config", "editorial_asset_plan.json")),
     readJson(path.join(dir, "direction", "visual_rebalance_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
+    readJson(path.join(dir, "direction", "motion_hook.json")),
   ]);
 
   const usesByPath = new Map();
@@ -50,6 +51,18 @@ export async function prepareFootageReviewQueue(projectId) {
         semantic_rationale: assignment.semantic_rationale || assignment.reuse_reason,
       });
     }
+  }
+
+  for (const hookShot of motionHook.shots || []) {
+    const sceneId = sceneIdFromAsset(hookShot.video_asset);
+    const currentAssetPath = currentPathByScene.get(sceneId) || hookShot.video_asset;
+    addUse(currentAssetPath, {
+      claim_id: hookShot.claim_id,
+      narration_anchor: hookShot.narration_anchor || "Opening visual premise before the first narrated sentence.",
+      semantic_rationale: hookShot.semantic_rationale || hookShot.editorial_purpose,
+      trim_in_sec: hookShot.trim_in_sec,
+      trim_out_sec: hookShot.trim_out_sec,
+    });
   }
 
   const shots = blueprint.full_production?.shots || [];
