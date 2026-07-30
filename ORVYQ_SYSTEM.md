@@ -240,14 +240,14 @@ After every meaningful discovery, update the live acceptance record and change l
 - [x] Research and narration pass factual QA
 - [x] ElevenLabs handoff script and settings are available
 - [x] User narration is ingested and aligned
-- [ ] Footage acquisition completes without manual hunting or push failure
+- [x] Footage acquisition completes without manual hunting or push failure
 - [x] Official evidence acquisition completes
 - [x] Music acquisition and licensing complete
 - [x] Provenance and licence audits pass for the last validated candidate
 - [ ] Candidate Validation passes on the complete film
 - [x] A 720p Full-Length Review is generated
 - [ ] User corrections are collected and applied
-- [ ] Reusable defects discovered during review are fixed system-wide
+- [x] Reusable defects discovered during review are fixed system-wide
 - [ ] A corrected Full-Length Review passes again
 - [ ] The user explicitly approves the candidate
 - [ ] The 1080p Final Encode succeeds
@@ -278,11 +278,28 @@ Current status (last verified 2026-07-30):
 - Shared visual-balance gates now reject the old candidate: its 38.85%
   source-derived and 46.84% card-like fractions exceed the new 30% and 35%
   ceilings, and section-level clustering is checked independently.
+- Footage Acquisition run `30524147398` completed and committed 50 compact,
+  repository-owned Pexels clips. Direct contact-sheet/frame review rejected
+  nine metadata matches whose visible content did not fit their narration
+  targets; none can enter authored assignments or automated backfill.
 - Project 002's long closing claim was split into six narration-anchored
-  synthesis claims so the last 5m46s is no longer one 47-shot claim. Balanced
-  contextual footage acquisition is in progress; a corrected Candidate
-  Validation must pass before another review can be dispatched.
-- The complete unit suite passes 255/255 serially on the corrected source.
+  synthesis claims so the last 5m46s is no longer one 47-shot claim. The
+  corrected 150-shot, 31,128-frame plan uses 89 footage shots and 52 evidence
+  shots. Every used footage source stays at or below two non-contiguous uses.
+- Render-free local Candidate Validation now passes 258/258 unit tests,
+  26/26 canonical checks, the complete `orvyq:qa` chain and render-ready
+  TypeScript validation. The measured mix is 59.49% total footage, 58.14%
+  contextual body footage, 29.05% source-derived graphics, 34.79% card-like
+  presentation, 5.72% official primary capture and 34.78% evidence/archive;
+  the longest uninterrupted evidence run is 13.83s.
+- Presentation-motif identity is based on the reader-facing image/content,
+  not citation title alone. Distinct JAMSTEC captures and distinct IEA
+  comparisons therefore remain independently auditable without being falsely
+  collapsed into one repeated motif; exact duplicates still share one key and
+  are rejected beyond two uses.
+- Commit `5430b0e` contains the corrected asset plan and shared regression
+  gate. A new immutable Candidate Validation artifact for this commit is still
+  required before another review can be dispatched.
 - A blank `003-isolation-probe` scaffold was generated twice in clean
   temporary roots. Both runs produced the same 19 generic files after
   normalising the creation timestamp, with no Project 001 or Project 002
@@ -305,8 +322,12 @@ Current status (last verified 2026-07-30):
   semantic audit, alignment scoring and edit-plan tests.
 - Added repeated presentation-motif rejection and reduced evidence headings
   to the mobile-safe 76-character limit.
-- Split Project 002's oversized closing claim and requested narration-specific
-  replacement footage.
+- Split Project 002's oversized closing claim, acquired narration-specific
+  replacement footage, rejected nine visually mismatched downloads and
+  authored the balanced 150-shot plan.
+- Made repeated-motif comparison use exact reader-facing image/content
+  identity rather than citation title alone, with official-figure,
+  source-derived comparison and exact-duplicate regression tests.
 - Proved a fresh Project 003 scaffold is isolated and deterministic.
 
 ### 2026-07-27 — Authoritative contract established
