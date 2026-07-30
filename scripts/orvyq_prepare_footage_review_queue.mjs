@@ -16,6 +16,11 @@ function keyForUse(use) {
   return [use.claim_id, use.narration_anchor, use.trim_in_sec ?? "", use.trim_out_sec ?? ""].join("|");
 }
 
+function sceneIdFromAsset(assetPath) {
+  const match = String(assetPath || "").match(/(?:^|\/)scene_(\d{3})(?:_|\.)/);
+  return match ? `scene_${match[1]}` : null;
+}
+
 export async function prepareFootageReviewQueue(projectId) {
   const dir = projectDir(projectId);
   const [manifest, editorial, rebalance, blueprint] = await Promise.all([
@@ -26,6 +31,7 @@ export async function prepareFootageReviewQueue(projectId) {
   ]);
 
   const usesByPath = new Map();
+  const currentPathByScene = new Map((manifest.entries || []).map((entry) => [entry.scene_id, entry.asset_path]));
   const addUse = (assetPath, rawUse) => {
     if (!assetPath) return;
     const use = normalizeUse(rawUse);
@@ -47,6 +53,20 @@ export async function prepareFootageReviewQueue(projectId) {
   }
 
   const shots = blueprint.full_production?.shots || [];
+  for (const shot of shots) {
+    if (shot.asset_type !== "footage") continue;
+    const sceneId = sceneIdFromAsset(shot.asset);
+    const currentAssetPath = currentPathByScene.get(sceneId);
+    if (!currentAssetPath) continue;
+    addUse(currentAssetPath, {
+      claim_id: shot.claim_id,
+      narration_anchor: shot.narration_anchor || shot.editorial_purpose,
+      semantic_rationale: shot.semantic_rationale || shot.editorial_purpose,
+      trim_in_sec: shot.trim_in_sec,
+      trim_out_sec: shot.trim_out_sec,
+    });
+  }
+
   for (const action of rebalance.actions || []) {
     if (action.decision !== "replace_contextual_footage") continue;
     const shot = shots[action.baseline_shot_index] || {};
