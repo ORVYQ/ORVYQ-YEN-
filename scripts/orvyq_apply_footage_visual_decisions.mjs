@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import path from "node:path";
+import { promises as fs } from "node:fs";
 import {
   projectDir,
   readJson,
@@ -19,6 +20,29 @@ function matches(entry, decision) {
     String(entry.asset_sha256).toLowerCase() === String(decision.asset_sha256).toLowerCase() &&
     String(entry.contact_sheet_sha256).toLowerCase() === String(decision.contact_sheet_sha256).toLowerCase()
   );
+}
+
+async function loadDecisionRounds(dir, projectId) {
+  const researchDir = path.join(dir, "research");
+  const names = (await fs.readdir(researchDir))
+    .filter((name) => /^footage_visual_decisions(?:_[a-z0-9-]+)?\.json$/.test(name))
+    .sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+  if (!names.length) throw new Error(`No footage_visual_decisions*.json files exist for ${projectId}`);
+  const byScene = new Map();
+  const bases = [];
+  for (const name of names) {
+    const round = await readJson(path.join(researchDir, name));
+    if (round.project_id !== projectId) throw new Error(`${name} project_id does not match ${projectId}`);
+    bases.push(`${name}: ${round.review_basis}`);
+    for (const decision of round.decisions || []) byScene.set(decision.scene_id, decision);
+  }
+  return {
+    schema_version: "1.0",
+    project_id: projectId,
+    review_basis: bases.join(" | "),
+    decisions: [...byScene.values()],
+    round_files: names,
+  };
 }
 
 function materializeOpeningHook(shots, motionHook) {
@@ -59,7 +83,6 @@ export async function applyProjectFootageVisualDecisions(projectId) {
   const dir = projectDir(projectId);
   const files = {
     queue: path.join(dir, "qa", "footage_review_queue.json"),
-    decisions: path.join(dir, "research", "footage_visual_decisions.json"),
     reviews: path.join(dir, "research", "visual_asset_reviews.json"),
     runtime: path.join(dir, "assets", "footage_acquisition.runtime.json"),
     requests: path.join(dir, "research", "visual_asset_requests.json"),
@@ -73,7 +96,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
 
   const [queue, decisions, reviews, runtime, requests, rebalance, blueprint, motionHook] = await Promise.all([
     readJson(files.queue),
-    readJson(files.decisions),
+    loadDecisionRounds(dir, projectId),
     readJson(files.reviews),
     readJson(files.runtime),
     readJson(files.requests),
@@ -143,6 +166,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
 
   return {
     project_id: projectId,
+    decision_rounds: decisions.round_files,
     ready_for_materialization: result.ready_for_materialization,
     applied_approvals: result.applied_approvals,
     applied_rejections: result.applied_rejections,
