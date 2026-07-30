@@ -21,18 +21,18 @@
     },
     "scene_008": {
       "queries": [
-        "wind farm engineers workers",
-        "wind turbine maintenance crew",
-        "technicians working wind turbine"
+        "wind turbine people working",
+        "wind farm workers",
+        "engineer near wind turbine"
       ],
       "fallback_queries": [
-        "renewable energy engineers wind farm",
-        "workers near wind turbines",
-        "wind turbine installation team"
+        "people at wind farm",
+        "wind energy worker",
+        "wind turbine team"
       ],
       "required_any_groups": [
-        ["wind", "turbine", "wind-farm", "wind farm", "renewable"],
-        ["worker", "engineer", "technician", "crew", "maintenance", "installation", "working"]
+        ["wind", "turbine", "wind-farm", "wind farm"],
+        ["worker", "engineer", "technician", "crew", "team", "people", "person", "man", "woman", "working", "maintenance", "install"]
       ],
       "forbidden_terms": ["sunset", "silhouette", "scenic", "timelapse", "animation"]
     }
