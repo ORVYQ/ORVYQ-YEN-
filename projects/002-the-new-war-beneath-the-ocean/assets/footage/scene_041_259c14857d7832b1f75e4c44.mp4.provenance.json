@@ -1,0 +1,57 @@
+{
+  "stable_asset_id": "990d376e0a4ec6a57c4f363b",
+  "scene_id": "scene_041",
+  "provider": "pexels",
+  "provider_asset_id": "7643616",
+  "source_page_url": "https://www.pexels.com/video/businesspeople-having-a-meeting-in-the-office-7643616/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "MART  PRODUCTION",
+  "attribution_required": false,
+  "search_query": "policy negotiation meeting table",
+  "editorial_role": "human_context",
+  "editorial_note": "Negotiators embody the bargaining leverage created by an unused option without assigning the scene to a named state.",
+  "narration_anchor": "But even an unused option changes power.",
+  "target_claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+  "target_slice_index": 4,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "meeting",
+        "conference",
+        "discussion",
+        "committee",
+        "roundtable",
+        "official",
+        "delegate",
+        "people"
+      ]
+    ],
+    "forbidden_terms": [
+      "walking",
+      "leaving",
+      "party",
+      "wedding",
+      "restaurant"
+    ]
+  },
+  "duration": 15.88,
+  "actual_duration_seconds": 15.88,
+  "width": 1920,
+  "height": 1012,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1012,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 2952980,
+  "sha256": "6150652fbb48323ba47d1074cb85fff7ca558b67ccb5be7caea51aad6f41afc7",
+  "actual_sha256": "6150652fbb48323ba47d1074cb85fff7ca558b67ccb5be7caea51aad6f41afc7",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "10512780",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:54:00.947Z"
+}

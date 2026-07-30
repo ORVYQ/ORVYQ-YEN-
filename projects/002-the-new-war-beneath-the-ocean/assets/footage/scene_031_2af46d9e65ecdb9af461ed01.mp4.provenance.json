@@ -1,0 +1,53 @@
+{
+  "stable_asset_id": "3f1d09a2298c36e9345efb41",
+  "scene_id": "scene_031",
+  "provider": "pexels",
+  "provider_asset_id": "6951503",
+  "source_page_url": "https://www.pexels.com/video/people-having-a-meeting-in-the-conference-room-6951503/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Werner Pfennig",
+  "attribution_required": false,
+  "search_query": "international conference delegates meeting",
+  "editorial_role": "human_context",
+  "editorial_note": "An international rulemaking setting directly supports the contest over governance; ISA and UNCLOS documents remain the factual legal evidence.",
+  "narration_anchor": "It is a race to decide which rules will exist when extraction becomes possible.",
+  "target_claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+  "target_slice_index": 40,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "meeting",
+        "conference",
+        "delegate",
+        "official",
+        "negotiation"
+      ]
+    ],
+    "forbidden_terms": [
+      "walking",
+      "after",
+      "leaving",
+      "party"
+    ]
+  },
+  "duration": 15.56,
+  "actual_duration_seconds": 15.56,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 3145544,
+  "sha256": "683f71a0a8d06efd0babfbac8dc584c7334bcdb72d9203535b0c63383c8a5fbc",
+  "actual_sha256": "683f71a0a8d06efd0babfbac8dc584c7334bcdb72d9203535b0c63383c8a5fbc",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "10244229",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:51:05.190Z"
+}

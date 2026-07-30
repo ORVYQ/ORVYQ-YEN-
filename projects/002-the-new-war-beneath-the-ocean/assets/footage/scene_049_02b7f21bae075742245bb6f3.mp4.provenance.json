@@ -1,0 +1,55 @@
+{
+  "stable_asset_id": "2ccc8a690540b302c2e417fe",
+  "scene_id": "scene_049",
+  "provider": "pexels",
+  "provider_asset_id": "27556594",
+  "source_page_url": "https://www.pexels.com/video/aerial-view-of-a-sailboat-in-the-sea-27556594/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "정규송 Nui MALAMA",
+  "attribution_required": false,
+  "search_query": "research vessel sailing open ocean",
+  "editorial_role": "context",
+  "editorial_note": "A research vessel returning to the ocean supports the announced 2027 return while remaining explicitly generic contextual footage.",
+  "narration_anchor": "In 2027, Japan plans to return to the Pacific for a longer production-chain test.",
+  "target_claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+  "target_slice_index": 2,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "ship",
+        "vessel",
+        "boat",
+        "ocean",
+        "sea"
+      ]
+    ],
+    "forbidden_terms": [
+      "cargo",
+      "freight",
+      "ferry",
+      "cruise",
+      "yacht",
+      "fishing"
+    ]
+  },
+  "duration": 16.016,
+  "actual_duration_seconds": 16.016,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 18098841,
+  "sha256": "ee17b82ef29a74c01e4541818f999cf96d5e8b2775471ce7ed5b008ffdbe0b2e",
+  "actual_sha256": "ee17b82ef29a74c01e4541818f999cf96d5e8b2775471ce7ed5b008ffdbe0b2e",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "12167705",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:57:06.081Z"
+}

@@ -1,0 +1,56 @@
+{
+  "stable_asset_id": "30e0cc03050e8844d091f8db",
+  "scene_id": "scene_026",
+  "provider": "pexels",
+  "provider_asset_id": "8327144",
+  "source_page_url": "https://www.pexels.com/video/scientist-dropping-a-liquid-in-a-glass-tube-8327144/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Kindel Media",
+  "attribution_required": false,
+  "search_query": "marine scientist water sample",
+  "editorial_role": "human_context",
+  "editorial_note": "Scientists collecting baseline samples directly support the need for pre-disturbance ecological measurement without claiming a specific expedition or result.",
+  "narration_anchor": "Every year without baseline ecological research makes it harder to know what was lost after industrial activity begins.",
+  "target_claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+  "target_slice_index": 30,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "scientist",
+        "researcher",
+        "laboratory",
+        "lab",
+        "biologist",
+        "technician"
+      ]
+    ],
+    "forbidden_terms": [
+      "diver",
+      "divers",
+      "scuba",
+      "swimmer",
+      "urchin",
+      "snorkel"
+    ]
+  },
+  "duration": 15.8,
+  "actual_duration_seconds": 15.8,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 5092251,
+  "sha256": "81e23194de99aa62fc3ae818e9a0f64ea15e579c6a9f04fb07206e5aebe61160",
+  "actual_sha256": "81e23194de99aa62fc3ae818e9a0f64ea15e579c6a9f04fb07206e5aebe61160",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "10778525",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:49:56.682Z"
+}

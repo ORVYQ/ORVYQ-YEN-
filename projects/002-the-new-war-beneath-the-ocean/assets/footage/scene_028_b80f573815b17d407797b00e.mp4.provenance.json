@@ -1,0 +1,59 @@
+{
+  "stable_asset_id": "5d9cc3a8a2056875b0e402eb",
+  "scene_id": "scene_028",
+  "provider": "pexels",
+  "provider_asset_id": "33934276",
+  "source_page_url": "https://www.pexels.com/video/serene-underwater-ocean-floor-scene-33934276/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "JUN HO LEE",
+  "attribution_required": false,
+  "search_query": "underwater sediment seabed",
+  "editorial_role": "context",
+  "editorial_note": "Dark seabed and suspended sediment provide restrained physical context for distant, hard-to-observe impacts; measured plume claims remain source-backed graphics and documents.",
+  "narration_anchor": "The deep ocean may carry damage that cannot be seen from shore.",
+  "target_claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+  "target_slice_index": 34,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "sediment",
+        "seabed",
+        "ocean-floor",
+        "ocean floor",
+        "sea-floor",
+        "sea floor",
+        "sand",
+        "particles"
+      ]
+    ],
+    "forbidden_terms": [
+      "sunlight",
+      "coral",
+      "reef",
+      "tropical",
+      "diver",
+      "divers",
+      "snorkel"
+    ]
+  },
+  "duration": 12.012012,
+  "actual_duration_seconds": 12.012012,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 11848035,
+  "sha256": "dfe8b21613bf57f6997631e7bb47dfa6b9e35f3fb15cfdb0d66d75f34a1810e4",
+  "actual_sha256": "dfe8b21613bf57f6997631e7bb47dfa6b9e35f3fb15cfdb0d66d75f34a1810e4",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "14400287",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": true,
+  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "downloaded_at": "2026-07-30T07:50:21.999Z"
+}
