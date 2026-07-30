@@ -15,6 +15,7 @@ on:
       - ".github/workflows/orvyq-footage-acquisition.yml"
       - "scripts/orvyq_acquire_footage.mjs"
       - "scripts/orvyq_acquire_footage_demand.mjs"
+      - "scripts/orvyq_fail_closed_pending_footage.mjs"
       - "scripts/orvyq_generate_footage_contact_sheets.mjs"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
@@ -107,6 +108,9 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/orvyq_acquire_footage_demand.mjs --project-id="$PROJECT_ID" 2>&1 | tee footage-acquisition.log
+
+      - name: Fail closed every pending footage approval
+        run: node scripts/orvyq_fail_closed_pending_footage.mjs --project-id="$PROJECT_ID"
 
       - name: Validate every acquired or reused clip and provenance record
         run: node scripts/orvyq_materialize_footage.mjs --project-id="$PROJECT_ID"
