@@ -17,6 +17,7 @@ on:
       - "scripts/orvyq_acquire_footage_demand.mjs"
       - "projects/*/research/footage_acquisition_plan.json"
       - "projects/*/research/footage_semantic_constraints.json"
+      - "projects/*/research/visual_asset_reviews.json"
 
 permissions:
   contents: write
@@ -137,6 +138,7 @@ jobs:
             "projects/$PROJECT_ID/qa/local_assets.provenance.json"
           git add \
             "projects/$PROJECT_ID/research/footage_acquisition_plan.json" \
+            "projects/$PROJECT_ID/research/visual_asset_reviews.json" \
             "projects/$PROJECT_ID/config/editorial_asset_plan.json"
           git config user.name "orvyq-footage-bot"
           git config user.email "orvyq-footage-bot@users.noreply.github.com"

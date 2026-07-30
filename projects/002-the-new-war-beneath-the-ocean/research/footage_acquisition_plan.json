@@ -976,6 +976,86 @@
         "role": "human_context",
         "semantic_rationale": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden."
       }
+    },
+    {
+      "scene_id": "scene_051",
+      "role": "scientific_context",
+      "min_duration_seconds": 10,
+      "max_duration_seconds": 18,
+      "editorial_note": "Official NOAA ROV operations provide direct scientific observation context for examining persistent deep-seabed tracks; the cited 1979-to-2023 figures retain the evidentiary burden.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_D2_2018_TECHNOLOGY",
+        "source_page_url": "https://oceanexplorer.noaa.gov/technology/subs-deep-discoverer/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2018/09/d2-1280x720-2.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official U.S. government source; retain source credit and verify any third-party credit displayed in the selected frames.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 4,
+        "output_duration_seconds": 18
+      }
+    },
+    {
+      "scene_id": "scene_052",
+      "role": "scientific_context",
+      "min_duration_seconds": 10,
+      "max_duration_seconds": 18,
+      "editorial_note": "Official expedition footage of sediment coring provides the visible physical measurement link for the plume-sampling sentence without being used as the numerical plume evidence.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_CASCADIA_SEDIMENT_CORING_2020",
+        "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/20cascadia-seeps-logs-sept29/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/coring-1920x1080-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "Oregon State University, NOAA OER, NOAA OCNMS, Ocean Exploration Trust, NA-121",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted expedition media with named partner credits; preserve the complete credit in provenance and end matter.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 3,
+        "output_duration_seconds": 18
+      }
+    },
+    {
+      "scene_id": "scene_053",
+      "role": "scientific_context",
+      "min_duration_seconds": 10,
+      "max_duration_seconds": 18,
+      "editorial_note": "Official NOAA water-column footage directly grounds the midwater food-web mechanism and marine-snow context while the cited paper supplies the experiment and result.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_WATER_COLUMN_2012",
+        "source_page_url": "https://oceanexplorer.noaa.gov/ocean-fact/water-column/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2012/09/water-column-1280x720-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration, Deep-Sea Symphony: Exploring the Musicians Seamounts",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted media; preserve the expedition credit in provenance and end matter.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 4,
+        "output_duration_seconds": 18
+      }
+    },
+    {
+      "scene_id": "scene_054",
+      "role": "scientific_context",
+      "min_duration_seconds": 10,
+      "max_duration_seconds": 18,
+      "editorial_note": "Official expedition operations footage provides a real field-assessment setting for decision under uncertainty, with mission objectives, weather, sampling and dive choices physically connected.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_DEEP_SEARCH_LEG1_HIGHLIGHTS_2019",
+        "source_page_url": "https://oceanexplorer.noaa.gov/expedition-feature/19deepsearch-logs-apr19/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2025/04/leg1-highlights-1280x720-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "Ivan Hurzeler and DEEP SEARCH 2019 – BOEM, USGS, NOAA, ROV Jason, Woods Hole Oceanographic Institution",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted partner expedition media; preserve the complete displayed credit and do not imply NOAA authorship of third-party frames.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 6,
+        "output_duration_seconds": 18
+      }
     }
   ]
 }

@@ -110,11 +110,12 @@
         "reuse_reason": "This human industrial-work image is introduced while describing the planned production chain and returns under the industry's counterargument at a distinct trim window, keeping real workers and operators present on both sides of the trade-off."
       },
       "6": {
-        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
+        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
         "trimInRatio": 0.12,
         "motion": "drift_right",
         "role": "context",
-        "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
+        "semantic_anchor": "The deposit contains rare earth elements in fine sediment beneath the seabed.",
+        "semantic_rationale": "A verified dark seabed-sediment view will carry the physical location and material form named in the sentence; the specific Japanese deposit remains established by primary evidence."
       },
       "8": {
         "asset": "assets/footage/scene_022_9366a132ae3b293a02df46b7.mp4",
@@ -266,11 +267,12 @@
     },
     "CLM_011_REFINING_BOTTLENECK": {
       "0": {
-        "asset": "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
+        "asset": "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
-        "reuse_reason": "This processing-chain image returns from Japan's industrial timeline at a distinct trim window, deliberately showing that reaching or lifting material is not the same as refining it into a strategic input."
+        "semantic_anchor": "Battery chemistry is changing; lithium iron phosphate batteries use neither nickel nor cobalt.",
+        "semantic_rationale": "A verified battery-materials research environment will support the changing-chemistry mechanism; the LFP composition claim remains carried by the source figure."
       },
       "2": {
         "asset": "assets/footage/scene_021_eeb6a54ead512364a289a3aa.mp4",
@@ -386,12 +388,12 @@
     },
     "CLM_016_DECISION_UNDER_UNCERTAINTY": {
       "0": {
-        "asset": "assets/footage/scene_035_ef447180da828809758f0d18.mp4",
+        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
         "trimInRatio": 0,
         "motion": "pull",
         "role": "context",
-        "semantic_anchor": "The strongest case for moving ahead is not that the damage will be harmless.",
-        "semantic_rationale": "A real terrestrial quarry makes the competing damage of land-based extraction visible without quantifying it."
+        "semantic_anchor": "The studies identify a plausible mechanism of harm, not proof of commercial-scale ecosystem collapse.",
+        "semantic_rationale": "Verified midwater organisms will keep the qualified ecological mechanism visible while the cited study figures carry the measured scientific claim."
       },
       "1": {
         "asset": "assets/footage/scene_036_7b62d0b33b1487ebb9a46e65.mp4",

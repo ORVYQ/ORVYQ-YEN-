@@ -7,28 +7,20 @@
     "rejected_asset_global_reentry_forbidden": true,
     "automatic_backfill_forbidden": true,
     "approval_requires_contact_sheet_sha256": true,
-    "approval_requires_claim_id_narration_anchor_and_semantic_rationale": true
+    "approval_requires_claim_id_narration_anchor_and_semantic_rationale": true,
+    "approval_is_limited_to_exact_reviewed_uses": true
   },
   "summary": {
-    "pool_assets": 50,
-    "rejected_from_metadata": 37,
-    "pending_frame_review": 13,
-    "approved": 0
+    "pool_assets": 54,
+    "rejected_from_metadata": 44,
+    "pending_frame_review": 4,
+    "approved": 6
   },
   "pending_frame_review_scene_ids": [
-    "scene_009",
-    "scene_010",
-    "scene_011",
-    "scene_017",
-    "scene_018",
-    "scene_022",
-    "scene_023",
-    "scene_027",
-    "scene_028",
-    "scene_033",
-    "scene_035",
-    "scene_040",
-    "scene_043"
+    "scene_051",
+    "scene_052",
+    "scene_053",
+    "scene_054"
   ],
   "rejected_assets": [
     {
@@ -252,6 +244,159 @@
       "provider_asset_id": "6951641",
       "source_page_url": "https://www.pexels.com/video/people-talking-while-in-the-conference-room-6951641/",
       "reason": "A generic conversation has no verifiable committee-hearing or regulatory context."
+    },
+    {
+      "scene_id": "scene_009",
+      "provider_asset_id": "32305292",
+      "source_page_url": "https://www.pexels.com/video/assembly-line-at-automobile-factory-in-bangladesh-32305292/",
+      "reason": "Contact-sheet review shows general vehicle body assembly but no electric motor, powertrain, or battery-production detail; it cannot carry the EV component claim."
+    },
+    {
+      "scene_id": "scene_018",
+      "provider_asset_id": "29702750",
+      "source_page_url": "https://www.pexels.com/video/industrial-recycling-facility-aerial-view-29702750/",
+      "reason": "Contact-sheet review shows only a high aerial facility overview; neither metal recovery nor a recycling process is visible enough to support the narrated alternative."
+    },
+    {
+      "scene_id": "scene_023",
+      "provider_asset_id": "6951642",
+      "source_page_url": "https://www.pexels.com/video/businessmen-with-facemasks-having-a-meeting-6951642/",
+      "reason": "Contact-sheet review confirms a generic private business meeting with no diplomatic, trade-policy, or public-institution connection."
+    },
+    {
+      "scene_id": "scene_027",
+      "provider_asset_id": "6285692",
+      "source_page_url": "https://www.pexels.com/video/men-in-hard-helmet-talking-while-looking-at-a-blueprint-6285692/",
+      "reason": "Contact-sheet review shows a staged construction blueprint discussion; it does not establish environmental assessment or a decision among the narrated ecological and industrial risks."
+    },
+    {
+      "scene_id": "scene_028",
+      "provider_asset_id": "33934276",
+      "source_page_url": "https://www.pexels.com/video/serene-underwater-ocean-floor-scene-33934276/",
+      "reason": "Contact-sheet review shows a shallow, illuminated reef-like seabed with no deep-ocean scale, suspended sediment, measurement activity, or disturbance mechanism."
+    },
+    {
+      "scene_id": "scene_033",
+      "provider_asset_id": "7056633",
+      "source_page_url": "https://www.pexels.com/video/jellyfish-swimming-under-the-water-7056633/",
+      "reason": "Contact-sheet review shows an isolated jellyfish beauty shot; it does not establish a midwater food-web observation, particle exposure, or research context."
+    },
+    {
+      "scene_id": "scene_043",
+      "provider_asset_id": "12903923",
+      "source_page_url": "https://www.pexels.com/video/people-working-at-night-in-port-12903923/",
+      "reason": "Contact-sheet review shows a small unidentified vessel at a dark dock; it does not establish industrial-port preparation, scientific expedition activity, or strategic positioning."
+    }
+  ],
+  "approved_assets": [
+    {
+      "scene_id": "scene_010",
+      "provider_asset_id": "5121750",
+      "asset_sha256": "4754a12f6f4b8032bba94198ec77b9258c5357e118ebc63ae71855f804005e61",
+      "contact_sheet_sha256": "735943ae29b8eb52f3c03e08cc44df7a82c2b758e6a2e2560086c91d466cd5fa",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_002_CHINA_RARE_EARTH_CHOKEPOINT",
+          "narration_anchor": "The difficult part is separating them, refining them and turning them into high -performance magnets. And that is where the world has",
+          "semantic_rationale": "The visible industrial pour directly grounds high-temperature metal processing while the IEA source carries the specific rare-earth concentration claim."
+        },
+        {
+          "claim_id": "CLM_010_SCARCITY_IS_MINERAL_SPECIFIC",
+          "narration_anchor": "land. The argument cannot be dismissed simply because some of its strongest advocates are mining companies. Every mineral has to come from somewhere.",
+          "semantic_rationale": "The molten material provides a physical transition from mined inputs to usable metal without identifying the facility or asserting a mineral composition."
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_011",
+      "provider_asset_id": "37420128",
+      "asset_sha256": "5b98d6633c0b5c9429b9193bc9b2a136c053aa21655a19079a72b1d278aa8781",
+      "contact_sheet_sha256": "e5eca383e05113af2aba174aeb8ff45e4026ae181511194407421e3018f2344f",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "The lesson was uncomfortable. Owning a deposit is not the same as controlling a supply chain. A country can",
+          "semantic_rationale": "The verified container terminal makes transport and logistics visibly distinct from resource ownership; it is not presented as a Japanese site."
+        },
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "Owning a deposit is not the same as controlling a supply chain.",
+          "semantic_rationale": "Port handling is a direct physical link in the supply chain named by the sentence, while the specific industrial timeline remains source-backed."
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_017",
+      "provider_asset_id": "28668454",
+      "asset_sha256": "813a92dc887ad117fff4cb76ba36b2bced31fc6904f1997ee4c486357b59b97b",
+      "contact_sheet_sha256": "10edd32e981c1273b2b0f0a2660de289c8bec7576ddf84f1d0c9e425017e1745",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+          "narration_anchor": "Some terrestrial mines destroy forests, generate tailings, consume water and displaced communities. From that perspective,",
+          "semantic_rationale": "The wide quarry view directly establishes the terrestrial extraction alternative; it is contextual and does not quantify or identify a particular mine."
+        },
+        {
+          "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+          "narration_anchor": "material. Copper demand is rising. Rare earth supply chains remain highly concentrated. Some terrestrial",
+          "semantic_rationale": "The same quarry at a distinct reviewed window physically introduces terrestrial extraction as the narration pivots from demand and concentration to land-mining costs."
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_022",
+      "provider_asset_id": "32243444",
+      "asset_sha256": "a44357a5e4b2552322f51c3ecf4d90ea468556984168e653e9f3fbac4f56ed06",
+      "contact_sheet_sha256": "188ecf2fa853952bf04a0b4917561f69ffa32544f88bfeb921004a3667c3c277",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "tested. A larger production chain trial is planned for 2027 followed by technical and economic assessment.",
+          "semantic_rationale": "Workers operating real industrial machinery support the still-developing production-chain scale; the clip is not identified as the Japanese trial."
+        },
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "over. Instead, governments are being asked to make a precedent setting decision while the economics, technology,",
+          "semantic_rationale": "Active industrial equipment gives moving technical and economic capability a physical scale while the institutional decision remains in narration and evidence."
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_035",
+      "provider_asset_id": "31100083",
+      "asset_sha256": "b60a7190258952ef9ca39029abcf2fb29a440e680c0a783e69464ea895d86cb1",
+      "contact_sheet_sha256": "699116562a9b9f9fce85a777366717276993b17c7c874ad9e1ff625197bae11e",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "minerals. It is a race to decide which rules will exist when extraction becomes possible. Who carries the uncertainty?",
+          "semantic_rationale": "The verified quarry makes the physical contest for mineral extraction visible without identifying a project or standing in for the legal rulemaking evidence."
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_040",
+      "provider_asset_id": "29702517",
+      "asset_sha256": "f7a4d3d0168e142b140cd10bb8200ade91517728450fcc5292ed44a31f8b6cd8",
+      "contact_sheet_sha256": "97d012d26135fb43a12565c0c83d63bd10e173839153152d76a700a29911b2fb",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+          "narration_anchor": "harmless. It is that the alternatives also carry damage and that mineral dependence can become a national security risk.",
+          "semantic_rationale": "The visible industrial recycling facility provides one real alternative pathway without presenting recycling as harmless, sufficient, or quantified."
+        },
+        {
+          "claim_id": "CLM_018_CAPABILITY_IS_NOT_OBLIGATION",
+          "narration_anchor": "demand. Recycling and diversified refining could weaken the security argument. Governments may spend billions to",
+          "semantic_rationale": "The verified recycling operation directly carries one alternative named in the sentence; evidence sources retain the burden for the supply-security claim."
+        }
+      ]
     }
   ]
 }

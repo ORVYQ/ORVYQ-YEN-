@@ -7,6 +7,132 @@
     "blind_keyword_acceptance_forbidden": true
   },
   "scenes": {
+    "scene_001": {
+      "queries": ["scientific research vessel crew deck", "ocean expedition crew equipment"],
+      "fallback_queries": ["marine survey vessel crew", "research ship deck operations"],
+      "required_any_groups": [["research", "scientific", "survey", "expedition"], ["ship", "vessel", "crew", "deck"]],
+      "forbidden_terms": ["tour", "tourist", "fishing", "yacht", "sailboat", "cruise", "boarding"]
+    },
+    "scene_002": {
+      "queries": ["scientific research vessel rough ocean", "ocean survey ship heavy seas"],
+      "fallback_queries": ["working research ship waves", "expedition vessel rough sea"],
+      "required_any_groups": [["research", "scientific", "survey", "expedition"], ["ship", "vessel"]],
+      "forbidden_terms": ["fishing", "yacht", "sailboat", "cruise", "tourist"]
+    },
+    "scene_003": {
+      "queries": ["underwater ROV robot deep sea", "deep sea submersible vehicle"],
+      "fallback_queries": ["underwater robot ocean floor", "ROV dark ocean"],
+      "required_any_groups": [["rov", "robot", "submersible", "vehicle", "drone"], ["underwater", "deep-sea", "deep sea", "ocean"]],
+      "forbidden_terms": ["coral beauty", "squid", "diver", "scuba", "snorkel", "aquarium"]
+    },
+    "scene_004": {
+      "queries": ["offshore industrial pipe operation vessel", "marine riser pipe installation ship"],
+      "fallback_queries": ["offshore engineering pipe vessel", "subsea pipe operation"],
+      "required_any_groups": [["pipe", "riser", "subsea", "offshore"], ["industrial", "engineering", "operation", "installation"]],
+      "forbidden_terms": ["tug", "tow", "fishing", "yacht", "recreational"]
+    },
+    "scene_005": {
+      "queries": ["ship control room operators", "offshore operations control room"],
+      "fallback_queries": ["marine vessel control room crew", "industrial operators monitoring screens"],
+      "required_any_groups": [["control-room", "control room", "operator", "monitoring"], ["ship", "marine", "offshore", "industrial"]],
+      "forbidden_terms": ["empty panel", "close-up panel", "arcade", "gaming"]
+    },
+    "scene_006": {
+      "queries": ["electric motor factory assembly", "industrial motor manufacturing"],
+      "fallback_queries": ["electric motor production line", "motor components factory"],
+      "required_any_groups": [["motor", "electric"], ["factory", "manufacturing", "assembly", "production"]],
+      "forbidden_terms": ["grinding", "welding-only", "repair", "toy"]
+    },
+    "scene_007": {
+      "queries": ["industrial magnet manufacturing", "permanent magnet factory production"],
+      "fallback_queries": ["magnet components production", "rare earth magnet manufacturing"],
+      "required_any_groups": [["magnet", "magnetic"], ["factory", "manufacturing", "production", "assembly"]],
+      "forbidden_terms": ["building exterior", "toy", "fridge", "school"]
+    },
+    "scene_008": {
+      "queries": ["wind turbine maintenance technicians", "wind turbine factory assembly"],
+      "fallback_queries": ["wind energy technicians turbine", "wind turbine manufacturing"],
+      "required_any_groups": [["wind", "turbine"], ["maintenance", "technician", "factory", "manufacturing", "assembly"]],
+      "forbidden_terms": ["sunset", "silhouette", "scenic", "timelapse"]
+    },
+    "scene_009": {
+      "queries": ["electric vehicle motor assembly factory", "EV powertrain production line"],
+      "fallback_queries": ["electric car factory assembly", "vehicle motor manufacturing"],
+      "required_any_groups": [["electric", "ev", "vehicle", "car"], ["factory", "assembly", "production", "manufacturing"]],
+      "forbidden_terms": ["generic car", "showroom", "driving", "race", "repair"]
+    },
+    "scene_010": {
+      "queries": ["metal refinery molten metal industrial", "mineral processing smelter factory"],
+      "fallback_queries": ["industrial metal smelting", "refining furnace metal"],
+      "required_any_groups": [["metal", "mineral", "smelting", "refinery", "molten"], ["industrial", "factory", "processing", "furnace"]],
+      "forbidden_terms": ["jewelry", "blacksmith", "art", "craft"]
+    },
+    "scene_011": {
+      "queries": ["container port cranes terminal", "global shipping container terminal"],
+      "fallback_queries": ["cargo port logistics", "container ship harbor cranes"],
+      "required_any_groups": [["container", "cargo", "shipping"], ["port", "terminal", "crane", "harbor"]],
+      "forbidden_terms": ["marina", "yacht", "fishing", "cruise"]
+    },
+    "scene_012": {
+      "queries": ["remote Pacific island aerial open ocean", "isolated ocean island aerial"],
+      "fallback_queries": ["remote island vast ocean", "small Pacific island aerial"],
+      "required_any_groups": [["island"], ["ocean", "pacific", "sea", "remote"]],
+      "forbidden_terms": ["resort", "tourist", "city", "coastline-only", "beach-party"]
+    },
+    "scene_013": {
+      "queries": ["international assembly delegates conference", "United Nations delegates meeting"],
+      "fallback_queries": ["multilateral conference delegates", "international policy assembly"],
+      "required_any_groups": [["international", "united-nations", "multilateral", "delegate"], ["assembly", "conference", "meeting"]],
+      "forbidden_terms": ["business presentation", "sales", "office", "party"]
+    },
+    "scene_014": {
+      "queries": ["official law document government archive", "treaty document institutional archive"],
+      "fallback_queries": ["government legal record", "official treaty archive"],
+      "required_any_groups": [["law", "legal", "treaty", "government"], ["document", "archive", "record"]],
+      "forbidden_terms": ["generic signing", "contract signing", "notebook", "blank paper"]
+    },
+    "scene_015": {
+      "queries": ["deep seabed sediment particles dark ocean", "underwater seafloor sediment disturbance"],
+      "fallback_queries": ["dark ocean floor sediment", "deep sea sand particles"],
+      "required_any_groups": [["sediment", "seabed", "seafloor", "ocean-floor", "ocean floor"], ["underwater", "deep", "dark", "particles"]],
+      "forbidden_terms": ["turtle", "coral reef", "tropical", "diver", "scuba", "snorkel"]
+    },
+    "scene_016": {
+      "queries": ["marine science laboratory ocean samples", "ocean research laboratory scientists"],
+      "fallback_queries": ["marine biologist laboratory samples", "oceanographic research lab"],
+      "required_any_groups": [["marine", "ocean", "oceanographic"], ["scientist", "research", "laboratory", "lab", "sample"]],
+      "forbidden_terms": ["medical", "hospital", "patient", "generic chemistry"]
+    },
+    "scene_017": {
+      "queries": ["open pit mine aerial industrial", "large terrestrial mine trucks"],
+      "fallback_queries": ["surface mining quarry aerial", "open cast mine landscape"],
+      "required_any_groups": [["mine", "mining", "quarry"], ["open-pit", "open pit", "surface", "aerial", "truck"]],
+      "forbidden_terms": ["crypto", "bitcoin", "data-mining", "minecraft", "tourist"]
+    },
+    "scene_018": {
+      "queries": ["industrial metal recycling factory", "scrap metal processing plant"],
+      "fallback_queries": ["metal recycling conveyor", "industrial recycling facility"],
+      "required_any_groups": [["recycling", "recycle", "scrap"], ["metal", "industrial", "factory", "processing"]],
+      "forbidden_terms": ["plastic", "household", "compost", "aerial-only", "fashion"]
+    },
+    "scene_019": {
+      "queries": ["dark open ocean waves night", "stormy ocean night surface"],
+      "fallback_queries": ["open sea night waves", "dark ocean surface"],
+      "required_any_groups": [["ocean", "sea"], ["night", "dark", "storm", "wave"]],
+      "forbidden_terms": ["city", "skyline", "beach", "coast", "harbor"]
+    },
+    "scene_020": {
+      "queries": ["scientist research vessel ocean deck", "ocean researcher ship horizon"],
+      "fallback_queries": ["marine scientist vessel deck", "expedition crew looking ocean"],
+      "required_any_groups": [["scientist", "researcher", "expedition", "crew"], ["ship", "vessel", "deck", "ocean"]],
+      "forbidden_terms": ["beach", "tourist", "vacation", "romantic", "Tenerife"]
+    },
+    "scene_021": {
+      "queries": ["battery materials research laboratory", "electrochemistry laboratory researchers"],
+      "fallback_queries": ["advanced battery research lab", "materials science laboratory engineers"],
+      "required_any_groups": [["battery", "electrochemistry", "materials"], ["laboratory", "lab", "research", "scientist", "engineer"]],
+      "forbidden_terms": ["medical", "test-tube-only", "phone repair", "car repair", "school"]
+    },
     "scene_022": {
       "rejected_provider_asset_ids": ["35548139"],
       "queries": ["engineers inspecting industrial machinery", "factory engineers testing equipment", "industrial technicians machinery blueprint"],
