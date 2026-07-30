@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { auditVisualRebalancePlan } from "./orvyq-visual-rebalance.mjs";
+import {
+  auditVisualRebalancePlan,
+  materializeVisualRebalancePlan,
+} from "./orvyq-visual-rebalance.mjs";
 
 function shot(duration, asset_type, section_id, extra = {}) {
   return {
@@ -62,4 +65,61 @@ test("missing replacement asset fails closed", () => {
   assert.equal(result.editorial_plan_pass, false);
   assert.match(result.failures.join("; "), /contextual footage/);
   assert.equal(result.materialization_ready, false);
+});
+
+test("materialization replaces cards with exact evidence and footage assets", () => {
+  const shots = [
+    shot(8, "graphic", "SEC_01", {
+      graphic: { type: "claim_recap_card" },
+      narration_anchor: "Official evidence appears here.",
+    }),
+    shot(7, "graphic", "SEC_01", {
+      graphic: { type: "claim_recap_card" },
+      narration_anchor: "Physical process appears here.",
+    }),
+  ];
+  const requests = [
+    { asset_request_id: "REQ_EVD_DIRECT", status: "ready" },
+    { asset_request_id: "REQ_FTG_DIRECT", status: "ready" },
+  ];
+  const plan = {
+    status: "materialized",
+    actions: [
+      {
+        baseline_shot_index: 0,
+        claim_id: "CLM_001",
+        duration_seconds: 8,
+        decision: "replace_primary_evidence",
+        projected_medium: "primary_evidence",
+        asset_request_id: "REQ_EVD_DIRECT",
+        rationale: "Use the exact official source figure for the narrated claim.",
+        replacement_assets: [{
+          asset_path: "assets/evidence/official.png",
+          evidence_asset_id: "EVID_OFFICIAL",
+          source_region: "Figure 1",
+        }],
+      },
+      {
+        baseline_shot_index: 1,
+        claim_id: "CLM_001",
+        duration_seconds: 7,
+        decision: "replace_contextual_footage",
+        projected_medium: "contextual_footage",
+        asset_request_id: "REQ_FTG_DIRECT",
+        rationale: "Use a physically direct process shot for the narrated action.",
+        replacement_assets: [{
+          asset_path: "assets/footage/direct.mp4",
+          trim_in_sec: 2,
+          trim_out_sec: 9,
+        }],
+      },
+    ],
+  };
+
+  const result = materializeVisualRebalancePlan({ shots, plan, assetRequests: requests });
+  assert.equal(result[0].asset_type, "evidence");
+  assert.deepEqual(result[0].evidence.evidence_asset_ids, ["EVID_OFFICIAL"]);
+  assert.equal(result[1].asset_type, "footage");
+  assert.equal(result[1].asset, "assets/footage/direct.mp4");
+  assert.equal(result[1].trim_out_sec, 9);
 });

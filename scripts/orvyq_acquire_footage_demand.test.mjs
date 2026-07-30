@@ -87,3 +87,40 @@ test("materializeAssignments resolves the downloaded hash path and is idempotent
     await fs.rm(dir, { recursive: true, force: true });
   }
 });
+
+test("materializeAssignments retires every use of a reacquired scene, not only its named target", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "orvyq-acquisition-global-replace-"));
+  try {
+    await fs.mkdir(path.join(dir, "config"), { recursive: true });
+    await fs.writeFile(
+      path.join(dir, "config", "editorial_asset_plan.json"),
+      JSON.stringify({
+        project_id: "002-the-new-war-beneath-the-ocean",
+        footage_assignments: {
+          CLM_A: { "0": { asset: "assets/footage/scene_021_aabbcc11.mp4" } },
+          CLM_B: { "2": { asset: "assets/footage/scene_021_aabbcc11.mp4" } },
+        },
+        graphic_break_assignments: {},
+        full_footage_pool: ["assets/footage/scene_021_aabbcc11.mp4"],
+      }),
+    );
+    const plan = { assets: [] };
+    const records = [{
+      scene_id: "scene_021",
+      path: "assets/footage/scene_021_ddeeff22.mp4",
+      provider_asset_id: "456",
+      role: "context",
+    }];
+
+    const result = await materializeAssignments(dir, plan, records);
+    assert.equal(result.retired_paths, 1);
+    const materialized = JSON.parse(
+      await fs.readFile(path.join(dir, "config", "editorial_asset_plan.json"), "utf8"),
+    );
+    assert.equal(materialized.footage_assignments.CLM_A["0"].asset, records[0].path);
+    assert.equal(materialized.footage_assignments.CLM_B["2"].asset, records[0].path);
+    assert.deepEqual(materialized.full_footage_pool, [records[0].path]);
+  } finally {
+    await fs.rm(dir, { recursive: true, force: true });
+  }
+});

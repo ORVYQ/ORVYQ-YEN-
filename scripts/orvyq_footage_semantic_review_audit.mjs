@@ -10,9 +10,9 @@ export async function runFootageSemanticReviewAudit(projectId) {
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
     readJson(path.join(dir, "research", "visual_asset_reviews.json")),
   ]);
-  const footageAssets = blueprint.full_production.shots
-    .filter((shot) => shot.asset_type === "footage")
-    .map((shot) => shot.asset);
+  const footageShots = blueprint.full_production.shots
+    .filter((shot) => shot.asset_type === "footage");
+  const footageAssets = footageShots.map((shot) => shot.asset);
   const provenanceByPath = new Map();
   for (const assetPath of [...new Set(footageAssets)]) {
     try {
@@ -23,7 +23,7 @@ export async function runFootageSemanticReviewAudit(projectId) {
   }
   const report = {
     project_id: projectId,
-    ...auditFootageSemanticReviews({ footageAssets, provenanceByPath, reviews }),
+    ...auditFootageSemanticReviews({ footageAssets, footageShots, provenanceByPath, reviews }),
   };
   await writeJsonAtomic(path.join(dir, "qa", "footage_semantic_review_audit.json"), report);
   return report;

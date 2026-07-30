@@ -10,6 +10,7 @@ const execFileAsync = promisify(execFile);
 const PEXELS_API = "https://api.pexels.com/videos/search";
 const PEXELS_LICENSE = "https://www.pexels.com/license/";
 const MAX_WIDTH = 1920;
+const DIRECT_FOOTAGE_HOSTS = new Set(["oceanexplorer.noaa.gov"]);
 
 const hash = (value) => crypto.createHash("sha256").update(value).digest("hex");
 const shortHash = (value) => hash(Buffer.from(String(value))).slice(0, 24);
@@ -114,6 +115,10 @@ async function loadPlan(dir, projectId) {
   if (reviews.project_id !== projectId) {
     throw new Error("visual_asset_reviews project_id mismatch");
   }
+  Object.defineProperty(plan, "_approvedByProviderId", {
+    value: new Map((reviews.approved_assets || []).map((asset) => [String(asset.provider_asset_id), asset])),
+    enumerable: false,
+  });
   const globallyRejected = collectRejectedProviderAssetIds(semantic, reviews);
   plan.assets = plan.assets.map((item) => {
     const constraint = semantic.scenes?.[item.scene_id];
@@ -191,7 +196,92 @@ async function probe(file) {
   };
 }
 
+async function acquireDirectOne(projectId, dir, item, usedIds) {
+  const id = sceneId(item.scene_id);
+  const source = item.direct_source;
+  const mediaUrl = new URL(String(source?.media_url || ""));
+  if (mediaUrl.protocol !== "https:" || !DIRECT_FOOTAGE_HOSTS.has(mediaUrl.hostname)) {
+    throw new Error(`${id}: direct footage host is not approved`);
+  }
+  const providerAssetId = String(source.provider_asset_id || "").trim();
+  if (!providerAssetId || usedIds.has(providerAssetId)) {
+    throw new Error(`${id}: direct provider asset is missing or already used`);
+  }
+  usedIds.add(providerAssetId);
+  const relative = `assets/footage/${id}_direct.mp4`;
+  const output = path.join(dir, relative);
+  const start = Number(source.source_trim_start_seconds || 0);
+  const requested = Number(source.output_duration_seconds || item.min_duration_seconds || 12);
+  await execFileAsync("ffmpeg", [
+    "-y",
+    "-ss", String(start),
+    "-i", mediaUrl.href,
+    "-t", String(requested),
+    "-map", "0:v:0",
+    "-c:v", "copy",
+    "-movflags", "+faststart",
+    "-an",
+    output,
+  ], { maxBuffer: 20 * 1024 * 1024 });
+  const info = await probe(output);
+  if (
+    info.width < 1280 ||
+    info.height < 720 ||
+    info.width <= info.height ||
+    info.duration + 0.05 < Number(item.min_duration_seconds || 8)
+  ) {
+    throw new Error(`${id}: direct footage failed HD/duration validation`);
+  }
+  const buffer = await fs.readFile(output);
+  const digest = hash(buffer);
+  await writeJsonAtomic(`${output}.provenance.json`, {
+    stable_asset_id: shortHash(`${projectId}:${id}:${providerAssetId}`),
+    scene_id: id,
+    provider: String(source.provider || "official_source"),
+    provider_asset_id: providerAssetId,
+    source_page_url: source.source_page_url,
+    source_media_url: mediaUrl.href,
+    source_institution: source.source_institution,
+    license_url: source.license_url,
+    license_note: source.license_note,
+    creator: source.creator || source.source_institution,
+    attribution_required: Boolean(source.attribution_required),
+    search_query: null,
+    editorial_role: item.role || "context",
+    editorial_note: item.editorial_note || null,
+    evidence_use_forbidden: true,
+    semantic_metadata_verified: true,
+    source_trim_start_seconds: start,
+    duration: info.duration,
+    actual_duration_seconds: info.duration,
+    width: info.width,
+    height: info.height,
+    codec: info.codec,
+    actual_width: info.width,
+    actual_height: info.height,
+    actual_codec: info.codec,
+    actual_container: info.container,
+    byte_size: buffer.length,
+    sha256: digest,
+    actual_sha256: digest,
+    transformed_for_edit: false,
+    selected_reason: "OFFICIAL_SOURCE_NARRATION_ANCHORED_DIRECT_CLIP",
+    approved_for_final_edit: true,
+    human_review_status: "PENDING_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+    downloaded_at: new Date().toISOString(),
+  });
+  return {
+    path: relative,
+    scene_id: id,
+    provider_asset_id: providerAssetId,
+    role: item.role || "context",
+  };
+}
+
 async function acquireOne(projectId, dir, item, key, usedIds, policy) {
+  if (item.direct_source) {
+    return acquireDirectOne(projectId, dir, item, usedIds);
+  }
   const id = sceneId(item.scene_id);
   const queries = [...new Set([...(item.queries || []), ...(item.fallback_queries || [])]
     .map(String)
@@ -303,13 +393,17 @@ async function acquireOne(projectId, dir, item, key, usedIds, policy) {
   };
 }
 
-async function reusable(dir, record, id, item) {
+async function reusable(dir, record, id, item, approvedByProviderId = new Map()) {
   if (!record?.path || record.scene_id !== id) return null;
   const media = path.join(dir, record.path);
   const provenanceFile = `${media}.provenance.json`;
   if (!(await exists(media)) || !(await exists(provenanceFile))) return null;
   const provenance = await readJson(provenanceFile);
-  if (provenance.approved_for_final_edit !== true || provenance.scene_id !== id) return null;
+  const approval = approvedByProviderId.get(String(provenance.provider_asset_id));
+  const reviewApproved =
+    approval?.asset_sha256 === provenance.sha256 &&
+    /^[a-f0-9]{64}$/i.test(String(approval.contact_sheet_sha256 || ""));
+  if ((provenance.approved_for_final_edit !== true && !reviewApproved) || provenance.scene_id !== id) return null;
   const rejected = new Set((item.rejected_provider_asset_ids || []).map(String));
   if (rejected.has(String(provenance.provider_asset_id))) return null;
   if (!matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;
@@ -323,7 +417,7 @@ async function reusable(dir, record, id, item) {
 
 export async function materializeAssignments(dir, plan, records) {
   const items = plan.assets.filter((item) => item.editorial_assignment);
-  if (!items.length) return { assignments: 0, replaced_graphics: 0 };
+  if (!items.length && !records.length) return { assignments: 0, replaced_graphics: 0, retired_paths: 0 };
   const file = path.join(dir, "config", "editorial_asset_plan.json");
   const editorial = await readJson(file);
   editorial.footage_assignments ||= {};
@@ -333,6 +427,22 @@ export async function materializeAssignments(dir, plan, records) {
   const targets = new Set();
   const retiredPaths = new Set();
   let replaced = 0;
+  for (const assignments of Object.values(editorial.footage_assignments)) {
+    for (const assignment of Object.values(assignments || {})) {
+      const match = String(assignment?.asset || "").match(/^assets\/footage\/(scene_[0-9]{3})_[a-f0-9]+\.mp4$/);
+      const record = match ? recordByScene.get(match[1]) : null;
+      if (!record || assignment.asset === record.path) continue;
+      retiredPaths.add(assignment.asset);
+      assignment.asset = record.path;
+    }
+  }
+  editorial.full_footage_pool = editorial.full_footage_pool.map((assetPath) => {
+    const match = String(assetPath).match(/^assets\/footage\/(scene_[0-9]{3})_[a-f0-9]+\.mp4$/);
+    const record = match ? recordByScene.get(match[1]) : null;
+    if (!record || assetPath === record.path) return assetPath;
+    retiredPaths.add(assetPath);
+    return record.path;
+  });
   for (const item of items) {
     const { claimId, sliceIndex } = validateAssignment(item);
     const index = String(sliceIndex);
@@ -398,7 +508,6 @@ export async function materializeAssignments(dir, plan, records) {
 
 export async function acquireDemandFootage(projectId) {
   const key = String(process.env.PEXELS_API_KEY || "").trim();
-  if (!key) throw new Error("PEXELS_API_KEY is required");
   const dir = projectDir(projectId);
   const plan = await loadPlan(dir, projectId);
   if (plan.project_id !== projectId || !Array.isArray(plan.assets) || !plan.assets.length) {
@@ -406,6 +515,9 @@ export async function acquireDemandFootage(projectId) {
   }
   const ids = plan.assets.map((item) => sceneId(item.scene_id));
   if (new Set(ids).size !== ids.length) throw new Error("Duplicate scene_id in footage plan");
+  if (plan.assets.some((item) => !item.direct_source) && !key) {
+    throw new Error("PEXELS_API_KEY is required");
+  }
   plan.assets.forEach(validateAssignment);
   const capacity = validateCapacityTarget(plan);
   const runtimeFile = path.join(dir, "assets", "footage_acquisition.runtime.json");
@@ -424,7 +536,7 @@ export async function acquireDemandFootage(projectId) {
   for (const item of plan.assets) {
     const id = sceneId(item.scene_id);
     const previousRecord = previousByScene.get(id);
-    const old = await reusable(dir, previousRecord, id, item);
+    const old = await reusable(dir, previousRecord, id, item, plan._approvedByProviderId);
     if (old) {
       records.push(old);
       usedIds.add(old.provider_asset_id);

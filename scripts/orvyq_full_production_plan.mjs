@@ -39,6 +39,7 @@ import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { tokenizeWords, tokenizeAnchorText, findAnchorMatch, endsAtSentenceBoundary, endsAtClauseBoundary } from "./lib/orvyq-pause-resolver.mjs";
 import { buildEvidenceContent } from "./lib/orvyq-evidence-authoring.mjs";
 import { FPS, END_CARD_SECONDS } from "./lib/orvyq-timeline.mjs";
+import { materializeVisualRebalancePlan } from "./lib/orvyq-visual-rebalance.mjs";
 
 const TARGET_SHOT_SECONDS = 6;
 const TITLE_CARD_SECONDS = 2.5;
@@ -1593,7 +1594,7 @@ export async function writeFullProductionPlan(projectId) {
   const dir = projectDir(projectId);
   const blueprintPath = path.join(dir, "direction", "editorial_blueprint.json");
   const blueprint = await readJson(blueprintPath);
-  const { shots, totalDuration, claimCount, pauseCount } = await buildFullProductionPlan(projectId);
+  const { shots: baselineShots, totalDuration, claimCount, pauseCount } = await buildFullProductionPlan(projectId);
   const durationSeconds = Math.round(totalDuration * 1000) / 1000;
   const [rebalancePlan, visualRequests] = await Promise.all([
     readJsonSafe(path.join(dir, "direction", "visual_rebalance_plan.json"), null),
@@ -1603,6 +1604,13 @@ export async function writeFullProductionPlan(projectId) {
     .filter((request) => request.status !== "ready")
     .map((request) => request.asset_request_id);
   const rebalanceMaterialized = !rebalancePlan || rebalancePlan.status === "materialized";
+  const shots = rebalanceMaterialized && pendingVisualRequestIds.length === 0
+    ? materializeVisualRebalancePlan({
+        shots: baselineShots,
+        plan: rebalancePlan,
+        assetRequests: visualRequests.requests || [],
+      })
+    : baselineShots;
   blueprint.full_production.status = rebalanceMaterialized && pendingVisualRequestIds.length === 0
     ? "ready"
     : "blocked_pending_visual_assets";

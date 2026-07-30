@@ -1,4 +1,11 @@
-export function auditFootageSemanticReviews({ footageAssets, provenanceByPath, reviews }) {
+function normalizedShots(footageAssets, footageShots) {
+  if (Array.isArray(footageShots)) return footageShots;
+  return (footageAssets || []).map((asset) => ({ asset }));
+}
+
+export function auditFootageSemanticReviews({ footageAssets, footageShots, provenanceByPath, reviews }) {
+  const shots = normalizedShots(footageAssets, footageShots);
+  const assetPaths = [...new Set(shots.map((shot) => shot.asset))];
   const rejectedByProviderId = new Map(
     (reviews.rejected_assets || []).map((asset) => [String(asset.provider_asset_id), asset]),
   );
@@ -9,7 +16,7 @@ export function auditFootageSemanticReviews({ footageAssets, provenanceByPath, r
   const rejected = [];
   const pending = [];
 
-  for (const assetPath of [...new Set(footageAssets)]) {
+  for (const assetPath of assetPaths) {
     const provenance = provenanceByPath.get(assetPath);
     if (!provenance) {
       failures.push(`${assetPath}: provenance is missing`);
@@ -35,11 +42,22 @@ export function auditFootageSemanticReviews({ footageAssets, provenanceByPath, r
     if (!/^[a-f0-9]{64}$/i.test(String(approval.contact_sheet_sha256 || ""))) {
       failures.push(`${assetPath}: approval lacks contact_sheet_sha256`);
     }
-    if (!approval.claim_id || !approval.narration_anchor || String(approval.semantic_rationale || "").length < 24) {
-      failures.push(`${assetPath}: approval lacks claim_id, narration_anchor, or semantic_rationale`);
-    }
     if (approval.asset_sha256 !== provenance.sha256) {
       failures.push(`${assetPath}: approval does not match current asset bytes`);
+    }
+    const uses = shots.filter((shot) => shot.asset === assetPath);
+    if (Array.isArray(footageShots)) {
+      for (const shot of uses) {
+        const approvedUse = (approval.approved_uses || []).find((use) =>
+          use.claim_id === shot.claim_id &&
+          use.narration_anchor === shot.narration_anchor
+        );
+        if (!approvedUse || String(approvedUse.semantic_rationale || "").length < 24) {
+          failures.push(`${assetPath}: no exact approved use for ${shot.claim_id} / ${shot.narration_anchor}`);
+        }
+      }
+    } else if (!approval.claim_id || !approval.narration_anchor || String(approval.semantic_rationale || "").length < 24) {
+      failures.push(`${assetPath}: approval lacks claim_id, narration_anchor, or semantic_rationale`);
     }
   }
 
@@ -48,6 +66,7 @@ export function auditFootageSemanticReviews({ footageAssets, provenanceByPath, r
     failures,
     rejected,
     pending,
-    reviewed_asset_count: new Set(footageAssets).size,
+    reviewed_asset_count: assetPaths.length,
+    reviewed_shot_count: shots.length,
   };
 }

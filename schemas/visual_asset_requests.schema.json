@@ -26,7 +26,9 @@
           "required_source": { "type": "string", "minLength": 8 },
           "required_content": { "type": "string", "minLength": 24 },
           "acceptance": { "type": "string", "minLength": 24 },
-          "forbidden_substitutes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } }
+          "forbidden_substitutes": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 3 } },
+          "resolved_asset_paths": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 8 } },
+          "resolved_evidence_asset_ids": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^EVID_[A-Z0-9_]+$" } }
         },
         "additionalProperties": false
       }

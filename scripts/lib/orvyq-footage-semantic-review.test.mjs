@@ -35,3 +35,29 @@ test("approval is byte-bound and narration-specific", () => {
   });
   assert.equal(result.pass, true, result.failures.join("; "));
 });
+
+test("production audit requires an exact approval for every narration use", () => {
+  const asset = "assets/footage/context.mp4";
+  const result = auditFootageSemanticReviews({
+    footageShots: [{
+      asset,
+      claim_id: "CLM_002",
+      narration_anchor: "This exact narration must be reviewed.",
+    }],
+    provenanceByPath: new Map([[asset, { provider_asset_id: "789", sha256: "d".repeat(64) }]]),
+    reviews: {
+      approved_assets: [{
+        provider_asset_id: "789",
+        asset_sha256: "d".repeat(64),
+        contact_sheet_sha256: "e".repeat(64),
+        approved_uses: [{
+          claim_id: "CLM_001",
+          narration_anchor: "A different sentence.",
+          semantic_rationale: "This rationale is deliberately tied to another narration use.",
+        }],
+      }],
+    },
+  });
+  assert.equal(result.pass, false);
+  assert.match(result.failures.join("; "), /no exact approved use/);
+});
