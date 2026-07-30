@@ -119,63 +119,63 @@
       "forbidden_terms": ["household-bin", "plastic-bottle", "compost", "fashion"]
     },
     "scene_041": {
-      "queries": ["government officials negotiation table", "international trade negotiation delegates", "diplomatic meeting discussion"],
-      "fallback_queries": ["policy bargaining meeting", "delegates negotiation conference"],
-      "required_any_groups": [["negotiation", "diplomatic", "delegate", "official", "government"]],
+      "queries": ["policy negotiation meeting table", "international committee discussion", "officials conference table", "trade policy meeting"],
+      "fallback_queries": ["professional roundtable discussion", "committee meeting people", "conference table discussion"],
+      "required_any_groups": [["meeting", "conference", "discussion", "committee", "roundtable", "official", "delegate", "people"]],
       "forbidden_terms": ["walking", "leaving", "party", "wedding", "restaurant"]
     },
     "scene_042": {
-      "queries": ["scientific research vessel ocean survey", "marine survey ship sonar", "ocean mapping vessel"],
-      "fallback_queries": ["expedition vessel at sea", "survey boat ocean"],
-      "required_any_groups": [["ship", "vessel", "boat"]],
+      "queries": ["scientific research vessel ocean survey", "marine survey ship sonar", "ocean mapping vessel", "expedition boat open sea"],
+      "fallback_queries": ["expedition vessel at sea", "survey boat ocean", "working ship ocean"],
+      "required_any_groups": [["ship", "vessel", "boat", "ocean", "sea"]],
       "forbidden_terms": ["cargo", "freight", "ferry", "cruise", "yacht", "fishing"]
     },
     "scene_043": {
-      "queries": ["industrial port workers ships", "maritime crew harbor operations", "busy shipping port workers"],
-      "fallback_queries": ["vessels harbor workers", "industrial port operations"],
-      "required_any_groups": [["port", "harbor", "harbour", "ship", "vessel"]],
+      "queries": ["industrial port workers ships", "maritime crew harbor operations", "busy shipping port workers", "dock workers harbor"],
+      "fallback_queries": ["vessels harbor workers", "industrial port operations", "port cranes workers"],
+      "required_any_groups": [["port", "harbor", "harbour", "ship", "vessel", "dock", "worker", "crane"]],
       "forbidden_terms": ["cruise", "tourist", "beach", "marina", "yacht"]
     },
     "scene_044": {
-      "queries": ["factory production delay workers", "idle manufacturing plant workers", "industrial supply disruption"],
-      "fallback_queries": ["factory workers stopped machinery", "manufacturing plant idle"],
-      "required_any_groups": [["factory", "manufacturing", "industrial", "production"]],
+      "queries": ["factory production delay workers", "idle manufacturing plant workers", "industrial supply disruption", "workers inspecting factory machinery"],
+      "fallback_queries": ["factory workers stopped machinery", "manufacturing plant idle", "industrial workers machine"],
+      "required_any_groups": [["factory", "manufacturing", "industrial", "production", "machine", "machinery", "worker"]],
       "forbidden_terms": ["food", "kitchen", "farm", "agriculture", "toy"]
     },
     "scene_045": {
-      "queries": ["international law delegates negotiation", "government officials treaty meeting", "policy rulemaking conference"],
-      "fallback_queries": ["international policy delegates", "officials legal meeting"],
-      "required_any_groups": [["delegate", "official", "government", "diplomatic", "policy"]],
+      "queries": ["international law delegates negotiation", "government officials treaty meeting", "policy rulemaking conference", "legal committee discussion"],
+      "fallback_queries": ["international policy delegates", "officials legal meeting", "committee conference people"],
+      "required_any_groups": [["delegate", "official", "government", "diplomatic", "policy", "meeting", "conference", "committee", "discussion"]],
       "forbidden_terms": ["walking", "leaving", "party", "wedding"]
     },
     "scene_046": {
-      "queries": ["marine scientists collecting water samples", "research vessel ocean sampling", "marine biologist field research"],
-      "fallback_queries": ["ocean researcher sample collection", "scientist water testing"],
-      "required_any_groups": [["scientist", "researcher", "biologist", "sample", "marine", "ocean"]],
+      "queries": ["marine scientists collecting water samples", "research vessel ocean sampling", "marine biologist field research", "scientist testing water laboratory"],
+      "fallback_queries": ["ocean researcher sample collection", "scientist water testing", "researcher laboratory sample"],
+      "required_any_groups": [["scientist", "researcher", "biologist", "sample", "marine", "ocean", "water", "laboratory", "lab"]],
       "forbidden_terms": ["diver", "scuba", "snorkel", "aquarium", "swimming-pool"]
     },
     "scene_047": {
-      "queries": ["coastal industrial community workers", "port town workers industry", "harbor community people"],
-      "fallback_queries": ["industrial community people", "coastal workers harbor"],
-      "required_any_groups": [["community", "people", "worker", "person", "town"]],
+      "queries": ["coastal industrial community workers", "port town workers industry", "harbor community people", "industrial workers town"],
+      "fallback_queries": ["industrial community people", "coastal workers harbor", "workers outside factory"],
+      "required_any_groups": [["community", "people", "worker", "person", "town", "industrial", "factory", "port", "harbor"]],
       "forbidden_terms": ["tourist", "vacation", "beach-party", "resort", "wedding"]
     },
     "scene_048": {
-      "queries": ["young marine scientists research", "marine biology students fieldwork", "young ocean researchers"],
-      "fallback_queries": ["science students laboratory", "young researchers ocean"],
-      "required_any_groups": [["student", "young", "researcher", "scientist"]],
+      "queries": ["young marine scientists research", "marine biology students fieldwork", "young ocean researchers", "science students laboratory research"],
+      "fallback_queries": ["science students laboratory", "young researchers ocean", "research team laboratory"],
+      "required_any_groups": [["student", "young", "researcher", "scientist", "science", "laboratory", "lab", "team"]],
       "forbidden_terms": ["school-child", "elementary", "party", "graduation", "aquarium-tour"]
     },
     "scene_049": {
-      "queries": ["research vessel sailing open ocean", "scientific ship at sea", "ocean expedition vessel"],
-      "fallback_queries": ["survey ship ocean", "research boat sea"],
-      "required_any_groups": [["ship", "vessel", "boat"]],
+      "queries": ["research vessel sailing open ocean", "scientific ship at sea", "ocean expedition vessel", "working boat open sea"],
+      "fallback_queries": ["survey ship ocean", "research boat sea", "ship sailing ocean"],
+      "required_any_groups": [["ship", "vessel", "boat", "ocean", "sea"]],
       "forbidden_terms": ["cargo", "freight", "ferry", "cruise", "yacht", "fishing"]
     },
     "scene_050": {
-      "queries": ["government officials committee hearing", "regulatory public hearing officials", "policy committee meeting"],
-      "fallback_queries": ["government officials meeting table", "regulatory agency meeting"],
-      "required_any_groups": [["official", "government", "regulatory", "committee", "policy"]],
+      "queries": ["government officials committee hearing", "regulatory public hearing officials", "policy committee meeting", "formal committee discussion"],
+      "fallback_queries": ["government officials meeting table", "regulatory agency meeting", "conference table people"],
+      "required_any_groups": [["official", "government", "regulatory", "committee", "policy", "meeting", "conference", "discussion", "people"]],
       "forbidden_terms": ["party", "wedding", "restaurant", "walking", "leaving"]
     }
   }
