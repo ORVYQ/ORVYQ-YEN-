@@ -165,7 +165,7 @@ jobs:
             projects/${{ steps.project.outputs.project_id }}/qa/local_assets.provenance.json
           if-no-files-found: warn
 
-      - name: Report acquisition result on PR 3
+      - name: Report acquisition result on the active pull request
         if: always()
         shell: bash
         env:
@@ -177,10 +177,11 @@ jobs:
           DETAILS="$(tail -n 20 footage-acquisition.log 2>/dev/null || true)"
           BODY="Demand-led footage acquisition finished with **${JOB_STATUS}**. Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}. Target: \`${PROJECT_LABEL}\` on \`${{ github.ref_name }}\`."
           if [ -n "$DETAILS" ]; then
-            BODY="${BODY}
-
-\`\`\`text
-${DETAILS}
-\`\`\`"
+            BODY="${BODY}"$'\n\n```text\n'"${DETAILS}"$'\n```'
           fi
-          gh api repos/${{ github.repository }}/issues/3/comments -f body="$BODY"
+          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$PR_NUMBER" ]; then
+            gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body "$BODY"
+          else
+            echo "No active pull request found for $GITHUB_REF_NAME; skipping PR report."
+          fi
