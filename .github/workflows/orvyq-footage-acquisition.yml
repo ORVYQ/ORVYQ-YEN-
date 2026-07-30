@@ -50,7 +50,7 @@ jobs:
           else
             CHANGED_INPUT="$(
               git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints)\.json$' |
+                grep -E '^projects/[^/]+/research/(footage_acquisition_plan|footage_semantic_constraints|visual_asset_reviews)\.json$' |
                 head -n 1 || true
             )"
             if [ -n "$CHANGED_INPUT" ]; then
@@ -160,6 +160,7 @@ jobs:
             footage-acquisition.log
             projects/${{ steps.project.outputs.project_id }}/research/footage_acquisition_plan.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
+            projects/${{ steps.project.outputs.project_id }}/research/visual_asset_reviews.json
             projects/${{ steps.project.outputs.project_id }}/config/editorial_asset_plan.json
             projects/${{ steps.project.outputs.project_id }}/assets/footage_acquisition.runtime.json
             projects/${{ steps.project.outputs.project_id }}/assets/local_assets.json
