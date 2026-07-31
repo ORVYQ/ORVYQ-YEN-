@@ -16,13 +16,21 @@ function normalizeApprovedUse(use) {
   };
 }
 
+export function matchesContactSheetDecision(entry, decisionSha256) {
+  const decisionHash = String(decisionSha256 || "").toLowerCase();
+  if (!decisionHash) return false;
+  return [entry?.contact_sheet_sha256, entry?.contact_sheet_pointer_sha256]
+    .filter(Boolean)
+    .some((hash) => String(hash).toLowerCase() === decisionHash);
+}
+
 function isMatchingDecision(entry, decision) {
   return Boolean(
     entry &&
     entry.scene_id === decision.scene_id &&
     String(entry.provider_asset_id) === String(decision.provider_asset_id) &&
     String(entry.asset_sha256).toLowerCase() === String(decision.asset_sha256).toLowerCase() &&
-    String(entry.contact_sheet_sha256).toLowerCase() === String(decision.contact_sheet_sha256).toLowerCase()
+    matchesContactSheetDecision(entry, decision.contact_sheet_sha256)
   );
 }
 
@@ -72,7 +80,9 @@ export function applyFootageVisualDecisions({ queue, decisions, reviews, runtime
         scene_id: decision.scene_id,
         provider_asset_id: providerId,
         asset_sha256: decision.asset_sha256,
-        contact_sheet_sha256: decision.contact_sheet_sha256,
+        // Persist the canonical contact-sheet content identity. A legacy decision may match the pointer-file SHA,
+        // but the resulting approval is upgraded to the Git LFS object SHA emitted by the current queue.
+        contact_sheet_sha256: entry.contact_sheet_sha256,
         reviewed_frame_count: entry.reviewed_frame_count,
         approved_uses: approvedUses,
       });
