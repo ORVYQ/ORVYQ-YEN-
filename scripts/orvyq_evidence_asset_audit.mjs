@@ -4,7 +4,8 @@
 // `plan.mode`, matching the canonical edit_plan.schema.json shape.
 import path from "node:path";
 import { promises as fs } from "node:fs";
-import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 
@@ -104,7 +105,14 @@ export async function runEvidenceAssetAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runEvidenceAssetAudit().then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runEvidenceAssetAudit(projectId).then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
     console.error(JSON.stringify({ ok: false, error: error.message }));
     process.exitCode = 1;
   });

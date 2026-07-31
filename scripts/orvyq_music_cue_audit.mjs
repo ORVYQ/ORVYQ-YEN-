@@ -5,7 +5,8 @@
 // contiguity check normalizes both that shape and music_cue_sheet.json's
 // full_cues (start/end, untouched real project data) to a common form.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
@@ -94,7 +95,14 @@ export async function runMusicCueAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runMusicCueAudit().then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runMusicCueAudit(projectId).then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
     console.error(JSON.stringify({ ok: false, error: error.message }));
     process.exitCode = 1;
   });

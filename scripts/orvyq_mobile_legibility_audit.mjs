@@ -2,7 +2,8 @@
 // Mobile-legibility gate for evidence/overlay typography. Logic unchanged
 // from golden; de-minified for readability during the rebuild.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const IMAGE_KINDS = new Set(["split_documents", "official_document", "official_figure", "official_screen", "image_sequence", "recap"]);
@@ -56,7 +57,14 @@ export async function runMobileLegibilityAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runMobileLegibilityAudit().then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runMobileLegibilityAudit(projectId).then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
     console.error(JSON.stringify({ ok: false, error: error.message }));
     process.exitCode = 1;
   });

@@ -18,7 +18,8 @@ import assert from "node:assert/strict";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import path from "node:path";
-import { projectDir, readJson, pathExists } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, pathExists, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 import { resolveVisualBalanceThresholds } from "./lib/orvyq-visual-balance.mjs";
@@ -282,7 +283,7 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`)
-  validateCanonicalEditPlan()
+  validateCanonicalEditPlan(resolveProjectId(parseArgs(process.argv.slice(2))))
     .then((result) => console.log(JSON.stringify({ ok: true, ...result })))
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));

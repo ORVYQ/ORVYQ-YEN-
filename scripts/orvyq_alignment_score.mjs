@@ -23,7 +23,8 @@
 // minimum, the 65%-of-weight per-category floor, and the mandatory human
 // rendered-video review are all unchanged.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 import { DEFAULT_VISUAL_MEDIUM_BALANCE } from "./lib/orvyq-visual-balance.mjs";
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
@@ -153,7 +154,14 @@ export async function buildAlignmentReadiness(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  buildAlignmentReadiness()
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  buildAlignmentReadiness(projectId)
     .then((report) => console.log(JSON.stringify({ ok: true, pre_render_readiness_score: report.pre_render_readiness_score, automated_readiness_ceiling: report.automated_readiness_ceiling, final_aperture_alignment_score: null })))
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));

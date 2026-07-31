@@ -11,7 +11,8 @@
 // class that let scripts/orvyq_full_production_plan.mjs ship 55 evidence
 // shots with only kind/source_ids/source_label/font_px.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { claimLimitation } from "./lib/orvyq-evidence-authoring.mjs";
 
@@ -155,7 +156,14 @@ export async function runEvidenceSpecAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runEvidenceSpecAudit()
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runEvidenceSpecAudit(projectId)
     .then((report) => console.log(JSON.stringify({ ok: true, ...report })))
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));

@@ -2,7 +2,8 @@
 // Shot-duration variety gate. Deliberate change vs golden: `plan.preview`
 // -> `plan.mode === "proof"`, matching the canonical edit_plan.schema.json.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 
@@ -82,7 +83,14 @@ export async function runPacingAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runPacingAudit().then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runPacingAudit(projectId).then((report) => console.log(JSON.stringify({ ok: true, ...report }))).catch((error) => {
     console.error(JSON.stringify({ ok: false, error: error.message }));
     process.exitCode = 1;
   });

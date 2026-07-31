@@ -4,7 +4,8 @@
 // `plan.mode === "proof"` / `plan.mode === "full"`, matching the canonical
 // edit_plan.schema.json shape from Phase 2/3. Logic is otherwise unchanged.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
@@ -103,7 +104,14 @@ export async function runEvidenceAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runEvidenceAudit()
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runEvidenceAudit(projectId)
     .then((report) => console.log(JSON.stringify({ ok: true, ...report })))
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));

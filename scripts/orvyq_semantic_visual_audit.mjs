@@ -3,7 +3,8 @@
 // document slideshow. Deliberate change vs golden: `plan.preview` ->
 // `plan.mode`, matching the canonical edit_plan.schema.json shape.
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 import { auditSectionVisualBalance, auditVisualMediumBalance } from "./lib/orvyq-visual-balance.mjs";
@@ -206,7 +207,14 @@ export async function runSemanticVisualAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  runSemanticVisualAudit()
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  runSemanticVisualAudit(projectId)
     .then((report) => console.log(JSON.stringify({ ok: true, ...report })))
     .catch((error) => {
       console.error(JSON.stringify({ ok: false, error: error.message }));

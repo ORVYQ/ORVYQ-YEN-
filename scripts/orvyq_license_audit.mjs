@@ -10,7 +10,8 @@
 import path from "node:path";
 import { promises as fs } from "node:fs";
 import { createHash } from "node:crypto";
-import { projectDir, readJson, writeJsonAtomic, pathExists } from "./lib/fs-utils.mjs";
+import { projectDir, readJson, writeJsonAtomic, pathExists, parseArgs } from "./lib/fs-utils.mjs";
+import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
@@ -222,7 +223,14 @@ export async function buildLicenseAudit(projectId = PROJECT_ID) {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  buildLicenseAudit()
+  let projectId;
+  try {
+    projectId = resolveProjectId(parseArgs(process.argv.slice(2)));
+  } catch (error) {
+    console.error(JSON.stringify({ ok: false, error: error.message, code: error.code }));
+    process.exit(1);
+  }
+  buildLicenseAudit(projectId)
     .then((result) =>
       console.log(
         JSON.stringify({
