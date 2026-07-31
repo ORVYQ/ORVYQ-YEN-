@@ -138,43 +138,6 @@ new_preflight = '''    let selected;
 source = replace_once(source, old_preflight, new_preflight, "multi-page global preflight ranking")
 source_path.write_text(source)
 
-workflow_path = Path(".github/workflows/orvyq-footage-acquisition.yml")
-workflow = workflow_path.read_text()
-runtime_patch = '''      - name: Make byte-bound human approval authoritative for reuse
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          source = Path("scripts/orvyq_acquire_footage_demand.mjs")
-          text = source.read_text()
-          old = '  if (!matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;'
-          new = '  if (!reviewApproved && !matchesSemanticText(`${provenance.source_page_url || ""} ${provenance.creator || ""}`, item)) return null;'
-          if old in text:
-              source.write_text(text.replace(old, new))
-          elif new not in text:
-              raise SystemExit("Could not find the reusable semantic guard")
-          PY
-
-'''
-workflow = replace_once(workflow, runtime_patch, "", "runtime source mutation removal")
-workflow = replace_once(
-    workflow,
-    '          jq --slurpfile override "$OVERRIDE" \'.scenes = (.scenes * $override[0].scenes) | .request_revision = ((.request_revision // 0) + 1)\' "$BASE" > "$BASE.tmp"',
-    '          jq --slurpfile override "$OVERRIDE" \'.scenes = (.scenes * $override[0].scenes)\' "$BASE" > "$BASE.tmp"',
-    "request revision churn removal",
-)
-prune_step = '''      - name: Prune orphan footage before acquisition decision
-        shell: bash
-        run: |
-          set -euo pipefail
-          node scripts/orvyq_prune_orphan_footage.mjs --project-id="$PROJECT_ID"
-
-'''
-if prune_step not in workflow:
-    workflow = replace_once(workflow, "      - name: Determine acquisition requirement\n", prune_step + "      - name: Determine acquisition requirement\n", "pre-decision pruning")
-workflow_path.write_text(workflow)
-
 override_path = Path("projects/002-the-new-war-beneath-the-ocean/research/footage_constraint_overrides.json")
 override = json.loads(override_path.read_text())
 scenes = override["scenes"]
@@ -245,7 +208,6 @@ package_path = Path("package.json")
 package = json.loads(package_path.read_text())
 package.get("scripts", {}).pop("postinstall", None)
 package_path.write_text(json.dumps(package, indent=2) + "\n")
-Path(".github/workflows/orvyq-systemic-semantic-fix.yml").unlink(missing_ok=True)
 Path(__file__).unlink(missing_ok=True)
 
 run("node", "--test", "scripts/orvyq_acquire_footage_demand.test.mjs", "scripts/orvyq_acquire_footage_semantic.test.mjs", "scripts/orvyq_acquire_footage_semantic_regression.test.mjs")
