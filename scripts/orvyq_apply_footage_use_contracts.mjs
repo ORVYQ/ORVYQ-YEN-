@@ -9,6 +9,7 @@ import {
   printJson,
 } from "./lib/fs-utils.mjs";
 import { canonicalVisualRole } from "./lib/orvyq-visual-roles.mjs";
+import { materializeVisualRebalancePlan } from "./lib/orvyq-visual-rebalance.mjs";
 
 function sceneIdFromAsset(assetPath) {
   const match = String(assetPath || "").match(/(?:^|\/)scene_(\d{3})(?:_|\.mp4)/);
@@ -70,10 +71,6 @@ export function mergeFootageUseContractOverrides(contracts, overrides = null) {
   const overrideRetirements = overrides.retired_targets || [];
   overrideRetirements.forEach((item, index) => validateRetirement(item, `footage_use_contract_overrides.retired_targets[${index}]`));
 
-  // An override is authoritative for every scene it explicitly manages. This
-  // lets an editor move a clip to a better narration beat without rewriting
-  // the entire project contract, while keeping the final merged contract as
-  // the single canonical source written back to disk.
   merged.assignments = merged.assignments.filter((item) => !overrideManaged.has(item.scene_id));
   merged.retired_targets = merged.retired_targets.filter((item) => !overrideManaged.has(item.scene_id));
   merged.assignments.push(...clone(overrideAssignments));
@@ -129,6 +126,15 @@ export function assertNoSilentManagedAssignmentRemoval({
   }
 }
 
+export function synchronizeVisualRebalanceShots({ shots, rebalancePlan, assetRequests = [] }) {
+  if (!rebalancePlan || rebalancePlan.status !== "materialized") return clone(shots || []);
+  return materializeVisualRebalancePlan({
+    shots: shots || [],
+    plan: rebalancePlan,
+    assetRequests,
+  });
+}
+
 export async function applyFootageUseContracts(projectId) {
   const dir = projectDir(projectId);
   const files = {
@@ -138,16 +144,37 @@ export async function applyFootageUseContracts(projectId) {
     runtime: path.join(dir, "assets", "footage_acquisition.runtime.json"),
     plan: path.join(dir, "research", "footage_acquisition_plan.json"),
     blueprint: path.join(dir, "direction", "editorial_blueprint.json"),
+    rebalancePlan: path.join(dir, "direction", "visual_rebalance_plan.json"),
+    assetRequests: path.join(dir, "research", "visual_asset_requests.json"),
   };
-  const [baseContracts, overrides, editorial, runtime, plan, blueprint] = await Promise.all([
+  const [
+    baseContracts,
+    overrides,
+    editorial,
+    runtime,
+    plan,
+    blueprint,
+    rebalancePlan,
+    assetRequests,
+  ] = await Promise.all([
     readJson(files.contracts),
     readJsonSafe(files.overrides, null),
     readJson(files.editorial),
     readJson(files.runtime),
     readJson(files.plan),
     readJson(files.blueprint),
+    readJsonSafe(files.rebalancePlan, null),
+    readJsonSafe(files.assetRequests, { project_id: projectId, requests: [] }),
   ]);
-  for (const [label, value] of Object.entries({ baseContracts, editorial, runtime, plan, blueprint })) {
+  for (const [label, value] of Object.entries({
+    baseContracts,
+    editorial,
+    runtime,
+    plan,
+    blueprint,
+    ...(rebalancePlan ? { rebalancePlan } : {}),
+    assetRequests,
+  })) {
     if (value.project_id !== projectId) throw new Error(`${label} project_id does not match ${projectId}`);
   }
 
@@ -282,7 +309,12 @@ export async function applyFootageUseContracts(projectId) {
       materializedShotCount += 1;
     }
   }
-  blueprint.full_production.shots = nextShots;
+
+  blueprint.full_production.shots = synchronizeVisualRebalanceShots({
+    shots: nextShots,
+    rebalancePlan,
+    assetRequests: assetRequests.requests || [],
+  });
 
   editorial.last_footage_use_contract_application = {
     generated_at: new Date().toISOString(),
@@ -292,6 +324,7 @@ export async function applyFootageUseContracts(projectId) {
     removed_previous_assignments: removedAssignments,
     explicit_retirement_count: (contracts.retired_targets || []).length,
     override_file: overrides ? "research/footage_use_contract_overrides.json" : null,
+    visual_rebalance_resynchronized: Boolean(rebalancePlan?.status === "materialized"),
     deferred_targets: deferredTargets,
   };
 
@@ -311,6 +344,7 @@ export async function applyFootageUseContracts(projectId) {
     project_id: projectId,
     assignment_count: assignments.length,
     materialized_shot_count: materializedShotCount,
+    visual_rebalance_resynchronized: Boolean(rebalancePlan?.status === "materialized"),
     deferred_target_count: deferredTargets.length,
     removed_previous_assignments: removedAssignments,
     explicit_retirement_count: (contracts.retired_targets || []).length,
