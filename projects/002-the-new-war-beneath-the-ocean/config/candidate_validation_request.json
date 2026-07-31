@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 22,
-  "reason": "Re-run exact-head Candidate Validation after retiring the excess CLM_015 slice-0 footage assignment without forcing a semantically weaker replacement. Scene_015 now has only its two direct seabed uses, scene_053 retains only its two approved midwater-research uses, and the canonical generated evidence/context treatment remains at the retired target. No video render is permitted.",
+  "request_revision": 23,
+  "reason": "Re-run exact-head Candidate Validation after replacing the stale third scene_015 use at CLM_015 slice 0 with a distinct approved trim of official NOAA scene_051 ROV research footage. Scene_015 now has exactly two continuous-use groups, scene_051 has exactly two separated uses with an explicit callback reason on the second, and scene_053 remains within its two-use ceiling. No video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T17:24:00Z"
+  "requested_at": "2026-07-31T17:45:00Z"
 }
