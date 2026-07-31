@@ -1,3 +1,6 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   classifyVisualMedium,
   resolveVisualBalanceThresholds,
@@ -12,9 +15,14 @@ const DECISIONS = new Set([
   "remove",
 ]);
 const MEDIA = new Set(["contextual_footage", "primary_evidence", "graphic_card"]);
+const REPO_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 
 function clone(value) {
   return structuredClone(value);
+}
+
+function unique(values) {
+  return [...new Set(values.filter((value) => typeof value === "string" && value.trim()).map((value) => value.trim()))];
 }
 
 function requireReadyRequest(requests, action) {
@@ -23,21 +31,90 @@ function requireReadyRequest(requests, action) {
   if (request.status !== "ready") throw new Error(`shot ${action.baseline_shot_index} asset request ${action.asset_request_id} is ${request.status}`);
 }
 
-function applyPrimaryEvidenceReplacement(shot, action, requests) {
+function loadPrimaryEvidenceAssets(plan, providedAssets) {
+  if (Array.isArray(providedAssets)) return providedAssets;
+  if (!plan?.project_id) return [];
+  const manifestPath = path.join(
+    REPO_ROOT,
+    "projects",
+    plan.project_id,
+    "research",
+    "primary_evidence_manifest.json",
+  );
+  try {
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    return Array.isArray(manifest.assets) ? manifest.assets : [];
+  } catch (error) {
+    throw new Error(
+      `project ${plan.project_id} primary-evidence manifest could not be loaded: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
+function resolvePrimaryEvidenceAttribution(replacements, evidenceAssets, action) {
+  const byId = new Map(evidenceAssets.map((asset) => [asset.evidence_asset_id, asset]));
+  const manifests = replacements.map((replacement) => {
+    const manifest = byId.get(replacement.evidence_asset_id);
+    if (!manifest) {
+      throw new Error(
+        `shot ${action.baseline_shot_index} replacement ${replacement.evidence_asset_id} is missing from primary_evidence_manifest.json`,
+      );
+    }
+    const missing = [];
+    if (!Array.isArray(manifest.source_ids) || !manifest.source_ids.length) missing.push("source_ids");
+    for (const field of ["source_institution", "source_title", "source_date", "source_url", "content_identity"]) {
+      if (typeof manifest[field] !== "string" || !manifest[field].trim()) missing.push(field);
+    }
+    if (missing.length) {
+      throw new Error(
+        `shot ${action.baseline_shot_index} replacement ${replacement.evidence_asset_id} lacks canonical provenance fields: ${missing.join(", ")}`,
+      );
+    }
+    return manifest;
+  });
+
+  const sourceIds = unique(manifests.flatMap((manifest) => manifest.source_ids || []));
+  const sourcePairs = unique(
+    manifests.map((manifest) => `${manifest.source_institution.trim()} — ${manifest.source_date.trim()}`),
+  );
+  const institutions = unique(manifests.map((manifest) => manifest.source_institution));
+  const titles = unique(manifests.map((manifest) => manifest.caption || manifest.source_title));
+  const limitations = unique(manifests.map((manifest) => manifest.limitation));
+
+  return {
+    sourceIds,
+    sourceLabel: sourcePairs.join(" / "),
+    eyebrow: `${institutions[0].toUpperCase()} — PRIMARY EVIDENCE`,
+    title: titles.length === 1 ? titles[0] : `${titles[0]} (+${titles.length - 1} source${titles.length === 2 ? "" : "s"})`,
+    limitation: limitations.join(" ") || "The source supports only the specific claim and region shown on screen.",
+  };
+}
+
+function applyPrimaryEvidenceReplacement(shot, action, requests, evidenceAssets) {
   requireReadyRequest(requests, action);
   const replacements = action.replacement_assets || [];
   if (!replacements.length || replacements.some((asset) => !asset.asset_path || !asset.evidence_asset_id)) {
     throw new Error(`shot ${action.baseline_shot_index} requires materialized primary-evidence replacement_assets`);
   }
+  const attribution = resolvePrimaryEvidenceAttribution(replacements, evidenceAssets, action);
   const updated = clone(shot);
+  const existingEvidence = updated.evidence || {};
   updated.asset_type = "evidence";
   updated.visual_role = "evidence";
   updated.editorial_purpose = action.rationale;
   updated.semantic_rationale = action.rationale;
   updated.semantic_link = "direct_evidence";
   updated.evidence = {
-    ...(updated.evidence || {}),
+    ...existingEvidence,
     kind: replacements.length > 1 ? "image_sequence" : "official_figure",
+    source_ids: attribution.sourceIds,
+    source_label: attribution.sourceLabel,
+    font_px: existingEvidence.font_px || 32,
+    eyebrow: existingEvidence.eyebrow || attribution.eyebrow,
+    title: existingEvidence.title || attribution.title,
+    limitation: existingEvidence.limitation || attribution.limitation,
+    template_id: existingEvidence.template_id || "orvyq_official_figure",
+    necessity: existingEvidence.necessity || "critical_result",
     image_assets: replacements.map((asset) => asset.asset_path),
     evidence_asset_ids: replacements.map((asset) => asset.evidence_asset_id),
     source_regions: replacements.map((asset) => asset.source_region).filter(Boolean),
@@ -129,10 +206,19 @@ function extendAdjacentFootage(shots, index, action) {
   return updated;
 }
 
-export function materializeVisualRebalancePlan({ shots, plan, assetRequests = [] }) {
+export function materializeVisualRebalancePlan({
+  shots,
+  plan,
+  assetRequests = [],
+  primaryEvidenceAssets = null,
+}) {
   if (!plan || plan.status !== "materialized") return clone(shots || []);
   const requests = new Map(assetRequests.map((request) => [request.asset_request_id, request]));
   const actions = new Map((plan.actions || []).map((action) => [action.baseline_shot_index, action]));
+  const needsPrimaryEvidence = [...actions.values()].some((action) => action.decision === "replace_primary_evidence");
+  const evidenceAssets = needsPrimaryEvidence
+    ? loadPrimaryEvidenceAssets(plan, primaryEvidenceAssets)
+    : [];
   const output = clone(shots || []);
 
   for (let index = 0; index < output.length; index += 1) {
@@ -144,7 +230,7 @@ export function materializeVisualRebalancePlan({ shots, plan, assetRequests = []
     if (action.decision === "redesign" || action.decision === "keep") {
       output[index] = applyRedesign(output[index], action);
     } else if (action.decision === "replace_primary_evidence") {
-      output[index] = applyPrimaryEvidenceReplacement(output[index], action, requests);
+      output[index] = applyPrimaryEvidenceReplacement(output[index], action, requests, evidenceAssets);
     } else if (action.decision === "replace_contextual_footage") {
       output[index] = applyFootageReplacement(output[index], action, requests);
     } else if (action.decision === "remove" && action.replacement_strategy === "extend_adjacent_footage") {
