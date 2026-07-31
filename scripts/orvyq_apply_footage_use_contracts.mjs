@@ -360,6 +360,7 @@ export async function applyFootageUseContracts(projectId) {
     deferred_targets: deferredTargets,
     source_duration_fit: {
       shifted_contiguous_runs: trimFitResult.shifted_runs,
+      slowed_contiguous_runs: trimFitResult.slowed_runs,
     },
     footage_use_budget: {
       max_uses_per_source: Number(blueprint.global_rules?.max_uses_per_source),
@@ -391,6 +392,7 @@ export async function applyFootageUseContracts(projectId) {
     removed_previous_assignments: removedAssignments,
     explicit_retirement_count: (contracts.retired_targets || []).length,
     shifted_contiguous_run_count: trimFitResult.shifted_runs.length,
+    slowed_contiguous_run_count: trimFitResult.slowed_runs.length,
     removed_optional_hook_use_count: budgetResult.removed_hook_uses.length,
     override_applied: Boolean(overrides),
     pruned_plan_assets: originalPlanCount - plan.assets.length,

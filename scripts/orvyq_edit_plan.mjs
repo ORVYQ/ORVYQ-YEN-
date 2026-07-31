@@ -236,13 +236,17 @@ async function buildFullPlan(dir, projectId, blueprint) {
     if (!provenance.approved_for_final_edit || !provenance.license_url) throw new Error(`${common.shot_id} footage is not licensed and approved`);
     const sourceDuration = Number(provenance.actual_duration_seconds || provenance.duration);
     const trimIn = Number(spec.trim_in_sec || 0);
-    const trimOut = Number(spec.trim_out_sec || trimIn + duration);
+    const playbackRate = Number(spec.playback_rate || 1);
+    if (!Number.isFinite(playbackRate) || playbackRate < 0.75 || playbackRate > 1)
+      throw new Error(`full_production.shots[${index}] playback_rate must stay within the system cinematic range 0.75-1.00`);
+    const trimOut = Number(spec.trim_out_sec || trimIn + duration * playbackRate);
     if (!Number.isFinite(sourceDuration) || trimIn < 0 || trimOut <= trimIn || trimOut > sourceDuration + 0.02)
       throw new Error(
         `${common.shot_id} has an invalid footage trim on ${spec.asset}: trim_in=${trimIn}, trim_out=${trimOut}, ` +
           `real source duration=${sourceDuration} -- ${trimOut > sourceDuration + 0.02 ? "trim_out overruns the clip's own real duration" : "trim_in/trim_out are not a valid non-empty range"}`
       );
-    if (Math.abs(trimOut - trimIn - duration) > 0.02) throw new Error(`full_production.shots[${index}] trim does not match timeline duration`);
+    if (Math.abs(trimOut - trimIn - duration * playbackRate) > 0.02)
+      throw new Error(`full_production.shots[${index}] trim does not match timeline duration at playback_rate=${playbackRate}`);
     // A shot that continues the immediately preceding shot's own asset from
     // exactly where its trim left off (an editorial pause hold on the same
     // footage, split into two shots so neither exceeds max_shot_seconds) is
@@ -259,6 +263,7 @@ async function buildFullPlan(dir, projectId, blueprint) {
       video_asset: spec.asset,
       trim_in_sec: round(trimIn),
       trim_out_sec: round(trimOut),
+      playback_rate: round(playbackRate),
       motion_variant: spec.motion || "hold",
       hook_footage: isHookFootage,
       contextual_footage: isContextualFootage,
