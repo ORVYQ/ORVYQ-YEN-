@@ -15,7 +15,7 @@
       "scene_id": "scene_015",
       "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
       "slice_index": 0,
-      "reason": "Retire the third use of the generic seafloor-sediment clip and replace this midwater food-web beat with approved official NOAA water-column footage that matches the narration more directly."
+      "reason": "Retire the third use of the generic seafloor-sediment clip. Do not force a different footage asset into this beat: the claim-specific NOAA water-column clip already has two valid uses, so the canonical generated evidence/context treatment should remain instead of violating the global two-use ceiling or using semantically weaker footage."
     },
     {
       "scene_id": "scene_016",
@@ -116,16 +116,6 @@
       "role": "human_context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A distinct formal-hearing trim represents regulatory delay while source documents retain the factual burden."
-    },
-    {
-      "scene_id": "scene_053",
-      "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
-      "slice_index": 0,
-      "trim_in_ratio": 0.4,
-      "motion": "pull",
-      "role": "context",
-      "semantic_link": "physical",
-      "semantic_rationale": "Official NOAA water-column footage directly carries the midwater setting and suspended-particle mechanism while the cited paper retains the food-web claim and scientific qualification."
     },
     {
       "scene_id": "scene_053",
