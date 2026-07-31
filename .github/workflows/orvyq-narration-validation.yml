@@ -81,6 +81,15 @@ jobs:
           echo $? > speech-qa.status
           cat speech-qa.log
 
+      # This gate used to be the LAST step in the job. Everything below it --
+      # building the alignment and, with commit_alignment, pushing it to the
+      # branch -- therefore ran even when speech QA had failed, so a bad or
+      # stale transcript could be committed as canonical narration alignment
+      # and only afterwards be reported as a failure. The gate belongs here,
+      # before anything derived from the transcript is written or pushed.
+      - name: Stop when speech QA failed
+        run: test "$(cat speech-qa.status)" = "0"
+
       - name: Build canonical narration alignment
         run: node scripts/orvyq_narration_alignment.mjs --project-id="$PROJECT_ID"
 
@@ -112,6 +121,3 @@ jobs:
             projects/${{ env.PROJECT_ID }}/qa/full_narration_speech_qa.json
             projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
           if-no-files-found: warn
-
-      - name: Fail when speech QA failed
-        run: test "$(cat speech-qa.status)" = "0"

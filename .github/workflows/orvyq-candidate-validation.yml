@@ -173,26 +173,6 @@ jobs:
           node scripts/orvyq_frozen_candidate.mjs --project-id="$PROJECT_ID"
           cat "projects/$PROJECT_ID/qa/frozen_candidate.json"
 
-      - name: Upload immutable validated candidate bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: orvyq-validated-candidate-${{ inputs.project_id }}-${{ github.run_id }}
-          retention-days: 90
-          include-hidden-files: true
-          path: |
-            validation-source-sha.txt
-            projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
-            projects/${{ env.PROJECT_ID }}/qa/full_narration_speech_qa.json
-            projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
-            projects/${{ env.PROJECT_ID }}/config/production_profile.json
-            projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
-            projects/${{ env.PROJECT_ID }}/remotion/captions.json
-            projects/${{ env.PROJECT_ID }}/assets/**
-            projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/**
-            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/node_modules
-            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
-            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion
-
       - name: Run full pre-render QA chain
         run: |
           set +e
@@ -227,3 +207,30 @@ jobs:
 
       - name: Stop when the pre-render QA chain failed
         run: test "$(cat qa-chain.status)" = "0"
+
+      # Published only after the QA chain that decides whether this candidate
+      # is valid has actually passed. It used to be uploaded before that chain
+      # ran, so a candidate the audits went on to reject still left an artifact
+      # named "validated-candidate" behind -- exactly what ORVYQ_SYSTEM.md
+      # section 7 forbids ("a failed candidate is repaired internally; it is
+      # not presented to the user as review-ready"). The separate validation
+      # reports artifact below still uploads on failure for diagnosis.
+      - name: Upload immutable validated candidate bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-validated-candidate-${{ inputs.project_id }}-${{ github.run_id }}
+          retention-days: 90
+          include-hidden-files: true
+          path: |
+            validation-source-sha.txt
+            projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
+            projects/${{ env.PROJECT_ID }}/qa/full_narration_speech_qa.json
+            projects/${{ env.PROJECT_ID }}/voice/narration_alignment.json
+            projects/${{ env.PROJECT_ID }}/config/production_profile.json
+            projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
+            projects/${{ env.PROJECT_ID }}/remotion/captions.json
+            projects/${{ env.PROJECT_ID }}/assets/**
+            projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/**
+            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/node_modules
+            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
+            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion

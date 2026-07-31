@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { checkReviewFinalParity } from "./orvyq_review_final_parity.mjs";
+import { checkReviewFinalParity, SCHEMA_VERSION } from "./orvyq_review_final_parity.mjs";
+import { buildRenderManifest } from "./orvyq_render_manifest.mjs";
 
 // Real-shaped identity, matching what orvyq-review.yml / orvyq-final-encode.yml
 // actually write (see the render-bundle work).
@@ -24,7 +25,7 @@ function identity(overrides = {}) {
 
 function reviewManifest(identityOverrides = {}) {
   return {
-    schema_version: "2.0",
+    schema_version: SCHEMA_VERSION,
     identity: identity(identityOverrides),
     encode: { profile: "review", width: 1280, height: 720, codec: "h264", bitrate: "6M", crf: null, encoder_preset: null },
     artifact: { run_id: "30061057489", video_path: "out/orvyq_review.mp4", video_sha256: "1".repeat(64) }
@@ -33,10 +34,37 @@ function reviewManifest(identityOverrides = {}) {
 
 function finalManifest(identityOverrides = {}) {
   return {
-    schema_version: "2.0",
+    schema_version: SCHEMA_VERSION,
     identity: identity(identityOverrides),
     encode: { profile: "final", width: 1920, height: 1080, codec: "h264", bitrate: null, crf: 16, encoder_preset: null },
     artifact: { run_id: "30099999999", video_path: "out/final_video.mp4", video_sha256: "2".repeat(64) }
+  };
+}
+
+// The frozen candidate shape orvyq_frozen_candidate.mjs really produces --
+// the only input the manifest builder is allowed to derive identity from.
+function frozenCandidate(overrides = {}) {
+  return {
+    project_id: "002-a-real-project",
+    candidate_hash: "a".repeat(64),
+    render_bundle_hash: "r".repeat(64),
+    canonical_candidate_identity: {
+      project_id: "002-a-real-project",
+      source_commit_sha: "0".repeat(40),
+      edit_plan_hash: "b".repeat(64),
+      caption_hash: "c".repeat(64),
+      audio_mix_metadata_hash: "d".repeat(64),
+      asset_registry_hash: "i".repeat(64),
+      final_mix_audio_hash: "e".repeat(64),
+      asset_manifest_hash: "f".repeat(64),
+      render_ready_source_hash: "g".repeat(64),
+      renderer_source_tree_hash: "h".repeat(64),
+      fps: 30,
+      total_frames: 25719,
+      selected_render_range: { start_frame: 0, end_frame: 25719 },
+      mode: "full",
+      ...overrides
+    }
   };
 }
 
@@ -127,6 +155,76 @@ test("wrong schema_version fails", () => {
   const { pass, failures } = checkReviewFinalParity(review, finalManifest());
   assert.equal(pass, false);
   assert.ok(failures.some((f) => f.includes("schema_version")));
+});
+
+// The bug this pair of tests exists to prevent: the manifests were written
+// by hand-inlined `node -e` heredocs inside the two workflows while the
+// verifier kept its own SCHEMA_VERSION and these fixtures kept a third copy.
+// They drifted (workflows "3.0", verifier "2.0"), so every real Final Encode
+// would have failed at the parity gate -- and no test noticed, because the
+// fixtures never went through the code the workflows actually run. These
+// tests exercise the real builder instead of a fixture.
+test("real builder output: review vs final manifests from the same frozen candidate PASS parity", () => {
+  const candidate = frozenCandidate();
+  const review = buildRenderManifest({
+    projectId: "002-a-real-project",
+    candidate,
+    encode: { profile: "review", width: 1280, height: 720, codec: "h264", bitrate: "6M" },
+    artifact: { run_id: "30061057489", validated_by_run_id: "30061000000", video_path: "out/orvyq_review.mp4", video_sha256: "1".repeat(64) }
+  });
+  const final = buildRenderManifest({
+    projectId: "002-a-real-project",
+    candidate,
+    encode: { profile: "final", width: 1920, height: 1080, codec: "h264", crf: 16 },
+    artifact: { run_id: "30099999999", video_path: "out/final_video.mp4", video_sha256: "2".repeat(64) }
+  });
+  assert.equal(review.schema_version, SCHEMA_VERSION);
+  assert.equal(final.schema_version, SCHEMA_VERSION);
+  assert.notEqual(review.encode.profile, final.encode.profile);
+  const { pass, failures } = checkReviewFinalParity(review, final);
+  assert.equal(pass, true, failures.join("; "));
+});
+
+test("real builder output: a final render of a DIFFERENT candidate fails parity", () => {
+  const review = buildRenderManifest({
+    projectId: "002-a-real-project",
+    candidate: frozenCandidate(),
+    encode: { profile: "review", width: 1280, height: 720, codec: "h264", bitrate: "6M" },
+    artifact: { run_id: "30061057489", video_path: "out/orvyq_review.mp4", video_sha256: "1".repeat(64) }
+  });
+  const drifted = frozenCandidate({ edit_plan_hash: "9".repeat(64) });
+  drifted.candidate_hash = "z".repeat(64);
+  const final = buildRenderManifest({
+    projectId: "002-a-real-project",
+    candidate: drifted,
+    encode: { profile: "final", width: 1920, height: 1080, codec: "h264", crf: 16 },
+    artifact: { run_id: "30099999999", video_path: "out/final_video.mp4", video_sha256: "2".repeat(64) }
+  });
+  const { pass, failures } = checkReviewFinalParity(review, final);
+  assert.equal(pass, false);
+  assert.ok(failures.some((f) => f.includes("candidate_hash")));
+  assert.ok(failures.some((f) => f.includes("edit_plan_hash")));
+});
+
+test("the builder refuses an unknown render profile instead of writing an unverifiable manifest", () => {
+  assert.throws(
+    () => buildRenderManifest({ projectId: "002-a-real-project", candidate: frozenCandidate(), encode: { profile: "proof" }, artifact: {} }),
+    /Unknown render profile/
+  );
+});
+
+test("the builder refuses a frozen candidate whose identity is incomplete", () => {
+  const candidate = frozenCandidate();
+  delete candidate.canonical_candidate_identity.render_ready_source_hash;
+  assert.throws(
+    () => buildRenderManifest({
+      projectId: "002-a-real-project",
+      candidate,
+      encode: { profile: "final", width: 1920, height: 1080, codec: "h264", crf: 16 },
+      artifact: { run_id: "1", video_path: "out/final_video.mp4", video_sha256: "2".repeat(64) }
+    }),
+    /render_ready_source_hash/
+  );
 });
 
 test("an undeclared extra identity field that differs fails", () => {

@@ -19,7 +19,14 @@
 // reproduces that exact failure against real review/final manifests).
 import { readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
 
-export const SCHEMA_VERSION = "2.0";
+// Must equal the version the review and final render manifests are actually
+// written with. Both are now written by scripts/orvyq_render_manifest.mjs,
+// which imports this constant, so the two can no longer drift -- they did:
+// the workflows emitted "3.0" while this constant said "2.0" and the tests
+// below built their own "2.0" fixtures, which would have failed every real
+// Final Encode at the parity gate. "3.0" is kept (rather than reverting the
+// workflows to "2.0") because real review manifests already on file carry it.
+export const SCHEMA_VERSION = "3.0";
 
 // Every one of these must be present, with an identical value, in BOTH
 // manifests' `identity` section. This is the complete definition of "the

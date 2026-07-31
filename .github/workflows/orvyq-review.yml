@@ -160,58 +160,24 @@ jobs:
           set -euo pipefail
           echo "REVIEW_VIDEO_SHA256=$(sha256sum "projects/$PROJECT_ID/remotion/render_ready_project/out/orvyq_review.mp4" | cut -d' ' -f1)" >> "$GITHUB_ENV"
 
+      # Written by the one shared builder both this workflow and the final
+      # encode use, so the manifest shape and schema version can never drift
+      # apart again (see scripts/orvyq_render_manifest.mjs).
       - name: Write review render manifest
         run: |
           set -euo pipefail
-          node -e "
-            const fs = require('fs');
-            const candidate = JSON.parse(fs.readFileSync('projects/$PROJECT_ID/qa/frozen_candidate.json', 'utf8'));
-            const identity = candidate.canonical_candidate_identity;
-            const manifest = {
-              schema_version: '3.0',
-              project_id: process.env.PROJECT_ID,
-              identity: {
-                candidate_hash: candidate.candidate_hash,
-                render_bundle_hash: candidate.render_bundle_hash,
-                edit_plan_hash: identity.edit_plan_hash,
-                caption_hash: identity.caption_hash,
-                final_mix_audio_hash: identity.final_mix_audio_hash || null,
-                audio_mix_metadata_hash: identity.audio_mix_metadata_hash,
-                asset_manifest_hash: identity.asset_manifest_hash || null,
-                render_ready_source_hash: identity.render_ready_source_hash || null,
-                renderer_source_hash: identity.renderer_source_tree_hash || null,
-                total_frames: identity.total_frames,
-                fps: identity.fps,
-                frame_range: identity.selected_render_range
-              },
-              encode: { profile: 'review', width: Number(process.env.REVIEW_WIDTH), height: Number(process.env.REVIEW_HEIGHT), codec: 'h264', bitrate: process.env.REVIEW_BITRATE, crf: null, encoder_preset: null },
-              artifact: {
-                run_id: '${{ github.run_id }}',
-                validated_by_run_id: '${{ inputs.approved_validation_run_id }}',
-                video_path: 'out/orvyq_review.mp4',
-                video_sha256: process.env.REVIEW_VIDEO_SHA256
-              }
-            };
-            fs.writeFileSync('projects/$PROJECT_ID/qa/review_render_manifest.json', JSON.stringify(manifest, null, 2));
-          "
-
-      - name: Upload immutable render bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: orvyq-render-bundle-${{ inputs.project_id }}-${{ github.run_id }}
-          retention-days: 90
-          include-hidden-files: true
-          path: |
-            projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
-            projects/${{ env.PROJECT_ID }}/qa/review_render_manifest.json
-            projects/${{ env.PROJECT_ID }}/config/production_profile.json
-            projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
-            projects/${{ env.PROJECT_ID }}/remotion/captions.json
-            projects/${{ env.PROJECT_ID }}/assets/**
-            projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/**
-            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/node_modules
-            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
-            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion
+          node scripts/orvyq_render_manifest.mjs \
+            --project-id="$PROJECT_ID" \
+            --profile=review \
+            --output="projects/$PROJECT_ID/qa/review_render_manifest.json" \
+            --run-id="${{ github.run_id }}" \
+            --validated-by-run-id="${{ inputs.approved_validation_run_id }}" \
+            --video-path="out/orvyq_review.mp4" \
+            --video-sha256="$REVIEW_VIDEO_SHA256" \
+            --width="$REVIEW_WIDTH" \
+            --height="$REVIEW_HEIGHT" \
+            --codec=h264 \
+            --bitrate="$REVIEW_BITRATE"
 
       - name: Upload review render before media QA
         if: always()
@@ -291,3 +257,29 @@ jobs:
           set -euo pipefail
           test "$(cat media-qa.status)" = "0"
           test "$(cat near-black.status)" = "0"
+
+      # Published only after post-render QA passed. This artifact is the exact
+      # input orvyq-final-encode.yml consumes, so a review whose media QA or
+      # near-black audit failed must not leave a downloadable render bundle
+      # behind for someone to approve and encode (ORVYQ_SYSTEM.md section 7:
+      # a failed candidate is never presented as review-ready). The rendered
+      # MP4 itself is still uploaded above with `if: always()`, so a failed
+      # review can always be watched and diagnosed.
+      - name: Upload immutable render bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-render-bundle-${{ inputs.project_id }}-${{ github.run_id }}
+          retention-days: 90
+          include-hidden-files: true
+          path: |
+            render-source-sha.txt
+            projects/${{ env.PROJECT_ID }}/qa/frozen_candidate.json
+            projects/${{ env.PROJECT_ID }}/qa/review_render_manifest.json
+            projects/${{ env.PROJECT_ID }}/config/production_profile.json
+            projects/${{ env.PROJECT_ID }}/direction/edit_plan.json
+            projects/${{ env.PROJECT_ID }}/remotion/captions.json
+            projects/${{ env.PROJECT_ID }}/assets/**
+            projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/**
+            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/node_modules
+            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/out
+            !projects/${{ env.PROJECT_ID }}/remotion/render_ready_project/.remotion
