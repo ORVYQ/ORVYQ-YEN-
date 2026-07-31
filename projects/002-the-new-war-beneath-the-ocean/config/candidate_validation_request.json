@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 27,
-  "reason": "Re-run exact-head Candidate Validation after resolving shot_150's source-duration overrun. The byte-identical NOAA water-column source now remains at only two direct uses, while the closing metaphor moves to a second, distinct, explicitly justified trim of the approved night-ocean scene_019. Global reuse limits remain unchanged and no video render is permitted.",
+  "request_revision": 28,
+  "reason": "Re-run exact-head Candidate Validation after adding system-wide hook-aware footage use budgeting. Claim-bound body assignments remain unchanged; the system now accounts for hook and body uses together, removes only an optional hook use when the authored minimum hook duration remains satisfied, and otherwise fails closed. No video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T18:16:00Z"
+  "requested_at": "2026-07-31T20:19:00Z"
 }
