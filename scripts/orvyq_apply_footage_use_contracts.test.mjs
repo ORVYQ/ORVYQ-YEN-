@@ -166,7 +166,23 @@ test("footage reconciliation reapplies the effective visual-rebalance materializ
         kind: "official_figure",
         source_ids: ["SRC_A"],
         source_label: "Fixture Institution",
-        title: "Fixture source",
+        title: "Fixture source — redundant view",
+      },
+    },
+    {
+      duration: 4,
+      claim_id: "CLM_A",
+      section_id: "SEC_A",
+      source_slice_index: 2,
+      asset_type: "evidence",
+      visual_role: "evidence",
+      semantic_link: "direct_evidence",
+      semantic_rationale: "A concise source-backed beat remains after the redundant view is removed.",
+      evidence: {
+        kind: "source_article",
+        source_ids: ["SRC_A"],
+        source_label: "Fixture Institution",
+        title: "Fixture source — retained evidence",
       },
     },
   ];
@@ -191,4 +207,6 @@ test("footage reconciliation reapplies the effective visual-rebalance materializ
   assert.equal(synchronized[1].trim_in_sec, 8);
   assert.equal(synchronized[1].trim_out_sec, 14);
   assert.equal(synchronized[1].evidence, undefined);
+  assert.equal(synchronized[2].asset_type, "evidence");
+  assert.deepEqual(synchronized[2].evidence.source_ids, ["SRC_A"]);
 });
