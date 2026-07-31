@@ -101,6 +101,145 @@ async function applyOfficialSourceOverrides(dir, projectId) {
   return applied;
 }
 
+async function readProvenanceIfPresent(dir, assetPath) {
+  if (!assetPath) return null;
+  const file = path.join(dir, `${assetPath}.provenance.json`);
+  return (await pathExists(file)) ? readJson(file) : null;
+}
+
+async function applyLocalOfficialReuse(dir, projectId, runtime, result) {
+  const reuseFile = path.join(dir, "research", "footage_local_official_reuse.json");
+  if (!(await pathExists(reuseFile))) return 0;
+  const reusePlan = await readJson(reuseFile);
+  if (reusePlan.project_id !== projectId) throw new Error("local official reuse project_id mismatch");
+  if (!Array.isArray(reusePlan.reuses) || !reusePlan.reuses.length) return 0;
+
+  const records = runtime.records || [];
+  const recordByScene = new Map(records.map((record) => [record.scene_id, record]));
+  const rejectedIds = new Set((result.reviews.rejected_assets || []).map((asset) => String(asset.provider_asset_id)));
+  const contentUseCounts = new Map();
+  for (const record of records) {
+    const provenance = await readProvenanceIfPresent(dir, record.path);
+    const contentHash = String(provenance?.actual_sha256 || provenance?.sha256 || "").toLowerCase();
+    if (contentHash) contentUseCounts.set(contentHash, (contentUseCounts.get(contentHash) || 0) + 1);
+  }
+
+  const pendingScenes = new Set(result.reviews.pending_frame_review_scene_ids || []);
+  let applied = 0;
+  for (const reuse of reusePlan.reuses) {
+    const targetSceneId = String(reuse.target_scene_id || "");
+    const sourceSceneId = String(reuse.source_scene_id || "");
+    if (!/^scene_[0-9]{3}$/.test(targetSceneId) || !/^scene_[0-9]{3}$/.test(sourceSceneId)) {
+      throw new Error("local official reuse contains an invalid scene id");
+    }
+    const targetRecord = recordByScene.get(targetSceneId);
+    if (!targetRecord || !rejectedIds.has(String(targetRecord.provider_asset_id))) continue;
+
+    const sourceAssetPath = String(reuse.source_asset_path || "");
+    const sourceSheetPath = String(reuse.source_contact_sheet_path || "");
+    const sourceMedia = path.join(dir, sourceAssetPath);
+    const sourceSheet = path.join(dir, sourceSheetPath);
+    const sourceProvenanceFile = `${sourceMedia}.provenance.json`;
+    for (const [label, file] of Object.entries({ sourceMedia, sourceSheet, sourceProvenanceFile })) {
+      if (!(await pathExists(file))) throw new Error(`${targetSceneId}: ${label} is missing for local official reuse`);
+    }
+    const sourceProvenance = await readJson(sourceProvenanceFile);
+    if (sourceProvenance.approved_for_final_edit !== true) {
+      throw new Error(`${targetSceneId}: source official footage is not approved`);
+    }
+    if (String(sourceProvenance.scene_id) !== sourceSceneId) {
+      throw new Error(`${targetSceneId}: source official footage scene identity does not match`);
+    }
+    const contentHash = String(sourceProvenance.actual_sha256 || sourceProvenance.sha256 || "").toLowerCase();
+    if (!/^[a-f0-9]{64}$/.test(contentHash)) {
+      throw new Error(`${targetSceneId}: source official footage has no valid byte identity`);
+    }
+    if ((contentUseCounts.get(contentHash) || 0) >= 2) {
+      throw new Error(`${targetSceneId}: source official footage would exceed the two-use content limit`);
+    }
+
+    const oldAssetPath = targetRecord.path;
+    const oldMedia = path.join(dir, oldAssetPath);
+    const oldProvenance = await readProvenanceIfPresent(dir, oldAssetPath);
+    const targetAssetPath = `assets/footage/${targetSceneId}_official_reuse.mp4`;
+    const targetMedia = path.join(dir, targetAssetPath);
+    const targetSheetPath = `qa/footage-contact-sheets/${targetSceneId}.jpg`;
+    const targetSheet = path.join(dir, targetSheetPath);
+    await fs.copyFile(sourceMedia, targetMedia);
+    await fs.copyFile(sourceSheet, targetSheet);
+
+    const derivedProviderId = `ORVYQ_REUSE_${sourceProvenance.provider_asset_id}_${targetSceneId}`;
+    const nextProvenance = {
+      ...sourceProvenance,
+      stable_asset_id: `${sourceProvenance.stable_asset_id}-${targetSceneId}`,
+      scene_id: targetSceneId,
+      provider_asset_id: derivedProviderId,
+      source_provider_asset_id: sourceProvenance.provider_asset_id,
+      reuse_source_scene_id: sourceSceneId,
+      reuse_source_asset_path: sourceAssetPath,
+      editorial_role: oldProvenance?.editorial_role || targetRecord.role || "context",
+      editorial_note: String(reuse.editorial_note || oldProvenance?.editorial_note || ""),
+      narration_anchor: oldProvenance?.narration_anchor || null,
+      target_claim_id: oldProvenance?.target_claim_id || null,
+      target_slice_index: oldProvenance?.target_slice_index ?? null,
+      approved_for_final_edit: false,
+      visual_qa_status: "PENDING_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+      visual_qa_origin: "system_visual_qa",
+      selected_reason: "REPOSITORY_OWNED_OFFICIAL_FOOTAGE_REUSE_PENDING_BYTE_BOUND_QA",
+      reused_at: new Date().toISOString(),
+    };
+    for (const field of [
+      "reviewed_asset_sha256",
+      "reviewed_contact_sheet_sha256",
+      "visual_qa_reason",
+      "human_review_status",
+      "human_review_reason",
+      "fail_closed_reason",
+    ]) delete nextProvenance[field];
+    await writeJsonAtomic(`${targetMedia}.provenance.json`, nextProvenance);
+
+    targetRecord.path = targetAssetPath;
+    targetRecord.provider_asset_id = derivedProviderId;
+    targetRecord.role = nextProvenance.editorial_role;
+    for (const request of result.requests.requests || []) {
+      request.resolved_asset_paths = (request.resolved_asset_paths || []).map((assetPath) =>
+        assetPath === oldAssetPath ? targetAssetPath : assetPath
+      );
+      if ((request.resolved_asset_paths || []).includes(targetAssetPath)) request.status = "pending_frame_review";
+    }
+
+    result.reviews.rejected_assets = (result.reviews.rejected_assets || [])
+      .filter((asset) => String(asset.provider_asset_id) !== String(oldProvenance?.provider_asset_id || targetRecord.provider_asset_id));
+    result.reviews.approved_assets = (result.reviews.approved_assets || [])
+      .filter((asset) => String(asset.provider_asset_id) !== derivedProviderId);
+    pendingScenes.add(targetSceneId);
+    rejectedIds.delete(String(oldProvenance?.provider_asset_id || ""));
+    contentUseCounts.set(contentHash, (contentUseCounts.get(contentHash) || 0) + 1);
+
+    if (oldMedia !== targetMedia && (await pathExists(oldMedia))) await fs.rm(oldMedia, { force: true });
+    if (oldMedia !== targetMedia && (await pathExists(`${oldMedia}.provenance.json`))) {
+      await fs.rm(`${oldMedia}.provenance.json`, { force: true });
+    }
+    applied += 1;
+  }
+
+  if (!applied) return 0;
+  const currentProviderIds = new Set(records.map((record) => String(record.provider_asset_id)));
+  result.reviews.rejected_assets = (result.reviews.rejected_assets || [])
+    .filter((asset) => currentProviderIds.has(String(asset.provider_asset_id)));
+  result.reviews.approved_assets = (result.reviews.approved_assets || [])
+    .filter((asset) => currentProviderIds.has(String(asset.provider_asset_id)));
+  result.reviews.pending_frame_review_scene_ids = [...pendingScenes].sort();
+  result.reviews.summary = {
+    pool_assets: records.length,
+    rejected_from_metadata: result.reviews.rejected_assets.length,
+    pending_frame_review: result.reviews.pending_frame_review_scene_ids.length,
+    approved: result.reviews.approved_assets.length,
+  };
+  result.ready_for_materialization = false;
+  return applied;
+}
+
 function materializeOpeningHook(shots, motionHook) {
   const replaceCount = Number(motionHook.replace_opening_shot_count || motionHook.shots?.length || 0);
   if (!replaceCount || !Array.isArray(motionHook.shots) || motionHook.shots.length !== replaceCount) {
@@ -192,6 +331,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
   }
 
   const officialFallbacksApplied = await applyOfficialSourceOverrides(dir, projectId);
+  const localOfficialReusesApplied = await applyLocalOfficialReuse(dir, projectId, runtime, result);
   const wasMaterialized = rebalance.status === "materialized";
   rebalance.status = result.ready_for_materialization ? "materialized" : "blocked_pending_assets";
   const pendingRequestIds = (result.requests.requests || [])
@@ -220,6 +360,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
 
   await Promise.all([
     writeJsonAtomic(files.reviews, result.reviews),
+    writeJsonAtomic(files.runtime, runtime),
     writeJsonAtomic(files.requests, result.requests),
     writeJsonAtomic(files.rebalance, rebalance),
     writeJsonAtomic(files.blueprint, blueprint),
@@ -230,6 +371,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
     decision_rounds: decisions.round_files,
     ready_for_materialization: result.ready_for_materialization,
     official_fallbacks_applied: officialFallbacksApplied,
+    local_official_reuses_applied: localOfficialReusesApplied,
     applied_approvals: result.applied_approvals,
     applied_rejections: result.applied_rejections,
     stale_decisions: result.stale_decisions,
