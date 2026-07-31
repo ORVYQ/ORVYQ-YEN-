@@ -1,0 +1,37 @@
+name: Apply bounded playback system patch
+
+on:
+  push:
+    branches:
+      - agent/systemic-visual-evidence-balance
+    paths:
+      - .github/workflows/apply-bounded-playback-patch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v4
+        with:
+          ref: agent/systemic-visual-evidence-balance
+          fetch-depth: 2
+
+      - name: Apply guarded source patch
+        run: node scripts/maintenance/apply_bounded_playback_patch.mjs
+
+      - name: Remove one-shot maintenance files
+        run: |
+          git rm scripts/maintenance/apply_bounded_playback_patch.mjs
+          git rm .github/workflows/apply-bounded-playback-patch.yml
+
+      - name: Commit system changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/orvyq_edit_plan.mjs scripts/orvyq_apply_footage_use_contracts.mjs
+          git commit -m "Support bounded source-safe footage playback"
+          git push origin HEAD:agent/systemic-visual-evidence-balance
