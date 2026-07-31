@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   mergeFootageUseContractOverrides,
   assertNoSilentManagedAssignmentRemoval,
+  synchronizeVisualRebalanceShots,
 } from "./orvyq_apply_footage_use_contracts.mjs";
 
 const base = {
@@ -132,4 +133,62 @@ test("duplicate override targets are rejected before project files are changed",
       }),
     /duplicate target/
   );
+});
+
+test("footage reconciliation reapplies the effective visual-rebalance materialization", () => {
+  const shots = [
+    {
+      duration: 7,
+      claim_id: "CLM_A",
+      section_id: "SEC_A",
+      source_slice_index: 0,
+      asset_type: "footage",
+      asset: "assets/footage/abyss.mp4",
+      visual_role: "context",
+      trim_in_sec: 1,
+      trim_out_sec: 8,
+      motion: "push",
+      semantic_link: "physical",
+      semantic_rationale: "The approved abyssal footage establishes the physical setting.",
+      contextual_footage: true,
+      generic_stock: false,
+    },
+    {
+      duration: 6,
+      claim_id: "CLM_A",
+      section_id: "SEC_A",
+      source_slice_index: 1,
+      asset_type: "evidence",
+      visual_role: "evidence",
+      semantic_link: "direct_evidence",
+      semantic_rationale: "The previous blueprint still contains a redundant evidence beat.",
+      evidence: {
+        kind: "official_figure",
+        source_ids: ["SRC_A"],
+        source_label: "Fixture Institution",
+        title: "Fixture source",
+      },
+    },
+  ];
+  const rebalancePlan = {
+    status: "materialized",
+    actions: [
+      {
+        baseline_shot_index: 1,
+        claim_id: "CLM_A",
+        duration_seconds: 6,
+        decision: "remove",
+        projected_medium: "contextual_footage",
+        replacement_strategy: "extend_adjacent_footage",
+        rationale: "Continue the approved physical footage instead of repeating the same evidence page.",
+      },
+    ],
+  };
+
+  const synchronized = synchronizeVisualRebalanceShots({ shots, rebalancePlan });
+  assert.equal(synchronized[1].asset_type, "footage");
+  assert.equal(synchronized[1].asset, "assets/footage/abyss.mp4");
+  assert.equal(synchronized[1].trim_in_sec, 8);
+  assert.equal(synchronized[1].trim_out_sec, 14);
+  assert.equal(synchronized[1].evidence, undefined);
 });
