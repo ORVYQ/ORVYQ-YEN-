@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { requiresClaimBoundReview } from "./orvyq_prepare_footage_review_queue.mjs";
@@ -51,4 +52,10 @@ test("an unused asset is not queued solely because approval is absent", () => {
     approval: null,
     assetSha256: "a".repeat(64),
   }), false);
+});
+
+test("claim-bound queue excludes planning-only editorial assignment anchors", () => {
+  const source = fs.readFileSync(new URL("./orvyq_prepare_footage_review_queue.mjs", import.meta.url), "utf8");
+  assert.doesNotMatch(source, /editorial_asset_plan\.json/);
+  assert.doesNotMatch(source, /footage_assignments/);
 });
