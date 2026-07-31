@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "review_basis": "footage_visual_decisions.json: Every decision is bound to the current media SHA-256 and twelve-frame contact-sheet SHA-256, then checked against the exact claim, narration anchor and contextual role. Generic footage is rejected whenever it merely illustrates a noun, impersonates a named source or fails to carry the sentence meaning. | footage_visual_decisions_round2.json: Second byte-bound review of the twenty replacement clips retained by the claim-bound use contract. Decisions use the replacement media SHA-256, twelve-frame contact-sheet SHA-256 and only the narrowed claim/slice roles declared in footage_use_contracts.json. | footage_visual_decisions_round3.json: Third byte-bound review of the eight replacement clips generated after the second review. Every decision is tied to the replacement media SHA-256, its twelve-frame contact-sheet SHA-256 and the narrowed claim/slice role in footage_use_contracts.json.",
+  "review_basis": "footage_visual_decisions.json: Every decision is bound to the current media SHA-256 and twelve-frame contact-sheet SHA-256, then checked against the exact claim, narration anchor and contextual role. Generic footage is rejected whenever it merely illustrates a noun, impersonates a named source or fails to carry the sentence meaning. | footage_visual_decisions_round2.json: Second byte-bound review of the twenty replacement clips retained by the claim-bound use contract. Decisions use the replacement media SHA-256, twelve-frame contact-sheet SHA-256 and only the narrowed claim/slice roles declared in footage_use_contracts.json. | footage_visual_decisions_round3.json: Third byte-bound review of the eight replacement clips generated after the second review. Every decision is tied to the replacement media SHA-256, its twelve-frame contact-sheet SHA-256 and the narrowed claim/slice role in footage_use_contracts.json. | footage_visual_decisions_round4.json: ORVYQ system-owned semantic visual QA inspected each twelve-frame contact sheet against the exact claim, narration anchor, use contract, prohibited lookalike substitutions and factual-burden boundary. The user is not an asset reviewer; only the complete Full-Length Review requires user approval.",
   "policy": {
     "default_status_for_unlisted_assets": "pending_frame_review",
     "rejected_asset_global_reentry_forbidden": true,
@@ -13,14 +13,12 @@
   "summary": {
     "pool_assets": 49,
     "rejected_from_metadata": 0,
-    "pending_frame_review": 7,
-    "approved": 42
+    "pending_frame_review": 5,
+    "approved": 44
   },
   "pending_frame_review_scene_ids": [
-    "scene_002",
     "scene_003",
     "scene_004",
-    "scene_005",
     "scene_012",
     "scene_024",
     "scene_032"
@@ -69,6 +67,12 @@
       "reason": "The frames show only the dark ocean surface and never reveal a seabed, abyssal plane, benthic survey, submersible or underwater exploration context."
     },
     {
+      "scene_id": "scene_003",
+      "provider_asset_id": "34448740",
+      "source_page_url": "https://www.pexels.com/video/mysterious-underwater-cave-with-deep-blue-light-34448740/",
+      "reason": "The contact sheet shows a rocky underwater cave with bright blue openings, not an abyssal plain, nodule field, or restrained deep-seabed survey context."
+    },
+    {
       "scene_id": "scene_004",
       "provider_asset_id": "15660444",
       "source_page_url": "https://www.pexels.com/video/a-boat-is-being-pulled-by-a-tug-boat-in-the-ocean-15660444/",
@@ -85,6 +89,12 @@
       "provider_asset_id": "37931415",
       "source_page_url": "https://www.pexels.com/video/container-ship-operations-at-melbourne-dock-37931415/",
       "reason": "Container cranes at a commercial dock do not show marine pipe handling, offshore machinery or the physical operation required by the technical-test assignments."
+    },
+    {
+      "scene_id": "scene_004",
+      "provider_asset_id": "30900251",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-industrial-harbor-with-cargo-ships-30900251/",
+      "reason": "The contact sheet shows a commercial port storing wind-turbine components and cargo ships, not offshore pipe handling or the physical rare-earth-mud lifting operation required by the contracted uses."
     },
     {
       "scene_id": "scene_005",
@@ -157,6 +167,12 @@
       "provider_asset_id": "31824746",
       "source_page_url": "https://www.pexels.com/video/submerged-shipwreck-underwater-exploration-31824746/",
       "reason": "A brightly lit recreational shipwreck cannot represent measured long-term disturbance, persistent mining tracks or a restrained scientific benthic-survey context."
+    },
+    {
+      "scene_id": "scene_012",
+      "provider_asset_id": "37417450",
+      "source_page_url": "https://www.pexels.com/video/enchanting-underwater-cave-exploration-footage-37417450/",
+      "reason": "The contact sheet shows a close recreational view of a rocky cave wall, not a dark abyssal seabed, benthic survey, persistent mining track, or visible long-term disturbance."
     },
     {
       "scene_id": "scene_013",
@@ -261,6 +277,12 @@
       "reason": "The fishing boat lacks scientific personnel, survey instruments or visible offshore technical equipment and would falsely imply that ordinary fishing activity represents the expedition."
     },
     {
+      "scene_id": "scene_024",
+      "provider_asset_id": "34294261",
+      "source_page_url": "https://www.pexels.com/video/dramatic-offshore-oil-rig-at-sunset-34294261/",
+      "reason": "The contact sheet clearly shows an offshore oil rig. Petroleum infrastructure would falsely substitute for a scientific survey vessel or Japan’s rare-earth-mud technical test."
+    },
+    {
       "scene_id": "scene_025",
       "provider_asset_id": "8328050",
       "source_page_url": "https://www.pexels.com/video/a-man-controlling-a-robot-8328050/",
@@ -343,6 +365,12 @@
       "provider_asset_id": "38704048",
       "source_page_url": "https://www.pexels.com/video/underwater-shipwreck-exploration-with-diving-fish-38704048/",
       "reason": "The clear-water shipwreck, reef and fish imagery is recreational underwater beauty footage, not a dark abyssal descent or persistent deep-seabed context."
+    },
+    {
+      "scene_id": "scene_032",
+      "provider_asset_id": "31629386",
+      "source_page_url": "https://www.pexels.com/video/vibrant-underwater-coral-reef-exploration-31629386/",
+      "reason": "The contact sheet shows a bright shallow coral reef and tropical marine life, not a dark deep-ocean descent, abyssal seabed, or poorly understood slow deep-sea ecosystem."
     },
     {
       "scene_id": "scene_033",
@@ -504,6 +532,55 @@
           "semantic_rationale": "The research-vessel crew introduced in the opening hook returns at a distinct trim window, grounding the industrial-trial biodiversity result in the same real, working expedition rather than a generic stock cutaway.",
           "trim_in_sec": 5.6,
           "trim_out_sec": 12.5
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_002",
+      "provider_asset_id": "35861099",
+      "asset_sha256": "7aa8dde012f52e93654cc7e72ea2882ff5ec83ee7e28d093ee3162332e3252d8",
+      "contact_sheet_sha256": "0732cd3ccdba583f501abbff688a698386599b7a5fa8a7dee80f32a8e9528b57",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "pumped rare earth -rich mud from beneath the seabed near Minamitarishima, a remote island in Japan's exclusive economic zone.",
+          "semantic_rationale": "A verified working research or offshore vessel may carry the exposed surface-logistics context, but it must never be identified as Chikyu or as the mining system itself."
+        },
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "pumped rare earth -rich mud from beneath the seabed near Minamitarishima, a remote island in Japan's exclusive economic zone.",
+          "semantic_rationale": "A verified working research or offshore vessel may carry the exposed surface-logistics context, but it must never be identified as Chikyu or as the mining system itself.",
+          "trim_in_sec": 1.121,
+          "trim_out_sec": 9.021
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_005",
+      "provider_asset_id": "31751351",
+      "asset_sha256": "60df68dbb8ea3c33b6010f3f37f60826518636a26330befe763e3d554e59a058",
+      "contact_sheet_sha256": "e1bf88f0a8993d65a6b97715adc5c65022150f87c0df406d9378ecad2c23974e",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "clear. Japan is not simply looking for minerals. It is trying to reduce the power of a choke point and it is not alone.",
+          "semantic_rationale": "Visible operators making technical decisions keep the shared-ocean question human, provided the footage is a real operational control setting rather than an interview or studio."
+        },
+        {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "Opening visual premise before the first narrated sentence.",
+          "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
+          "trim_in_sec": 1,
+          "trim_out_sec": 3.5
+        },
+        {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "clear. Japan is not simply looking for minerals. It is trying to reduce the power of a choke point and it is not alone.",
+          "semantic_rationale": "Visible operators making technical decisions keep the shared-ocean question human, provided the footage is a real operational control setting rather than an interview or studio.",
+          "trim_in_sec": 1.44,
+          "trim_out_sec": 9.14
         }
       ]
     },

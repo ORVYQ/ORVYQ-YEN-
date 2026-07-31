@@ -13,7 +13,7 @@
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       },
       "4": {
-        "asset": "assets/footage/scene_004_e8727a03ed5424ed200462a2.mp4",
+        "asset": "assets/footage/scene_004_feed076e493369110dd2e610.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "context",
@@ -31,7 +31,7 @@
         "semantic_link": "physical"
       },
       "6": {
-        "asset": "assets/footage/scene_024_0368a70451923392f943f4a5.mp4",
+        "asset": "assets/footage/scene_024_3654c303b6220e4097fd418d.mp4",
         "trimInRatio": 0.08,
         "motion": "drift_left",
         "role": "context",
@@ -69,7 +69,7 @@
     },
     "CLM_004_JAPAN_INDUSTRIAL_TIMELINE": {
       "0": {
-        "asset": "assets/footage/scene_004_e8727a03ed5424ed200462a2.mp4",
+        "asset": "assets/footage/scene_004_feed076e493369110dd2e610.mp4",
         "trimInRatio": 0.45,
         "motion": "pull",
         "role": "context",
@@ -130,7 +130,7 @@
         "semantic_link": "physical"
       },
       "2": {
-        "asset": "assets/footage/scene_003_b3322998efa2654c785ffb52.mp4",
+        "asset": "assets/footage/scene_003_357338d36996314e4379479c.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
         "role": "context",
@@ -595,7 +595,7 @@
         "reuse_reason": "Midwater life first grounds the discharge-risk mechanism and returns near the conclusion at a distinct trim window to make the ecological inheritance behind precedent physically visible."
       },
       "8": {
-        "asset": "assets/footage/scene_032_c464cfcf2109a04538849ecd.mp4",
+        "asset": "assets/footage/scene_032_c227d6af07e6cc6e8697660c.mp4",
         "trimInRatio": 0.42,
         "motion": "hold",
         "role": "metaphor",
@@ -607,7 +607,7 @@
     },
     "CLM_012_LONG_TERM_TRACK_PERSISTENCE": {
       "0": {
-        "asset": "assets/footage/scene_012_2676b7b844eb1364077aa461.mp4",
+        "asset": "assets/footage/scene_012_c666c877e98e2809478ae853.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "scientific_context",
@@ -625,7 +625,7 @@
         "semantic_link": "conceptual"
       },
       "5": {
-        "asset": "assets/footage/scene_032_c464cfcf2109a04538849ecd.mp4",
+        "asset": "assets/footage/scene_032_c227d6af07e6cc6e8697660c.mp4",
         "trimInRatio": 0,
         "motion": "push",
         "role": "scientific_context",
@@ -780,8 +780,8 @@
   "full_footage_pool": [
     "assets/footage/scene_001_direct.mp4",
     "assets/footage/scene_002_b78da07e94823deaae5ca74e.mp4",
-    "assets/footage/scene_003_b3322998efa2654c785ffb52.mp4",
-    "assets/footage/scene_004_e8727a03ed5424ed200462a2.mp4",
+    "assets/footage/scene_003_357338d36996314e4379479c.mp4",
+    "assets/footage/scene_004_feed076e493369110dd2e610.mp4",
     "assets/footage/scene_005_06daaaabbe0826dbedfa2207.mp4",
     "assets/footage/scene_006_cd809aab47833abf6ee1de6b.mp4",
     "assets/footage/scene_007_34b3f4906a6eee7e10be8f10.mp4",
@@ -789,7 +789,7 @@
     "assets/footage/scene_009_8846f61745140cdcd70c4150.mp4",
     "assets/footage/scene_010_9f0c1cd965d27101f9e31b3d.mp4",
     "assets/footage/scene_011_9ee53a113509a6f291ad3414.mp4",
-    "assets/footage/scene_012_2676b7b844eb1364077aa461.mp4",
+    "assets/footage/scene_012_c666c877e98e2809478ae853.mp4",
     "assets/footage/scene_013_direct.mp4",
     "assets/footage/scene_014_9ffed5eb663a6f6f21233078.mp4",
     "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
@@ -800,14 +800,14 @@
     "assets/footage/scene_021_146b6b5935f192be27d07afd.mp4",
     "assets/footage/scene_022_9366a132ae3b293a02df46b7.mp4",
     "assets/footage/scene_023_a96b0c345a995af5baf0923a.mp4",
-    "assets/footage/scene_024_0368a70451923392f943f4a5.mp4",
+    "assets/footage/scene_024_3654c303b6220e4097fd418d.mp4",
     "assets/footage/scene_026_a8425569c1d990a57f193a1d.mp4",
     "assets/footage/scene_027_cee752d61ab26eeb024d411f.mp4",
     "assets/footage/scene_028_b925e4019f461a8eb547df63.mp4",
     "assets/footage/scene_029_bec7ca5e63295de8aa016832.mp4",
     "assets/footage/scene_030_b39f52916266bceb2590b3fc.mp4",
     "assets/footage/scene_031_48cfc78463916f8222590c3f.mp4",
-    "assets/footage/scene_032_c464cfcf2109a04538849ecd.mp4",
+    "assets/footage/scene_032_c227d6af07e6cc6e8697660c.mp4",
     "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
     "assets/footage/scene_034_dbd1819c871818356753f93e.mp4",
     "assets/footage/scene_035_ef447180da828809758f0d18.mp4",
@@ -837,22 +837,20 @@
   },
   "slice_count_overrides": {},
   "last_supplemental_footage_materialization": {
-    "generated_at": "2026-07-31T05:25:49.887Z",
+    "generated_at": "2026-07-31T07:36:20.441Z",
     "assignments": 0,
     "unresolved_scenes": [],
     "replaced_graphics": 0,
     "retired_paths": [
-      "assets/footage/scene_004_2e17b30fab179dbb8685f33e.mp4",
-      "assets/footage/scene_002_6356d064d9a4932ac9834f8e.mp4",
-      "assets/footage/scene_024_c050ee25f91d52a42dfef08b.mp4",
-      "assets/footage/scene_005_69adbe90a1af077b25df8895.mp4",
-      "assets/footage/scene_003_5a0776e5a68a8aa691940d78.mp4",
-      "assets/footage/scene_032_ce542f4b7bd0eecd81e6bcef.mp4",
-      "assets/footage/scene_012_2a8861011cd720878a9eafb0.mp4"
+      "assets/footage/scene_004_e8727a03ed5424ed200462a2.mp4",
+      "assets/footage/scene_024_0368a70451923392f943f4a5.mp4",
+      "assets/footage/scene_003_b3322998efa2654c785ffb52.mp4",
+      "assets/footage/scene_032_c464cfcf2109a04538849ecd.mp4",
+      "assets/footage/scene_012_2676b7b844eb1364077aa461.mp4"
     ]
   },
   "last_footage_use_contract_application": {
-    "generated_at": "2026-07-31T07:33:01.154Z",
+    "generated_at": "2026-07-31T07:36:29.532Z",
     "managed_scene_count": 27,
     "pruned_scene_count": 5,
     "assignment_count": 30,

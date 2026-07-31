@@ -1,55 +1,22 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "generated_at": "2026-07-31T07:33:01.304Z",
-  "pending_review_count": 7,
-  "entries_with_exact_uses": 7,
+  "generated_at": "2026-07-31T07:36:29.671Z",
+  "pending_review_count": 5,
+  "entries_with_exact_uses": 5,
   "entries": [
     {
-      "scene_id": "scene_002",
-      "asset_path": "assets/footage/scene_002_b78da07e94823deaae5ca74e.mp4",
-      "provider": "pexels",
-      "provider_asset_id": "35861099",
-      "source_page_url": "https://www.pexels.com/video/aerial-view-of-industrial-dredging-barge-operations-35861099/",
-      "creator": "willy one",
-      "asset_sha256": "7aa8dde012f52e93654cc7e72ea2882ff5ec83ee7e28d093ee3162332e3252d8",
-      "contact_sheet_path": "qa/footage-contact-sheets/scene_002.jpg",
-      "contact_sheet_sha256": "0732cd3ccdba583f501abbff688a698386599b7a5fa8a7dee80f32a8e9528b57",
-      "reviewed_frame_count": 12,
-      "duration_seconds": 14.014,
-      "editorial_role": "context",
-      "narration_anchor": null,
-      "claim_id": null,
-      "semantic_rationale": "Surface scale and isolation.",
-      "status": "pending_visual_review",
-      "approved_uses_if_visually_valid": [
-        {
-          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
-          "narration_anchor": "pumped rare earth -rich mud from beneath the seabed near Minamitarishima, a remote island in Japan's exclusive economic zone.",
-          "semantic_rationale": "A verified working research or offshore vessel may carry the exposed surface-logistics context, but it must never be identified as Chikyu or as the mining system itself."
-        },
-        {
-          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
-          "narration_anchor": "pumped rare earth -rich mud from beneath the seabed near Minamitarishima, a remote island in Japan's exclusive economic zone.",
-          "semantic_rationale": "A verified working research or offshore vessel may carry the exposed surface-logistics context, but it must never be identified as Chikyu or as the mining system itself.",
-          "trim_in_sec": 1.121,
-          "trim_out_sec": 9.021
-        }
-      ],
-      "review_blockers": []
-    },
-    {
       "scene_id": "scene_003",
-      "asset_path": "assets/footage/scene_003_b3322998efa2654c785ffb52.mp4",
+      "asset_path": "assets/footage/scene_003_357338d36996314e4379479c.mp4",
       "provider": "pexels",
-      "provider_asset_id": "34448740",
-      "source_page_url": "https://www.pexels.com/video/mysterious-underwater-cave-with-deep-blue-light-34448740/",
+      "provider_asset_id": "33132093",
+      "source_page_url": "https://www.pexels.com/video/cave-diving-adventure-in-deep-ocean-33132093/",
       "creator": "JUN HO LEE",
-      "asset_sha256": "7fd4744e580d6a64c1b3b218f66f9d216143170481be51a494f2ea2f67f768ef",
+      "asset_sha256": "4769df4f8ddfa8de5ce22ecebb8cbde3b6687fe19697173609112309602e18f5",
       "contact_sheet_path": "qa/footage-contact-sheets/scene_003.jpg",
-      "contact_sheet_sha256": "2c4849ce73327738b930e62fbeaa6198b5e71b83da80bfffc9d34b06b8175bbc",
+      "contact_sheet_sha256": "7cfa4bceba28f1e0b4254aad3ab7febe7d93d482a5d5c21774d63d8292605de9",
       "reviewed_frame_count": 12,
-      "duration_seconds": 8.008008,
+      "duration_seconds": 12,
       "editorial_role": "context",
       "narration_anchor": null,
       "claim_id": null,
@@ -65,22 +32,22 @@
           "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
           "narration_anchor": "Mexico. The Clarion Clipperton Zone is a vast abyssal plane. Across parts of its sediment lie polymetallic nodules.",
           "semantic_rationale": "A dark, sparsely populated deep-seabed view gives the international Area a physical scale while official maps and treaty text retain the factual burden.",
-          "trim_in_sec": 0.341,
-          "trim_out_sec": 8.008
+          "trim_in_sec": 0.96,
+          "trim_out_sec": 8.627
         }
       ],
       "review_blockers": []
     },
     {
       "scene_id": "scene_004",
-      "asset_path": "assets/footage/scene_004_e8727a03ed5424ed200462a2.mp4",
+      "asset_path": "assets/footage/scene_004_feed076e493369110dd2e610.mp4",
       "provider": "pexels",
-      "provider_asset_id": "30900251",
-      "source_page_url": "https://www.pexels.com/video/aerial-view-of-industrial-harbor-with-cargo-ships-30900251/",
+      "provider_asset_id": "29928556",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-cargo-ships-at-industrial-port-29928556/",
       "creator": "Toàn BDS",
-      "asset_sha256": "73e8058cb9c63e4de7ac35abbf4f0ff87421cef912a59326dd642bdad5ded8db",
+      "asset_sha256": "1091657d9171415cd9857bb7a65287ab4b97324fb3a0662bd929157ca19fe7fb",
       "contact_sheet_path": "qa/footage-contact-sheets/scene_004.jpg",
-      "contact_sheet_sha256": "71f5e36e95cd27940438fd466b5da17bd7dd2ed6bff4642b9d6ad28de1d204fb",
+      "contact_sheet_sha256": "0a9dd0a56064d0010322bfd71d6d3a0532d6c84d7a8e48727c2d687924b37bff",
       "reviewed_frame_count": 12,
       "duration_seconds": 12.012,
       "editorial_role": "context",
@@ -124,57 +91,17 @@
       "review_blockers": []
     },
     {
-      "scene_id": "scene_005",
-      "asset_path": "assets/footage/scene_005_06daaaabbe0826dbedfa2207.mp4",
-      "provider": "pexels",
-      "provider_asset_id": "31751351",
-      "source_page_url": "https://www.pexels.com/video/industrial-machine-console-operation-31751351/",
-      "creator": "Dominik Zítka",
-      "asset_sha256": "60df68dbb8ea3c33b6010f3f37f60826518636a26330befe763e3d554e59a058",
-      "contact_sheet_path": "qa/footage-contact-sheets/scene_005.jpg",
-      "contact_sheet_sha256": "e1bf88f0a8993d65a6b97715adc5c65022150f87c0df406d9378ecad2c23974e",
-      "reviewed_frame_count": 12,
-      "duration_seconds": 12,
-      "editorial_role": "context",
-      "narration_anchor": null,
-      "claim_id": null,
-      "semantic_rationale": "Human monitoring and technical decision-making.",
-      "status": "pending_visual_review",
-      "approved_uses_if_visually_valid": [
-        {
-          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
-          "narration_anchor": "clear. Japan is not simply looking for minerals. It is trying to reduce the power of a choke point and it is not alone.",
-          "semantic_rationale": "Visible operators making technical decisions keep the shared-ocean question human, provided the footage is a real operational control setting rather than an interview or studio."
-        },
-        {
-          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
-          "narration_anchor": "Opening visual premise before the first narrated sentence.",
-          "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
-          "trim_in_sec": 1,
-          "trim_out_sec": 3.5
-        },
-        {
-          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
-          "narration_anchor": "clear. Japan is not simply looking for minerals. It is trying to reduce the power of a choke point and it is not alone.",
-          "semantic_rationale": "Visible operators making technical decisions keep the shared-ocean question human, provided the footage is a real operational control setting rather than an interview or studio.",
-          "trim_in_sec": 1.44,
-          "trim_out_sec": 9.14
-        }
-      ],
-      "review_blockers": []
-    },
-    {
       "scene_id": "scene_012",
-      "asset_path": "assets/footage/scene_012_2676b7b844eb1364077aa461.mp4",
+      "asset_path": "assets/footage/scene_012_c666c877e98e2809478ae853.mp4",
       "provider": "pexels",
-      "provider_asset_id": "37417450",
-      "source_page_url": "https://www.pexels.com/video/enchanting-underwater-cave-exploration-footage-37417450/",
+      "provider_asset_id": "34310800",
+      "source_page_url": "https://www.pexels.com/video/underwater-exploration-featuring-divers-and-marine-life-34310800/",
       "creator": "JUN HO LEE",
-      "asset_sha256": "00b270e71d42d9c857aa2c43fcd61704b00cdf6bce50b2fbb24d535606f8ddab",
+      "asset_sha256": "49c211040e1786dcce9ecb632b2576817469b598f318bc11caeebf51c494224c",
       "contact_sheet_path": "qa/footage-contact-sheets/scene_012.jpg",
-      "contact_sheet_sha256": "9e931781725b67dfa5e75d1979c36f4ddbf131205ca3aaf0ac6a91852b9e3b3a",
+      "contact_sheet_sha256": "dbaecf3e561be52204cd150a506320cda65c8c8e46c1c18793808b9253069820",
       "reviewed_frame_count": 12,
-      "duration_seconds": 8.003602,
+      "duration_seconds": 9.009009,
       "editorial_role": "context",
       "narration_anchor": null,
       "claim_id": null,
@@ -205,16 +132,16 @@
     },
     {
       "scene_id": "scene_024",
-      "asset_path": "assets/footage/scene_024_0368a70451923392f943f4a5.mp4",
+      "asset_path": "assets/footage/scene_024_3654c303b6220e4097fd418d.mp4",
       "provider": "pexels",
-      "provider_asset_id": "34294261",
-      "source_page_url": "https://www.pexels.com/video/dramatic-offshore-oil-rig-at-sunset-34294261/",
-      "creator": "Dio Hasbi Saniskoro",
-      "asset_sha256": "2ccebb9cd5ae7d896f2000cf7d94ecbc11cdc4bcfa823f1a57a873abacda4f91",
+      "provider_asset_id": "32834333",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-busy-container-port-operations-32834333/",
+      "creator": "Toàn BDS",
+      "asset_sha256": "153d6608696bf9e39572ff957e41d9e66bb22e6e99dfcf2d7987c8d108fdfbb8",
       "contact_sheet_path": "qa/footage-contact-sheets/scene_024.jpg",
-      "contact_sheet_sha256": "3894c62624207192371d8808385b501dc2722dd85d29cb091c67ef7eaef85662",
+      "contact_sheet_sha256": "453f0eac609da4daa8f041a74e5c197a181079fb26a9db88bf33c3af7ea5b652",
       "reviewed_frame_count": 12,
-      "duration_seconds": 16,
+      "duration_seconds": 16.016,
       "editorial_role": "context",
       "narration_anchor": null,
       "claim_id": null,
@@ -230,24 +157,24 @@
           "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
           "narration_anchor": "zone. The test did not prove that commercial mining would be profitable. It did not end Japan's dependence on foreign processing, and",
           "semantic_rationale": "A verified survey or working vessel keeps the boundary between a technical test and a commercial mine visible; leisure craft are forbidden.",
-          "trim_in_sec": 1.28,
-          "trim_out_sec": 9.18
+          "trim_in_sec": 1.281,
+          "trim_out_sec": 9.181
         }
       ],
       "review_blockers": []
     },
     {
       "scene_id": "scene_032",
-      "asset_path": "assets/footage/scene_032_c464cfcf2109a04538849ecd.mp4",
+      "asset_path": "assets/footage/scene_032_c227d6af07e6cc6e8697660c.mp4",
       "provider": "pexels",
-      "provider_asset_id": "31629386",
-      "source_page_url": "https://www.pexels.com/video/vibrant-underwater-coral-reef-exploration-31629386/",
-      "creator": "Thomas Judge",
-      "asset_sha256": "33c1f65dd1699eecee30ec7ad552c2b91a56f7faf26d74d5c7f26abf9d324171",
+      "provider_asset_id": "31774645",
+      "source_page_url": "https://www.pexels.com/video/deep-sea-diving-adventure-with-scenic-views-31774645/",
+      "creator": "JUN HO LEE",
+      "asset_sha256": "621abd9efd5f3272b7b56eae6153a752349321b4d3d4fbbb2e030423105bf2c5",
       "contact_sheet_path": "qa/footage-contact-sheets/scene_032.jpg",
-      "contact_sheet_sha256": "fd21bdd652a00bcdd3562bad75a3ff83099794e2ee8bd6a9fa16690404376a3e",
+      "contact_sheet_sha256": "eccff701e040ade431e31f39d3567c456ed7e5fe68713a8723f9e14a8d837d3f",
       "reviewed_frame_count": 12,
-      "duration_seconds": 16.016,
+      "duration_seconds": 15.015,
       "editorial_role": "context",
       "narration_anchor": null,
       "claim_id": null,
@@ -275,15 +202,15 @@
           "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
           "narration_anchor": "surface to the seabed. It is the distance between what humanity has learned how to extract and what it has agreed not to destroy.",
           "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim.",
-          "trim_in_sec": 2.083,
-          "trim_out_sec": 10.016
+          "trim_in_sec": 1.082,
+          "trim_out_sec": 9.015
         },
         {
           "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
           "narration_anchor": "agreed not to destroy.",
           "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim.",
-          "trim_in_sec": 10.016,
-          "trim_out_sec": 16.016
+          "trim_in_sec": 9.015,
+          "trim_out_sec": 15.015
         }
       ],
       "review_blockers": []
