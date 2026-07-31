@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "review_basis": "footage_visual_decisions.json [legacy_system_visual_qa]: Every decision is bound to the current media SHA-256 and twelve-frame contact-sheet SHA-256, then checked against the exact claim, narration anchor and contextual role. Generic footage is rejected whenever it merely illustrates a noun, impersonates a named source or fails to carry the sentence meaning. | footage_visual_decisions_round2.json [legacy_system_visual_qa]: Second byte-bound review of the twenty replacement clips retained by the claim-bound use contract. Decisions use the replacement media SHA-256, twelve-frame contact-sheet SHA-256 and only the narrowed claim/slice roles declared in footage_use_contracts.json. | footage_visual_decisions_round3.json [legacy_system_visual_qa]: Third byte-bound review of the eight replacement clips generated after the second review. Every decision is tied to the replacement media SHA-256, its twelve-frame contact-sheet SHA-256 and the narrowed claim/slice role in footage_use_contracts.json. | footage_visual_decisions_round4.json [system_visual_qa]: ORVYQ system-owned semantic visual QA inspected each twelve-frame contact sheet against the exact claim, narration anchor, use contract, prohibited lookalike substitutions and factual-burden boundary. The user is not an asset reviewer; only the complete Full-Length Review requires user approval. | footage_visual_decisions_round5.json [system_visual_qa]: Fifth ORVYQ system-owned byte-bound semantic visual-QA round. Each replacement contact sheet was inspected against all current claim-bound uses; any clip valid only as a loose metaphor but misleading for another assigned use was rejected rather than partially approved.",
+  "review_basis": "footage_visual_decisions.json [legacy_system_visual_qa]: Every decision is bound to the current media SHA-256 and twelve-frame contact-sheet SHA-256, then checked against the exact claim, narration anchor and contextual role. Generic footage is rejected whenever it merely illustrates a noun, impersonates a named source or fails to carry the sentence meaning. | footage_visual_decisions_round2.json [legacy_system_visual_qa]: Second byte-bound review of the twenty replacement clips retained by the claim-bound use contract. Decisions use the replacement media SHA-256, twelve-frame contact-sheet SHA-256 and only the narrowed claim/slice roles declared in footage_use_contracts.json. | footage_visual_decisions_round3.json [legacy_system_visual_qa]: Third byte-bound review of the eight replacement clips generated after the second review. Every decision is tied to the replacement media SHA-256, its twelve-frame contact-sheet SHA-256 and the narrowed claim/slice role in footage_use_contracts.json. | footage_visual_decisions_round4.json [system_visual_qa]: ORVYQ system-owned semantic visual QA inspected each twelve-frame contact sheet against the exact claim, narration anchor, use contract, prohibited lookalike substitutions and factual-burden boundary. The user is not an asset reviewer; only the complete Full-Length Review requires user approval. | footage_visual_decisions_round5.json [system_visual_qa]: Fifth ORVYQ system-owned byte-bound semantic visual-QA round. Each replacement contact sheet was inspected against all current claim-bound uses; any clip valid only as a loose metaphor but misleading for another assigned use was rejected rather than partially approved. | footage_visual_decisions_round6.json [system_visual_qa]: Sixth ORVYQ system-owned byte-bound semantic visual-QA round. The stricter Pexels replacements were inspected against every claim-bound use. All five remain visually misleading, so the system rejects them and switches these specialized slots to verified official NOAA or USGS direct-source footage.",
   "policy": {
     "default_status_for_unlisted_assets": "pending_frame_review",
     "rejected_asset_global_reentry_forbidden": true,
@@ -79,6 +79,12 @@
       "reason": "The contact sheet shows recreational scuba divers inside a rocky cave. It is not an abyssal plain, nodule field, ROV survey, or unoccupied deep-seabed context."
     },
     {
+      "scene_id": "scene_003",
+      "provider_asset_id": "33151454",
+      "source_page_url": "https://www.pexels.com/video/relaxing-underwater-stingray-on-ocean-floor-33151454/",
+      "reason": "The contact sheet shows a stingray on a bright sandy seabed. It is not an abyssal plain, deep-ocean ROV survey, or restrained Clarion-Clipperton Zone context."
+    },
+    {
       "scene_id": "scene_004",
       "provider_asset_id": "15660444",
       "source_page_url": "https://www.pexels.com/video/a-boat-is-being-pulled-by-a-tug-boat-in-the-ocean-15660444/",
@@ -107,6 +113,12 @@
       "provider_asset_id": "29928556",
       "source_page_url": "https://www.pexels.com/video/aerial-view-of-cargo-ships-at-industrial-port-29928556/",
       "reason": "The contact sheet shows a bulk cargo ship loading at a commercial port. It does not show offshore pipe handling, a working marine deck operation, or the rare-earth-mud lifting context required by the contracted uses."
+    },
+    {
+      "scene_id": "scene_004",
+      "provider_asset_id": "30768552",
+      "source_page_url": "https://www.pexels.com/video/aerial-view-of-offshore-construction-site-with-cranes-30768552/",
+      "reason": "The contact sheet shows cranes and construction barges in sheltered inland water. It does not show an offshore working-vessel deck, pipe handling, or marine lifting equipment."
     },
     {
       "scene_id": "scene_005",
@@ -191,6 +203,12 @@
       "provider_asset_id": "34310800",
       "source_page_url": "https://www.pexels.com/video/underwater-exploration-featuring-divers-and-marine-life-34310800/",
       "reason": "The contact sheet shows a scuba diver over a bright shallow rocky seabed with fish. It does not show a dark benthic survey, persistent extraction tracks, or visible long-term disturbance."
+    },
+    {
+      "scene_id": "scene_012",
+      "provider_asset_id": "33872851",
+      "source_page_url": "https://www.pexels.com/video/mysterious-underwater-ray-stirring-ocean-floor-33872851/",
+      "reason": "The contact sheet shows a stingray naturally stirring shallow sand. It cannot represent persistent deep-seabed extraction tracks, benthic survey work, or long-term industrial disturbance."
     },
     {
       "scene_id": "scene_013",
@@ -307,6 +325,12 @@
       "reason": "The contact sheet shows barges and dredging or construction activity in a sheltered canal or port. It is not a scientific survey vessel, offshore research crew, or oceanographic equipment operation."
     },
     {
+      "scene_id": "scene_024",
+      "provider_asset_id": "35239446",
+      "source_page_url": "https://www.pexels.com/video/naval-vessel-on-ocean-with-choppy-waves-35239446/",
+      "reason": "The contact sheet shows a naval or military vessel with visible weapon hardware. It is not an oceanographic research vessel, survey crew, or scientific mapping operation."
+    },
+    {
       "scene_id": "scene_025",
       "provider_asset_id": "8328050",
       "source_page_url": "https://www.pexels.com/video/a-man-controlling-a-robot-8328050/",
@@ -401,6 +425,12 @@
       "provider_asset_id": "31774645",
       "source_page_url": "https://www.pexels.com/video/deep-sea-diving-adventure-with-scenic-views-31774645/",
       "reason": "The contact sheet shows a recreational scuba diver in a cave. Because the current uses include factual deep-ocean ecology as well as a closing descent metaphor, it would falsely substitute cave diving for abyssal conditions."
+    },
+    {
+      "scene_id": "scene_032",
+      "provider_asset_id": "29881943",
+      "source_page_url": "https://www.pexels.com/video/deep-sea-creature-swimming-in-underwater-darkness-29881943/",
+      "reason": "The contact sheet is a stylized creature close-up and appears synthetic or highly staged. It does not show a real deep-ocean descent, seafloor survey, or defensible abyssal ecosystem context."
     },
     {
       "scene_id": "scene_033",
