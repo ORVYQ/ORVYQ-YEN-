@@ -13,6 +13,7 @@ import {
 
 const HASH_PATTERN = /^[a-f0-9]{64}$/i;
 const SCENE_PATTERN = /^scene_[0-9]{3}$/;
+const LFS_HEADER = "version https://git-lfs.github.com/spec/v1";
 
 function fail(message) {
   const error = new Error(message);
@@ -28,8 +29,20 @@ function assertFraction(value, threshold, direction, label) {
   return numeric;
 }
 
-async function sha256File(filePath) {
-  return crypto.createHash("sha256").update(await fs.readFile(filePath)).digest("hex");
+async function sha256Binding(filePath) {
+  const bytes = await fs.readFile(filePath);
+  if (bytes.length < 4096) {
+    const text = bytes.toString("utf8");
+    if (text.startsWith(LFS_HEADER)) {
+      const match = text.match(/^oid sha256:([a-f0-9]{64})$/im);
+      if (!match) fail(`${filePath}: malformed Git LFS pointer`);
+      return { hash: match[1].toLowerCase(), mode: "git_lfs_oid" };
+    }
+  }
+  return {
+    hash: crypto.createHash("sha256").update(bytes).digest("hex"),
+    mode: "materialized_bytes",
+  };
 }
 
 function resolveProjectPath(rootDir, relativePath, label) {
@@ -74,6 +87,7 @@ export async function buildReviewReadinessReport(
 
   const recordByScene = new Map(records.map((record) => [String(record.scene_id), record]));
   const seenScenes = new Set();
+  const bindingModes = { materialized_bytes: 0, git_lfs_oid: 0 };
   for (const entry of entries) {
     const sceneId = String(entry.scene_id || "");
     if (!SCENE_PATTERN.test(sceneId)) fail(`Invalid review scene_id: ${sceneId}`);
@@ -93,9 +107,18 @@ export async function buildReviewReadinessReport(
     if (!record || record.path !== entry.asset_path) fail(`${sceneId}: queue asset does not match runtime record`);
     const assetPath = resolveProjectPath(rootDir, entry.asset_path, `${sceneId} asset_path`);
     const sheetPath = resolveProjectPath(rootDir, entry.contact_sheet_path, `${sceneId} contact_sheet_path`);
-    const [assetHash, sheetHash] = await Promise.all([sha256File(assetPath), sha256File(sheetPath)]);
-    if (assetHash !== String(entry.asset_sha256).toLowerCase()) fail(`${sceneId}: asset bytes changed after queue generation`);
-    if (sheetHash !== String(entry.contact_sheet_sha256).toLowerCase()) fail(`${sceneId}: contact-sheet bytes changed after queue generation`);
+    const [assetBinding, sheetBinding] = await Promise.all([
+      sha256Binding(assetPath),
+      sha256Binding(sheetPath),
+    ]);
+    bindingModes[assetBinding.mode] += 1;
+    bindingModes[sheetBinding.mode] += 1;
+    if (assetBinding.hash !== String(entry.asset_sha256).toLowerCase()) {
+      fail(`${sceneId}: asset bytes/LFS object changed after queue generation`);
+    }
+    if (sheetBinding.hash !== String(entry.contact_sheet_sha256).toLowerCase()) {
+      fail(`${sceneId}: contact-sheet bytes/LFS object changed after queue generation`);
+    }
   }
 
   const projected = rebalance.projected || {};
@@ -147,6 +170,7 @@ export async function buildReviewReadinessReport(
       pending_review_scenes: pendingScenes,
       all_pending_reviews_have_exact_uses: true,
       all_pending_reviews_are_byte_bound: true,
+      byte_binding_modes: bindingModes,
       visual_rebalance_plan: "passed",
       generic_card_audit: "deferred_until_post_review_edit_plan_materialization"
     },
