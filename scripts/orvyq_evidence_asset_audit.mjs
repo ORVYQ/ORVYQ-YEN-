@@ -13,6 +13,27 @@ const OFFICIAL_CAPTURE_KINDS = new Set(["split_documents", "official_document", 
 const SOURCE_DERIVED_KINDS = new Set(["source_timeline", "source_article", "concept_map", "boundary", "comparison", "evidence_chain"]);
 const unique = (values) => [...new Set(values.filter(Boolean))];
 
+export function auditEvidenceFingerprints(records) {
+  const failures = [];
+  const contentOwners = new Map();
+  const shaOwners = new Map();
+  for (const record of records) {
+    const identityOwner = contentOwners.get(record.content_identity);
+    if (identityOwner && identityOwner !== record.evidence_asset_id) {
+      failures.push(`${record.evidence_asset_id} duplicates content identity ${record.content_identity} already owned by ${identityOwner}`);
+    } else {
+      contentOwners.set(record.content_identity, record.evidence_asset_id);
+    }
+    const shaOwner = shaOwners.get(record.sha256);
+    if (shaOwner && shaOwner !== record.evidence_asset_id) {
+      failures.push(`${record.evidence_asset_id} duplicates evidence bytes already owned by ${shaOwner}; a recrop cannot count as new evidence diversity`);
+    } else {
+      shaOwners.set(record.sha256, record.evidence_asset_id);
+    }
+  }
+  return { failures, unique_content_identity_count: contentOwners.size };
+}
+
 export async function runEvidenceAssetAudit(projectId = PROJECT_ID) {
   const dir = projectDir(projectId);
   const [manifest, runtime, plan, evidenceMap] = await Promise.all([
@@ -59,6 +80,11 @@ export async function runEvidenceAssetAudit(projectId = PROJECT_ID) {
     const localPath = declared.local_asset;
     if (produced.local_asset !== localPath) failures.push(`${assetId} runtime path does not match declared path`);
     if (declared.provenance_mode !== "official_primary_capture" || produced.provenance_mode !== "official_primary_capture") failures.push(`${assetId} is not an official primary capture`);
+    for (const field of ["source_institution", "source_title", "source_date", "content_identity"]) {
+      if (!String(declared[field] || "").trim() || declared[field] !== produced[field]) {
+        failures.push(`${assetId} has missing or mismatched ${field}`);
+      }
+    }
     if (!declared.source_url || !produced.source_url || declared.source_url !== produced.source_url) failures.push(`${assetId} source URL mismatch`);
     if (!produced.sha256 || produced.sha256.length !== 64) failures.push(`${assetId} has no valid SHA-256`);
     if (!Number.isFinite(produced.bytes) || produced.bytes < Number(declared.output_min_bytes || 30000)) failures.push(`${assetId} is below its rendered-output byte threshold`);
@@ -68,7 +94,19 @@ export async function runEvidenceAssetAudit(projectId = PROJECT_ID) {
       const stat = await fs.stat(absolute);
       if (stat.size !== produced.bytes) failures.push(`${assetId} physical byte size differs from runtime manifest`);
     }
-    reports.push({ evidence_asset_id: assetId, local_asset: localPath, source_url: produced.source_url, sha256: produced.sha256, bytes: produced.bytes, provenance_mode: produced.provenance_mode, source_ids: declared.source_ids });
+    reports.push({
+      evidence_asset_id: assetId,
+      local_asset: localPath,
+      source_url: produced.source_url,
+      source_institution: produced.source_institution,
+      source_title: produced.source_title,
+      source_date: produced.source_date,
+      content_identity: produced.content_identity,
+      sha256: produced.sha256,
+      bytes: produced.bytes,
+      provenance_mode: produced.provenance_mode,
+      source_ids: declared.source_ids,
+    });
   }
 
   const required = (manifest.assets || []).filter((asset) => (isProof ? asset.required_for_proof === true : asset.required_for_full === true));
@@ -80,6 +118,8 @@ export async function runEvidenceAssetAudit(projectId = PROJECT_ID) {
   for (const imageAsset of usedImageAssets) {
     if (!reports.some((report) => report.local_asset === imageAsset)) failures.push(`Image ${imageAsset} is not backed by a validated runtime evidence asset`);
   }
+  const fingerprintAudit = auditEvidenceFingerprints(reports);
+  failures.push(...fingerprintAudit.failures);
 
   const report = {
     schema_version: "1.0-canonical",
@@ -90,6 +130,7 @@ export async function runEvidenceAssetAudit(projectId = PROJECT_ID) {
     approved_hook_footage_count: plan.shots.filter((shot) => shot.asset_type === "footage" && shot.hook_footage === true).length,
     motion_hook: motionHook,
     used_official_capture_count: reports.length,
+    unique_primary_evidence_content_count: fingerprintAudit.unique_content_identity_count,
     used_source_derived_graphic_count: plan.shots.filter((shot) => shot.asset_type === "evidence" && SOURCE_DERIVED_KINDS.has(shot.evidence?.kind)).length,
     used_asset_ids: usedAssetIds,
     used_image_assets: usedImageAssets,

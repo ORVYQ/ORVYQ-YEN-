@@ -1,0 +1,58 @@
+name: ORVYQ Footage Review Queue
+
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: orvyq-footage-review-queue-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          lfs: false
+          fetch-depth: 1
+
+      - name: Resolve selected project
+        shell: bash
+        run: |
+          set -euo pipefail
+          PROJECT_ID="${{ inputs.project_id }}"
+          test -f "projects/$PROJECT_ID/qa/footage_contact_sheets.json"
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build claim-bound footage review queue
+        run: node scripts/orvyq_prepare_footage_review_queue.mjs --project-id="$PROJECT_ID"
+
+      - name: Upload review queue and contact sheets
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-footage-review-queue-${{ env.PROJECT_ID }}-${{ github.run_id }}
+          retention-days: 30
+          path: |
+            projects/${{ env.PROJECT_ID }}/qa/footage_review_queue.json
+            projects/${{ env.PROJECT_ID }}/qa/footage_contact_sheets.json
+            projects/${{ env.PROJECT_ID }}/qa/footage-contact-sheets/*.jpg
+          if-no-files-found: error

@@ -52,7 +52,11 @@
   },
   "mismatch_flags": [],
   "approved_for_final_edit": true,
-  "human_review_status": "NOT_REQUIRED",
   "downloaded_at": "2026-07-27T00:19:01.294Z",
-  "retrieval_timestamp": "2026-07-27T00:19:01.294Z"
+  "retrieval_timestamp": "2026-07-27T00:19:01.294Z",
+  "visual_qa_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "visual_qa_origin": "canonical_visual_review_registry",
+  "reviewed_asset_sha256": "5b98d6633c0b5c9429b9193bc9b2a136c053aa21655a19079a72b1d278aa8781",
+  "reviewed_contact_sheet_sha256": "e5eca383e05113af2aba174aeb8ff45e4026ae181511194407421e3018f2344f",
+  "visual_qa_reason": "Approval restored from the canonical byte-bound visual review registry for the active runtime asset."
 }

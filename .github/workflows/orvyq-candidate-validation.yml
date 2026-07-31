@@ -1,7 +1,9 @@
 name: ORVYQ Candidate Validation
 
 # Builds and validates one explicitly selected project without rendering video.
-# No repository branch, project id, asset, or creative choice is implicit.
+# A project may be selected manually, by a reusable workflow caller, or by a
+# committed candidate_validation_request.json. The exact source SHA is always
+# locked before any candidate inputs are generated.
 on:
   workflow_dispatch:
     inputs:
@@ -15,16 +17,23 @@ on:
         description: "Project directory id under projects/"
         type: string
         required: true
+  push:
+    branches:
+      - "agent/**"
+      - "claude/**"
+    paths:
+      - "projects/*/config/candidate_validation_request.json"
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 concurrency:
-  group: orvyq-candidate-validation-${{ inputs.project_id }}-${{ github.ref }}
+  group: orvyq-candidate-validation-${{ inputs.project_id || github.ref_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  PROJECT_ID: ${{ inputs.project_id }}
   SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
@@ -36,6 +45,7 @@ jobs:
         with:
           ref: ${{ env.SOURCE_SHA }}
           lfs: true
+          fetch-depth: 2
 
       - name: Lock exact source commit
         run: |
@@ -43,6 +53,30 @@ jobs:
           ACTUAL_SHA="$(git rev-parse HEAD)"
           test "$ACTUAL_SHA" = "$SOURCE_SHA"
           printf '%s\n' "$ACTUAL_SHA" | tee validation-source-sha.txt
+
+      - name: Resolve explicitly selected project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "push" ]; then
+            mapfile -t REQUESTS < <(
+              git diff --name-only "$SOURCE_SHA^" "$SOURCE_SHA" |
+                grep -E '^projects/[^/]+/config/candidate_validation_request\.json$' || true
+            )
+            test "${#REQUESTS[@]}" -eq 1 || {
+              echo "::error::Candidate Validation requires exactly one changed request file; found ${#REQUESTS[@]}."
+              exit 1
+            }
+            REQUEST_FILE="${REQUESTS[0]}"
+            test "$(jq -r '.status' "$REQUEST_FILE")" = "requested"
+            PROJECT_ID="$(jq -r '.project_id' "$REQUEST_FILE")"
+          else
+            PROJECT_ID="${{ inputs.project_id }}"
+          fi
+          [[ "$PROJECT_ID" =~ ^[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$ ]]
+          test -f "projects/$PROJECT_ID/config/production_profile.json"
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+          echo "Selected project: $PROJECT_ID"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -104,13 +138,32 @@ jobs:
         run: node scripts/orvyq_resolve_pauses.mjs --project-id="$PROJECT_ID"
 
       - name: Build the canonical full production shot list from real data
-        run: node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID"
+        run: |
+          set +e
+          node scripts/orvyq_full_production_plan.mjs --project-id="$PROJECT_ID" > full-production-plan.log 2>&1
+          echo $? > full-production-plan.status
+          cat full-production-plan.log
+          exit 0
+
+      - name: Stop when canonical full production plan failed
+        run: test "$(cat full-production-plan.status)" = "0"
+
+      - name: Reconcile claim-bound footage contracts after shot generation
+        run: node scripts/orvyq_apply_footage_use_contracts.mjs --project-id="$PROJECT_ID"
 
       - name: Validate canonical schemas and recovered project data
         run: npm run validate:canonical
 
       - name: Fetch and verify official primary evidence
-        run: node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID"
+        run: |
+          set +e
+          node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID" > primary-evidence-fetch.log 2>&1
+          echo $? > primary-evidence-fetch.status
+          cat primary-evidence-fetch.log
+          exit 0
+
+      - name: Stop when primary evidence fetch failed
+        run: test "$(cat primary-evidence-fetch.status)" = "0"
 
       - name: Promote verified evidence assets to ready
         run: node scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID"
@@ -120,7 +173,15 @@ jobs:
         run: node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
 
       - name: Build the canonical candidate edit plan
-        run: node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full
+        run: |
+          set +e
+          node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full > edit-plan.log 2>&1
+          echo $? > edit-plan.status
+          cat edit-plan.log
+          exit 0
+
+      - name: Stop when canonical edit plan failed
+        run: test "$(cat edit-plan.status)" = "0"
 
       - name: Apply project-authored creative polish
         run: node scripts/orvyq_creative_polish.mjs --project-id="$PROJECT_ID"
@@ -176,7 +237,7 @@ jobs:
       - name: Upload immutable validated candidate bundle
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-validated-candidate-${{ inputs.project_id }}-${{ github.run_id }}
+          name: orvyq-validated-candidate-${{ env.PROJECT_ID }}-${{ github.run_id }}
           retention-days: 90
           include-hidden-files: true
           path: |
@@ -205,12 +266,18 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-candidate-validation-${{ inputs.project_id }}-${{ github.run_id }}
+          name: orvyq-candidate-validation-${{ env.PROJECT_ID }}-${{ github.run_id }}
           retention-days: 30
           path: |
             validation-source-sha.txt
             alignment-speech-qa.log
             alignment-speech-qa.status
+            full-production-plan.log
+            full-production-plan.status
+            primary-evidence-fetch.log
+            primary-evidence-fetch.status
+            edit-plan.log
+            edit-plan.status
             narration-qa.log
             narration-qa.status
             qa-chain.log
@@ -227,3 +294,23 @@ jobs:
 
       - name: Stop when the pre-render QA chain failed
         run: test "$(cat qa-chain.status)" = "0"
+
+      - name: Report Candidate Validation on the active pull request
+        if: always()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          PROJECT_LABEL="${PROJECT_ID:-unresolved}"
+          FULL_PLAN_STATUS="$(cat full-production-plan.status 2>/dev/null || echo unavailable)"
+          EVIDENCE_STATUS="$(cat primary-evidence-fetch.status 2>/dev/null || echo unavailable)"
+          EDIT_STATUS="$(cat edit-plan.status 2>/dev/null || echo unavailable)"
+          QA_STATUS="$(cat qa-chain.status 2>/dev/null || echo unavailable)"
+          BODY="Candidate Validation finished with **${JOB_STATUS}**. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Project: \`${PROJECT_LABEL}\`. Exact source: \`${SOURCE_SHA}\`. Full-production-plan status: \`${FULL_PLAN_STATUS}\`. Primary-evidence status: \`${EVIDENCE_STATUS}\`. Edit-plan status: \`${EDIT_STATUS}\`. Pre-render QA status: \`${QA_STATUS}\`. No video render was started."
+          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$PR_NUMBER" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
+              echo "::warning::Could not post Candidate Validation result to PR #$PR_NUMBER."
+          fi

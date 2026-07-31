@@ -10,6 +10,7 @@ import { resolveProjectId } from "./lib/orvyq-project-profile.mjs";
 const run = promisify(execFile);
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const sha256 = (buffer) => crypto.createHash("sha256").update(buffer).digest("hex");
+const defaultSleep = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 function assertMagic(buffer, mime, assetId) {
   if (mime === "application/pdf" && buffer.subarray(0, 4).toString("ascii") !== "%PDF") throw new Error(`${assetId} did not download as a PDF`);
@@ -25,14 +26,83 @@ function outputMime(asset) {
   return asset.mime;
 }
 
-async function fetchBuffer(url, allowedHosts) {
+function errorDetail(error) {
+  const message = String(error?.message || error || "unknown error");
+  const cause = error?.cause;
+  const causeDetail = cause
+    ? String(cause.code || cause.message || cause)
+    : "none reported";
+  return `${message} (cause: ${causeDetail})`;
+}
+
+function isRetryableStatus(status) {
+  return status === 408 || status === 425 || status === 429 || status >= 500;
+}
+
+export async function fetchBuffer(
+  url,
+  allowedHosts,
+  {
+    fetchImpl = globalThis.fetch,
+    maxAttempts = 4,
+    timeoutMs = 90000,
+    baseDelayMs = 750,
+    sleep = defaultSleep,
+  } = {},
+) {
   const parsed = new URL(url);
   if (!allowedHosts.includes(parsed.hostname)) throw new Error(`Evidence host is not allowlisted: ${parsed.hostname}`);
-  const response = await fetch(parsed, { redirect: "follow", headers: { "user-agent": "ORVYQ-primary-evidence-fetch/2.1" }, signal: AbortSignal.timeout(90000) });
-  if (!response.ok) throw new Error(`Evidence download failed ${response.status}: ${url}`);
-  const finalUrl = new URL(response.url);
-  if (!allowedHosts.includes(finalUrl.hostname)) throw new Error(`Evidence redirect escaped allowlist: ${finalUrl.hostname}`);
-  return { buffer: Buffer.from(await response.arrayBuffer()), final_url: finalUrl.toString(), content_type: response.headers.get("content-type") || null };
+  if (!Number.isInteger(maxAttempts) || maxAttempts < 1) throw new Error("maxAttempts must be a positive integer");
+
+  let lastError = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      const response = await fetchImpl(parsed, {
+        redirect: "follow",
+        headers: { "user-agent": "ORVYQ-primary-evidence-fetch/2.1" },
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      const finalUrl = new URL(response.url || parsed.toString());
+      if (!allowedHosts.includes(finalUrl.hostname)) throw new Error(`Evidence redirect escaped allowlist: ${finalUrl.hostname}`);
+      if (!response.ok) {
+        const statusError = new Error(`Evidence download failed ${response.status}: ${url}`);
+        statusError.status = response.status;
+        if (!isRetryableStatus(response.status) || attempt === maxAttempts) throw statusError;
+        lastError = statusError;
+      } else {
+        return {
+          buffer: Buffer.from(await response.arrayBuffer()),
+          final_url: finalUrl.toString(),
+          content_type: response.headers?.get?.("content-type") || null,
+          attempts: attempt,
+        };
+      }
+    } catch (error) {
+      if (String(error?.message || "").startsWith("Evidence redirect escaped allowlist")) throw error;
+      const status = Number(error?.status || 0);
+      const retryable = status ? isRetryableStatus(status) : true;
+      lastError = error;
+      if (!retryable || attempt === maxAttempts) {
+        throw new Error(
+          `Evidence download failed after ${attempt} attempt(s): ${url}; ${errorDetail(error)}`,
+          { cause: error },
+        );
+      }
+    }
+
+    const delayMs = Math.min(baseDelayMs * (2 ** (attempt - 1)), 6000);
+    console.warn(JSON.stringify({
+      event: "primary_evidence_download_retry",
+      url,
+      attempt,
+      max_attempts: maxAttempts,
+      delay_ms: delayMs,
+      error: errorDetail(lastError),
+    }));
+    await sleep(delayMs);
+  }
+
+  throw new Error(`Evidence download failed: ${url}; ${errorDetail(lastError)}`);
 }
 
 export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
@@ -41,6 +111,9 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
   const allowedHosts = manifest.policy?.allowed_hosts || [];
   const downloadGroups = new Map();
   for (const asset of manifest.assets || []) {
+    for (const field of ["source_institution", "source_title", "source_date", "content_identity"]) {
+      if (!String(asset[field] || "").trim()) throw new Error(`${asset.evidence_asset_id} requires ${field}`);
+    }
     const existing = downloadGroups.get(asset.download_asset);
     if (existing && existing.source_url !== asset.source_url) throw new Error(`Conflicting URLs for ${asset.download_asset}`);
     downloadGroups.set(asset.download_asset, asset);
@@ -50,11 +123,18 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
   for (const [relativePath, asset] of downloadGroups.entries()) {
     const target = path.join(dir, relativePath);
     await fs.mkdir(path.dirname(target), { recursive: true });
-    const { buffer, final_url, content_type } = await fetchBuffer(asset.source_url, allowedHosts);
+    const { buffer, final_url, content_type, attempts } = await fetchBuffer(asset.source_url, allowedHosts);
     if (buffer.length < Number(asset.min_bytes || 1)) throw new Error(`${asset.evidence_asset_id} downloaded only ${buffer.length} bytes`);
     assertMagic(buffer, asset.mime, asset.evidence_asset_id);
     await fs.writeFile(target, buffer);
-    downloadRecords.set(relativePath, { source_url: asset.source_url, final_url, content_type, bytes: buffer.length, sha256: sha256(buffer) });
+    downloadRecords.set(relativePath, {
+      source_url: asset.source_url,
+      final_url,
+      content_type,
+      bytes: buffer.length,
+      sha256: sha256(buffer),
+      download_attempts: attempts,
+    });
   }
 
   const runtimeAssets = [];
@@ -74,6 +154,10 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
       evidence_asset_id: asset.evidence_asset_id,
       source_ids: asset.source_ids,
       source_url: asset.source_url,
+      source_institution: asset.source_institution,
+      source_title: asset.source_title,
+      source_date: asset.source_date,
+      content_identity: asset.content_identity,
       final_url: downloadRecords.get(asset.download_asset)?.final_url || asset.source_url,
       local_asset: asset.local_asset,
       download_asset: asset.download_asset,
@@ -86,7 +170,15 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
     });
   }
 
-  const runtime = { schema_version: "2.1", project_id: projectId, generated_at: new Date().toISOString(), policy: manifest.policy, downloads: Object.fromEntries(downloadRecords), assets: runtimeAssets, pass: runtimeAssets.length === (manifest.assets || []).length };
+  const runtime = {
+    schema_version: "2.1",
+    project_id: projectId,
+    generated_at: new Date().toISOString(),
+    policy: manifest.policy,
+    downloads: Object.fromEntries(downloadRecords),
+    assets: runtimeAssets,
+    pass: runtimeAssets.length === (manifest.assets || []).length,
+  };
   await writeJsonAtomic(path.join(dir, manifest.policy.runtime_manifest), runtime);
   return runtime;
 }
@@ -94,5 +186,15 @@ export async function fetchPrimaryEvidence(projectId = PROJECT_ID) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   const args = parseArgs(process.argv.slice(2));
   const projectId = resolveProjectId(args);
-  fetchPrimaryEvidence(projectId).then((runtime) => console.log(JSON.stringify({ ok: true, asset_count: runtime.assets.length, total_bytes: runtime.assets.reduce((sum, asset) => sum + asset.bytes, 0), runtime_manifest: runtime.policy.runtime_manifest }))).catch((error) => { console.error(JSON.stringify({ ok: false, error: error.message })); process.exitCode = 1; });
+  fetchPrimaryEvidence(projectId)
+    .then((runtime) => console.log(JSON.stringify({
+      ok: true,
+      asset_count: runtime.assets.length,
+      total_bytes: runtime.assets.reduce((sum, asset) => sum + asset.bytes, 0),
+      runtime_manifest: runtime.policy.runtime_manifest,
+    })))
+    .catch((error) => {
+      console.error(JSON.stringify({ ok: false, error: error.message }));
+      process.exitCode = 1;
+    });
 }

@@ -16,9 +16,13 @@ type BaseShot = {
   scene_id: string;
   start_frame: number;
   end_frame: number;
-  claim_id?: string;
+  claim_id: string;
   visual_role?: string;
   editorial_purpose?: string;
+  narration_anchor: string;
+  semantic_rationale: string;
+  semantic_link: "physical" | "historical" | "conceptual" | "direct_evidence";
+  source_slice_index?: number | null;
   editorial_overlay?: EditorialOverlaySpec | null;
   emphasis_card?: EmphasisCardSpec | null;
   hook_question?: HookQuestionSpec | null;
@@ -33,6 +37,7 @@ type FootageShot = BaseShot & {
   video_asset: string;
   trim_in_sec: number;
   trim_out_sec: number;
+  playback_rate?: number;
   motion_variant?: FootageMotion;
 };
 type GraphicShot = BaseShot & {
@@ -110,6 +115,7 @@ export const FactForgeVideo: React.FC = () => {
                 videoSrc={staticFile(shot.video_asset)}
                 trimInSec={shot.trim_in_sec}
                 trimOutSec={shot.trim_out_sec}
+                playbackRate={shot.playback_rate || 1}
                 motionVariant={shot.motion_variant || "hold"}
                 editorialOverlay={shot.editorial_overlay || null}
                 emphasisCard={shot.emphasis_card || null}

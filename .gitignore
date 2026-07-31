@@ -30,6 +30,11 @@ projects/*/qa/*
 # rule.
 !projects/*/qa/proof_approval.json
 
+# The byte-bound footage semantic audit is a canonical pre-review gate, not
+# disposable runtime output. It must be committed with the exact materialized
+# blueprint so Candidate Validation can verify the same reviewed state.
+!projects/*/qa/footage_semantic_review_audit.json
+
 # Always-regenerate build output -- see docs/golden-renderer-map.md section 5.
 # Never hand-commit this; if it must be inspected, add a CI check that it is
 # byte-identical to a fresh `build-project` run instead.

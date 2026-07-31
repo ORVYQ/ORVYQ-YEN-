@@ -5,6 +5,7 @@ import {
   interpolate,
   useCurrentFrame,
 } from "remotion";
+import { ORVYQ_DESIGN } from "./designSystem";
 
 export type EmphasisCardSpec = {
   eyebrow: string;
@@ -23,6 +24,7 @@ export const EmphasisCard: React.FC<{
   durationInFrames: number;
 }> = ({ spec, durationInFrames }) => {
   const frame = useCurrentFrame();
+  const { color, type, safe } = ORVYQ_DESIGN;
   const isBriefAccent = durationInFrames <= 90;
   const enterFrames = isBriefAccent ? 10 : 20;
   const exitFrames = isBriefAccent ? 9 : 18;
@@ -45,15 +47,15 @@ export const EmphasisCard: React.FC<{
     easing: Easing.bezier(0.22, 1, 0.36, 1),
     ...clamp,
   });
-  const accent = spec.accent || "#E06A63";
-  const fullTitleSize = spec.title.length > 76 ? 54 : spec.title.length > 52 ? 60 : 68;
-  const titleSize = isBriefAccent ? (spec.title.length > 62 ? 42 : 48) : fullTitleSize;
+  const accent = spec.accent || color.signal;
+  const fullTitleSize = spec.title.length > 76 ? 46 : spec.title.length > 52 ? 52 : 58;
+  const titleSize = isBriefAccent ? (spec.title.length > 62 ? 38 : 44) : fullTitleSize;
 
   return (
     <AbsoluteFill
       style={{
         justifyContent: isBriefAccent ? "flex-end" : "center",
-        padding: isBriefAccent ? "0 138px 122px" : "0 146px",
+        padding: `0 ${safe.x}px ${isBriefAccent ? safe.bottom : 0}px`,
         pointerEvents: "none",
         background: isBriefAccent
           ? "linear-gradient(180deg,rgba(3,7,12,0) 30%,rgba(3,7,12,.18) 62%,rgba(3,7,12,.72) 100%)"
@@ -65,15 +67,15 @@ export const EmphasisCard: React.FC<{
           opacity,
           transform: `translateY(${translateY}px)`,
           maxWidth: isBriefAccent ? 1080 : 1320,
-          fontFamily: "Arial, Helvetica, sans-serif",
+          fontFamily: type.family,
           textShadow: "0 6px 26px rgba(0,0,0,.78)",
         }}
       >
         <div
           style={{
-            color: isBriefAccent ? "#A8BED2" : accent,
+            color: isBriefAccent ? color.information : accent,
             fontSize: isBriefAccent ? 17 : 20,
-            fontWeight: 800,
+            fontWeight: type.labelWeight,
             letterSpacing: isBriefAccent ? ".18em" : ".2em",
             marginBottom: isBriefAccent ? 13 : 20,
           }}
@@ -82,9 +84,9 @@ export const EmphasisCard: React.FC<{
         </div>
         <div
           style={{
-            color: "#F6F2E9",
+            color: color.ink,
             fontSize: titleSize,
-            fontWeight: isBriefAccent ? 650 : 730,
+            fontWeight: type.displayWeight,
             letterSpacing: isBriefAccent ? "-.022em" : "-.03em",
             lineHeight: isBriefAccent ? 1.08 : 1.04,
             maxWidth: isBriefAccent ? 1080 : 1320,

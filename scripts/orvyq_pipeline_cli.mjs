@@ -8,6 +8,8 @@ const AUDIT_SCRIPTS = [
   "scripts/orvyq_evidence_spec_audit.mjs",
   "scripts/orvyq_evidence_asset_audit.mjs",
   "scripts/orvyq_semantic_visual_audit.mjs",
+  "scripts/orvyq_footage_semantic_review_audit.mjs",
+  "scripts/orvyq_visual_rebalance_audit.mjs",
   "scripts/orvyq_pacing_audit.mjs",
   "scripts/orvyq_mobile_legibility_audit.mjs",
   "scripts/orvyq_music_cue_audit.mjs",

@@ -5,6 +5,18 @@
   "creative_limits": {
     "minimum_mobile_font_px": 36,
     "maximum_uses_per_source": 2,
+    "visual_medium_balance": {
+      "contextual_footage_fraction_min": 0.6,
+      "contextual_footage_fraction_max": 0.7,
+      "primary_evidence_fraction_min": 0.2,
+      "graphic_card_fraction_max": 0.15,
+      "full_screen_text_card_fraction_max": 0.03,
+      "section_graphic_card_fraction_max": 0.25,
+      "maximum_consecutive_graphic_card_shots": 1,
+      "maximum_graphic_template_uses": 3,
+      "maximum_full_screen_template_uses": 2,
+      "project_overrides_may_only_tighten": true
+    },
     "hook": {
       "minimum_cuts": 3,
       "maximum_cuts": 6,

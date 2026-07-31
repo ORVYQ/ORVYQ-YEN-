@@ -21,7 +21,7 @@ import path from "node:path";
 import { projectDir, readJson, pathExists } from "./lib/fs-utils.mjs";
 import { loadResolvedEvidenceMap } from "./lib/orvyq-evidence.mjs";
 import { auditMotionHook } from "./lib/orvyq-motion-hook.mjs";
-import { resolveVisualBalanceThresholds } from "./lib/orvyq-visual-balance.mjs";
+import { auditVisualMediumBalance } from "./lib/orvyq-visual-balance.mjs";
 const run = promisify(execFile);
 const PROJECT_ID = process.env.ORVYQ_PROJECT_ID || null;
 const VALID_ROLES = new Set(["evidence", "archive", "context", "human_context", "metaphor", "graphic"]);
@@ -92,7 +92,7 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
   const evidenceUsage = new Map();
   const footageUsage = new Map();
   const shotDurations = new Set();
-  let pureGraphicFrames = 0, evidenceFrames = 0, contextualFootageFrames = 0, emphasisBeats = 0, previousSignature = null, previousFootage = null;
+  let emphasisBeats = 0, previousSignature = null, previousFootage = null;
 
   for (let index = 0; index < shots.length; index++) {
     const shot = shots[index];
@@ -116,15 +116,16 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
     assert.ok(claimIds.has(shot.claim_id));
     assert.ok(VALID_ROLES.has(shot.visual_role));
     assert.ok(shot.editorial_purpose?.length >= 18);
+    assert.ok(shot.narration_anchor?.length >= 8);
+    assert.ok(shot.semantic_rationale?.length >= 24);
+    assert.ok(["physical", "historical", "conceptual", "direct_evidence"].includes(shot.semantic_link));
     if (shot.asset_type === "graphic") {
-      pureGraphicFrames += frames;
       assert.ok(shot.graphic?.title);
       assert.ok(!FORBIDDEN.has(shot.graphic?.type));
       previousSignature = `graphic:${shot.graphic.type}:${shot.graphic.title}`;
       continue;
     }
     if (shot.asset_type === "evidence") {
-      evidenceFrames += frames;
       const spec = shot.evidence || {};
       assert.ok(VALID_KINDS.has(spec.kind), `${shot.shot_id} invalid evidence kind`);
       assert.ok(spec.title && spec.eyebrow && spec.source_label, `${shot.shot_id} lacks evidence hierarchy`);
@@ -164,7 +165,6 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
     const approvedHook = shot.hook_footage === true;
     const approvedContext = plan.quality_policy?.cinematic_body_footage === true && shot.contextual_footage === true && shot.provenance_mode === "approved_contextual_footage";
     assert.ok(approvedHook || approvedContext);
-    if (approvedContext) contextualFootageFrames += frames;
     // A shot that continues the immediately preceding shot's own asset from
     // exactly where its trim left off (an editorial pause hold on the same
     // footage, split into two shots so neither exceeds max_shot_seconds --
@@ -189,20 +189,12 @@ export async function validateCanonicalEditPlan(projectId = PROJECT_ID) {
     previousSignature = `footage:${shot.video_asset}`;
   }
 
-  const graphicFraction = pureGraphicFrames / plan.duration_frames;
-  const evidenceFraction = evidenceFrames / plan.duration_frames;
-  const contextualFootageFraction = contextualFootageFrames / plan.duration_frames;
-  const visualBalanceThresholds = resolveVisualBalanceThresholds(blueprint.global_rules);
-  // Proof is now a genuine frame-prefix of the full candidate: both modes
-  // share the exact same plan.shots/duration_frames (see
-  // scripts/orvyq_edit_plan.mjs), so there is only one real fraction profile
-  // to check regardless of plan.mode -- matching the same shared thresholds
-  // scripts/orvyq_semantic_visual_audit.mjs applies.
-  assert.ok(graphicFraction <= visualBalanceThresholds.full_screen_graphic_fraction_max);
+  const visualBalanceAudit = auditVisualMediumBalance(
+    { shots, durationFrames: plan.duration_frames },
+    blueprint.global_rules,
+  );
   if (plan.quality_policy?.cinematic_body_footage) {
-    assert.ok(evidenceFraction >= visualBalanceThresholds.evidence_archive_fraction_min);
-    assert.ok(contextualFootageFraction >= visualBalanceThresholds.contextual_body_footage_fraction_min);
-    assert.ok(contextualFootageFraction <= visualBalanceThresholds.contextual_body_footage_fraction_max);
+    assert.equal(visualBalanceAudit.pass, true, visualBalanceAudit.failures.join("; "));
     assert.ok(emphasisBeats >= 4);
   }
   assert.ok(shotDurations.size >= 5);

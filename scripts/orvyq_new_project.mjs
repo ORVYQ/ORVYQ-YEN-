@@ -56,6 +56,18 @@ export function buildScaffoldManifest({ projectId, title, durationMinutes = 12 }
       project_id: projectId,
       status: "needs_editorial_input",
       creative_profile: "orvyq-aperture-cinematic",
+      visual_medium_balance: {
+        contextual_footage_fraction_min: 0.60,
+        contextual_footage_fraction_max: 0.70,
+        primary_evidence_fraction_min: 0.20,
+        graphic_card_fraction_max: 0.15,
+        full_screen_text_card_fraction_max: 0.03,
+        section_graphic_card_fraction_max: 0.25,
+        maximum_consecutive_graphic_card_shots: 1,
+        maximum_graphic_template_uses: 3,
+        maximum_full_screen_template_uses: 2,
+        project_overrides_may_only_tighten: true,
+      },
       art_direction: {
         topic: null,
         palette: {
@@ -128,6 +140,27 @@ export function buildScaffoldManifest({ projectId, title, durationMinutes = 12 }
       required_primary_sources: [],
       claims: [],
       status: "needs_research",
+    },
+    "research/visual_asset_reviews.json": {
+      schema_version: "1.0",
+      project_id: projectId,
+      review_basis: "Fail-closed claim-specific footage review registry.",
+      policy: {
+        default_status_for_unlisted_assets: "pending_frame_review",
+        rejected_asset_global_reentry_forbidden: true,
+        automatic_backfill_forbidden: true,
+        approval_requires_contact_sheet_sha256: true,
+        approval_requires_claim_id_narration_anchor_and_semantic_rationale: true,
+      },
+      summary: {
+        pool_assets: 0,
+        rejected_from_metadata: 0,
+        pending_frame_review: 0,
+        approved: 0,
+      },
+      pending_frame_review_scene_ids: [],
+      rejected_assets: [],
+      approved_assets: [],
     },
   };
 }

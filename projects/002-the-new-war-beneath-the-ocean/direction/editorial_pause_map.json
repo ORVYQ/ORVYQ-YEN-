@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "duration_policy": {
-    "minimum_final_duration_seconds": 960,
+    "minimum_final_duration_seconds": 1037.68,
     "maximum_final_duration_seconds": null,
     "rule": "The film may exceed the minimum. Final duration follows the real narration, the cold open, seven resolved editorial pauses and the terminal end card; no padding is added merely to hit a fixed target."
   },
