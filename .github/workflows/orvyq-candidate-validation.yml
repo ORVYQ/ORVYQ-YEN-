@@ -154,7 +154,15 @@ jobs:
         run: node scripts/orvyq_footage_duration_report.mjs --project-id="$PROJECT_ID" | tee "projects/$PROJECT_ID/qa/footage_duration_report.json"
 
       - name: Build the canonical candidate edit plan
-        run: node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full
+        run: |
+          set +e
+          node scripts/orvyq_edit_plan.mjs --project-id="$PROJECT_ID" --mode=full > edit-plan.log 2>&1
+          echo $? > edit-plan.status
+          cat edit-plan.log
+          exit 0
+
+      - name: Stop when canonical edit plan failed
+        run: test "$(cat edit-plan.status)" = "0"
 
       - name: Apply project-authored creative polish
         run: node scripts/orvyq_creative_polish.mjs --project-id="$PROJECT_ID"
@@ -245,6 +253,8 @@ jobs:
             validation-source-sha.txt
             alignment-speech-qa.log
             alignment-speech-qa.status
+            edit-plan.log
+            edit-plan.status
             narration-qa.log
             narration-qa.status
             qa-chain.log
@@ -272,7 +282,8 @@ jobs:
           set -euo pipefail
           PROJECT_LABEL="${PROJECT_ID:-unresolved}"
           QA_STATUS="$(cat qa-chain.status 2>/dev/null || echo unavailable)"
-          BODY="Candidate Validation finished with **${JOB_STATUS}**. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Project: \`${PROJECT_LABEL}\`. Exact source: \`${SOURCE_SHA}\`. Pre-render QA status: \`${QA_STATUS}\`. No video render was started."
+          EDIT_STATUS="$(cat edit-plan.status 2>/dev/null || echo unavailable)"
+          BODY="Candidate Validation finished with **${JOB_STATUS}**. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Project: \`${PROJECT_LABEL}\`. Exact source: \`${SOURCE_SHA}\`. Edit-plan status: \`${EDIT_STATUS}\`. Pre-render QA status: \`${QA_STATUS}\`. No video render was started."
           PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$PR_NUMBER" ]; then
             gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
