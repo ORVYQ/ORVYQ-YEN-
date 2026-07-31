@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { matchesSemanticText, semanticMatchScore, pick } from "./orvyq_acquire_footage_demand.mjs";
+import { matchesSemanticText, semanticMatchScore, evaluateSemanticCandidate, pick } from "./orvyq_acquire_footage_demand.mjs";
 
 const hd = (id) => ({ id, file_type: "video/mp4", width: 1920, height: 1080, link: `https://videos.pexels.com/video-files/${id}/${id}-hd.mp4` });
 
@@ -28,4 +28,39 @@ test("selection excludes provider assets rejected by prior review", () => {
   const item = { min_duration_seconds: 8, max_duration_seconds: 30, rejected_provider_asset_ids: ["101"], semantic_title_constraints: { required_any_groups: [["research"], ["vessel"]], forbidden_terms: [] } };
   const rejected = { id: 101, duration: 12, url: "https://www.pexels.com/video/research-vessel-101/", user: { name: "Creator" }, video_files: [hd(201)] };
   assert.equal(pick([rejected], new Set(), item), null);
+});
+
+
+test("semantic token matching accepts conservative singular and plural equivalents", () => {
+  const item = { semantic_title_constraints: { required_any_groups: [["worker"], ["vessel"]], forbidden_terms: [] } };
+  assert.equal(matchesSemanticText("workers aboard vessels", item), true);
+  assert.equal(matchesSemanticText("cargo operations", { semantic_title_constraints: { required_any_groups: [["car"]], forbidden_terms: [] } }), false);
+});
+
+test("query assistance may satisfy one missing group but metadata must carry a concrete anchor", () => {
+  const item = {
+    semantic_title_constraints: {
+      required_any_groups: [["research", "scientific"], ["vessel", "ship", "boat"]],
+      forbidden_terms: ["fishing", "shipyard"],
+      min_metadata_required_groups: 1,
+    },
+  };
+  const assisted = evaluateSemanticCandidate(
+    "https://www.pexels.com/video/blue-and-white-boat-at-sea-501/",
+    item,
+    "research vessel ocean crew",
+  );
+  assert.equal(assisted.metadataMatchedGroups, 1);
+  assert.equal(assisted.queryMatchedGroups, 1);
+  assert.equal(assisted.fullyMetadataMatched, false);
+  assert.equal(evaluateSemanticCandidate(
+    "https://www.pexels.com/video/fishing-boat-at-sea-502/",
+    item,
+    "research vessel ocean crew",
+  ), null);
+  assert.equal(evaluateSemanticCandidate(
+    "https://www.pexels.com/video-calm-water-503/",
+    item,
+    "research vessel ocean crew",
+  ), null);
 });

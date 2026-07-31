@@ -95,10 +95,15 @@ test("Pexels preflight reports every scene with no eligible metadata match", asy
       },
     },
   ];
-  await assert.rejects(
-    () => preflightPexelsSelections(items, "test-key", new Set(), {}, async () => [video]),
-    /scene_002, scene_003/,
+  const result = await preflightPexelsSelections(
+    items,
+    "test-key",
+    new Set(),
+    {},
+    async () => [video],
   );
+  assert.deepEqual(result.failures, ["scene_002", "scene_003"]);
+  assert.equal(result.selectedByScene.get("scene_001").selected.video.id, 101);
 });
 
 test("materializeAssignments resolves the downloaded hash path and is idempotent", async () => {

@@ -38,35 +38,84 @@ function normalizeText(value) {
     .trim();
 }
 
+function semanticTokenStem(token) {
+  if (token.length < 4) return token;
+  if (token.endsWith("ies") && token.length > 4) return `${token.slice(0, -3)}y`;
+  if (token.endsWith("es") && /(s|x|z|ch|sh)es$/.test(token)) return token.slice(0, -2);
+  if (token.endsWith("s") && !token.endsWith("ss")) return token.slice(0, -1);
+  return token;
+}
+
+function semanticTokensEqual(left, right) {
+  return left === right || semanticTokenStem(left) === semanticTokenStem(right);
+}
+
 function containsSemanticTerm(normalizedHaystack, value) {
   const term = normalizeText(value);
   if (!term) return false;
-  return ` ${normalizedHaystack} `.includes(` ${term} `);
+  const haystackTokens = normalizedHaystack.split(" ").filter(Boolean);
+  const termTokens = term.split(" ").filter(Boolean);
+  if (!termTokens.length || termTokens.length > haystackTokens.length) return false;
+  for (let start = 0; start <= haystackTokens.length - termTokens.length; start += 1) {
+    if (termTokens.every((token, index) => semanticTokensEqual(haystackTokens[start + index], token))) {
+      return true;
+    }
+  }
+  return false;
 }
 
-export function semanticMatchScore(value, item) {
+function bestGroupMatchScore(normalizedText, group) {
+  const matched = (Array.isArray(group) ? group : [])
+    .map((term) => normalizeText(term))
+    .filter((term) => term && containsSemanticTerm(normalizedText, term));
+  if (!matched.length) return null;
+  return Math.max(...matched.map((term) => term.split(" ").length * 100 + term.length));
+}
+
+export function evaluateSemanticCandidate(value, item, searchQuery = "") {
   const constraints = item.semantic_title_constraints;
-  if (!constraints) return 0;
-  const haystack = normalizeText(value);
+  if (!constraints) {
+    return { score: 0, metadataMatchedGroups: 0, queryMatchedGroups: 0, fullyMetadataMatched: true };
+  }
+  const metadata = normalizeText(value);
+  const query = normalizeText(searchQuery);
   const forbidden = Array.isArray(constraints.forbidden_terms)
     ? constraints.forbidden_terms
     : [];
-  if (forbidden.some((term) => containsSemanticTerm(haystack, term))) {
-    return Number.NEGATIVE_INFINITY;
-  }
+  if (forbidden.some((term) => containsSemanticTerm(metadata, term))) return null;
   const groups = Array.isArray(constraints.required_any_groups)
     ? constraints.required_any_groups
     : [];
+  const minimumMetadataGroups = Math.max(
+    1,
+    Math.min(groups.length || 1, Number(constraints.min_metadata_required_groups || 1)),
+  );
+  let metadataMatchedGroups = 0;
+  let queryMatchedGroups = 0;
   let score = 0;
   for (const group of groups) {
-    const terms = Array.isArray(group) ? group : [];
-    const matched = terms
-      .map((term) => normalizeText(term))
-      .filter((term) => term && containsSemanticTerm(haystack, term));
-    if (!terms.length || !matched.length) return Number.NEGATIVE_INFINITY;
-    score += Math.max(...matched.map((term) => term.split(" ").length * 100 + term.length));
+    const metadataScore = bestGroupMatchScore(metadata, group);
+    if (metadataScore !== null) {
+      metadataMatchedGroups += 1;
+      score += 10000 + metadataScore;
+      continue;
+    }
+    const queryScore = bestGroupMatchScore(query, group);
+    if (queryScore === null) return null;
+    queryMatchedGroups += 1;
+    score += 1000 + queryScore;
   }
-  return score;
+  if (metadataMatchedGroups < minimumMetadataGroups) return null;
+  return {
+    score,
+    metadataMatchedGroups,
+    queryMatchedGroups,
+    fullyMetadataMatched: queryMatchedGroups === 0,
+  };
+}
+
+export function semanticMatchScore(value, item) {
+  return evaluateSemanticCandidate(value, item)?.score ?? Number.NEGATIVE_INFINITY;
 }
 
 export function matchesSemanticText(value, item) {
@@ -148,6 +197,7 @@ async function loadPlan(dir, projectId) {
             semantic_title_constraints: {
               required_any_groups: constraint.required_any_groups || [],
               forbidden_terms: constraint.forbidden_terms || [],
+              min_metadata_required_groups: constraint.min_metadata_required_groups || 1,
             },
           }
         : {}),
@@ -172,14 +222,19 @@ async function search(query, key, perPage, page = 1) {
   return (await response.json()).videos || [];
 }
 
-export function pick(videos, usedIds, item) {
+export function pick(videos, usedIds, item, searchQuery = "") {
   const min = Number(item.min_duration_seconds || 8);
   const max = Number(item.max_duration_seconds || 120);
   const candidates = [];
   const rejectedIds = new Set((item.rejected_provider_asset_ids || []).map(String));
   for (const video of videos) {
     if (usedIds.has(String(video.id)) || rejectedIds.has(String(video.id)) || video.duration < min || video.duration > max) continue;
-    if (!matchesSemanticMetadata(video, item)) continue;
+    const semantic = evaluateSemanticCandidate(
+      `${video?.url || ""} ${video?.user?.name || ""}`,
+      item,
+      searchQuery,
+    );
+    if (!semantic) continue;
     const files = (video.video_files || []).filter((file) =>
       file.file_type === "video/mp4" &&
       file.width >= 1280 &&
@@ -189,7 +244,14 @@ export function pick(videos, usedIds, item) {
     );
     if (!files.length) continue;
     files.sort((a, b) => Math.abs(a.width * a.height - 1920 * 1080) - Math.abs(b.width * b.height - 1920 * 1080));
-    candidates.push({ video, rendition: files[0], semanticScore: semanticMatchScore(`${video?.url || ""} ${video?.user?.name || ""}`, item) });
+    candidates.push({
+      video,
+      rendition: files[0],
+      semanticScore: semantic.score,
+      semanticMetadataMatchedGroups: semantic.metadataMatchedGroups,
+      semanticQueryMatchedGroups: semantic.queryMatchedGroups,
+      semanticMetadataFullyMatched: semantic.fullyMetadataMatched,
+    });
   }
   candidates.sort((a, b) =>
     b.semanticScore - a.semanticScore ||
@@ -218,7 +280,7 @@ export async function preflightPexelsSelections(items, key, usedIds, policy, sea
         for (const video of pageVideos) videosById.set(String(video.id), video);
         if (pageVideos.length < perPage) break;
       }
-      const candidate = pick([...videosById.values()], usedIds, item);
+      const candidate = pick([...videosById.values()], usedIds, item, query);
       if (!candidate) continue;
       const candidateDistance = Math.abs(candidate.video.duration - (Number(item.min_duration_seconds || 8) + 4));
       const selectedDistance = selected
@@ -240,12 +302,7 @@ export async function preflightPexelsSelections(items, key, usedIds, policy, sea
     usedIds.add(String(selected.video.id));
     selectedByScene.set(id, { selected, selectedQuery });
   }
-  if (failures.length) {
-    throw new Error(
-      `No unique semantically eligible Pexels clip found for ${failures.join(", ")}`,
-    );
-  }
-  return selectedByScene;
+  return { selectedByScene, failures };
 }
 
 async function probe(file) {
@@ -403,7 +460,7 @@ async function acquireOne(projectId, dir, item, key, usedIds, policy, preselecte
   }
   const buffer = await fs.readFile(output);
   const digest = hash(buffer);
-  const semanticVerified = Boolean(item.semantic_title_constraints);
+  const semanticVerified = selected.semanticMetadataFullyMatched === true;
   const provenance = {
     stable_asset_id: shortHash(`${projectId}:${id}:${selected.video.id}`),
     scene_id: id,
@@ -422,6 +479,9 @@ async function acquireOne(projectId, dir, item, key, usedIds, policy, preselecte
     evidence_use_forbidden: true,
     semantic_metadata_verified: semanticVerified,
     semantic_metadata_constraints: item.semantic_title_constraints || null,
+    semantic_metadata_matched_groups: selected.semanticMetadataMatchedGroups ?? null,
+    semantic_query_matched_groups: selected.semanticQueryMatchedGroups ?? null,
+    semantic_query_assisted: selected.semanticQueryMatchedGroups > 0,
     duration: info.duration,
     actual_duration_seconds: info.duration,
     width: info.width,
@@ -438,7 +498,7 @@ async function acquireOne(projectId, dir, item, key, usedIds, policy, preselecte
     selected_rendition_id: String(selected.rendition.id),
     selected_reason: semanticVerified
       ? "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED"
-      : "NARRATION_ANCHORED_UNIQUE_HD_CONTEXT",
+      : "NARRATION_ANCHORED_UNIQUE_HD_QUERY_ASSISTED_PENDING_FRAME_REVIEW",
     approved_for_final_edit: false,
     human_review_status: "PENDING_FRAME_REVIEW",
     downloaded_at: new Date().toISOString(),
@@ -474,7 +534,7 @@ async function reusable(dir, record, id, item, approvedByProviderId = new Map())
   };
 }
 
-export async function materializeAssignments(dir, plan, records) {
+export async function materializeAssignments(dir, plan, records, { unresolvedSceneIds = [] } = {}) {
   const items = plan.assets.filter((item) => item.editorial_assignment);
   if (!items.length && !records.length) return { assignments: 0, replaced_graphics: 0, retired_paths: 0 };
   const file = path.join(dir, "config", "editorial_asset_plan.json");
@@ -483,9 +543,21 @@ export async function materializeAssignments(dir, plan, records) {
   editorial.graphic_break_assignments ||= {};
   editorial.full_footage_pool ||= [];
   const recordByScene = new Map(records.map((record) => [record.scene_id, record]));
+  const unresolved = new Set(unresolvedSceneIds.map(String));
   const targets = new Set();
   const retiredPaths = new Set();
   let replaced = 0;
+  for (const [claimId, assignments] of Object.entries(editorial.footage_assignments)) {
+    for (const [index, assignment] of Object.entries(assignments || {})) {
+      const match = String(assignment?.asset || "").match(/^assets\/footage\/(scene_[0-9]{3})_[^/]+\.mp4$/);
+      if (!match || !unresolved.has(match[1])) continue;
+      retiredPaths.add(assignment.asset);
+      delete editorial.footage_assignments[claimId][index];
+    }
+    if (!Object.keys(editorial.footage_assignments[claimId] || {}).length) {
+      delete editorial.footage_assignments[claimId];
+    }
+  }
   for (const assignments of Object.values(editorial.footage_assignments)) {
     for (const assignment of Object.values(assignments || {})) {
       const match = String(assignment?.asset || "").match(/^assets\/footage\/(scene_[0-9]{3})_[a-f0-9]+\.mp4$/);
@@ -503,6 +575,7 @@ export async function materializeAssignments(dir, plan, records) {
     return record.path;
   });
   for (const item of items) {
+    if (unresolved.has(item.scene_id)) continue;
     const { claimId, sliceIndex } = validateAssignment(item);
     const index = String(sliceIndex);
     const target = `${claimId}:${index}`;
@@ -557,12 +630,13 @@ export async function materializeAssignments(dir, plan, records) {
     "demand-led narration-anchored footage acquisition; exact downloaded paths replace only explicit graphic targets; source-title semantic constraints reject clear metadata mismatches before download; no fixed clip-count completion and no silent fallback";
   editorial.last_supplemental_footage_materialization = {
     generated_at: new Date().toISOString(),
-    assignments: items.length,
+    assignments: items.length - unresolved.size,
+    unresolved_scenes: [...unresolved],
     replaced_graphics: replaced,
     retired_paths: [...retiredPaths],
   };
   await writeJsonAtomic(file, editorial);
-  return { assignments: items.length, replaced_graphics: replaced, retired_paths: retiredPaths.size };
+  return { assignments: items.length - unresolved.size, unresolved_scenes: unresolved.size, replaced_graphics: replaced, retired_paths: retiredPaths.size };
 }
 
 export async function acquireDemandFootage(projectId) {
@@ -606,12 +680,14 @@ export async function acquireDemandFootage(projectId) {
       pendingPexels.push(item);
     }
   }
-  const preselected = await preflightPexelsSelections(
+  const policy = plan.acquisition_policy || plan.policy || {};
+  const { selectedByScene: preselected, failures } = await preflightPexelsSelections(
     pendingPexels,
     key,
     new Set(usedIds),
-    plan.policy || {},
+    policy,
   );
+  const unresolved = new Set(failures);
   const records = [];
   let acquired = 0;
   let reused = 0;
@@ -630,13 +706,14 @@ export async function acquireDemandFootage(projectId) {
       await fs.rm(oldMedia, { force: true });
       await fs.rm(`${oldMedia}.provenance.json`, { force: true });
     }
+    if (unresolved.has(id)) continue;
     records.push(await acquireOne(
       projectId,
       dir,
       item,
       key,
       usedIds,
-      plan.policy || {},
+      policy,
       preselected.get(id),
     ));
     acquired += 1;
@@ -655,15 +732,23 @@ export async function acquireDemandFootage(projectId) {
     acquired_this_run: acquired,
     reused_existing: reused,
     semantic_constraints_applied: plan.assets.filter((item) => item.semantic_title_constraints).length,
+    unresolved_scene_ids: [...unresolved],
     records,
-    pass: records.length === plan.assets.length,
+    pass: unresolved.size === 0 && records.length === plan.assets.length,
   });
-  const materialized = await materializeAssignments(dir, plan, records);
+  const materialized = await materializeAssignments(
+    dir,
+    plan,
+    records,
+    { unresolvedSceneIds: [...unresolved] },
+  );
   return {
     project_id: projectId,
     acquired,
     reused,
     total: records.length,
+    partial: unresolved.size > 0,
+    unresolved: [...unresolved],
     capacity,
     ...materialized,
   };
