@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 17,
-  "reason": "The only revision-16 unit-test failure was schema-invalid auxiliary metadata in footage_visual_decisions_round9.json; the unsupported field has been removed without changing the byte-bound decisions, visual plan, quality gates or approved assets. The prior footage workflow remains green with 49 approved assets, zero rejected or pending assets, zero blocked requests, a materialized plan and a ready blueprint. Re-run exact-head Candidate Validation without rendering video.",
+  "request_revision": 18,
+  "reason": "The schema-clean Round 9 decision file has passed footage preparation again on the canonical bot-updated branch head. Current state remains 49 approved assets, zero rejected or pending assets, zero blocked requests, a materialized visual-rebalance plan and a ready synchronized blueprint. Re-run Candidate Validation on this exact final head without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T15:00:00Z"
+  "requested_at": "2026-07-31T15:02:00Z"
 }
