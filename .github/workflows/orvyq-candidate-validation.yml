@@ -1,7 +1,9 @@
 name: ORVYQ Candidate Validation
 
 # Builds and validates one explicitly selected project without rendering video.
-# No repository branch, project id, asset, or creative choice is implicit.
+# A project may be selected manually, by a reusable workflow caller, or by a
+# committed candidate_validation_request.json. The exact source SHA is always
+# locked before any candidate inputs are generated.
 on:
   workflow_dispatch:
     inputs:
@@ -15,16 +17,21 @@ on:
         description: "Project directory id under projects/"
         type: string
         required: true
+  push:
+    branches:
+      - "agent/**"
+      - "claude/**"
+    paths:
+      - "projects/*/config/candidate_validation_request.json"
 
 permissions:
   contents: read
 
 concurrency:
-  group: orvyq-candidate-validation-${{ inputs.project_id }}-${{ github.ref }}
+  group: orvyq-candidate-validation-${{ inputs.project_id || github.ref_name }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  PROJECT_ID: ${{ inputs.project_id }}
   SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
 
 jobs:
@@ -36,6 +43,7 @@ jobs:
         with:
           ref: ${{ env.SOURCE_SHA }}
           lfs: true
+          fetch-depth: 2
 
       - name: Lock exact source commit
         run: |
@@ -43,6 +51,30 @@ jobs:
           ACTUAL_SHA="$(git rev-parse HEAD)"
           test "$ACTUAL_SHA" = "$SOURCE_SHA"
           printf '%s\n' "$ACTUAL_SHA" | tee validation-source-sha.txt
+
+      - name: Resolve explicitly selected project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "push" ]; then
+            mapfile -t REQUESTS < <(
+              git diff-tree --no-commit-id --name-only -r "$SOURCE_SHA" |
+                grep -E '^projects/[^/]+/config/candidate_validation_request\.json$' || true
+            )
+            test "${#REQUESTS[@]}" -eq 1 || {
+              echo "::error::Candidate Validation requires exactly one changed request file; found ${#REQUESTS[@]}."
+              exit 1
+            }
+            REQUEST_FILE="${REQUESTS[0]}"
+            test "$(jq -r '.status' "$REQUEST_FILE")" = "requested"
+            PROJECT_ID="$(jq -r '.project_id' "$REQUEST_FILE")"
+          else
+            PROJECT_ID="${{ inputs.project_id }}"
+          fi
+          [[ "$PROJECT_ID" =~ ^[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$ ]]
+          test -f "projects/$PROJECT_ID/config/production_profile.json"
+          echo "PROJECT_ID=$PROJECT_ID" >> "$GITHUB_ENV"
+          echo "Selected project: $PROJECT_ID"
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -176,7 +208,7 @@ jobs:
       - name: Upload immutable validated candidate bundle
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-validated-candidate-${{ inputs.project_id }}-${{ github.run_id }}
+          name: orvyq-validated-candidate-${{ env.PROJECT_ID }}-${{ github.run_id }}
           retention-days: 90
           include-hidden-files: true
           path: |
@@ -205,7 +237,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: orvyq-candidate-validation-${{ inputs.project_id }}-${{ github.run_id }}
+          name: orvyq-candidate-validation-${{ env.PROJECT_ID }}-${{ github.run_id }}
           retention-days: 30
           path: |
             validation-source-sha.txt
