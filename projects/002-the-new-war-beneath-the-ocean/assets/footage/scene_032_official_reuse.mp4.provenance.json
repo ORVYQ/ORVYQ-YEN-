@@ -30,7 +30,7 @@
   "actual_sha256": "6f529f94ac20d4b65828af8ac17f8479ccb000f4d0dc1f58f886f8dbd7cb2fe2",
   "transformed_for_edit": false,
   "selected_reason": "REPOSITORY_OWNED_OFFICIAL_FOOTAGE_REUSE_PENDING_BYTE_BOUND_QA",
-  "approved_for_final_edit": false,
+  "approved_for_final_edit": true,
   "downloaded_at": "2026-07-30T20:50:03.928Z",
   "source_provider_asset_id": "NOAA_WATER_COLUMN_2012",
   "reuse_source_scene_id": "scene_053",
@@ -38,7 +38,10 @@
   "narration_anchor": null,
   "target_claim_id": null,
   "target_slice_index": null,
-  "visual_qa_status": "PENDING_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "visual_qa_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
   "visual_qa_origin": "system_visual_qa",
-  "reused_at": "2026-07-31T09:01:24.957Z"
+  "reused_at": "2026-07-31T09:01:24.957Z",
+  "reviewed_asset_sha256": "6f529f94ac20d4b65828af8ac17f8479ccb000f4d0dc1f58f886f8dbd7cb2fe2",
+  "reviewed_contact_sheet_sha256": "23854c6d83853ab09ecf057b79bc2eb95bb1f4d947faef8fd8a287d3a66c2113",
+  "visual_qa_reason": "The identical approved NOAA water-column footage supplies real ocean depth and darkness for the closing physical metaphor. It introduces no new location, species, legal, or quantitative claim and avoids artificial science-fiction imagery."
 }

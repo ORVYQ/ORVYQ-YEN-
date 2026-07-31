@@ -46,8 +46,11 @@
   "transformed_for_edit": true,
   "selected_rendition_id": "13288396",
   "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
-  "approved_for_final_edit": false,
-  "human_review_status": "PENDING_FULL_LENGTH_REVIEW",
+  "approved_for_final_edit": true,
   "downloaded_at": "2026-07-30T07:52:41.276Z",
-  "fail_closed_reason": "Byte-bound contact-sheet and claim-specific semantic review are required before final-edit approval."
+  "visual_qa_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "visual_qa_origin": "canonical_visual_review_registry",
+  "reviewed_asset_sha256": "b60a7190258952ef9ca39029abcf2fb29a440e680c0a783e69464ea895d86cb1",
+  "reviewed_contact_sheet_sha256": "699116562a9b9f9fce85a777366717276993b17c7c874ad9e1ff625197bae11e",
+  "visual_qa_reason": "Approval restored from the canonical byte-bound visual review registry for the active runtime asset."
 }

@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "status": "blocked_pending_assets",
+  "status": "materialized",
   "purpose": "Exclusive-medium rebalance of every baseline graphic/card moment. No replacement may be materialized until its request passes provenance and semantic review.",
   "baseline": {
     "shot_count": 150,

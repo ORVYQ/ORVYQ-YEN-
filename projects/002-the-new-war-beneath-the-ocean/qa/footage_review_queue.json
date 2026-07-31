@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "generated_at": "2026-07-31T09:06:34.574Z",
+  "generated_at": "2026-07-31T09:44:14.413Z",
   "pending_review_count": 5,
   "entries_with_exact_uses": 5,
   "entries": [
@@ -115,13 +115,6 @@
         },
         {
           "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
-          "narration_anchor": "Opening visual premise before the first narrated sentence.",
-          "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
-          "trim_in_sec": 0.5,
-          "trim_out_sec": 3.5
-        },
-        {
-          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
           "narration_anchor": "Moving extraction to the ocean does not automatically move separation, metal production or magnet manufacturing out",
           "semantic_rationale": "A real dark seabed or benthic survey view introduces persistent physical disturbance; tropical island imagery is forbidden for this claim.",
           "trim_in_sec": 0,
@@ -211,6 +204,13 @@
           "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim.",
           "trim_in_sec": 12.155,
           "trim_out_sec": 18.155
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "The final narrated conclusion and its immediate closing hold.",
+          "semantic_rationale": "Remove the separate end card to avoid consecutive cards; let the final image and overlay breathe through the existing four seconds.",
+          "trim_in_sec": 18.155,
+          "trim_out_sec": 22.155
         }
       ],
       "review_blockers": []

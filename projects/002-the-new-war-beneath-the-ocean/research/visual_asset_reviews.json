@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "review_basis": "footage_visual_decisions.json [legacy_system_visual_qa]: Every decision is bound to the current media SHA-256 and twelve-frame contact-sheet SHA-256, then checked against the exact claim, narration anchor and contextual role. Generic footage is rejected whenever it merely illustrates a noun, impersonates a named source or fails to carry the sentence meaning. | footage_visual_decisions_round2.json [legacy_system_visual_qa]: Second byte-bound review of the twenty replacement clips retained by the claim-bound use contract. Decisions use the replacement media SHA-256, twelve-frame contact-sheet SHA-256 and only the narrowed claim/slice roles declared in footage_use_contracts.json. | footage_visual_decisions_round3.json [legacy_system_visual_qa]: Third byte-bound review of the eight replacement clips generated after the second review. Every decision is tied to the replacement media SHA-256, its twelve-frame contact-sheet SHA-256 and the narrowed claim/slice role in footage_use_contracts.json. | footage_visual_decisions_round4.json [system_visual_qa]: ORVYQ system-owned semantic visual QA inspected each twelve-frame contact sheet against the exact claim, narration anchor, use contract, prohibited lookalike substitutions and factual-burden boundary. The user is not an asset reviewer; only the complete Full-Length Review requires user approval. | footage_visual_decisions_round5.json [system_visual_qa]: Fifth ORVYQ system-owned byte-bound semantic visual-QA round. Each replacement contact sheet was inspected against all current claim-bound uses; any clip valid only as a loose metaphor but misleading for another assigned use was rejected rather than partially approved. | footage_visual_decisions_round6.json [system_visual_qa]: Seventh system-owned byte-bound semantic QA pass. The exact five current assets remain unsuitable for their claim-bound uses and are rejected so the verified official direct sources can replace them. The prior sixth-pass record remains preserved in Git history.",
+  "review_basis": "footage_visual_decisions.json [legacy_system_visual_qa]: Every decision is bound to the current media SHA-256 and twelve-frame contact-sheet SHA-256, then checked against the exact claim, narration anchor and contextual role. Generic footage is rejected whenever it merely illustrates a noun, impersonates a named source or fails to carry the sentence meaning. | footage_visual_decisions_round2.json [legacy_system_visual_qa]: Second byte-bound review of the twenty replacement clips retained by the claim-bound use contract. Decisions use the replacement media SHA-256, twelve-frame contact-sheet SHA-256 and only the narrowed claim/slice roles declared in footage_use_contracts.json. | footage_visual_decisions_round3.json [legacy_system_visual_qa]: Third byte-bound review of the eight replacement clips generated after the second review. Every decision is tied to the replacement media SHA-256, its twelve-frame contact-sheet SHA-256 and the narrowed claim/slice role in footage_use_contracts.json. | footage_visual_decisions_round4.json [system_visual_qa]: ORVYQ system-owned semantic visual QA inspected each twelve-frame contact sheet against the exact claim, narration anchor, use contract, prohibited lookalike substitutions and factual-burden boundary. The user is not an asset reviewer; only the complete Full-Length Review requires user approval. | footage_visual_decisions_round5.json [system_visual_qa]: Fifth ORVYQ system-owned byte-bound semantic visual-QA round. Each replacement contact sheet was inspected against all current claim-bound uses; any clip valid only as a loose metaphor but misleading for another assigned use was rejected rather than partially approved. | footage_visual_decisions_round6.json [system_visual_qa]: Seventh system-owned byte-bound semantic QA pass. The exact five current assets remain unsuitable for their claim-bound uses and are rejected so the verified official direct sources can replace them. The prior sixth-pass record remains preserved in Git history. | footage_visual_decisions_round7.json [system_visual_qa]: Seventh ORVYQ system-owned claim-specific visual-QA round. Each target asset is a repository-owned derivative whose video SHA-256 is identical to an already byte-bound and provenance-approved NOAA source clip. The target contact-sheet identity is bound to the exact current queue entry. Approval is limited to the stated contextual use; maps, source documents and primary evidence retain all location, quantitative, institutional and legal factual burdens.",
   "policy": {
     "default_status_for_unlisted_assets": "pending_frame_review",
     "rejected_asset_global_reentry_forbidden": true,
@@ -13,16 +13,10 @@
   "summary": {
     "pool_assets": 49,
     "rejected_from_metadata": 0,
-    "pending_frame_review": 5,
-    "approved": 44
+    "pending_frame_review": 0,
+    "approved": 49
   },
-  "pending_frame_review_scene_ids": [
-    "scene_003",
-    "scene_004",
-    "scene_012",
-    "scene_024",
-    "scene_032"
-  ],
+  "pending_frame_review_scene_ids": [],
   "rejected_assets": [],
   "approved_assets": [
     {
@@ -66,6 +60,67 @@
           "semantic_rationale": "A verified working research or offshore vessel may carry the exposed surface-logistics context, but it must never be identified as Chikyu or as the mining system itself.",
           "trim_in_sec": 1.121,
           "trim_out_sec": 9.021
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_003",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_SEASCAPE_ALASKA_DIVE07_BIODIVERSITY_2023_scene_003",
+      "asset_sha256": "8b64b1ca31c4eac4528af74798279fef4b09ee3614d3e64c856f794b0aca17cf",
+      "contact_sheet_sha256": "994e8501222d714d0fc258746b477ba590404e3944144404fd754465b2c1ac8e",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "Mexico. The Clarion Clipperton Zone is a vast abyssal plane. Across parts of its sediment lie polymetallic nodules.",
+          "semantic_rationale": "A dark, sparsely populated deep-seabed view gives the international Area a physical scale while official maps and treaty text retain the factual burden."
+        },
+        {
+          "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+          "narration_anchor": "Mexico. The Clarion Clipperton Zone is a vast abyssal plane. Across parts of its sediment lie polymetallic nodules.",
+          "semantic_rationale": "A dark, sparsely populated deep-seabed view gives the international Area a physical scale while official maps and treaty text retain the factual burden.",
+          "trim_in_sec": 1.455,
+          "trim_out_sec": 9.122
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_004",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_WALTON_SMITH_ROV_DEPLOYMENT_2024_scene_004",
+      "asset_sha256": "42e20b2d517bafd26316bb036873f2a6b062cd1776f4d74583304e8a8ca07d51",
+      "contact_sheet_sha256": "90b78ee13e01f01523ade4ca184dd331562caa85214041c51f5973e9c322a4c5",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "cheekyew. It was not searching for oil. It was looking for a way out. For three days, Japan's marine science agency pumped",
+          "semantic_rationale": "Real offshore industrial equipment connects the technical test to a physical operation without substituting petroleum infrastructure or claiming a named vessel."
+        },
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "problem. Shipments of several heavy rare earths and related magnets fell sharply. Manufacturers outside China struggled",
+          "semantic_rationale": "A distinct trim of real offshore equipment bridges demonstrated lifting capability to the larger production chain that remains unfinished."
+        },
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "cheekyew. It was not searching for oil. It was looking for a way out. For three days, Japan's marine science agency pumped",
+          "semantic_rationale": "Real offshore industrial equipment connects the technical test to a physical operation without substituting petroleum infrastructure or claiming a named vessel.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 7.867
+        },
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "It was looking for a way out.",
+          "semantic_rationale": "Real offshore industrial equipment connects the technical test to a physical operation without substituting petroleum infrastructure or claiming a named vessel.",
+          "trim_in_sec": 7.867,
+          "trim_out_sec": 11.867
+        },
+        {
+          "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+          "narration_anchor": "problem. Shipments of several heavy rare earths and related magnets fell sharply. Manufacturers outside China struggled",
+          "semantic_rationale": "A distinct trim of real offshore equipment bridges demonstrated lifting capability to the larger production chain that remains unfinished.",
+          "trim_in_sec": 8.123,
+          "trim_out_sec": 16.056
         }
       ]
     },
@@ -224,6 +279,27 @@
           "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
           "narration_anchor": "Owning a deposit is not the same as controlling a supply chain.",
           "semantic_rationale": "Port handling is a direct physical link in the supply chain named by the sentence, while the specific industrial timeline remains source-backed."
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_012",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_D2_2018_TECHNOLOGY_scene_012",
+      "asset_sha256": "e150e3f07369e617aac5ca192d6717f2c88f5ec3298520b4f8e254e3cc10f933",
+      "contact_sheet_sha256": "d0f2e79a6649af8aa6c54d632119dbbc6383ca7212f9020e5066ec547e6728fd",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "Moving extraction to the ocean does not automatically move separation, metal production or magnet manufacturing out",
+          "semantic_rationale": "A real dark seabed or benthic survey view introduces persistent physical disturbance; tropical island imagery is forbidden for this claim."
+        },
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "Moving extraction to the ocean does not automatically move separation, metal production or magnet manufacturing out",
+          "semantic_rationale": "A real dark seabed or benthic survey view introduces persistent physical disturbance; tropical island imagery is forbidden for this claim.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 7.967
         }
       ]
     },
@@ -530,6 +606,27 @@
       ]
     },
     {
+      "scene_id": "scene_024",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_DEEP_SEARCH_LEG1_HIGHLIGHTS_2019_scene_024",
+      "asset_sha256": "c4c5f1ca82696e5310327d31a562503053a0ead6b5675b4ac3dd7fd3a2f403ab",
+      "contact_sheet_sha256": "72f442f25c7187e528285982cf7b27fa791ac3342640cc77e29b6ac157302e57",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "zone. The test did not prove that commercial mining would be profitable. It did not end Japan's dependence on foreign processing, and",
+          "semantic_rationale": "A verified survey or working vessel keeps the boundary between a technical test and a commercial mine visible; leisure craft are forbidden."
+        },
+        {
+          "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+          "narration_anchor": "zone. The test did not prove that commercial mining would be profitable. It did not end Japan's dependence on foreign processing, and",
+          "semantic_rationale": "A verified survey or working vessel keeps the boundary between a technical test and a commercial mine visible; leisure craft are forbidden.",
+          "trim_in_sec": 1.445,
+          "trim_out_sec": 9.345
+        }
+      ]
+    },
+    {
       "scene_id": "scene_026",
       "provider_asset_id": "5752550",
       "asset_sha256": "d8705f0eea04c2bcc2800dddf7d168b0b900650dfb52e736045333b9aa7abd1b",
@@ -712,6 +809,53 @@
           "semantic_rationale": "A separate formal meeting trim provides governance context while primary legal sources remain on screen elsewhere.",
           "trim_in_sec": 0,
           "trim_out_sec": 7.9
+        }
+      ]
+    },
+    {
+      "scene_id": "scene_032",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_WATER_COLUMN_2012_scene_032",
+      "asset_sha256": "6f529f94ac20d4b65828af8ac17f8479ccb000f4d0dc1f58f886f8dbd7cb2fe2",
+      "contact_sheet_sha256": "23854c6d83853ab09ecf057b79bc2eb95bb1f4d947faef8fd8a287d3a66c2113",
+      "reviewed_frame_count": 12,
+      "approved_uses": [
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "surface to the seabed. It is the distance between what humanity has learned how to extract and what it has agreed not to destroy.",
+          "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim."
+        },
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "The deep ocean is not empty. It is dark, slow and poorly understood. Many organisms live on inside or",
+          "semantic_rationale": "A restrained descent through real dark water or over the deep seabed carries physical depth and persistence; science-fiction city imagery is forbidden."
+        },
+        {
+          "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+          "narration_anchor": "The deep ocean is not empty. It is dark, slow and poorly understood. Many organisms live on inside or",
+          "semantic_rationale": "A restrained descent through real dark water or over the deep seabed carries physical depth and persistence; science-fiction city imagery is forbidden.",
+          "trim_in_sec": 0,
+          "trim_out_sec": 8
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "surface to the seabed. It is the distance between what humanity has learned how to extract and what it has agreed not to destroy.",
+          "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim.",
+          "trim_in_sec": 4.222,
+          "trim_out_sec": 12.155
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "agreed not to destroy.",
+          "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim.",
+          "trim_in_sec": 12.155,
+          "trim_out_sec": 18.155
+        },
+        {
+          "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+          "narration_anchor": "The final narrated conclusion and its immediate closing hold.",
+          "semantic_rationale": "Remove the separate end card to avoid consecutive cards; let the final image and overlay breathe through the existing four seconds.",
+          "trim_in_sec": 18.155,
+          "trim_out_sec": 22.155
         }
       ]
     },

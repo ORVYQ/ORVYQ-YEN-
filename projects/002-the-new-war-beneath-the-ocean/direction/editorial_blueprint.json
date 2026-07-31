@@ -25,7 +25,7 @@
     "human_review_required_for_95": true
   },
   "full_production": {
-    "status": "blocked_pending_visual_assets",
+    "status": "ready",
     "blocking_claim_ids": [],
     "visual_rebalance_plan": "direction/visual_rebalance_plan.json",
     "blocking_visual_asset_request_ids": [],
@@ -125,35 +125,37 @@
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
         "visual_role": "human_context",
-        "editorial_purpose": "Begin with people and operational judgment so the deep-sea race is framed as a human decision before it becomes an industrial spectacle.",
+        "editorial_purpose": "Begin with a verified research-vessel crew and operational judgment so the race is framed as a human decision before it becomes an industrial spectacle.",
         "narration_anchor": "Opening visual premise before the first narrated sentence.",
-        "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
+        "semantic_rationale": "Begin with a verified research-vessel crew and operational judgment so the race is framed as a human decision before it becomes an industrial spectacle.",
         "semantic_link": "physical",
         "source_slice_index": null,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
+        "asset": "assets/footage/scene_001_direct.mp4",
         "trim_in_sec": 0.5,
         "trim_out_sec": 3.5,
         "motion": "hold",
-        "hook_footage": true
+        "hook_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 2.5,
         "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
-        "visual_role": "human_context",
-        "editorial_purpose": "Widen from an individual operator to the shared ocean space whose legal status is at the center of the film.",
+        "visual_role": "context",
+        "editorial_purpose": "Descend into verified deep-ocean conditions so the shared legal space is introduced as a physical environment rather than an abstract map.",
         "narration_anchor": "Opening visual premise before the first narrated sentence.",
-        "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
+        "semantic_rationale": "Descend into verified deep-ocean conditions so the shared legal space is introduced as a physical environment rather than an abstract map.",
         "semantic_link": "physical",
         "source_slice_index": null,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_005_71bb9b48bc1563ab5d481f31.mp4",
-        "trim_in_sec": 1,
-        "trim_out_sec": 3.5,
+        "asset": "assets/footage/scene_016_direct.mp4",
+        "trim_in_sec": 0.5,
+        "trim_out_sec": 3,
         "motion": "pull",
-        "hook_footage": true
+        "hook_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 3,
@@ -161,53 +163,56 @@
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
         "visual_role": "context",
-        "editorial_purpose": "Introduce the physical intervention and ecological stakes as the central question begins to resolve on screen.",
+        "editorial_purpose": "Introduce verified deep-sea life before the film asks what industrial intervention may leave behind.",
         "narration_anchor": "Opening visual premise before the first narrated sentence.",
-        "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
+        "semantic_rationale": "Introduce verified deep-sea life before the film asks what industrial intervention may leave behind.",
         "semantic_link": "physical",
         "source_slice_index": null,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4",
+        "asset": "assets/footage/scene_013_direct.mp4",
         "trim_in_sec": 1.5,
         "trim_out_sec": 4.5,
         "motion": "push",
-        "hook_footage": true
+        "hook_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 2.5,
         "claim_id": "CLM_007_US_PARALLEL_ROUTE",
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
-        "visual_role": "context",
-        "editorial_purpose": "Shift from extraction technology to competing national rulebooks, giving the geopolitical half of the question equal visual weight.",
+        "visual_role": "governance_context",
+        "editorial_purpose": "Shift from the physical frontier to a restrained human decision setting without identifying the generic meeting as a named institution.",
         "narration_anchor": "Opening visual premise before the first narrated sentence.",
-        "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
+        "semantic_rationale": "Shift from the physical frontier to a restrained human decision setting without identifying the generic meeting as a named institution.",
         "semantic_link": "physical",
         "source_slice_index": null,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_007_7051fd0f969c083415562212.mp4",
+        "asset": "assets/footage/scene_007_34b3f4906a6eee7e10be8f10.mp4",
         "trim_in_sec": 2,
         "trim_out_sec": 4.5,
         "motion": "drift_left",
-        "hook_footage": true
+        "hook_footage": true,
+        "generic_stock": true
       },
       {
         "duration": 3,
         "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
-        "visual_role": "context",
-        "editorial_purpose": "Land on the long-lived seabed consequence and dissolve into verified expedition evidence rather than another generic montage.",
+        "visual_role": "metaphor",
+        "editorial_purpose": "Return to the open ocean as a restrained frontier metaphor before dissolving into verified expedition evidence.",
         "narration_anchor": "Opening visual premise before the first narrated sentence.",
-        "semantic_rationale": "Establishes the literal ocean-research setting that the opening narration immediately identifies.",
-        "semantic_link": "physical",
+        "semantic_rationale": "Return to the open ocean as a restrained frontier metaphor before dissolving into verified expedition evidence.",
+        "semantic_link": "conceptual",
         "source_slice_index": null,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_012_4a3b133f7bf224948e8ec9b7.mp4",
+        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
         "trim_in_sec": 0.5,
         "trim_out_sec": 3.5,
         "motion": "drift_right",
-        "hook_footage": true
+        "hook_footage": true,
+        "generic_stock": true
       },
       {
         "duration": 7.866666666666666,
@@ -250,7 +255,7 @@
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
         "visual_role": "graphic",
-        "editorial_purpose": "Present japan technical milestone evidence for this section.",
+        "editorial_purpose": "Keep one compact opening section sting; remove the presentation-style box treatment.",
         "narration_anchor": "Just after midnight on February 1st,",
         "source_slice_index": null,
         "asset_type": "graphic",
@@ -260,9 +265,10 @@
           "title": "Mud To Daylight",
           "subtitle": null,
           "template_id": "orvyq_section_sting",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         },
-        "semantic_rationale": "Marks the SEC_01_MUD_TO_DAYLIGHT transition without introducing a new factual claim; the card remains deliberately brief.",
+        "semantic_rationale": "Keep one compact opening section sting; remove the presentation-style box treatment.",
         "semantic_link": "conceptual"
       },
       {
@@ -307,7 +313,7 @@
         "narration_anchor": "At that depth, there is no sunlight. The pressure is crushing. The water is close to freezing, and",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+        "asset": "assets/footage/scene_016_direct.mp4",
         "trim_in_sec": 0.238,
         "trim_out_sec": 8.038,
         "motion": "drift_right",
@@ -377,13 +383,15 @@
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
         "visual_role": "context",
-        "editorial_purpose": "Editorial pause beat: Full pause: reveal that the expedition is about strategic escape, not only geology.",
+        "editorial_purpose": "Retain the authored pause as a restrained overlay on the underlying research context.",
         "narration_anchor": "It was looking for a way out.",
         "source_slice_index": 4,
         "emphasis_card": {
           "eyebrow": "FULL PAUSE: REVEAL THAT THE EXPEDITION IS ABOUT STRATEGIC ES",
           "title": "It was looking for a way out.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_lower",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "tonal_bloom",
         "asset_type": "footage",
@@ -476,7 +484,7 @@
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
         "visual_role": "evidence",
-        "editorial_purpose": "Present china rare earth chokepoint evidence for this section.",
+        "editorial_purpose": "Use a brief source bridge before the verified IEA capture; no document-lookalike card.",
         "narration_anchor": "Pacific. That single fact changes the",
         "source_slice_index": null,
         "overlay": {
@@ -487,7 +495,7 @@
           "reading_required": false
         },
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_002_CHINA_RARE_EARTH_CHOKEPOINT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Use a brief source bridge before the verified IEA capture; no document-lookalike card.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "boundary",
@@ -503,8 +511,9 @@
           "left_detail": "Per International Energy Agency, Jan 1, 2026.",
           "right": "Figures concern magnet rare earths and related permanent magnets.",
           "right_detail": "",
-          "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "template_id": "orvyq_source_bridge",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -534,14 +543,14 @@
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
         "visual_role": "evidence",
-        "editorial_purpose": "Present china rare earth chokepoint evidence for this section.",
+        "editorial_purpose": "The concentration claim needs the official IEA chart and highlighted data, not a recreated concept map.",
         "narration_anchor": "they may need to control. Rare earths are hidden inside some of the most important machines in modern life. They",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_002_CHINA_RARE_EARTH_CHOKEPOINT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "The concentration claim needs the official IEA chart and highlighted data, not a recreated concept map.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "concept_map",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_RARE_EARTHS_2026"
           ],
@@ -556,7 +565,16 @@
             "The chokepoint: Explain why refining and magnet concentration make the ocean…"
           ],
           "template_id": "orvyq_concept_map",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/iea_magnet_share_page31.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_IEA_MAGNET_SHARE_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 31 — mining and refining shares"
+          ]
         }
       },
       {
@@ -586,14 +604,14 @@
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
         "visual_role": "evidence",
-        "editorial_purpose": "Present china rare earth chokepoint evidence for this section.",
+        "editorial_purpose": "Continue through a different, substantively distinct region of the official chart; crop reuse does not count as new evidence.",
         "narration_anchor": "move aircraft systems and operate technologies used in defence. The minerals themselves are not always geologically rare.",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_002_CHINA_RARE_EARTH_CHOKEPOINT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Continue through a different, substantively distinct region of the official chart; crop reuse does not count as new evidence.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "concept_map",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_RARE_EARTHS_2026"
           ],
@@ -608,7 +626,16 @@
             "International Energy Agency (Jan 1, 2026): Rare Earth Elements — Executive Summary"
           ],
           "template_id": "orvyq_concept_map",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/iea_magnet_share_page31.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_IEA_MAGNET_SHARE_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 31 — magnet-manufacturing share"
+          ]
         }
       },
       {
@@ -621,7 +648,7 @@
         "narration_anchor": "The difficult part is separating them, refining them and turning them into high -performance magnets. And that is where the world has",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+        "asset": "assets/footage/scene_010_9f0c1cd965d27101f9e31b3d.mp4",
         "trim_in_sec": 1.65,
         "trim_out_sec": 9.617,
         "motion": "push",
@@ -638,11 +665,11 @@
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
         "visual_role": "evidence",
-        "editorial_purpose": "Present china rare earth chokepoint evidence for this section.",
+        "editorial_purpose": "Retain one concise comparison only because the multi-stage chokepoint is faster to understand as a direct comparison.",
         "narration_anchor": "has a problem. In 2024, China produced about 60 of the world's magnet rare earths.",
         "source_slice_index": 5,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_002_CHINA_RARE_EARTH_CHOKEPOINT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Retain one concise comparison only because the multi-stage chokepoint is faster to understand as a direct comparison.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "concept_map",
@@ -659,8 +686,9 @@
             "International Energy Agency (Jan 1, 2026): Rare Earth Elements — Executive Summary",
             "In 2024, China produced about sixty percent of the world’s magnet rare earths."
           ],
-          "template_id": "orvyq_concept_map",
-          "necessity": "critical_result"
+          "template_id": "orvyq_single_comparison",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -690,14 +718,14 @@
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
         "visual_role": "evidence",
-        "editorial_purpose": "Present export controls materialized risk evidence for this section.",
+        "editorial_purpose": "Show the official chronology and highlighted policy dates instead of a generic source card.",
         "narration_anchor": "94%. A supply chain can begin in one country, cross several borders and still end at the same bottleneck. In",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_003_EXPORT_CONTROLS_MATERIALIZED_RISK; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Show the official chronology and highlighted policy dates instead of a generic source card.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "boundary",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_RARE_EARTHS_2026",
             "SRC_IEA_CRITICAL_MINERALS_2026"
@@ -712,7 +740,16 @@
           "right": "Figures concern magnet rare earths and related permanent magnets.",
           "right_detail": "",
           "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/iea_export_timeline_page35.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_IEA_EXPORT_TIMELINE_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 35 — export volumes and restriction dates"
+          ]
         }
       },
       {
@@ -817,13 +854,15 @@
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
         "visual_role": "context",
-        "editorial_purpose": "Editorial pause beat: Brief accent: land the mine-versus-processing distinction.",
+        "editorial_purpose": "Keep the pause line as a minimal overlay on industrial footage.",
         "narration_anchor": "Owning a deposit is not the same as controlling a supply chain.",
         "source_slice_index": 2,
         "emphasis_card": {
           "eyebrow": "BRIEF ACCENT: LAND THE MINE-VERSUS-PROCESSING DISTINCTION",
           "title": "Owning a deposit is not the same as controlling a supply chain.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_center",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "low_impact",
         "asset_type": "footage",
@@ -834,7 +873,7 @@
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "This processing-chain image is introduced while separating Japan's test milestones and returns under the refining-bottleneck claim at a distinct trim window, connecting extraction hardware to the downstream gate that determines usable supply.",
+        "semantic_rationale": "Keep the pause line as a minimal overlay on industrial footage.",
         "semantic_link": "conceptual"
       },
       {
@@ -842,25 +881,25 @@
         "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
-        "visual_role": "graphic",
-        "editorial_purpose": "Present japan industrial timeline evidence for this section.",
+        "visual_role": "evidence",
+        "editorial_purpose": "Replace the recap card with the dated JAMSTEC schedule/milestone material and highlight planned versus completed stages.",
         "narration_anchor": "can discover minerals beneath its own territory and still depend on someone else to separate them. Refine them and manufacture the parts that industry",
         "source_slice_index": 3,
-        "asset_type": "graphic",
-        "graphic": {
-          "type": "claim_recap_card",
-          "mode": "illustrative",
-          "labels": [
-            "PLANNED",
-            "NOT GUARANTEED"
+        "asset_type": "evidence",
+        "semantic_rationale": "Replace the recap card with the dated JAMSTEC schedule/milestone material and highlight planned versus completed stages.",
+        "semantic_link": "direct",
+        "evidence": {
+          "kind": "official_figure",
+          "image_assets": [
+            "assets/evidence/jamstec_2027_trial_diagram.png"
           ],
-          "title": "THE SCHEDULE IS PLANNED, NOT GUARANTEED",
-          "subtitle": "A larger trial and its assessment are declared milestones, not a completed record.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
-        },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_004_JAPAN_INDUSTRIAL_TIMELINE; retained because the relationship cannot be read as quickly from footage alone.",
-        "semantic_link": "conceptual"
+          "evidence_asset_ids": [
+            "EVID_JAMSTEC_2027_TRIAL_DIAGRAM"
+          ],
+          "source_regions": [
+            "Official 2027 integrated-trial diagram"
+          ]
+        }
       },
       {
         "duration": 7.966666666666667,
@@ -872,7 +911,7 @@
         "narration_anchor": "that industry actually needs. That is why Japan's test matters. The mud near Minamitarisma is not the same resource",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+        "asset": "assets/footage/scene_009_8846f61745140cdcd70c4150.mp4",
         "trim_in_sec": 1.65,
         "trim_out_sec": 9.617,
         "motion": "drift_left",
@@ -909,21 +948,32 @@
         "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
         "section_id": "SEC_02_CHOKEPOINT",
         "scene_id": "scene_002",
-        "visual_role": "context",
-        "editorial_purpose": "Present japan industrial timeline evidence for this section.",
+        "visual_role": "evidence",
+        "editorial_purpose": "Use direct JAMSTEC primary evidence for the rare-earth mud and lifting-system sentence instead of an unrelated terrestrial quarry.",
         "narration_anchor": "contains rare earth elements in fine sediment beneath the seabed. Japan is developing a closed loop lifting system intended to",
         "source_slice_index": 6,
-        "asset_type": "footage",
-        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
-        "trim_in_sec": 1.441,
-        "trim_out_sec": 9.408,
-        "motion": "drift_right",
-        "hook_footage": false,
-        "contextual_footage": true,
-        "generic_stock": true,
-        "semantic_rationale": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims.",
-        "semantic_link": "conceptual",
-        "reuse_reason": "The land-based open-pit mine returns at a distinct trim window to keep the film's recurring land-vs-seabed mineral-rights motif visually consistent across the industrial-timeline and industry-counterargument claims."
+        "asset_type": "evidence",
+        "semantic_rationale": "The official JAMSTEC machine-on-seafloor image directly supports the named Japanese seabed operation while avoiding a misleading land-mine analogy.",
+        "semantic_link": "direct_evidence",
+        "evidence": {
+          "kind": "official_figure",
+          "source_ids": [
+            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"
+          ],
+          "source_label": "JAMSTEC",
+          "font_px": 32,
+          "eyebrow": "JAMSTEC — PRIMARY EVIDENCE",
+          "title": "Rare-earth mud and the closed-loop lifting system",
+          "limitation": "The technical system does not establish commercial viability, reserve scale or acceptable environmental impact.",
+          "template_id": "orvyq_official_figure",
+          "necessity": "mechanism",
+          "evidence_asset_ids": [
+            "EVID_JAMSTEC_MACHINE_ON_SEAFLOOR"
+          ],
+          "image_assets": [
+            "assets/evidence/jamstec_machine_on_seafloor.jpg"
+          ]
+        }
       },
       {
         "duration": 7.966666666666667,
@@ -985,7 +1035,7 @@
         "section_id": "SEC_03_BLACK_MAP",
         "scene_id": "scene_003",
         "visual_role": "evidence",
-        "editorial_purpose": "Present common heritage principle evidence for this section.",
+        "editorial_purpose": "Use a short bridge into the treaty text, avoiding a static section-card run.",
         "narration_anchor": "assessment. But the political meaning is already clear.",
         "source_slice_index": null,
         "overlay": {
@@ -996,7 +1046,7 @@
           "reading_required": false
         },
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_005_COMMON_HERITAGE_PRINCIPLE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Use a short bridge into the treaty text, avoiding a static section-card run.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "boundary",
@@ -1012,8 +1062,9 @@
           "left_detail": "Per United Nations, Jan 1, 1982.",
           "right": "The United States has not ratified UNCLOS and legal implications of…",
           "right_detail": "",
-          "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "template_id": "orvyq_source_bridge_alt",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -1043,14 +1094,14 @@
         "section_id": "SEC_03_BLACK_MAP",
         "scene_id": "scene_003",
         "visual_role": "evidence",
-        "editorial_purpose": "Present common heritage principle evidence for this section.",
+        "editorial_purpose": "Show the official treaty page with Article 136 highlighted.",
         "narration_anchor": "alone. Thousands of kilometers away, another mineral frontier stretches across the Pacific between Hawaii and Mexico.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_005_COMMON_HERITAGE_PRINCIPLE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Show the official treaty page with Article 136 highlighted.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "source_article",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_UNCLOS_ARTICLES_136_137"
           ],
@@ -1076,7 +1127,16 @@
             }
           ],
           "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/unclos_articles_136_137_page51.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_UNCLOS_ARTICLES_136_137_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "UNTS PDF page 51 — Article 136"
+          ]
         }
       },
       {
@@ -1106,14 +1166,14 @@
         "section_id": "SEC_03_BLACK_MAP",
         "scene_id": "scene_003",
         "visual_role": "evidence",
-        "editorial_purpose": "Present common heritage principle evidence for this section.",
+        "editorial_purpose": "Move to the exact Article 137 ownership language; this is a distinct cited region, not cosmetic recropping.",
         "narration_anchor": "polymetallic nodules. Dark potato -sized rocks that formed over millions of years. Layer by microscopic layer.",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_005_COMMON_HERITAGE_PRINCIPLE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Move to the exact Article 137 ownership language; this is a distinct cited region, not cosmetic recropping.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "source_article",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_UNCLOS_ARTICLES_136_137"
           ],
@@ -1139,7 +1199,16 @@
             }
           ],
           "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/unclos_articles_136_137_page51.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_UNCLOS_ARTICLES_136_137_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "UNTS PDF page 51 — Article 137"
+          ]
         }
       },
       {
@@ -1152,7 +1221,7 @@
         "narration_anchor": "microscopic layer. They contain manganese, nickel, copper and cobalt. Unlike Japan's rare earth mud, these nodules often lie",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
         "trim_in_sec": 0.28,
         "trim_out_sec": 7.98,
         "motion": "hold",
@@ -1169,14 +1238,14 @@
         "section_id": "SEC_03_BLACK_MAP",
         "scene_id": "scene_003",
         "visual_role": "evidence",
-        "editorial_purpose": "Present common heritage principle evidence for this section.",
+        "editorial_purpose": "Use the official Area map/treaty context with institution, date, and provenance visible.",
         "narration_anchor": "often lie in areas beyond national jurisdiction. No country owns the seabed there in the ordinary sense. Under the United Nations Convention on",
         "source_slice_index": 5,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_005_COMMON_HERITAGE_PRINCIPLE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the official Area map/treaty context with institution, date, and provenance visible.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "source_article",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_UNCLOS_ARTICLES_136_137"
           ],
@@ -1202,7 +1271,16 @@
             }
           ],
           "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/unclos_articles_136_137_page51.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_UNCLOS_ARTICLES_136_137_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "UNTS PDF page 51 — Authority acts on behalf of mankind"
+          ]
         }
       },
       {
@@ -1215,7 +1293,7 @@
         "narration_anchor": "Convention on the Law of the Sea, the seabed beyond national jurisdiction is described as the common heritage of mankind. The",
         "source_slice_index": 6,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_031_2af46d9e65ecdb9af461ed01.mp4",
+        "asset": "assets/footage/scene_031_48cfc78463916f8222590c3f.mp4",
         "trim_in_sec": 5.29,
         "trim_out_sec": 12.823,
         "motion": "pull",
@@ -1232,7 +1310,7 @@
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
         "visual_role": "evidence",
-        "editorial_purpose": "Present mining code unfinished evidence for this section.",
+        "editorial_purpose": "A compact source bridge prevents the legal evidence sequence from becoming a document slideshow.",
         "narration_anchor": "mankind. The international seabed authority was",
         "source_slice_index": null,
         "overlay": {
@@ -1243,7 +1321,7 @@
           "reading_required": false
         },
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_006_MINING_CODE_UNFINISHED; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "A compact source bridge prevents the legal evidence sequence from becoming a document slideshow.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "boundary",
@@ -1259,8 +1337,9 @@
           "left_detail": "Per International Seabed Authority, Jul 1, 2026.",
           "right": "Negotiations continue and status must be rechecked before final…",
           "right_detail": "",
-          "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "template_id": "orvyq_source_bridge",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -1358,7 +1437,7 @@
         "narration_anchor": "exploitation. Negotiators were working through environmental standards, compliance, inspections, financial terms,",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_007_7051fd0f969c083415562212.mp4",
+        "asset": "assets/footage/scene_007_34b3f4906a6eee7e10be8f10.mp4",
         "trim_in_sec": 0.961,
         "trim_out_sec": 8.894,
         "motion": "push",
@@ -1375,14 +1454,14 @@
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
         "visual_role": "evidence",
-        "editorial_purpose": "Present us parallel route evidence for this section.",
+        "editorial_purpose": "Use the signed Executive Order page and date as direct evidence.",
         "narration_anchor": "terms, benefit sharing. Effective control, closure plans, and the question of what happens when a contractor fails.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_007_US_PARALLEL_ROUTE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the signed Executive Order page and date as direct evidence.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_WHITEHOUSE_EO14285",
             "SRC_NOAA_DSHMRA_2026"
@@ -1397,7 +1476,16 @@
           "right": "Policy direction is not a permit or evidence of technical and…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/us_eo_14285_page1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_US_EO14285_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Federal Register page 17735 — policy and date"
+          ]
         }
       },
       {
@@ -1410,7 +1498,7 @@
         "narration_anchor": "fails. This is not a minor delay in paperwork. These rules are supposed to answer questions humanity has never answered at industrial",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_014_2225fe6ecbcf80a385bbe450.mp4",
+        "asset": "assets/footage/scene_014_9ffed5eb663a6f6f21233078.mp4",
         "trim_in_sec": 1.8,
         "trim_out_sec": 9.3,
         "motion": "drift_left",
@@ -1427,14 +1515,14 @@
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
         "visual_role": "evidence",
-        "editorial_purpose": "Present us parallel route evidence for this section.",
+        "editorial_purpose": "Show the official NOAA regulatory route/status page rather than a comparison template.",
         "narration_anchor": "at industrial scale. How much damage is acceptable in an ecosystem that may recover over centuries.",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_007_US_PARALLEL_ROUTE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Show the official NOAA regulatory route/status page rather than a comparison template.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_WHITEHOUSE_EO14285",
             "SRC_NOAA_DSHMRA_2026"
@@ -1449,7 +1537,16 @@
           "right": "Policy direction is not a permit or evidence of technical and…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/noaa_dshmra_final_rule_page1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NOAA_2026_FINAL_RULE_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Federal Register page 2642 — consolidated application process"
+          ]
         }
       },
       {
@@ -1462,7 +1559,7 @@
         "narration_anchor": "centuries. Who pays if a company collapses after disturbing thousands of square kilometers? How a benefit shared from a place international law",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_050_9c7d0944b7216fa51b882fe6.mp4",
+        "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.633,
         "motion": "hold",
@@ -1499,11 +1596,11 @@
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
         "visual_role": "evidence",
-        "editorial_purpose": "Present us parallel route evidence for this section.",
+        "editorial_purpose": "Keep one direct two-route comparison because the legal relationship is otherwise hard to hold in working memory.",
         "narration_anchor": "negotiations continue, the United States is building a parallel route. The United States has not ratified the Law of the Sea Convention.",
         "source_slice_index": 6,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_007_US_PARALLEL_ROUTE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Keep one direct two-route comparison because the legal relationship is otherwise hard to hold in working memory.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "comparison",
@@ -1520,8 +1617,9 @@
           "left_detail": "Per The White House, Apr 24, 2025.",
           "right": "Policy direction is not a permit or evidence of technical and…",
           "right_detail": "",
-          "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "template_id": "orvyq_two_rule_comparison",
+          "necessity": "comparison",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -1551,11 +1649,11 @@
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
         "visual_role": "evidence",
-        "editorial_purpose": "Present no us commercial permit evidence for this section.",
+        "editorial_purpose": "Present NOAA's current N/A commercial-permit status as a clearly sourced status graphic; do not misclassify an HTML-derived summary as a captured primary document.",
         "narration_anchor": "domestic law known as the Deep Seabed Hard Mineral Resources Act. In 2026, NOAA revised its",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_008_NO_US_COMMERCIAL_PERMIT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Present NOAA's current N/A commercial-permit status as a clearly sourced status graphic; do not misclassify an HTML-derived summary as a captured primary document.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "comparison",
@@ -1571,8 +1669,9 @@
           "left_detail": "Per National Oceanic and Atmospheric Administration, Jan 1, 2026.",
           "right": "Application status changes quickly and must be rechecked.",
           "right_detail": "",
-          "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "template_id": "orvyq_source_status",
+          "necessity": "comparison",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -1585,7 +1684,7 @@
         "narration_anchor": "revised its process, so exploration and commercial recovery applications could move through a consolidated review structure.",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_045_c6366c1aa2475db288e5321b.mp4",
+        "asset": "assets/footage/scene_045_3cfaea76e4faea730fa72c95.mp4",
         "trim_in_sec": 7.28,
         "trim_out_sec": 14.713,
         "motion": "hold",
@@ -1602,11 +1701,11 @@
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
         "visual_role": "evidence",
-        "editorial_purpose": "Present no us commercial permit evidence for this section.",
+        "editorial_purpose": "Distinguish listed exploration applications from issued commercial recovery permits in a second restrained sourced status view.",
         "narration_anchor": "structure. Several applications entered public review, but no United States commercial recovery permit had been issued.",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_008_NO_US_COMMERCIAL_PERMIT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Distinguish listed exploration applications from issued commercial recovery permits in a second restrained sourced status view.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "comparison",
@@ -1622,8 +1721,9 @@
           "left_detail": "Per National Oceanic and Atmospheric Administration, Jan 1, 2026.",
           "right": "Application status changes quickly and must be rechecked.",
           "right_detail": "",
-          "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "template_id": "orvyq_source_status_alt",
+          "necessity": "comparison",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -1632,21 +1732,14 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industry counterargument evidence for this section.",
+        "editorial_purpose": "Use the official rule title to make the application-versus-permit distinction visible; do not imply that the rule itself proves the current count of issued permits.",
         "narration_anchor": "issued. That distinction matters.",
         "source_slice_index": null,
-        "overlay": {
-          "type": "boundary",
-          "eyebrow": "SECTION 05",
-          "title": "Argument For Mining",
-          "font_px": 36,
-          "reading_required": false
-        },
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_009_INDUSTRY_COUNTERARGUMENT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the official rule title to make the application-versus-permit distinction visible; do not imply that the rule itself proves the current count of issued permits.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "boundary",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_TMC_LIFECYCLE_POSITION"
           ],
@@ -1660,7 +1753,16 @@
           "right": "Company-commissioned advocacy; must remain attributed and paired…",
           "right_detail": "",
           "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/noaa_final_rule_page1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NOAA_2026_FINAL_RULE_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 1 title — applications for exploration licences and commercial recovery permits"
+          ]
         }
       },
       {
@@ -1673,7 +1775,7 @@
         "narration_anchor": "An application is not approval. A certified application is not a mine. And a political order to accelerate",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_009_7279cb317ceb61f7c71ba1fe.mp4",
+        "asset": "assets/footage/scene_009_8846f61745140cdcd70c4150.mp4",
         "trim_in_sec": 2.64,
         "trim_out_sec": 10.007,
         "motion": "drift_right",
@@ -1690,14 +1792,14 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industry counterargument evidence for this section.",
+        "editorial_purpose": "Use the attributed lifecycle page as an industry claim, visibly labeled as such.",
         "narration_anchor": "to accelerate permitting does not erase the engineering, financial, environmental and legal barriers between a",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_009_INDUSTRY_COUNTERARGUMENT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the attributed lifecycle page as an industry claim, visibly labeled as such.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_TMC_LIFECYCLE_POSITION"
           ],
@@ -1711,7 +1813,16 @@
           "right": "Company-commissioned advocacy; must remain attributed and paired…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/tmc_lca_limitations_page3.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_TMC_LCA_LIMITATION_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 3 — commissioned scope and ecosystem limitation"
+          ]
         }
       },
       {
@@ -1724,7 +1835,7 @@
         "narration_anchor": "between a plan and an operating industry. Still, the direction is unmistakable. The world now has",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_016_28b5d814ad4d0990009c5c54.mp4",
+        "asset": "assets/footage/scene_016_direct.mp4",
         "trim_in_sec": 1.426,
         "trim_out_sec": 9.026,
         "motion": "pull",
@@ -1745,7 +1856,7 @@
         "narration_anchor": "has one ocean, two rule books and no commercial precedent. The first operation that crosses that line may do",
         "source_slice_index": 3,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.467,
         "motion": "drift_right",
@@ -1762,24 +1873,26 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "context",
-        "editorial_purpose": "Editorial pause beat: Full pause: hold the central legal fracture before the trade-off section.",
+        "editorial_purpose": "Retain the authored pause as an overlay, not a new full-screen card.",
         "narration_anchor": "The world now has one ocean, two rule books and no commercial precedent.",
         "source_slice_index": 3,
         "emphasis_card": {
           "eyebrow": "FULL PAUSE: HOLD THE CENTRAL LEGAL FRACTURE BEFORE THE TRADE",
           "title": "The world now has one ocean, two rule books and no commercial precedent.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_lower",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "tonal_bloom",
         "asset_type": "footage",
-        "asset": "assets/footage/scene_019_085a261a8973a21a0088d713.mp4",
+        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
         "trim_in_sec": 7.464,
         "trim_out_sec": 12.464,
         "motion": "drift_right",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim.",
+        "semantic_rationale": "Retain the authored pause as an overlay, not a new full-screen card.",
         "semantic_link": "conceptual"
       },
       {
@@ -1788,14 +1901,14 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industry counterargument evidence for this section.",
+        "editorial_purpose": "Highlight the exact seafloor-versus-land comparison within the source, preserving its interested-party attribution.",
         "narration_anchor": "do more than collect minerals. It may establish who gets to define the rules after the fact. Supporters of deep sea mining",
         "source_slice_index": 4,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_009_INDUSTRY_COUNTERARGUMENT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Highlight the exact seafloor-versus-land comparison within the source, preserving its interested-party attribution.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_TMC_LIFECYCLE_POSITION"
           ],
@@ -1809,7 +1922,16 @@
           "right": "Company-commissioned advocacy; must remain attributed and paired…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/tmc_lca_system_boundary_page5.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_TMC_LCA_SYSTEM_BOUNDARY_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 5 — offshore and onshore system boundary"
+          ]
         }
       },
       {
@@ -1822,7 +1944,7 @@
         "narration_anchor": "sea mining argue that waiting also has consequences. Modern infrastructure requires enormous quantities of material.",
         "source_slice_index": 5,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_027_6360650ef098b77bd45a5e4a.mp4",
+        "asset": "assets/footage/scene_027_cee752d61ab26eeb024d411f.mp4",
         "trim_in_sec": 5.445,
         "trim_out_sec": 12.812,
         "motion": "drift_right",
@@ -1838,30 +1960,18 @@
         "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
-        "visual_role": "evidence",
-        "editorial_purpose": "Present industry counterargument evidence for this section.",
+        "visual_role": "context",
+        "editorial_purpose": "Use the reviewed terrestrial quarry exactly as narration pivots from mineral demand to the physical costs of land-based extraction.",
         "narration_anchor": "material. Copper demand is rising. Rare earth supply chains remain highly concentrated. Some terrestrial",
         "source_slice_index": 6,
-        "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_009_INDUSTRY_COUNTERARGUMENT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
-        "evidence": {
-          "kind": "comparison",
-          "source_ids": [
-            "SRC_TMC_LIFECYCLE_POSITION"
-          ],
-          "source_label": "The Metals Company",
-          "font_px": 32,
-          "eyebrow": "SECTION CONTEXT — PRIMARY EVIDENCE",
-          "title": "The argument for mining: From that perspective, collecting nodules…",
-          "limitation": "Company-commissioned advocacy; must remain attributed and paired with independent science.",
-          "left": "From that perspective, collecting nodules from an uninhabited…",
-          "left_detail": "Per The Metals Company, current.",
-          "right": "Company-commissioned advocacy; must remain attributed and paired…",
-          "right_detail": "",
-          "template_id": "orvyq_comparison",
-          "necessity": "comparison"
-        }
+        "asset_type": "footage",
+        "semantic_rationale": "Use the reviewed terrestrial quarry exactly as narration pivots from mineral demand to the physical costs of land-based extraction.",
+        "semantic_link": "physical",
+        "asset": "assets/footage/scene_017_3be5f14070d93db018c32640.mp4",
+        "trim_in_sec": 0.5,
+        "trim_out_sec": 7.9,
+        "contextual_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 7.433333333333334,
@@ -1890,14 +2000,14 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industry counterargument evidence for this section.",
+        "editorial_purpose": "Replace the redundant company lifecycle card with a clearly labelled official photograph of real deep-sea mining equipment; do not imply that the JAMSTEC machine is TMC hardware.",
         "narration_anchor": "that perspective, collecting nodules from an uninhabited abyssal plane could appear less destructive than opening new mines on land.",
         "source_slice_index": 8,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_009_INDUSTRY_COUNTERARGUMENT; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Replace the redundant company lifecycle card with a clearly labelled official photograph of real deep-sea mining equipment; do not imply that the JAMSTEC machine is TMC hardware.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_TMC_LIFECYCLE_POSITION"
           ],
@@ -1911,7 +2021,16 @@
           "right": "Company-commissioned advocacy; must remain attributed and paired…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/jamstec_mining_machine.jpg"
+          ],
+          "evidence_asset_ids": [
+            "EVID_JAMSTEC_MINING_MACHINE"
+          ],
+          "source_regions": [
+            "Official JAMSTEC mining-machine photograph — real engineering context, not TMC attribution"
+          ]
         }
       },
       {
@@ -1924,7 +2043,7 @@
         "narration_anchor": "land. The argument cannot be dismissed simply because some of its strongest advocates are mining companies. Every mineral has to come from somewhere.",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_010_46470f5d9fa8456a33dff665.mp4",
+        "asset": "assets/footage/scene_010_9f0c1cd965d27101f9e31b3d.mp4",
         "trim_in_sec": 2.78,
         "trim_out_sec": 10.713,
         "motion": "pull",
@@ -1941,14 +2060,14 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present scarcity is mineral specific evidence for this section.",
+        "editorial_purpose": "Use the official chemistry/mineral-demand table for the mineral-specific claim.",
         "narration_anchor": "from somewhere. A wind turbine is not weightless. An electric grid is not built from policy targets. A robot,",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_010_SCARCITY_IS_MINERAL_SPECIFIC; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the official chemistry/mineral-demand table for the mineral-specific claim.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_CRITICAL_MINERALS_2026",
             "SRC_IEA_RARE_EARTHS_2026"
@@ -1963,7 +2082,16 @@
           "right": "Scenario analysis varies with technology, policy, prices and project…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/iea_battery_chemistry_page5.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_IEA_BATTERY_CHEMISTRY_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 5 — LFP omits nickel and cobalt"
+          ]
         }
       },
       {
@@ -1972,7 +2100,7 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "graphic",
-        "editorial_purpose": "Present scarcity is mineral specific evidence for this section.",
+        "editorial_purpose": "Keep one critical memory card: a short, legible mineral-chemistry contrast.",
         "narration_anchor": "robot, a data center, a missile guidance system and an electric motor all depend on physical materials extracted, processed and",
         "source_slice_index": 2,
         "asset_type": "graphic",
@@ -1986,10 +2114,11 @@
           ],
           "title": "NOT EVERY BATTERY NEEDS THE SAME METAL",
           "subtitle": "Lithium-iron-phosphate chemistry uses neither nickel nor cobalt.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
+          "template_id": "orvyq_single_comparison",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_010_SCARCITY_IS_MINERAL_SPECIFIC; retained because the relationship cannot be read as quickly from footage alone.",
+        "semantic_rationale": "Keep one critical memory card: a short, legible mineral-chemistry contrast.",
         "semantic_link": "conceptual"
       },
       {
@@ -1998,14 +2127,14 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present scarcity is mineral specific evidence for this section.",
+        "editorial_purpose": "Return to the official table and a different substantive row for verification.",
         "narration_anchor": "and transported through the real world. But the phrase we need deep sea mining for the energy transition is too simple.",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_010_SCARCITY_IS_MINERAL_SPECIFIC; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Return to the official table and a different substantive row for verification.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_CRITICAL_MINERALS_2026",
             "SRC_IEA_RARE_EARTHS_2026"
@@ -2020,7 +2149,16 @@
           "right": "Scenario analysis varies with technology, policy, prices and project…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/iea_battery_chemistry_page5.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_IEA_BATTERY_CHEMISTRY_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 5 — chemistry trade-off and recycling context"
+          ]
         }
       },
       {
@@ -2050,11 +2188,11 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Present refining bottleneck evidence for this section.",
+        "editorial_purpose": "Retain one technical mechanism graphic for extraction-to-refining dependencies that footage cannot display precisely.",
         "narration_anchor": "cobalt. Recycling will grow. New terrestrial projects may increase supply. Demand forecasts move with technology,",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_011_REFINING_BOTTLENECK; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Retain one technical mechanism graphic for extraction-to-refining dependencies that footage cannot display precisely.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "evidence_chain",
@@ -2071,8 +2209,9 @@
             "And for rare earths, the most important bottleneck may not be the mine.",
             "The argument for mining: Present the strongest case for extraction, then separate…"
           ],
-          "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "template_id": "orvyq_process_chain",
+          "necessity": "mechanism",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -2102,7 +2241,7 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "editorial_purpose": "Use a minimal bridge into the scientific evidence sequence.",
         "narration_anchor": "mine. It may be the refinery.",
         "source_slice_index": null,
         "overlay": {
@@ -2113,7 +2252,7 @@
           "reading_required": false
         },
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_012_LONG_TERM_TRACK_PERSISTENCE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Use a minimal bridge into the scientific evidence sequence.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "boundary",
@@ -2129,8 +2268,9 @@
           "left_detail": "Per Nature, Mar 26, 2025.",
           "right": "Historical small-scale test using older machinery.",
           "right_detail": "",
-          "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "template_id": "orvyq_source_bridge_alt",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -2160,14 +2300,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "editorial_purpose": "Use the paper's real track image/figure with study identity and year.",
         "narration_anchor": "out of the dominant supply chain. The strategic value of seabed minerals may therefore be different from their market value.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_012_LONG_TERM_TRACK_PERSISTENCE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the paper's real track image/figure with study identity and year.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "source_article",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_RECOVERY_2025"
           ],
@@ -2193,7 +2333,16 @@
             }
           ],
           "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/nature_44_year_track_figure1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_44_YEAR_TRACK_MAP_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 1 — 1979 OMCO track and 2023 study area"
+          ]
         }
       },
       {
@@ -2201,26 +2350,25 @@
         "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "graphic",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "visual_role": "evidence",
+        "editorial_purpose": "The '44 years' claim belongs on the real figure annotation, not a text recap card.",
         "narration_anchor": "value. A country may be willing to pay more for a difficult source if it reduces dependence during a crisis. That",
         "source_slice_index": 2,
-        "asset_type": "graphic",
-        "graphic": {
-          "type": "claim_recap_card",
-          "mode": "illustrative",
-          "labels": [
-            "1979 TEST",
-            "2023 SURVEY",
-            "44 YEARS"
+        "asset_type": "evidence",
+        "semantic_rationale": "The '44 years' claim belongs on the real figure annotation, not a text recap card.",
+        "semantic_link": "direct",
+        "evidence": {
+          "kind": "official_figure",
+          "image_assets": [
+            "assets/evidence/nature_44_year_track_figure2.png"
           ],
-          "title": "44 YEARS LATER: STILL VISIBLE",
-          "subtitle": "A 1979 test track remained physically visible in 2023.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
-        },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_012_LONG_TERM_TRACK_PERSISTENCE; retained because the relationship cannot be read as quickly from footage alone.",
-        "semantic_link": "conceptual"
+          "evidence_asset_ids": [
+            "EVID_NATURE_44_YEAR_TRACK_PHOTOS_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 2 — track photographs observed in 2023"
+          ]
+        }
       },
       {
         "duration": 7.966666666666667,
@@ -2249,13 +2397,15 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "context",
-        "editorial_purpose": "Editorial pause beat: Brief accent: turn mineral economics into strategic optionality.",
+        "editorial_purpose": "Keep the short pause line over evidence-related footage.",
         "narration_anchor": "It is insurance.",
         "source_slice_index": 3,
         "emphasis_card": {
           "eyebrow": "BRIEF ACCENT: TURN MINERAL ECONOMICS INTO STRATEGIC OPTIONAL",
           "title": "It is insurance.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_center",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "low_impact",
         "asset_type": "footage",
@@ -2275,14 +2425,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "editorial_purpose": "Highlight the exact persistent-disturbance region.",
         "narration_anchor": "not because it is the cheapest option today. The environmental problem is equally resistant to slogans. The",
         "source_slice_index": 4,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_012_LONG_TERM_TRACK_PERSISTENCE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Highlight the exact persistent-disturbance region.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "source_article",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_RECOVERY_2025"
           ],
@@ -2308,7 +2458,16 @@
             }
           ],
           "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/nature_44_year_track_figure3.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_44_YEAR_TRACK_RESPONSE_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 3 — track, plume and control responses"
+          ]
         }
       },
       {
@@ -2337,42 +2496,18 @@
         "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "evidence",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "visual_role": "context",
+        "editorial_purpose": "Break the document sequence with scientifically relevant ROV/track observation footage, never a recreational dive.",
         "narration_anchor": "inside or around the sediment. Some attached to nodules that took millions of years to form. Remove the nodules and the hard",
         "source_slice_index": 6,
-        "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_012_LONG_TERM_TRACK_PERSISTENCE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
-        "evidence": {
-          "kind": "source_article",
-          "source_ids": [
-            "SRC_NATURE_RECOVERY_2025"
-          ],
-          "source_label": "Nature",
-          "font_px": 32,
-          "eyebrow": "SECTION CONTEXT — PRIMARY EVIDENCE",
-          "title": "What the machine leaves behind: Forty-four years later, the physical…",
-          "limitation": "Historical small-scale test using older machinery.",
-          "items": [
-            {
-              "label": "SECTION",
-              "value": "What the machine leaves behind",
-              "detail": "Ground environmental uncertainty in measured track, plume and midwater evidence."
-            },
-            {
-              "label": "NATURE",
-              "value": "Mar 26, 2025",
-              "detail": "Long-term impact and biological recovery in a deep-sea mining track"
-            },
-            {
-              "label": "FILM CLAIM",
-              "value": "Forty-four years later, the physical disturbance was still visible."
-            }
-          ],
-          "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
-        }
+        "asset_type": "footage",
+        "semantic_rationale": "Break the document sequence with scientifically relevant ROV/track observation footage, never a recreational dive.",
+        "semantic_link": "physical",
+        "asset": "assets/footage/scene_051_direct.mp4",
+        "trim_in_sec": 0,
+        "trim_out_sec": 8,
+        "contextual_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 8,
@@ -2380,7 +2515,7 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "graphic",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "editorial_purpose": "Keep the necessary historical-versus-modern equipment caveat as a single premium comparison.",
         "narration_anchor": "hard surface they provide does not return on a human time scale. A study published in 2025 revisited tracks",
         "source_slice_index": 7,
         "asset_type": "graphic",
@@ -2393,10 +2528,11 @@
           ],
           "title": "1979 MACHINE ≠ MODERN FLEET",
           "subtitle": "A small experimental collector is not the same as continuous commercial operation.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
+          "template_id": "orvyq_single_comparison",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_012_LONG_TERM_TRACK_PERSISTENCE; retained because the relationship cannot be read as quickly from footage alone.",
+        "semantic_rationale": "Keep the necessary historical-versus-modern equipment caveat as a single premium comparison.",
         "semantic_link": "conceptual"
       },
       {
@@ -2405,14 +2541,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present long term track persistence evidence for this section.",
+        "editorial_purpose": "Return to a distinct methods/limitation region in the paper, not a recrop of the same image.",
         "narration_anchor": "tracks left by a small collector test carried out in 1979. 44 years later, the physical disturbance was still visible. Many",
         "source_slice_index": 8,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_012_LONG_TERM_TRACK_PERSISTENCE; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Return to a distinct methods/limitation region in the paper, not a recrop of the same image.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "source_article",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_RECOVERY_2025"
           ],
@@ -2438,7 +2574,16 @@
             }
           ],
           "template_id": "orvyq_source_article",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/nature_44_year_track_figure1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_44_YEAR_TRACK_MAP_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 1 — historical vehicle and test-scale context"
+          ]
         }
       },
       {
@@ -2451,7 +2596,7 @@
         "narration_anchor": "visible. Many biological communities remained altered, but the site was not completely lifeless. Some",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_013_7d21d1167aa47957a7002e0e.mp4",
+        "asset": "assets/footage/scene_013_direct.mp4",
         "trim_in_sec": 1.92,
         "trim_out_sec": 8.553,
         "motion": "drift_left",
@@ -2468,14 +2613,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industrial trial biodiversity evidence for this section.",
+        "editorial_purpose": "Use the real industrial-trial figure and highlighted sample region.",
         "narration_anchor": "Some mobile organisms and sediment fauna had begun to recolonize. That is the honest result.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the real industrial-trial figure and highlighted sample region.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NEE_MACROFAUNA_2026"
           ],
@@ -2489,7 +2634,16 @@
           "right": "Two-month follow-up does not establish long-term recovery or full…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/nature_2022_trial_figure1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_2022_TRIAL_MAP_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 1 — trial map, sample design and impact photographs"
+          ]
         }
       },
       {
@@ -2502,7 +2656,7 @@
         "narration_anchor": "Recovery was not zero. Recovery was not complete. And a small experimental",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "asset": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 6.9,
         "motion": "hold",
@@ -2519,24 +2673,26 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "context",
-        "editorial_purpose": "Editorial pause beat: Full pause: let the forty-four-year evidence land without overstating zero recovery.",
+        "editorial_purpose": "Retain the pause conclusion over related research footage.",
         "narration_anchor": "Recovery was not complete.",
         "source_slice_index": 2,
         "emphasis_card": {
           "eyebrow": "FULL PAUSE: LET THE FORTY-FOUR-YEAR EVIDENCE LAND WITHOUT OV",
           "title": "Recovery was not complete.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_lower",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "tonal_bloom",
         "asset_type": "footage",
-        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "asset": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
         "trim_in_sec": 6.913,
         "trim_out_sec": 10.913,
         "motion": "hold",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "This ecological-impact image is introduced with the measured biodiversity result and returns under midwater-discharge risk at a distinct trim window, carrying the film's evidence-led ecological consequence motif from seabed disturbance into the water column.",
+        "semantic_rationale": "Retain the pause conclusion over related research footage.",
         "semantic_link": "conceptual"
       },
       {
@@ -2545,14 +2701,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industrial trial biodiversity evidence for this section.",
+        "editorial_purpose": "Highlight density and richness values on the actual figure.",
         "narration_anchor": "experimental machine from the 1970s is not the same as a modern commercial fleet operating continuously. A",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Highlight density and richness values on the actual figure.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "comparison",
+          "kind": "image_sequence",
           "source_ids": [
             "SRC_NEE_MACROFAUNA_2026"
           ],
@@ -2566,7 +2722,19 @@
           "right": "Two-month follow-up does not establish long-term recovery or full…",
           "right_detail": "",
           "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "necessity": "comparison",
+          "image_assets": [
+            "assets/evidence/nature_2022_trial_figure2.png",
+            "assets/evidence/nature_2022_trial_figure3.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_2022_TRIAL_DENSITY_FIGURE",
+            "EVID_NATURE_2022_TRIAL_RICHNESS_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 2 — macrofaunal density",
+            "Figure 3 — species richness"
+          ]
         }
       },
       {
@@ -2575,11 +2743,11 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present industrial trial biodiversity evidence for this section.",
+        "editorial_purpose": "Keep one concise recovery caveat that distinguishes measurement from verdict.",
         "narration_anchor": "continuously. A separate study examined a much larger collector trial that recovered more than 3,000 tons of nodules.",
         "source_slice_index": 4,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Keep one concise recovery caveat that distinguishes measurement from verdict.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "comparison",
@@ -2595,8 +2763,9 @@
           "left_detail": "Per Nature Ecology & Environment, Jan 1, 2026.",
           "right": "Two-month follow-up does not establish long-term recovery or full…",
           "right_detail": "",
-          "template_id": "orvyq_comparison",
-          "necessity": "comparison"
+          "template_id": "orvyq_scientific_caveat",
+          "necessity": "comparison",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -2609,7 +2778,7 @@
         "narration_anchor": "Two months after the test, macrophonal density inside the mining tracks was 37 lower.",
         "source_slice_index": 5,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_001_53c6f3d7fa4dbb0af9451f2b.mp4",
+        "asset": "assets/footage/scene_001_direct.mp4",
         "trim_in_sec": 5.6,
         "trim_out_sec": 12.5,
         "motion": "hold",
@@ -2639,7 +2808,9 @@
         "generic_stock": false,
         "semantic_rationale": "Official sediment-coring footage shows the physical act of measurement while the cited plume figures retain the numerical result.",
         "semantic_link": "physical",
-        "reuse_reason": "This ocean-impact context returns from the U.S. parallel-route section at a distinct trim window, deliberately shifting from competing legal routes to the shared physical question of how disturbed sediment moves."
+        "reuse_reason": "This ocean-impact context returns from the U.S. parallel-route section at a distinct trim window, deliberately shifting from competing legal routes to the shared physical question of how disturbed sediment moves.",
+        "claim_bound_extension": true,
+        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
       },
       {
         "duration": 7.466666666666667,
@@ -2647,14 +2818,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present plume scale is complex evidence for this section.",
+        "editorial_purpose": "Use the paper's real plume map/measurement plot.",
         "narration_anchor": "the sediment plume were more complicated. Abundance did not fall in the same way, but the relationships between dominant species changed.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_014_PLUME_SCALE_IS_COMPLEX; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the paper's real plume map/measurement plot.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_PLUME_2025"
           ],
@@ -2669,7 +2840,16 @@
             "What the machine leaves behind: Ground environmental uncertainty in measured track,…"
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/nature_plume_figure3.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_PLUME_SPATIAL_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 3 — measured plume distribution"
+          ]
         }
       },
       {
@@ -2677,26 +2857,18 @@
         "claim_id": "CLM_014_PLUME_SCALE_IS_COMPLEX",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "graphic",
-        "editorial_purpose": "Present plume scale is complex evidence for this section.",
+        "visual_role": "context",
+        "editorial_purpose": "Remove the redundant slogan card and show actual sampling/monitoring context tied to plume measurement.",
         "narration_anchor": "species changed. Again, the result is not a slogan. The clearest near -term damage was where the machine physically",
         "source_slice_index": 2,
-        "asset_type": "graphic",
-        "graphic": {
-          "type": "claim_recap_card",
-          "mode": "illustrative",
-          "labels": [
-            "NEAR SEABED",
-            "DECLINES WITH DISTANCE",
-            "MEASURED, NOT ASSUMED"
-          ],
-          "title": "NEITHER LOCAL NOR OCEAN-WIDE",
-          "subtitle": "Disturbed sediment can travel kilometres, but concentration declines with distance, height and time.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
-        },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_014_PLUME_SCALE_IS_COMPLEX; retained because the relationship cannot be read as quickly from footage alone.",
-        "semantic_link": "conceptual"
+        "asset_type": "footage",
+        "semantic_rationale": "Remove the redundant slogan card and show actual sampling/monitoring context tied to plume measurement.",
+        "semantic_link": "physical",
+        "asset": "assets/footage/scene_052_direct.mp4",
+        "trim_in_sec": 0,
+        "trim_out_sec": 7,
+        "contextual_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 7.366666666666666,
@@ -2704,14 +2876,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present plume scale is complex evidence for this section.",
+        "editorial_purpose": "Highlight the transport-distance data point described by narration.",
         "narration_anchor": "machine physically crossed the seabed. Plume effects were subtler, but not absent. And two months cannot tell us",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_014_PLUME_SCALE_IS_COMPLEX; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Highlight the transport-distance data point described by narration.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_PLUME_2025"
           ],
@@ -2726,7 +2898,16 @@
             "Nature Communications (Jan 1, 2025): Monitoring benthic plumes, sediment redeposition…"
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/nature_plume_figure6.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_PLUME_DECAY_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 6 — concentration by distance"
+          ]
         }
       },
       {
@@ -2735,7 +2916,7 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "graphic",
-        "editorial_purpose": "Present plume scale is complex evidence for this section.",
+        "editorial_purpose": "Keep one decline-curve explainer because the shape, uncertainty, and non-verdict caveat must be understood together.",
         "narration_anchor": "tell us what recovery looks like after 10 years, 50 years, or a century. Sediment plumes",
         "source_slice_index": 4,
         "asset_type": "graphic",
@@ -2748,10 +2929,11 @@
           ],
           "title": "A DECLINE CURVE, NOT A VERDICT",
           "subtitle": "The plume data describes a measured decline with distance and time -- not a verdict on ocean-wide impact.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
+          "template_id": "orvyq_single_curve",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_014_PLUME_SCALE_IS_COMPLEX; retained because the relationship cannot be read as quickly from footage alone.",
+        "semantic_rationale": "Keep one decline-curve explainer because the shape, uncertainty, and non-verdict caveat must be understood together.",
         "semantic_link": "conceptual"
       },
       {
@@ -2760,14 +2942,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present plume scale is complex evidence for this section.",
+        "editorial_purpose": "Return to the paper's confidence/limitation region as a separate content identity.",
         "narration_anchor": "Sediment plumes are one of the most contested parts of the debate. Measurements from collector trials show that disturbed sediment can travel kilometers.",
         "source_slice_index": 5,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_014_PLUME_SCALE_IS_COMPLEX; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Return to the paper's confidence/limitation region as a separate content identity.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_PLUME_2025"
           ],
@@ -2782,7 +2964,16 @@
             "Measurements from collector trials show that disturbed sediment can travel kilometres."
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/nature_plume_figure6.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_PLUME_DECAY_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 6 — concentration by altitude and measured limits"
+          ]
         }
       },
       {
@@ -2795,7 +2986,7 @@
         "narration_anchor": "travel kilometers. The highest concentrations often remain close to the seabed and decline with distance, height, and",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_015_fcccc45a3ae391145ba4ec38.mp4",
+        "asset": "assets/footage/scene_015_2ad51facff3ebcec750c7486.mp4",
         "trim_in_sec": 3.844,
         "trim_out_sec": 11.177,
         "motion": "pull",
@@ -2812,14 +3003,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present midwater discharge risk evidence for this section.",
+        "editorial_purpose": "Use the real experimental/food-web figure for discharge-particle effects.",
         "narration_anchor": "height, and time. That does not mean the plume stays beside the machine. It also does not support the claim that one collector will",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_015_MIDWATER_DISCHARGE_RISK; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the real experimental/food-web figure for discharge-particle effects.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NCOMMS_MIDWATER_2025"
           ],
@@ -2834,7 +3025,16 @@
             "What the machine leaves behind: Ground environmental uncertainty in measured track,…"
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/nature_midwater_figure4.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_MIDWATER_FOODWEB_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 4 — midwater food-web impact mechanism"
+          ]
         }
       },
       {
@@ -2847,7 +3047,7 @@
         "narration_anchor": "will poison an entire ocean. The unresolved issue is accumulation. One test lasts days.",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
+        "asset": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.6,
         "motion": "push",
@@ -2864,24 +3064,26 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "context",
-        "editorial_purpose": "Editorial pause beat: Brief accent: pivot from measured single-trial effects to cumulative uncertainty.",
+        "editorial_purpose": "Keep the accumulation pause over scientifically related footage.",
         "narration_anchor": "The unresolved issue is accumulation.",
         "source_slice_index": 2,
         "emphasis_card": {
           "eyebrow": "BRIEF ACCENT: PIVOT FROM MEASURED SINGLE-TRIAL EFFECTS TO CU",
           "title": "The unresolved issue is accumulation.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_whisper",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "low_impact",
         "asset_type": "footage",
-        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
+        "asset": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
         "trim_in_sec": 7.609,
         "trim_out_sec": 9.609,
         "motion": "push",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "Real midwater life grounds the food-web mechanism without claiming that the jellyfish came from a cited trial.",
+        "semantic_rationale": "Keep the accumulation pause over scientifically related footage.",
         "semantic_link": "conceptual"
       },
       {
@@ -2890,14 +3092,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present midwater discharge risk evidence for this section.",
+        "editorial_purpose": "Highlight the nutritionally poor particle result in the actual source figure.",
         "narration_anchor": "days. A commercial operation could involve multiple collectors, repeated passes, surface processing and discharge",
         "source_slice_index": 3,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_015_MIDWATER_DISCHARGE_RISK; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Highlight the nutritionally poor particle result in the actual source figure.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_NCOMMS_MIDWATER_2025"
           ],
@@ -2912,7 +3114,16 @@
             "Nature Communications (Jan 1, 2025): Deep-sea mining discharge can disrupt midwater food…"
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/nature_midwater_figure1.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_NATURE_MIDWATER_PARTICLES_FIGURE"
+          ],
+          "source_regions": [
+            "Figure 1 — amino-acid content of background and discharge particles"
+          ]
         }
       },
       {
@@ -2925,7 +3136,7 @@
         "narration_anchor": "and discharge over years. Noise, light, suspended particles, and the removal of nodules would not occur once.",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_028_b80f573815b17d407797b00e.mp4",
+        "asset": "assets/footage/scene_028_b925e4019f461a8eb547df63.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.467,
         "motion": "drift_left",
@@ -2960,26 +3171,18 @@
         "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "graphic",
-        "editorial_purpose": "Present midwater discharge risk evidence for this section.",
+        "visual_role": "context",
+        "editorial_purpose": "Remove the biodiversity-number card because those values belong to CLM_013, not this midwater claim.",
         "narration_anchor": "uncertainty. Material brought to the surface must be separated from seawater and sediment. If waste particles are discharged back",
         "source_slice_index": 6,
-        "asset_type": "graphic",
-        "graphic": {
-          "type": "claim_recap_card",
-          "mode": "illustrative",
-          "labels": [
-            "DIRECT TRACKS",
-            "-37% DENSITY",
-            "-32% RICHNESS"
-          ],
-          "title": "37% LOWER DENSITY. 32% LOWER RICHNESS.",
-          "subtitle": "Two months after an industrial-scale trial, inside the direct mining tracks.",
-          "template_id": "orvyq_critical_result",
-          "necessity": "critical_result"
-        },
-        "semantic_rationale": "Summarizes the precise comparison in CLM_015_MIDWATER_DISCHARGE_RISK; retained because the relationship cannot be read as quickly from footage alone.",
-        "semantic_link": "conceptual"
+        "asset_type": "footage",
+        "semantic_rationale": "Remove the biodiversity-number card because those values belong to CLM_013, not this midwater claim.",
+        "semantic_link": "physical",
+        "asset": "assets/footage/scene_053_direct.mp4",
+        "trim_in_sec": 0,
+        "trim_out_sec": 7.833333333333333,
+        "contextual_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 7.866666666666666,
@@ -2987,11 +3190,11 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present midwater discharge risk evidence for this section.",
+        "editorial_purpose": "Keep one measured caveat separating plausible risk from demonstrated field-scale outcome.",
         "narration_anchor": "discharged back into the ocean, they may enter food webs built around the slow fall of natural organic matter. Research suggests",
         "source_slice_index": 7,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_015_MIDWATER_DISCHARGE_RISK; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Keep one measured caveat separating plausible risk from demonstrated field-scale outcome.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "evidence_chain",
@@ -3008,8 +3211,9 @@
             "Nature Communications (Jan 1, 2025): Deep-sea mining discharge can disrupt midwater food…",
             "Research suggests those discharge particles may be nutritionally poor compared with the…"
           ],
-          "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "template_id": "orvyq_scientific_caveat",
+          "necessity": "mechanism",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -3031,27 +3235,31 @@
         "generic_stock": false,
         "semantic_rationale": "Official water-column footage directly grounds the midwater food-web mechanism while the cited paper carries the experiment and effect.",
         "semantic_link": "physical",
-        "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
+        "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence.",
+        "claim_bound_extension": true,
+        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
       },
       {
         "duration": 7.8,
         "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "context",
-        "editorial_purpose": "Present decision under uncertainty evidence for this section.",
+        "visual_role": "scientific_context",
+        "editorial_purpose": "Keep the qualification about plausible harm and uncertainty in a real scientific field-assessment setting rather than an unrelated quarry.",
         "narration_anchor": "consume. That identifies a plausible mechanism of harm. It does not prove that a commercial operation would collapse an ecosystem.",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_035_ef447180da828809758f0d18.mp4",
-        "trim_in_sec": 0,
-        "trim_out_sec": 7.8,
+        "asset": "assets/footage/scene_054_direct.mp4",
+        "trim_in_sec": 8,
+        "trim_out_sec": 15.8,
         "motion": "pull",
         "hook_footage": false,
         "contextual_footage": true,
-        "generic_stock": true,
-        "semantic_rationale": "A real terrestrial quarry makes the competing damage of land-based extraction visible without quantifying it.",
-        "semantic_link": "conceptual"
+        "generic_stock": false,
+        "semantic_rationale": "Verified NOAA expedition assessment footage supports scientific judgment under uncertainty; the cited study remains responsible for the mechanism and limitation claim.",
+        "semantic_link": "physical",
+        "claim_bound_extension": true,
+        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
       },
       {
         "duration": 7.166666666666667,
@@ -3063,7 +3271,7 @@
         "narration_anchor": "ecosystem. But it reveals how easily a decision made at the surface can alter a system far below it.",
         "source_slice_index": 1,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_036_7b62d0b33b1487ebb9a46e65.mp4",
+        "asset": "assets/footage/scene_036_44ae569942147848854a5fc6.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.167,
         "motion": "drift_left",
@@ -3083,7 +3291,7 @@
         "narration_anchor": "it. The strongest case against rushing is not that science already knows every consequence.",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_039_de91134364b90fba1873073d.mp4",
+        "asset": "assets/footage/scene_039_d90b361d5f06560506e648bb.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 5.1,
         "motion": "push",
@@ -3098,42 +3306,18 @@
         "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "evidence",
-        "editorial_purpose": "Present decision under uncertainty evidence for this section.",
+        "visual_role": "context",
+        "editorial_purpose": "Replace the generic JAMSTEC comparison with a directly related scientific decision/field-assessment moment.",
         "narration_anchor": "consequence. It is that science does not. The strongest case for moving ahead is not that the damage will be harmless. It",
         "source_slice_index": 3,
-        "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_016_DECISION_UNDER_UNCERTAINTY; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
-        "evidence": {
-          "kind": "comparison",
-          "source_ids": [
-            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
-            "SRC_IEA_RARE_EARTHS_2026",
-            "SRC_IEA_CRITICAL_MINERALS_2026",
-            "SRC_METI_MINAMITORISHIMA_2026",
-            "SRC_UNCLOS_ARTICLES_136_137",
-            "SRC_ISA_COUNCIL_JULY_2026",
-            "SRC_WHITEHOUSE_EO14285",
-            "SRC_NOAA_DSHMRA_2026",
-            "SRC_TMC_LIFECYCLE_POSITION",
-            "SRC_NATURE_RECOVERY_2025",
-            "SRC_NEE_MACROFAUNA_2026",
-            "SRC_NATURE_PLUME_2025",
-            "SRC_NCOMMS_MIDWATER_2025"
-          ],
-          "source_label": "Multiple verified sources (recap)",
-          "font_px": 32,
-          "eyebrow": "JAMSTEC — PRIMARY EVIDENCE",
-          "title": "JAMSTEC: Results of the rare-earth-mud mining-system…",
-          "limitation": "Attributed commentary, not a measured or universal industry finding.",
-          "left": "The strongest case for moving ahead is not that the damage will be…",
-          "left_detail": "Per JAMSTEC, Jul 24, 2026.",
-          "right": "Attributed commentary, not a measured or universal industry finding.",
-          "right_detail": "",
-          "template_id": "orvyq_comparison",
-          "necessity": "comparison"
-        }
+        "asset_type": "footage",
+        "semantic_rationale": "Replace the generic JAMSTEC comparison with a directly related scientific decision/field-assessment moment.",
+        "semantic_link": "physical",
+        "asset": "assets/footage/scene_054_direct.mp4",
+        "trim_in_sec": 0,
+        "trim_out_sec": 7.033333333333333,
+        "contextual_footage": true,
+        "generic_stock": false
       },
       {
         "duration": 7.533333333333333,
@@ -3186,7 +3370,7 @@
         "narration_anchor": "were obviously catastrophic, the choice would be easy. If it were obviously safe and profitable, the race would already be over.",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_036_7b62d0b33b1487ebb9a46e65.mp4",
+        "asset": "assets/footage/scene_036_44ae569942147848854a5fc6.mp4",
         "trim_in_sec": 5.44,
         "trim_out_sec": 13.14,
         "motion": "drift_left",
@@ -3228,7 +3412,7 @@
         "narration_anchor": "technology, law and ecology are all still moving. The first commercial project will not simply answer whether a machine can collect minerals.",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_037_07dfc3d4c5df2973fb6c7573.mp4",
+        "asset": "assets/footage/scene_037_77974e64872de8e33bf15db5.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 8,
         "motion": "push",
@@ -3248,7 +3432,7 @@
         "narration_anchor": "minerals. It will answer what kind of uncertainty is enough to stop an industry. It will reveal whether international rules can govern",
         "source_slice_index": 5,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_041_259c14857d7832b1f75e4c44.mp4",
+        "asset": "assets/footage/scene_041_fb568a7886ffc7b5209cc5de.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 8,
         "motion": "hold",
@@ -3284,11 +3468,11 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present unused option synthesis evidence for this section.",
+        "editorial_purpose": "Retain one concise optionality timeline because the temporal logic cannot be shown literally in one clip.",
         "narration_anchor": "has practical meaning when the resource beneath it becomes strategically valuable. There is another possibility.",
         "source_slice_index": 7,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_017_UNUSED_OPTION_SYNTHESIS; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Retain one concise optionality timeline because the temporal logic cannot be shown literally in one clip.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "source_timeline",
@@ -3334,8 +3518,9 @@
               "detail": "Press Conference by Minister Akazawa — successful test mining of rare-earth mud"
             }
           ],
-          "template_id": "orvyq_source_timeline",
-          "necessity": "timeline"
+          "template_id": "orvyq_option_timeline",
+          "necessity": "timeline",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -3348,7 +3533,7 @@
         "narration_anchor": "possibility. The most important outcome of this race may not be a mine. Japan's effort could fail economically.",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_039_de91134364b90fba1873073d.mp4",
+        "asset": "assets/footage/scene_039_d90b361d5f06560506e648bb.mp4",
         "trim_in_sec": 5.1,
         "trim_out_sec": 12.167,
         "motion": "drift_right",
@@ -3365,14 +3550,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present capability is not obligation evidence for this section.",
+        "editorial_purpose": "Use the official milestone material to distinguish demonstrated capability from obligation.",
         "narration_anchor": "economically. Not your prices could make commercial projects unattractive. New magnet technologies could reduce demand.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_018_CAPABILITY_IS_NOT_OBLIGATION; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the official milestone material to distinguish demonstrated capability from obligation.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "image_sequence",
           "source_ids": [
             "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
             "SRC_IEA_RARE_EARTHS_2026",
@@ -3401,7 +3586,19 @@
             "United Nations (Jan 1, 1982): United Nations Convention on the Law of the Sea — Articles…"
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/jamstec_mining_system_diagram.png",
+            "assets/evidence/jamstec_2027_trial_diagram.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_JAMSTEC_MINING_SYSTEM_DIAGRAM",
+            "EVID_JAMSTEC_2027_TRIAL_DIAGRAM"
+          ],
+          "source_regions": [
+            "Official demonstrated mining-system configuration",
+            "Official planned 2027 integrated trial"
+          ]
         }
       },
       {
@@ -3456,7 +3653,7 @@
         "narration_anchor": "power. A state that can credibly say it has another source negotiates differently from one that has none.",
         "source_slice_index": 4,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_041_259c14857d7832b1f75e4c44.mp4",
+        "asset": "assets/footage/scene_041_fb568a7886ffc7b5209cc5de.mp4",
         "trim_in_sec": 5.399,
         "trim_out_sec": 12.699,
         "motion": "drift_left",
@@ -3477,7 +3674,7 @@
         "narration_anchor": "none. That is why the contest is beginning before commercial production. Survey ships, permits,",
         "source_slice_index": 5,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_027_6360650ef098b77bd45a5e4a.mp4",
+        "asset": "assets/footage/scene_027_cee752d61ab26eeb024d411f.mp4",
         "trim_in_sec": 5.445,
         "trim_out_sec": 12.478,
         "motion": "hold",
@@ -3498,7 +3695,7 @@
         "narration_anchor": "permits, pilot systems, processing research and legal claims are always of reserving a place in a future that may or may not arrive.",
         "source_slice_index": 6,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_043_318e94bb748025b47f615f48.mp4",
+        "asset": "assets/footage/scene_043_3274a7b8bb8853043b341006.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.867,
         "motion": "pull",
@@ -3514,14 +3711,14 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present capability is not obligation evidence for this section.",
+        "editorial_purpose": "Use the official supply-chain evidence for the distributed-risk conclusion.",
         "narration_anchor": "not arrive. The seabed is becoming strategic long before it becomes profitable. And the danger is that the world may mistake momentum",
         "source_slice_index": 7,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_018_CAPABILITY_IS_NOT_OBLIGATION; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the official supply-chain evidence for the distributed-risk conclusion.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "evidence_chain",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
             "SRC_IEA_RARE_EARTHS_2026",
@@ -3550,7 +3747,16 @@
             "International Seabed Authority (Jul 1, 2026): 31st Session of the Council, Part II —…"
           ],
           "template_id": "orvyq_evidence_chain",
-          "necessity": "mechanism"
+          "necessity": "mechanism",
+          "image_assets": [
+            "assets/evidence/iea_distributed_chain_page8.png"
+          ],
+          "evidence_asset_ids": [
+            "EVID_IEA_DISTRIBUTED_CHAIN_OFFICIAL_PAGE"
+          ],
+          "source_regions": [
+            "Page 8 — rare-earth supply-chain stages"
+          ]
         }
       },
       {
@@ -3563,7 +3769,7 @@
         "narration_anchor": "mistake momentum for inevitability. The ability to reach a resource does not create an obligation to extract it,",
         "source_slice_index": 8,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_044_5a72d9bad24ae074bf1566f9.mp4",
+        "asset": "assets/footage/scene_044_60259233df0534e7673a42ef.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.767,
         "motion": "hold",
@@ -3583,7 +3789,7 @@
         "narration_anchor": "it, but delay is not neutral either. Every year without diversified processing leaves,",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_044_5a72d9bad24ae074bf1566f9.mp4",
+        "asset": "assets/footage/scene_044_60259233df0534e7673a42ef.mp4",
         "trim_in_sec": 5.44,
         "trim_out_sec": 11.973,
         "motion": "push",
@@ -3604,7 +3810,7 @@
         "narration_anchor": "leaves, industries exposed to concentrated supply. Every year without agreed international rules gives national alternatives more",
         "source_slice_index": 1,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_037_07dfc3d4c5df2973fb6c7573.mp4",
+        "asset": "assets/footage/scene_037_77974e64872de8e33bf15db5.mp4",
         "trim_in_sec": 5.44,
         "trim_out_sec": 13.307,
         "motion": "pull",
@@ -3625,7 +3831,7 @@
         "narration_anchor": "alternatives more room to become the default. And every year without baseline ecological research makes it harder to know what was lost after",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_050_9c7d0944b7216fa51b882fe6.mp4",
+        "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
         "trim_in_sec": 5.1,
         "trim_out_sec": 12.767,
         "motion": "drift_right",
@@ -3684,11 +3890,11 @@
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
         "visual_role": "evidence",
-        "editorial_purpose": "Present distributed risk synthesis evidence for this section.",
+        "editorial_purpose": "Keep one systemic relationship graphic; limit it to the three essential dependencies.",
         "narration_anchor": "Land communities may bear the cost of terrestrial mining. Manufacturers may bear the cost of supply disruption.",
         "source_slice_index": 5,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_019_DISTRIBUTED_RISK_SYNTHESIS; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Keep one systemic relationship graphic; limit it to the three essential dependencies.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "concept_map",
@@ -3719,8 +3925,9 @@
             "Ministry of Economy, Trade and Industry of Japan (Feb 3, 2026): Press Conference by…",
             "United Nations (Jan 1, 1982): United Nations Convention on the Law of the Sea — Articles…"
           ],
-          "template_id": "orvyq_concept_map",
-          "necessity": "critical_result"
+          "template_id": "orvyq_risk_system",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -3750,7 +3957,7 @@
         "section_id": "SEC_07_PRECEDENT",
         "scene_id": "scene_007",
         "visual_role": "evidence",
-        "editorial_purpose": "Present precedent synthesis evidence for this section.",
+        "editorial_purpose": "Use a brief final-section bridge, then return to real expedition context.",
         "narration_anchor": "shore, and future generations may inherit",
         "source_slice_index": null,
         "overlay": {
@@ -3761,7 +3968,7 @@
           "reading_required": false
         },
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_020_PRECEDENT_SYNTHESIS; this source-derived visual is used only where footage cannot show the mechanism precisely.",
+        "semantic_rationale": "Use a brief final-section bridge, then return to real expedition context.",
         "semantic_link": "conceptual",
         "evidence": {
           "kind": "boundary",
@@ -3789,8 +3996,9 @@
           "left_detail": "Per JAMSTEC, Jul 24, 2026.",
           "right": "Attributed commentary, not a measured or universal industry finding.",
           "right_detail": "",
-          "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "template_id": "orvyq_source_bridge_alt",
+          "necessity": "critical_result",
+          "design_system": "orvyq_cinematic_v1"
         }
       },
       {
@@ -3803,7 +4011,7 @@
         "narration_anchor": "inherit the precedent. In 2027, Japan plans to return to the Pacific for a longer production chain test.",
         "source_slice_index": 0,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_045_c6366c1aa2475db288e5321b.mp4",
+        "asset": "assets/footage/scene_045_3cfaea76e4faea730fa72c95.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.433,
         "motion": "drift_right",
@@ -3820,14 +4028,14 @@
         "section_id": "SEC_07_PRECEDENT",
         "scene_id": "scene_007",
         "visual_role": "evidence",
-        "editorial_purpose": "Present precedent synthesis evidence for this section.",
+        "editorial_purpose": "Use the verified JAMSTEC photograph of Chikyu rather than an unidentified ship; the adjacent official 2027 diagram carries the future-trial claim.",
         "narration_anchor": "test. More applications will move through national processes. The International Seabed Authority will continue negotiating a mining code.",
         "source_slice_index": 1,
         "asset_type": "evidence",
-        "semantic_rationale": "Explains the relationship asserted by CLM_020_PRECEDENT_SYNTHESIS; this source-derived visual is used only where footage cannot show the mechanism precisely.",
-        "semantic_link": "conceptual",
+        "semantic_rationale": "Use the verified JAMSTEC photograph of Chikyu rather than an unidentified ship; the adjacent official 2027 diagram carries the future-trial claim.",
+        "semantic_link": "direct",
         "evidence": {
-          "kind": "boundary",
+          "kind": "official_figure",
           "source_ids": [
             "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
             "SRC_IEA_RARE_EARTHS_2026",
@@ -3853,7 +4061,16 @@
           "right": "Attributed commentary, not a measured or universal industry finding.",
           "right_detail": "",
           "template_id": "orvyq_boundary",
-          "necessity": "critical_result"
+          "necessity": "critical_result",
+          "image_assets": [
+            "assets/evidence/jamstec_chikyu_departure.jpg"
+          ],
+          "evidence_asset_ids": [
+            "EVID_JAMSTEC_CHIKYU_DEPARTURE"
+          ],
+          "source_regions": [
+            "Official JAMSTEC photograph — Chikyu departure"
+          ]
         }
       },
       {
@@ -3866,7 +4083,7 @@
         "narration_anchor": "a mining code. Scientists will return to old tracks and new experiments, trying to measure recovery in a world where the",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_043_318e94bb748025b47f615f48.mp4",
+        "asset": "assets/footage/scene_043_3274a7b8bb8853043b341006.mp4",
         "trim_in_sec": 5.105,
         "trim_out_sec": 12.938,
         "motion": "push",
@@ -3929,7 +4146,7 @@
         "narration_anchor": "uncertainty? Who receives the benefit? And whether the first country or company to move will define the frontier for",
         "source_slice_index": 5,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_031_2af46d9e65ecdb9af461ed01.mp4",
+        "asset": "assets/footage/scene_031_48cfc78463916f8222590c3f.mp4",
         "trim_in_sec": 0,
         "trim_out_sec": 7.9,
         "motion": "pull",
@@ -3950,7 +4167,7 @@
         "narration_anchor": "for everyone who comes after. Six kilometers below the Pacific, the mud is still there. The nodules are",
         "source_slice_index": 6,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_028_b80f573815b17d407797b00e.mp4",
+        "asset": "assets/footage/scene_028_b925e4019f461a8eb547df63.mp4",
         "trim_in_sec": 3.922,
         "trim_out_sec": 11.722,
         "motion": "drift_left",
@@ -3971,7 +4188,7 @@
         "narration_anchor": "nodules are still there. The law is still unfinished. The deepest part of this story is not the distance from the surface to",
         "source_slice_index": 7,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_033_f5c82b0fc88e578f93c9d7fa.mp4",
+        "asset": "assets/footage/scene_033_a33d4a9b21c98dfb52eedd48.mp4",
         "trim_in_sec": 7.776,
         "trim_out_sec": 15.709,
         "motion": "pull",
@@ -4009,13 +4226,15 @@
         "section_id": "SEC_07_PRECEDENT",
         "scene_id": "scene_007",
         "visual_role": "metaphor",
-        "editorial_purpose": "Editorial pause beat: Full pause: final moral and governance landing with a clean musical decay.",
+        "editorial_purpose": "Keep the final narrated phrase as a restrained overlay on the closing footage.",
         "narration_anchor": "agreed not to destroy.",
         "source_slice_index": 8,
         "emphasis_card": {
           "eyebrow": "FULL PAUSE: FINAL MORAL AND GOVERNANCE LANDING WITH A CLEAN ",
           "title": "agreed not to destroy.",
-          "accent": null
+          "accent": null,
+          "template_id": "orvyq_emphasis_whisper",
+          "design_system": "orvyq_cinematic_v1"
         },
         "sound_cue": "tonal_bloom",
         "asset_type": "footage",
@@ -4034,24 +4253,21 @@
         "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
         "section_id": "SEC_07_PRECEDENT",
         "scene_id": "scene_007",
-        "visual_role": "graphic",
-        "editorial_purpose": "Terminal end card: hold on the film's closing line before the picture fades to black.",
+        "visual_role": "context",
+        "editorial_purpose": "Remove the separate end card to avoid consecutive cards; let the final image and overlay breathe through the existing four seconds.",
         "narration_anchor": "The final narrated conclusion and its immediate closing hold.",
-        "semantic_rationale": "Provides a restrained editorial close after the final claim; it conveys no additional evidence.",
+        "semantic_rationale": "Remove the separate end card to avoid consecutive cards; let the final image and overlay breathe through the existing four seconds.",
         "semantic_link": "conceptual",
         "source_slice_index": null,
-        "asset_type": "graphic",
-        "graphic": {
-          "type": "end_card",
-          "mode": "brand",
-          "title": "WHAT WE CAN EXTRACT",
-          "subtitle": "AND WHAT WE AGREE NOT TO DESTROY",
-          "template_id": "orvyq_end_sting",
-          "necessity": "critical_result"
-        },
-        "transition_in": "fade"
+        "asset_type": "footage",
+        "transition_in": "fade",
+        "asset": "assets/footage/scene_032_official_reuse.mp4",
+        "trim_in_sec": 18.155,
+        "trim_out_sec": 22.155,
+        "contextual_footage": true,
+        "generic_stock": false
       }
     ],
-    "generated_at": "2026-07-30T12:25:07.720Z"
+    "generated_at": "2026-07-31T09:44:14.490Z"
   }
 }
