@@ -6,6 +6,7 @@
     "scene_016",
     "scene_019",
     "scene_029",
+    "scene_032",
     "scene_033",
     "scene_034",
     "scene_050",
@@ -31,6 +32,12 @@
       "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
       "slice_index": 3,
       "reason": "Retire the third use of the night-ocean metaphor and replace the two-rulebook sentence with a real human governance setting that carries the institutional meaning more directly."
+    },
+    {
+      "scene_id": "scene_032",
+      "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+      "slice_index": 8,
+      "reason": "Retire the third non-contiguous use of the same NOAA water-column source identity. Keep that official clip at its direct persistence and midwater-mechanism beats, and move the closing metaphor to a distinct approved night-ocean asset with its own safe trim window."
     },
     {
       "scene_id": "scene_033",
@@ -87,6 +94,17 @@
       "semantic_rationale": "A restrained night-ocean view carries the scale and remoteness of the shared frontier without replacing treaty text or asserting a named location."
     },
     {
+      "scene_id": "scene_019",
+      "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+      "slice_index": 8,
+      "trim_in_ratio": 0.5,
+      "motion": "hold",
+      "role": "metaphor",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A distinct night-ocean trim closes on the distance between technical capability and agreed limits without impersonating a named site or adding a factual claim.",
+      "reuse_reason": "A deliberate second use at a separate late-film target and distinct trim window returns to the shared-frontier motif for the closing synthesis while keeping the asset below the two-use ceiling."
+    },
+    {
       "scene_id": "scene_029",
       "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
       "slice_index": 3,
@@ -105,6 +123,16 @@
       "role": "human_context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A real international assembly gives practical meaning to common heritage while treaty and ISA sources retain the legal claim."
+    },
+    {
+      "scene_id": "scene_032",
+      "claim_id": "CLM_012_LONG_TERM_TRACK_PERSISTENCE",
+      "slice_index": 5,
+      "trim_in_ratio": 0,
+      "motion": "push",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "Official NOAA water-column footage supplies real depth and darkness for the persistence beat while the cited long-term track evidence carries every measured conclusion."
     },
     {
       "scene_id": "scene_033",
