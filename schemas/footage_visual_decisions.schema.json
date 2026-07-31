@@ -7,6 +7,10 @@
   "properties": {
     "schema_version": { "const": "1.0" },
     "project_id": { "type": "string", "pattern": "^[0-9]{3}-[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "review_origin": {
+      "enum": ["system_visual_qa", "legacy_system_visual_qa", "human_exception_review"],
+      "description": "The ORVYQ system owns normal asset-level semantic review. Human review is reserved for explicit exception handling, not routine footage approval."
+    },
     "review_basis": { "type": "string", "minLength": 24 },
     "decisions": {
       "type": "array",
