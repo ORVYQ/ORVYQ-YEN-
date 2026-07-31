@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 19,
-  "reason": "Candidate Validation now reapplies the shared claim-bound footage contracts immediately after full-production shot regeneration and before schema/edit-plan validation. This makes pause-hold extensions part of the canonical target duration, so reused footage receives an independent safe trim window and cannot overrun its real source duration. A workflow-order regression test requires this reconciliation for every project. Re-run exact-head Candidate Validation without rendering video.",
+  "request_revision": 20,
+  "reason": "Re-run exact-head Candidate Validation after replacing the third use of scene_015 with approved official NOAA water-column footage at CLM_015 slice 0. The override retains scene_015 only for its two direct seabed uses, gives scene_053 two distinct claim-bound trim windows, and must clear the hard two-use ceiling without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T15:08:00Z"
+  "requested_at": "2026-07-31T16:50:00Z"
 }
