@@ -244,7 +244,7 @@ After every meaningful discovery, update the live acceptance record and change l
 - [x] Official evidence acquisition completes
 - [x] Music acquisition and licensing complete
 - [x] Provenance and licence audits pass for the last validated candidate
-- [ ] Candidate Validation passes on the complete film
+- [x] Candidate Validation passes on the complete film
 - [x] A 720p Full-Length Review is generated
 - [ ] User corrections are collected and applied
 - [x] Reusable defects discovered during review are fixed system-wide
@@ -300,6 +300,17 @@ Current status (last verified 2026-07-30):
 - Commit `5430b0e` contains the corrected asset plan and shared regression
   gate. A new immutable Candidate Validation artifact for this commit is still
   required before another review can be dispatched.
+- **Candidate Validation now passes end to end on the complete film.** Run
+  `30670541910` (commit `8204947`, the state of `main`) completed every step,
+  including the full `orvyq:qa` pre-render chain that had never previously
+  reached a passing result: narration alignment, unit tests, pause plan,
+  150-shot production plan, canonical schemas, primary evidence, edit plan,
+  creative polish, music resolution, the full narration/music mix and its LRA
+  gate, mixed-narration speech verification, captions, asset registry,
+  render-ready build, Remotion type-check and the frozen candidate manifest.
+  The candidate measures 1,037.6s (17:17.6) at 30fps with a 14s motion hook.
+  This closes the last unchecked pre-review item in section 13; the candidate
+  is genuinely review-ready rather than review-ready by assumption.
 - PR `#4` joined the previously divergent histories without rewriting either
   one and merged the complete working system into `main` as `59e608d`. The
   default branch now contains the real pipeline rather than the placeholder
