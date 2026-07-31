@@ -152,7 +152,15 @@ jobs:
         run: npm run validate:canonical
 
       - name: Fetch and verify official primary evidence
-        run: node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID"
+        run: |
+          set +e
+          node scripts/orvyq_fetch_primary_evidence.mjs --project-id="$PROJECT_ID" > primary-evidence-fetch.log 2>&1
+          echo $? > primary-evidence-fetch.status
+          cat primary-evidence-fetch.log
+          exit 0
+
+      - name: Stop when primary evidence fetch failed
+        run: test "$(cat primary-evidence-fetch.status)" = "0"
 
       - name: Promote verified evidence assets to ready
         run: node scripts/orvyq_promote_evidence_assets.mjs --project-id="$PROJECT_ID"
@@ -263,6 +271,8 @@ jobs:
             alignment-speech-qa.status
             full-production-plan.log
             full-production-plan.status
+            primary-evidence-fetch.log
+            primary-evidence-fetch.status
             edit-plan.log
             edit-plan.status
             narration-qa.log
@@ -292,9 +302,10 @@ jobs:
           set -euo pipefail
           PROJECT_LABEL="${PROJECT_ID:-unresolved}"
           FULL_PLAN_STATUS="$(cat full-production-plan.status 2>/dev/null || echo unavailable)"
+          EVIDENCE_STATUS="$(cat primary-evidence-fetch.status 2>/dev/null || echo unavailable)"
           EDIT_STATUS="$(cat edit-plan.status 2>/dev/null || echo unavailable)"
           QA_STATUS="$(cat qa-chain.status 2>/dev/null || echo unavailable)"
-          BODY="Candidate Validation finished with **${JOB_STATUS}**. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Project: \`${PROJECT_LABEL}\`. Exact source: \`${SOURCE_SHA}\`. Full-production-plan status: \`${FULL_PLAN_STATUS}\`. Edit-plan status: \`${EDIT_STATUS}\`. Pre-render QA status: \`${QA_STATUS}\`. No video render was started."
+          BODY="Candidate Validation finished with **${JOB_STATUS}**. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Project: \`${PROJECT_LABEL}\`. Exact source: \`${SOURCE_SHA}\`. Full-production-plan status: \`${FULL_PLAN_STATUS}\`. Primary-evidence status: \`${EVIDENCE_STATUS}\`. Edit-plan status: \`${EDIT_STATUS}\`. Pre-render QA status: \`${QA_STATUS}\`. No video render was started."
           PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
           if [ -n "$PR_NUMBER" ]; then
             gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
