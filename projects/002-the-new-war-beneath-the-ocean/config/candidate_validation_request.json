@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 13,
-  "reason": "The reusable visual-rebalance materializer now resolves every primary-evidence replacement through the canonical primary_evidence_manifest, carries source IDs plus visible institution/date/title hierarchy into the materialized shot, and fails closed when institution, title, date, URL or content identity is missing. Regression tests cover both attribution preservation and missing-provenance rejection. Re-run exact-head Candidate Validation without rendering video.",
+  "request_revision": 14,
+  "reason": "A reusable, fail-closed visual-rebalance override layer now replaces one redundant third use of the same UNCLOS page with a contiguous extension of already approved abyssal footage. The two direct treaty propositions retain primary evidence, the nodule-formation sentence now receives physical seabed context, and the global two-use evidence limit remains unchanged. Regression tests cover override materialization and stale expected-decision rejection. Re-run exact-head Candidate Validation without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T13:33:00Z"
+  "requested_at": "2026-07-31T13:50:00Z"
 }
