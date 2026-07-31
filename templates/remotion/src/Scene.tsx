@@ -31,6 +31,7 @@ type SceneProps = {
   videoSrc?: string;
   trimInSec?: number;
   trimOutSec?: number;
+  playbackRate?: number;
   motionVariant?: FootageMotion;
   graphic?: OrvyqGraphicSpec;
   evidence?: PrimaryEvidenceSpec;
@@ -90,6 +91,7 @@ export const Scene: React.FC<SceneProps> = ({
   videoSrc,
   trimInSec,
   trimOutSec,
+  playbackRate = 1,
   motionVariant = "hold",
   graphic,
   evidence,
@@ -151,6 +153,7 @@ export const Scene: React.FC<SceneProps> = ({
               (trimOutSec ??
                 (trimInSec ?? 0) + durationInFrames / fps) * fps,
             )}
+            playbackRate={playbackRate}
             style={{
               width: "100%",
               height: "100%",
