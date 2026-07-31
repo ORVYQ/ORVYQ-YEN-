@@ -36,65 +36,87 @@ function sha256(buffer) {
   return crypto.createHash("sha256").update(buffer).digest("hex");
 }
 
+export function requiresClaimBoundReview({ currentUses, approval, assetSha256 }) {
+  const uses = Array.isArray(currentUses) ? currentUses : [];
+  if (!uses.length) return false;
+  if (!approval) return true;
+  if (String(approval.asset_sha256 || "").toLowerCase() !== String(assetSha256 || "").toLowerCase()) {
+    return true;
+  }
+  return uses.some((use) => !(approval.approved_uses || []).some((approvedUse) =>
+    approvedUse.claim_id === use.claim_id &&
+    String(approvedUse.narration_anchor || "").trim() === String(use.narration_anchor || "").trim() &&
+    String(approvedUse.semantic_rationale || "").trim().length >= 24
+  ));
+}
+
+async function buildCurrentReviewEntry(dir, record, existingEntry = {}) {
+  const assetFile = path.join(dir, record.path);
+  const provenanceFile = `${assetFile}.provenance.json`;
+  const contactSheetPath = `qa/footage-contact-sheets/${record.scene_id}.jpg`;
+  const contactSheetFile = path.join(dir, contactSheetPath);
+  for (const [label, file] of Object.entries({ assetFile, provenanceFile, contactSheetFile })) {
+    if (!(await pathExists(file))) {
+      throw new Error(`${record.scene_id}: ${label} is missing while building the footage review queue`);
+    }
+  }
+  const [provenance, assetBytes, sheetBytes] = await Promise.all([
+    readJson(provenanceFile),
+    fs.readFile(assetFile),
+    fs.readFile(contactSheetFile),
+  ]);
+  const assetHash = sha256(assetBytes);
+  const declaredHash = String(provenance.actual_sha256 || provenance.sha256 || "").toLowerCase();
+  if (declaredHash && declaredHash !== assetHash) {
+    throw new Error(`${record.scene_id}: footage bytes do not match provenance while building the review queue`);
+  }
+  return {
+    ...existingEntry,
+    scene_id: record.scene_id,
+    asset_path: record.path,
+    provider: provenance.provider,
+    provider_asset_id: String(provenance.provider_asset_id),
+    source_page_url: provenance.source_page_url,
+    creator: provenance.creator,
+    asset_sha256: assetHash,
+    contact_sheet_path: contactSheetPath,
+    contact_sheet_sha256: sha256(sheetBytes),
+    reviewed_frame_count: Number(existingEntry.reviewed_frame_count || 12),
+    duration_seconds: Number(provenance.actual_duration_seconds || provenance.duration || existingEntry.duration_seconds),
+    editorial_role: provenance.editorial_role || record.role || existingEntry.editorial_role,
+    narration_anchor: provenance.narration_anchor || existingEntry.narration_anchor || null,
+    claim_id: provenance.target_claim_id || existingEntry.claim_id || null,
+    semantic_rationale: provenance.editorial_note || existingEntry.semantic_rationale || record.semantic_rationale || "",
+    status: "pending_visual_review",
+  };
+}
+
 async function reconcileManifestEntries(dir, manifest, runtime) {
   const recordByScene = new Map((runtime.records || []).map((record) => [record.scene_id, record]));
   return Promise.all((manifest.entries || []).map(async (entry) => {
     const record = recordByScene.get(entry.scene_id);
-    if (!record || record.path === entry.asset_path) return entry;
-    const assetFile = path.join(dir, record.path);
-    const provenanceFile = `${assetFile}.provenance.json`;
-    const contactSheetPath = `qa/footage-contact-sheets/${entry.scene_id}.jpg`;
-    const contactSheetFile = path.join(dir, contactSheetPath);
-    for (const [label, file] of Object.entries({ assetFile, provenanceFile, contactSheetFile })) {
-      if (!(await pathExists(file))) {
-        throw new Error(`${entry.scene_id}: ${label} is missing while reconciling the footage review manifest`);
-      }
-    }
-    const [provenance, assetBytes, sheetBytes] = await Promise.all([
-      readJson(provenanceFile),
-      fs.readFile(assetFile),
-      fs.readFile(contactSheetFile),
-    ]);
-    const assetHash = sha256(assetBytes);
-    const declaredHash = String(provenance.actual_sha256 || provenance.sha256 || "").toLowerCase();
-    if (declaredHash && declaredHash !== assetHash) {
-      throw new Error(`${entry.scene_id}: reconciled footage bytes do not match provenance`);
-    }
-    return {
-      ...entry,
-      asset_path: record.path,
-      provider: provenance.provider,
-      provider_asset_id: String(provenance.provider_asset_id),
-      source_page_url: provenance.source_page_url,
-      creator: provenance.creator,
-      asset_sha256: assetHash,
-      contact_sheet_path: contactSheetPath,
-      contact_sheet_sha256: sha256(sheetBytes),
-      duration_seconds: Number(provenance.actual_duration_seconds || provenance.duration || entry.duration_seconds),
-      editorial_role: provenance.editorial_role || record.role || entry.editorial_role,
-      narration_anchor: provenance.narration_anchor || entry.narration_anchor || null,
-      claim_id: provenance.target_claim_id || entry.claim_id || null,
-      semantic_rationale: provenance.editorial_note || entry.semantic_rationale,
-      status: "pending_visual_review",
-    };
+    if (!record) return entry;
+    if (record.path === entry.asset_path) return buildCurrentReviewEntry(dir, record, entry);
+    return buildCurrentReviewEntry(dir, record, entry);
   }));
 }
 
 export async function prepareFootageReviewQueue(projectId) {
   const dir = projectDir(projectId);
   const manifestFile = path.join(dir, "qa", "footage_contact_sheets.json");
-  const [manifest, runtime, editorial, rebalance, blueprint, motionHook] = await Promise.all([
+  const [manifest, runtime, editorial, rebalance, blueprint, motionHook, reviews] = await Promise.all([
     readJson(manifestFile),
     readJson(path.join(dir, "assets", "footage_acquisition.runtime.json")),
     readJson(path.join(dir, "config", "editorial_asset_plan.json")),
     readJson(path.join(dir, "direction", "visual_rebalance_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
     readJson(path.join(dir, "direction", "motion_hook.json")),
+    readJson(path.join(dir, "research", "visual_asset_reviews.json")),
   ]);
 
   manifest.entries = await reconcileManifestEntries(dir, manifest, runtime);
   const usesByPath = new Map();
-  const currentPathByScene = new Map((manifest.entries || []).map((entry) => [entry.scene_id, entry.asset_path]));
+  const currentPathByScene = new Map((runtime.records || []).map((record) => [record.scene_id, record.path]));
   const addUse = (assetPath, rawUse) => {
     if (!assetPath) return;
     const use = normalizeUse(rawUse);
@@ -158,14 +180,37 @@ export async function prepareFootageReviewQueue(projectId) {
     }
   }
 
-  const entries = (manifest.entries || []).map((entry) => {
-    const approvedUses = [...(usesByPath.get(entry.asset_path)?.values() || [])];
-    return {
-      ...entry,
-      approved_uses_if_visually_valid: approvedUses,
-      review_blockers: approvedUses.length ? [] : ["No exact claim-specific use could be resolved for this asset."],
-    };
-  });
+  const entryByScene = new Map((manifest.entries || []).map((entry) => [entry.scene_id, entry]));
+  const approvalsByProviderId = new Map(
+    (reviews.approved_assets || []).map((approval) => [String(approval.provider_asset_id), approval]),
+  );
+
+  for (const record of runtime.records || []) {
+    const currentUses = [...(usesByPath.get(record.path)?.values() || [])];
+    if (!currentUses.length) continue;
+    const provenance = await readJson(path.join(dir, `${record.path}.provenance.json`));
+    const assetHash = String(provenance.actual_sha256 || provenance.sha256 || "").toLowerCase();
+    const approval = approvalsByProviderId.get(String(provenance.provider_asset_id));
+    if (!entryByScene.has(record.scene_id) && requiresClaimBoundReview({
+      currentUses,
+      approval,
+      assetSha256: assetHash,
+    })) {
+      entryByScene.set(record.scene_id, await buildCurrentReviewEntry(dir, record));
+    }
+  }
+
+  const entries = [...entryByScene.values()]
+    .sort((a, b) => String(a.scene_id).localeCompare(String(b.scene_id)))
+    .map((entry) => {
+      const approvedUses = [...(usesByPath.get(entry.asset_path)?.values() || [])];
+      return {
+        ...entry,
+        status: "pending_visual_review",
+        approved_uses_if_visually_valid: approvedUses,
+        review_blockers: approvedUses.length ? [] : ["No exact claim-specific use could be resolved for this asset."],
+      };
+    });
 
   const report = {
     schema_version: "1.0",
@@ -176,7 +221,7 @@ export async function prepareFootageReviewQueue(projectId) {
     entries,
   };
   await Promise.all([
-    writeJsonAtomic(manifestFile, { ...manifest, generated_at: report.generated_at }),
+    writeJsonAtomic(manifestFile, { ...manifest, generated_at: report.generated_at, entries }),
     writeJsonAtomic(path.join(dir, "qa", "footage_review_queue.json"), report),
   ]);
   return report;
