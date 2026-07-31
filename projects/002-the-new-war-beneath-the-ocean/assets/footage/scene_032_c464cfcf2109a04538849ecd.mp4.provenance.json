@@ -1,0 +1,71 @@
+{
+  "stable_asset_id": "bd02d03286b209a7dc5123eb",
+  "scene_id": "scene_032",
+  "provider": "pexels",
+  "provider_asset_id": "31629386",
+  "source_page_url": "https://www.pexels.com/video/vibrant-underwater-coral-reef-exploration-31629386/",
+  "license_url": "https://www.pexels.com/license/",
+  "creator": "Thomas Judge",
+  "attribution_required": false,
+  "search_query": "submersible deep sea floor",
+  "editorial_role": "context",
+  "editorial_note": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits.",
+  "narration_anchor": null,
+  "target_claim_id": null,
+  "target_slice_index": null,
+  "evidence_use_forbidden": true,
+  "semantic_metadata_verified": true,
+  "semantic_metadata_constraints": {
+    "required_any_groups": [
+      [
+        "underwater",
+        "deep sea",
+        "ocean",
+        "seabed",
+        "seafloor",
+        "submersible"
+      ],
+      [
+        "dark",
+        "darkness",
+        "lights",
+        "descent",
+        "exploration",
+        "floor"
+      ]
+    ],
+    "forbidden_terms": [
+      "city",
+      "rooftop",
+      "robot",
+      "android",
+      "futuristic",
+      "science fiction",
+      "sci-fi",
+      "building",
+      "street"
+    ],
+    "min_metadata_required_groups": 1
+  },
+  "semantic_metadata_matched_groups": 2,
+  "semantic_query_matched_groups": 0,
+  "semantic_query_assisted": false,
+  "duration": 16.016,
+  "actual_duration_seconds": 16.016,
+  "width": 1920,
+  "height": 1080,
+  "codec": "h264",
+  "actual_width": 1920,
+  "actual_height": 1080,
+  "actual_codec": "h264",
+  "actual_container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "byte_size": 9110160,
+  "sha256": "33c1f65dd1699eecee30ec7ad552c2b91a56f7faf26d74d5c7f26abf9d324171",
+  "actual_sha256": "33c1f65dd1699eecee30ec7ad552c2b91a56f7faf26d74d5c7f26abf9d324171",
+  "transformed_for_edit": true,
+  "selected_rendition_id": "13475885",
+  "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
+  "approved_for_final_edit": false,
+  "human_review_status": "PENDING_FRAME_REVIEW",
+  "downloaded_at": "2026-07-31T05:25:49.883Z"
+}

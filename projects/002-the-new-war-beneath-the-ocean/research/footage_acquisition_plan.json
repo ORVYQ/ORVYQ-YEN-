@@ -293,20 +293,6 @@
       "editorial_note": "Industry counterargument and land-mining trade-off; identify only as terrestrial mining context."
     },
     {
-      "scene_id": "scene_018",
-      "role": "context",
-      "queries": [
-        "recycling metal factory",
-        "industrial recycling facility"
-      ],
-      "fallback_queries": [
-        "electronics recycling",
-        "metal sorting factory"
-      ],
-      "min_duration_seconds": 8,
-      "editorial_note": "Recycling as a partial supply response, not a complete near-term substitute."
-    },
-    {
       "scene_id": "scene_019",
       "role": "metaphor",
       "queries": [
@@ -393,21 +379,6 @@
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
       "editorial_note": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere."
-    },
-    {
-      "scene_id": "scene_025",
-      "role": "context",
-      "queries": [
-        "underwater robot hovering seabed",
-        "deep sea submersible ocean floor"
-      ],
-      "fallback_queries": [
-        "ROV exploring dark ocean floor",
-        "underwater exploration vehicle lights"
-      ],
-      "min_duration_seconds": 12,
-      "max_duration_seconds": 120,
-      "editorial_note": "A real exploration vehicle reaching the seabed without depicting extraction directly expresses the distinction between technical access and a decision to mine."
     },
     {
       "scene_id": "scene_026",
@@ -650,21 +621,6 @@
       "editorial_note": "Negotiators embody the bargaining leverage created by an unused option without assigning the scene to a named state."
     },
     {
-      "scene_id": "scene_042",
-      "role": "context",
-      "queries": [
-        "ocean survey vessel mapping equipment",
-        "marine research ship sonar survey"
-      ],
-      "fallback_queries": [
-        "scientific vessel ocean mapping",
-        "survey ship control room"
-      ],
-      "min_duration_seconds": 12,
-      "max_duration_seconds": 120,
-      "editorial_note": "Survey work visualises how strategic positioning begins before production; it is not presented as a named expedition."
-    },
-    {
       "scene_id": "scene_043",
       "role": "human_context",
       "queries": [
@@ -710,21 +666,6 @@
       "editorial_note": "Delegates in a formal negotiation provide governance context for the cost of delayed common rules."
     },
     {
-      "scene_id": "scene_046",
-      "role": "human_context",
-      "queries": [
-        "marine biologists collecting ocean samples",
-        "research vessel scientists water sampling"
-      ],
-      "fallback_queries": [
-        "ocean scientists sample collection",
-        "marine ecology field research"
-      ],
-      "min_duration_seconds": 12,
-      "max_duration_seconds": 120,
-      "editorial_note": "Baseline field sampling directly visualises the work required before disturbance without claiming a specific expedition or result."
-    },
-    {
       "scene_id": "scene_047",
       "role": "human_context",
       "queries": [
@@ -753,21 +694,6 @@
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
       "editorial_note": "A new generation doing ocean research provides a restrained image for inherited precedent without sentimentalising the claim."
-    },
-    {
-      "scene_id": "scene_049",
-      "role": "context",
-      "queries": [
-        "research vessel departing open ocean",
-        "scientific ship sailing sea"
-      ],
-      "fallback_queries": [
-        "ocean expedition vessel departure",
-        "survey ship open ocean"
-      ],
-      "min_duration_seconds": 12,
-      "max_duration_seconds": 120,
-      "editorial_note": "A research vessel returning to the ocean supports the announced 2027 return while remaining explicitly generic contextual footage."
     },
     {
       "scene_id": "scene_050",
@@ -873,5 +799,7 @@
     "request_delay_ms": 200,
     "max_search_retries": 1,
     "max_retry_delay_ms": 3000
-  }
+  },
+  "planned_asset_count": 49,
+  "use_contract": "research/footage_use_contracts.json"
 }

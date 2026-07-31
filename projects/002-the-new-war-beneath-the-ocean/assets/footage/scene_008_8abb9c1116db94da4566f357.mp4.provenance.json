@@ -61,7 +61,10 @@
   "transformed_for_edit": true,
   "selected_rendition_id": "13280709",
   "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
-  "approved_for_final_edit": false,
-  "human_review_status": "PENDING_FRAME_REVIEW",
-  "downloaded_at": "2026-07-30T22:52:12.235Z"
+  "approved_for_final_edit": true,
+  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "downloaded_at": "2026-07-30T22:52:12.235Z",
+  "reviewed_asset_sha256": "7027d5adda09ec70d48440b88f9c46744f0f2fa0d402264596654f8aad4d8e72",
+  "reviewed_contact_sheet_sha256": "7071ff6ac246510b04752cf473873b8b94355210fab54577de0058ac68364b4f",
+  "human_review_reason": "The turbines are valid downstream rare-earth end-use context at the single contracted industrial-chain target and are not presented as a mine or Japanese site."
 }

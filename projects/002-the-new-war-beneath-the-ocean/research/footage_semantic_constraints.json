@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "request_revision": 6,
+  "request_revision": 7,
   "policy": {
     "selection_basis": "Pexels source-page title/slug must satisfy explicit positive and negative terms before download; the Full-Length Review remains the frame-level human verification gate.",
     "blind_keyword_acceptance_forbidden": true
@@ -42,14 +42,14 @@
     },
     "scene_002": {
       "queries": [
-        "research vessel at sea",
-        "offshore work vessel operations",
-        "scientific ship deck"
+        "research vessel ocean crew",
+        "offshore support vessel deck",
+        "marine workboat operations"
       ],
       "fallback_queries": [
-        "ocean research ship",
-        "working vessel rough sea",
-        "marine expedition vessel"
+        "ocean expedition ship",
+        "working vessel crew at sea",
+        "scientific marine vessel"
       ],
       "required_any_groups": [
         [
@@ -57,13 +57,17 @@
           "scientific",
           "expedition",
           "offshore",
+          "marine",
+          "support",
           "work",
-          "working"
+          "working",
+          "operations"
         ],
         [
           "vessel",
           "ship",
           "boat",
+          "workboat",
           "deck",
           "crew"
         ]
@@ -76,7 +80,12 @@
         "ferry",
         "cruise",
         "yacht",
-        "sailboat"
+        "sailboat",
+        "fishing",
+        "shipyard",
+        "welding",
+        "dry dock",
+        "dockyard"
       ]
     },
     "scene_003": {
@@ -205,7 +214,12 @@
         "podcast",
         "gaming",
         "smartphone",
-        "empty"
+        "empty",
+        "textile",
+        "garment",
+        "sewing",
+        "fabric",
+        "clothing"
       ]
     },
     "scene_006": {
@@ -613,32 +627,39 @@
     },
     "scene_018": {
       "queries": [
-        "industrial metal recycling factory",
-        "scrap metal processing plant"
+        "metal recycling industrial sorting",
+        "scrap metal recycling facility",
+        "industrial metal waste processing"
       ],
       "fallback_queries": [
-        "metal recycling conveyor",
-        "industrial recycling facility"
+        "metal recovery conveyor",
+        "scrap steel recycling plant",
+        "industrial material sorting metal"
       ],
       "required_any_groups": [
         [
-          "recycling",
-          "recycle",
-          "scrap"
+          "metal",
+          "steel",
+          "scrap",
+          "aluminum",
+          "copper"
         ],
         [
-          "metal",
-          "industrial",
-          "factory",
-          "processing"
+          "recycling",
+          "sorting",
+          "recovery",
+          "processing",
+          "facility",
+          "plant"
         ]
       ],
       "forbidden_terms": [
+        "paper",
+        "cardboard",
         "plastic",
-        "household",
-        "compost",
-        "aerial-only",
-        "fashion"
+        "bottle",
+        "glass",
+        "household"
       ]
     },
     "scene_019": {
@@ -804,7 +825,11 @@
         "sailboat",
         "tourist",
         "recreation",
-        "tiny boat"
+        "tiny boat",
+        "fishing",
+        "fisherman",
+        "trawler",
+        "angler"
       ]
     },
     "scene_025": {
@@ -812,30 +837,41 @@
         "8823145"
       ],
       "queries": [
-        "underwater robot exploration",
-        "submersible underwater vehicle",
-        "ROV underwater ocean floor"
+        "underwater ROV robot seafloor",
+        "deep sea submersible robot",
+        "ocean floor remotely operated vehicle"
       ],
       "fallback_queries": [
-        "underwater drone deep sea",
-        "robot vehicle underwater"
+        "underwater exploration robot",
+        "marine ROV deep ocean",
+        "submersible vehicle seabed"
       ],
       "required_any_groups": [
         [
-          "robot",
-          "submersible",
+          "underwater",
+          "deep sea",
+          "ocean",
+          "seafloor",
+          "seabed",
+          "marine"
+        ],
+        [
           "rov",
-          "drone",
+          "robot",
+          "robotic",
+          "submersible",
           "vehicle"
         ]
       ],
       "forbidden_terms": [
-        "diver",
-        "divers",
-        "scuba",
-        "swimmer",
-        "snorkel",
-        "urchin"
+        "massage",
+        "therapy",
+        "medical",
+        "toy",
+        "humanoid",
+        "android",
+        "warehouse",
+        "delivery"
       ]
     },
     "scene_026": {
@@ -945,7 +981,13 @@
         "empty",
         "wedding",
         "party",
-        "sales"
+        "sales",
+        "school",
+        "student",
+        "classroom",
+        "graduation",
+        "children",
+        "child"
       ]
     },
     "scene_030": {

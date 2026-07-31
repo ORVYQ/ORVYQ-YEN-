@@ -47,7 +47,10 @@
   "transformed_for_edit": true,
   "selected_rendition_id": "14689922",
   "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
-  "approved_for_final_edit": false,
-  "human_review_status": "PENDING_FRAME_REVIEW",
-  "downloaded_at": "2026-07-30T22:55:10.824Z"
+  "approved_for_final_edit": true,
+  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "downloaded_at": "2026-07-30T22:55:10.824Z",
+  "reviewed_asset_sha256": "734b5051e3fb807a9735274664b5ceca5dfe73f80a8c268157b0d5eb19d12c0a",
+  "reviewed_contact_sheet_sha256": "6c625e5d73e890c62b0cedb3b4b968df6bf363f39d8034679332bb1dcdd2c1d9",
+  "human_review_reason": "The multiple vessels provide a restrained physical metaphor for strategic competition at the two contracted synthesis targets without implying confrontation."
 }

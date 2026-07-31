@@ -61,7 +61,10 @@
   "transformed_for_edit": true,
   "selected_rendition_id": "13814735",
   "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
-  "approved_for_final_edit": false,
-  "human_review_status": "PENDING_FRAME_REVIEW",
-  "downloaded_at": "2026-07-30T22:52:00.562Z"
+  "approved_for_final_edit": true,
+  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "downloaded_at": "2026-07-30T22:52:00.562Z",
+  "reviewed_asset_sha256": "1a1de746e2a767b2d589ea268312ccfa1f6133f9af4b6ab4232a5a6b47e0cd93",
+  "reviewed_contact_sheet_sha256": "55cee1e1561718a7d70735ea554b0b4d6785dfca65ce7cb84ca61486bb068ba7",
+  "human_review_reason": "The reviewed frames clearly show industrial robotics, directly supporting the narration's physical end-use example without carrying any quantitative claim."
 }
