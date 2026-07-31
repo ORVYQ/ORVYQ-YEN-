@@ -46,6 +46,7 @@
     "video_asset": { "type": "string" },
     "trim_in_sec": { "type": "number", "minimum": 0 },
     "trim_out_sec": { "type": "number", "minimum": 0 },
+    "playback_rate": { "type": "number", "minimum": 0.75, "maximum": 1 },
     "motion_variant": { "enum": ["hold", "push", "pull", "drift_left", "drift_right"] },
     "graphic": { "type": "object" },
     "evidence": { "type": "object" },
