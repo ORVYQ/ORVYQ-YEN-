@@ -4,8 +4,11 @@
   "private": true,
   "description": "ORVYQ reusable single-renderer cinematic documentary production system",
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
+    "postinstall": "python3 scripts/orvyq_apply_semantic_hardening_patch.py",
     "validate:canonical": "node scripts/validate_canonical.mjs",
     "test": "node --test",
     "orvyq:new-project": "node scripts/orvyq_new_project.mjs",
@@ -44,5 +47,8 @@
     "orvyq:audits": "node scripts/orvyq_pipeline_cli.mjs audits",
     "orvyq:qa": "node scripts/orvyq_pipeline_cli.mjs qa"
   },
-  "dependencies": { "ajv": "^8.17.1", "ajv-formats": "^3.0.1" }
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
+  }
 }
