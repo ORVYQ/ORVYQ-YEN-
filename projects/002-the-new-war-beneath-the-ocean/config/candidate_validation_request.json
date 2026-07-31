@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 29,
-  "reason": "Re-run exact-head Candidate Validation after adding a system-wide source-duration fitting gate for contiguous footage runs. Downstream extensions now stay inside the real approved media duration by shifting the same contiguous run earlier; insufficient sources fail closed. Hook-aware source budgeting remains active, no project-specific creative data was changed, and no video render is permitted.",
+  "request_revision": 30,
+  "reason": "Re-run exact-head Candidate Validation after completing the system-wide source-safe extension policy. Contiguous approved footage first shifts inside its real source range, then may use only a bounded 0.75-1.00 playback rate; looping, synthetic frames, excessive slowdown and project-specific substitutions remain forbidden. Hook-aware source budgeting remains active and no video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T20:42:49Z"
+  "requested_at": "2026-07-31T20:59:00Z"
 }
