@@ -15,6 +15,18 @@ const baseline = {
   graphic: { type: "comparison", title: "Fixture" },
 };
 
+const primaryEvidenceAssets = [{
+  evidence_asset_id: "EVID_FIXTURE",
+  source_ids: ["SRC_FIXTURE"],
+  source_url: "https://example.org/fixture.pdf",
+  source_institution: "Fixture Institution",
+  source_title: "Fixture Primary Source",
+  source_date: "2026-07-31",
+  content_identity: "SRC_FIXTURE:page-1",
+  caption: "Fixture Institution — verified page 1",
+  limitation: "The fixture supports only the exact claim shown.",
+}];
+
 test("primary-evidence replacement emits the canonical direct_evidence semantic link", () => {
   const [shot] = materializeVisualRebalancePlan({
     shots: [baseline],
@@ -38,8 +50,11 @@ test("primary-evidence replacement emits the canonical direct_evidence semantic 
       ],
     },
     assetRequests: [{ asset_request_id: "REQ_FIXTURE", status: "ready" }],
+    primaryEvidenceAssets,
   });
 
   assert.equal(shot.asset_type, "evidence");
   assert.equal(shot.semantic_link, "direct_evidence");
+  assert.deepEqual(shot.evidence.source_ids, ["SRC_FIXTURE"]);
+  assert.equal(shot.evidence.source_label, "Fixture Institution — 2026-07-31");
 });
