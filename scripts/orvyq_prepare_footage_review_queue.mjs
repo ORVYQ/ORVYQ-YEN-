@@ -12,6 +12,7 @@ import {
 } from "./lib/fs-utils.mjs";
 
 // The queue is always rebuilt against current runtime bytes; stale acquisition paths are never authoritative.
+// Reconciliation also provides the deterministic trigger boundary for re-running materialization after shared QA fixes.
 function normalizeUse(use) {
   return {
     claim_id: use.claim_id,
