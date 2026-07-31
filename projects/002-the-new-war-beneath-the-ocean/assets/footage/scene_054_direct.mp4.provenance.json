@@ -31,9 +31,10 @@
   "transformed_for_edit": false,
   "selected_reason": "OFFICIAL_SOURCE_NARRATION_ANCHORED_DIRECT_CLIP",
   "approved_for_final_edit": true,
-  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
   "downloaded_at": "2026-07-30T20:50:04.396Z",
   "reviewed_asset_sha256": "c4c5f1ca82696e5310327d31a562503053a0ead6b5675b4ac3dd7fd3a2f403ab",
   "reviewed_contact_sheet_sha256": "7466e0e0598ead35a7af90cede2419a27fc372ac683c688fd6fa86e3e386fe07",
-  "human_review_reason": "Official source metadata and the twelve-frame contact sheet confirm the stated scientific context; numerical claims remain with primary evidence."
+  "visual_qa_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "visual_qa_origin": "system_visual_qa",
+  "visual_qa_reason": "The reviewed official expedition frames show real field operations, sampling and operational judgment. They physically support the narrated distinction between a plan and an operating system while remaining explicitly non-commercial and non-JAMSTEC; primary evidence retains all named-project and industrial-status claims."
 }

@@ -308,19 +308,19 @@
         "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
-        "visual_role": "human_context",
+        "visual_role": "context",
         "editorial_purpose": "Present japan technical milestone evidence for this section.",
         "narration_anchor": "At that depth, there is no sunlight. The pressure is crushing. The water is close to freezing, and",
         "source_slice_index": 2,
         "asset_type": "footage",
         "asset": "assets/footage/scene_016_direct.mp4",
-        "trim_in_sec": 0.238,
-        "trim_out_sec": 8.038,
+        "trim_in_sec": 0.362,
+        "trim_out_sec": 8.162,
         "motion": "drift_right",
         "hook_footage": false,
         "contextual_footage": true,
-        "generic_stock": true,
-        "semantic_rationale": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present.",
+        "generic_stock": false,
+        "semantic_rationale": "Official NOAA deep-ocean wall footage directly establishes darkness, cold and crushing-pressure conditions while JAMSTEC primary evidence retains the named Japanese operation.",
         "semantic_link": "physical",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       },
@@ -402,7 +402,7 @@
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": false,
-        "semantic_rationale": "Real offshore industrial equipment connects the technical test to a physical operation without substituting petroleum infrastructure or claiming a named vessel.",
+        "semantic_rationale": "Retain the authored pause as a restrained overlay on the underlying research context.",
         "semantic_link": "physical"
       },
       {
@@ -548,13 +548,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "The concentration claim needs the official IEA chart and highlighted data, not a recreated concept map.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_RARE_EARTHS_2026"
           ],
-          "source_label": "International Energy Agency",
+          "source_label": "International Energy Agency — 2026",
           "font_px": 32,
           "eyebrow": "INTERNATIONAL ENERGY AGENCY — PRIMARY EVIDENCE",
           "title": "International Energy Agency: Rare Earth Elements — Executive Summary",
@@ -609,13 +609,13 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Continue through a different, substantively distinct region of the official chart; crop reuse does not count as new evidence.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_IEA_RARE_EARTHS_2026"
           ],
-          "source_label": "International Energy Agency",
+          "source_label": "International Energy Agency — 2026",
           "font_px": 32,
           "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
           "title": "In 2024, China produced about sixty percent of the world’s magnet rare…",
@@ -723,14 +723,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Show the official chronology and highlighted policy dates instead of a generic source card.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_IEA_RARE_EARTHS_2026",
-            "SRC_IEA_CRITICAL_MINERALS_2026"
+            "SRC_IEA_RARE_EARTHS_2026"
           ],
-          "source_label": "International Energy Agency",
+          "source_label": "International Energy Agency — 2026",
           "font_px": 32,
           "eyebrow": "INTERNATIONAL ENERGY AGENCY — PRIMARY EVIDENCE",
           "title": "International Energy Agency: Rare Earth Elements — Executive Summary",
@@ -887,7 +886,7 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Replace the recap card with the dated JAMSTEC schedule/milestone material and highlight planned versus completed stages.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "image_assets": [
@@ -898,7 +897,17 @@
           ],
           "source_regions": [
             "Official 2027 integrated-trial diagram"
-          ]
+          ],
+          "source_ids": [
+            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"
+          ],
+          "source_label": "JAMSTEC — 2026-07-24",
+          "font_px": 32,
+          "eyebrow": "JAMSTEC — PRIMARY EVIDENCE",
+          "title": "JAMSTEC — concept for the planned 2027 integrated mining and processing trial",
+          "limitation": "The source supports only the specific claim and region shown on screen.",
+          "template_id": "orvyq_official_figure",
+          "necessity": "critical_result"
         }
       },
       {
@@ -1099,13 +1108,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Show the official treaty page with Article 136 highlighted.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_UNCLOS_ARTICLES_136_137"
           ],
-          "source_label": "United Nations",
+          "source_label": "United Nations Treaty Series — 1982-12-10",
           "font_px": 32,
           "eyebrow": "UNITED NATIONS — PRIMARY EVIDENCE",
           "title": "United Nations: United Nations Convention on the Law of the…",
@@ -1165,58 +1174,27 @@
         "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
         "section_id": "SEC_03_BLACK_MAP",
         "scene_id": "scene_003",
-        "visual_role": "evidence",
-        "editorial_purpose": "Move to the exact Article 137 ownership language; this is a distinct cited region, not cosmetic recropping.",
+        "visual_role": "context",
+        "editorial_purpose": "Continue the approved abyssal-seabed footage through the nodule-formation sentence; retain the UNCLOS page only for the two legal propositions it directly proves.",
         "narration_anchor": "polymetallic nodules. Dark potato -sized rocks that formed over millions of years. Layer by microscopic layer.",
         "source_slice_index": 3,
-        "asset_type": "evidence",
-        "semantic_rationale": "Move to the exact Article 137 ownership language; this is a distinct cited region, not cosmetic recropping.",
-        "semantic_link": "direct",
-        "evidence": {
-          "kind": "official_figure",
-          "source_ids": [
-            "SRC_UNCLOS_ARTICLES_136_137"
-          ],
-          "source_label": "United Nations",
-          "font_px": 32,
-          "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
-          "title": "Under the United Nations Convention on the Law of the Sea, the seabed…",
-          "limitation": "The United States has not ratified UNCLOS and legal implications of national action are disputed.",
-          "items": [
-            {
-              "label": "FILM CLAIM",
-              "value": "Under the United Nations Convention on the Law of the Sea, the…"
-            },
-            {
-              "label": "SECTION",
-              "value": "The black map",
-              "detail": "Move from Japan's EEZ to polymetallic nodules in the Clarion–Clipperton Zone."
-            },
-            {
-              "label": "UNITED NATIONS",
-              "value": "Jan 1, 1982",
-              "detail": "United Nations Convention on the Law of the Sea — Articles 136 and 137"
-            }
-          ],
-          "template_id": "orvyq_source_article",
-          "necessity": "critical_result",
-          "image_assets": [
-            "assets/evidence/unclos_articles_136_137_page51.png"
-          ],
-          "evidence_asset_ids": [
-            "EVID_UNCLOS_ARTICLES_136_137_OFFICIAL_PAGE"
-          ],
-          "source_regions": [
-            "UNTS PDF page 51 — Article 137"
-          ]
-        }
+        "asset_type": "footage",
+        "semantic_rationale": "Continue the approved abyssal-seabed footage through the nodule-formation sentence; retain the UNCLOS page only for the two legal propositions it directly proves.",
+        "semantic_link": "physical",
+        "asset": "assets/footage/scene_003_official_reuse.mp4",
+        "trim_in_sec": 9.122,
+        "trim_out_sec": 16.488666666666667,
+        "motion": "push",
+        "contextual_footage": true,
+        "generic_stock": false,
+        "reuse_reason": "This trade-and-supply image returns from the export-control claim at a distinct trim window, deliberately setting national restriction against the common-heritage principle without presenting the stock footage as primary evidence."
       },
       {
         "duration": 7.7,
         "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
         "section_id": "SEC_03_BLACK_MAP",
         "scene_id": "scene_003",
-        "visual_role": "context",
+        "visual_role": "metaphor",
         "editorial_purpose": "Present common heritage principle evidence for this section.",
         "narration_anchor": "microscopic layer. They contain manganese, nickel, copper and cobalt. Unlike Japan's rare earth mud, these nodules often lie",
         "source_slice_index": 4,
@@ -1228,7 +1206,7 @@
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim.",
+        "semantic_rationale": "A restrained night-ocean view carries the scale and remoteness of the shared frontier without replacing treaty text or asserting a named location.",
         "semantic_link": "conceptual",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       },
@@ -1243,13 +1221,13 @@
         "source_slice_index": 5,
         "asset_type": "evidence",
         "semantic_rationale": "Use the official Area map/treaty context with institution, date, and provenance visible.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_UNCLOS_ARTICLES_136_137"
           ],
-          "source_label": "United Nations",
+          "source_label": "United Nations Treaty Series — 1982-12-10",
           "font_px": 32,
           "eyebrow": "SECTION CONTEXT — PRIMARY EVIDENCE",
           "title": "The black map: Under the United Nations Convention on the…",
@@ -1459,14 +1437,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the signed Executive Order page and date as direct evidence.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_WHITEHOUSE_EO14285",
-            "SRC_NOAA_DSHMRA_2026"
+            "SRC_WHITEHOUSE_EO14285"
           ],
-          "source_label": "The White House",
+          "source_label": "Federal Register — 2025-04-24",
           "font_px": 32,
           "eyebrow": "THE WHITE HOUSE — PRIMARY EVIDENCE",
           "title": "The White House: Executive Order 14285 — Unleashing America's…",
@@ -1507,9 +1484,7 @@
         "generic_stock": true,
         "semantic_rationale": "A real regulatory hearing interrupts the dense legal-evidence sequence while the narration explains why unresolved rules matter at industrial scale; official documents retain every legal and factual claim.",
         "semantic_link": "conceptual",
-        "reuse_reason": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure.",
-        "claim_bound_extension": true,
-        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
+        "reuse_reason": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure."
       },
       {
         "duration": 6,
@@ -1522,14 +1497,13 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Show the official NOAA regulatory route/status page rather than a comparison template.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_WHITEHOUSE_EO14285",
             "SRC_NOAA_DSHMRA_2026"
           ],
-          "source_label": "The White House",
+          "source_label": "National Oceanic and Atmospheric Administration / Federal Register — 2026-01-21",
           "font_px": 32,
           "eyebrow": "NATIONAL OCEANIC AND ATMOSPHERIC ADMINISTRATION — PRIMARY…",
           "title": "National Oceanic and Atmospheric…: Deep Seabed Hard Minerals Mining",
@@ -1734,18 +1708,18 @@
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
         "visual_role": "evidence",
-        "editorial_purpose": "Use the official rule title to make the application-versus-permit distinction visible; do not imply that the rule itself proves the current count of issued permits.",
+        "editorial_purpose": "Use the canonical NOAA/Federal Register page path recorded in the primary-evidence manifest; the rule title distinguishes applications from issued commercial recovery permits without asserting a permit count.",
         "narration_anchor": "issued. That distinction matters.",
         "source_slice_index": null,
         "asset_type": "evidence",
-        "semantic_rationale": "Use the official rule title to make the application-versus-permit distinction visible; do not imply that the rule itself proves the current count of issued permits.",
-        "semantic_link": "direct",
+        "semantic_rationale": "Use the canonical NOAA/Federal Register page path recorded in the primary-evidence manifest; the rule title distinguishes applications from issued commercial recovery permits without asserting a permit count.",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_TMC_LIFECYCLE_POSITION"
+            "SRC_NOAA_DSHMRA_2026"
           ],
-          "source_label": "The Metals Company",
+          "source_label": "National Oceanic and Atmospheric Administration / Federal Register — 2026-01-21",
           "font_px": 32,
           "eyebrow": "THE METALS COMPANY — PRIMARY EVIDENCE",
           "title": "The Metals Company: Lifecycle",
@@ -1757,13 +1731,13 @@
           "template_id": "orvyq_boundary",
           "necessity": "critical_result",
           "image_assets": [
-            "assets/evidence/noaa_final_rule_page1.png"
+            "assets/evidence/noaa_dshmra_final_rule_page1.png"
           ],
           "evidence_asset_ids": [
             "EVID_NOAA_2026_FINAL_RULE_OFFICIAL_PAGE"
           ],
           "source_regions": [
-            "Page 1 title — applications for exploration licences and commercial recovery permits"
+            "Federal Register page 2642 title — exploration-license and commercial-recovery-permit applications"
           ]
         }
       },
@@ -1799,13 +1773,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the attributed lifecycle page as an industry claim, visibly labeled as such.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_TMC_LIFECYCLE_POSITION"
           ],
-          "source_label": "The Metals Company",
+          "source_label": "The Metals Company / Ecoquant — 2025-09",
           "font_px": 32,
           "eyebrow": "THE METALS COMPANY — PRIMARY EVIDENCE",
           "title": "The Metals Company: Lifecycle",
@@ -1837,14 +1811,14 @@
         "narration_anchor": "between a plan and an operating industry. Still, the direction is unmistakable. The world now has",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_016_direct.mp4",
-        "trim_in_sec": 1.426,
-        "trim_out_sec": 9.026,
-        "motion": "pull",
+        "asset": "assets/footage/scene_054_direct.mp4",
+        "trim_in_sec": 1.445,
+        "trim_out_sec": 9.045,
+        "motion": "drift_left",
         "hook_footage": false,
         "contextual_footage": true,
-        "generic_stock": true,
-        "semantic_rationale": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present.",
+        "generic_stock": false,
+        "semantic_rationale": "Official expedition field-operations footage physically expresses the gap between a plan and an operating system without presenting the generic mission as a commercial mining project.",
         "semantic_link": "physical",
         "reuse_reason": "The marine-science lab returns at a distinct trim window: first for the JAMSTEC-style technical test itself, later paired with the industry's own argument to keep independent science visually present."
       },
@@ -1853,19 +1827,19 @@
         "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
-        "visual_role": "context",
+        "visual_role": "human_context",
         "editorial_purpose": "Present industry counterargument evidence for this section.",
         "narration_anchor": "has one ocean, two rule books and no commercial precedent. The first operation that crosses that line may do",
         "source_slice_index": 3,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
-        "trim_in_sec": 0,
-        "trim_out_sec": 7.467,
-        "motion": "drift_right",
+        "asset": "assets/footage/scene_029_bec7ca5e63295de8aa016832.mp4",
+        "trim_in_sec": 3.533,
+        "trim_out_sec": 11,
+        "motion": "pull",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim.",
+        "semantic_rationale": "A populated formal assembly gives human form to the sentence about one ocean, two rulebooks and no commercial precedent; primary legal documents retain every factual proposition.",
         "semantic_link": "conceptual",
         "reuse_reason": "The dark night ocean returns at a distinct trim window to carry the same restrained frontier mood from the common-heritage claim into the long-term persistence claim."
       },
@@ -1874,7 +1848,7 @@
         "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
         "section_id": "SEC_05_ARGUMENT_FOR_MINING",
         "scene_id": "scene_005",
-        "visual_role": "context",
+        "visual_role": "human_context",
         "editorial_purpose": "Retain the authored pause as an overlay, not a new full-screen card.",
         "narration_anchor": "The world now has one ocean, two rule books and no commercial precedent.",
         "source_slice_index": 3,
@@ -1887,10 +1861,10 @@
         },
         "sound_cue": "tonal_bloom",
         "asset_type": "footage",
-        "asset": "assets/footage/scene_019_81d3921b615afae6bf8f9325.mp4",
-        "trim_in_sec": 7.464,
-        "trim_out_sec": 12.464,
-        "motion": "drift_right",
+        "asset": "assets/footage/scene_029_bec7ca5e63295de8aa016832.mp4",
+        "trim_in_sec": 11,
+        "trim_out_sec": 16,
+        "motion": "pull",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
@@ -1908,13 +1882,13 @@
         "source_slice_index": 4,
         "asset_type": "evidence",
         "semantic_rationale": "Highlight the exact seafloor-versus-land comparison within the source, preserving its interested-party attribution.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_TMC_LIFECYCLE_POSITION"
           ],
-          "source_label": "The Metals Company",
+          "source_label": "The Metals Company / Ecoquant — 2025-09",
           "font_px": 32,
           "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
           "title": "From that perspective, collecting nodules from an uninhabited abyssal…",
@@ -2007,13 +1981,13 @@
         "source_slice_index": 8,
         "asset_type": "evidence",
         "semantic_rationale": "Replace the redundant company lifecycle card with a clearly labelled official photograph of real deep-sea mining equipment; do not imply that the JAMSTEC machine is TMC hardware.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_TMC_LIFECYCLE_POSITION"
+            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"
           ],
-          "source_label": "The Metals Company",
+          "source_label": "JAMSTEC — 2026-07-24",
           "font_px": 32,
           "eyebrow": "THE METALS COMPANY — PRIMARY EVIDENCE",
           "title": "The Metals Company: Lifecycle",
@@ -2067,14 +2041,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the official chemistry/mineral-demand table for the mineral-specific claim.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_IEA_CRITICAL_MINERALS_2026",
-            "SRC_IEA_RARE_EARTHS_2026"
+            "SRC_IEA_CRITICAL_MINERALS_2026"
           ],
-          "source_label": "International Energy Agency",
+          "source_label": "International Energy Agency — 2022-07",
           "font_px": 32,
           "eyebrow": "INTERNATIONAL ENERGY AGENCY — PRIMARY EVIDENCE",
           "title": "International Energy Agency: Global Critical Minerals Outlook 2026",
@@ -2134,14 +2107,13 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Return to the official table and a different substantive row for verification.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_IEA_CRITICAL_MINERALS_2026",
-            "SRC_IEA_RARE_EARTHS_2026"
+            "SRC_IEA_CRITICAL_MINERALS_2026"
           ],
-          "source_label": "International Energy Agency",
+          "source_label": "International Energy Agency — 2022-07",
           "font_px": 32,
           "eyebrow": "INTERNATIONAL ENERGY AGENCY — PRIMARY EVIDENCE",
           "title": "International Energy Agency: Rare Earth Elements — Executive Summary",
@@ -2307,13 +2279,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the paper's real track image/figure with study identity and year.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_RECOVERY_2025"
           ],
-          "source_label": "Nature",
+          "source_label": "Nature — 2025-03-26",
           "font_px": 32,
           "eyebrow": "NATURE — PRIMARY EVIDENCE",
           "title": "Nature: Long-term impact and biological recovery in a…",
@@ -2358,7 +2330,7 @@
         "source_slice_index": 2,
         "asset_type": "evidence",
         "semantic_rationale": "The '44 years' claim belongs on the real figure annotation, not a text recap card.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "image_assets": [
@@ -2369,7 +2341,17 @@
           ],
           "source_regions": [
             "Figure 2 — track photographs observed in 2023"
-          ]
+          ],
+          "source_ids": [
+            "SRC_NATURE_RECOVERY_2025"
+          ],
+          "source_label": "Nature — 2025-03-26",
+          "font_px": 32,
+          "eyebrow": "NATURE — PRIMARY EVIDENCE",
+          "title": "Nature — images of the 1979 OMCO mining tracks observed in 2023",
+          "limitation": "The source supports only the specific claim and region shown on screen.",
+          "template_id": "orvyq_official_figure",
+          "necessity": "critical_result"
         }
       },
       {
@@ -2418,7 +2400,7 @@
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "A working harbor vessel gives the strategic-insurance argument a physical logistics context without presenting the ship as a mining project.",
+        "semantic_rationale": "Keep the short pause line over evidence-related footage.",
         "semantic_link": "conceptual"
       },
       {
@@ -2432,13 +2414,13 @@
         "source_slice_index": 4,
         "asset_type": "evidence",
         "semantic_rationale": "Highlight the exact persistent-disturbance region.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_RECOVERY_2025"
           ],
-          "source_label": "Nature",
+          "source_label": "Nature — 2025-03-26",
           "font_px": 32,
           "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
           "title": "Forty-four years later, the physical disturbance was still visible.",
@@ -2548,13 +2530,13 @@
         "source_slice_index": 8,
         "asset_type": "evidence",
         "semantic_rationale": "Return to a distinct methods/limitation region in the paper, not a recrop of the same image.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_RECOVERY_2025"
           ],
-          "source_label": "Nature",
+          "source_label": "Nature — 2025-03-26",
           "font_px": 32,
           "eyebrow": "NATURE — PRIMARY EVIDENCE",
           "title": "Nature: Long-term impact and biological recovery in a…",
@@ -2620,13 +2602,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the real industrial-trial figure and highlighted sample region.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NEE_MACROFAUNA_2026"
           ],
-          "source_label": "Nature Ecology & Environment",
+          "source_label": "Nature Ecology & Evolution — 2025-12-05",
           "font_px": 32,
           "eyebrow": "NATURE ECOLOGY & ENVIRONMENT — PRIMARY EVIDENCE",
           "title": "Nature Ecology & Environment: Impacts of an industrial deep-sea mining…",
@@ -2708,13 +2690,13 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Highlight density and richness values on the actual figure.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "image_sequence",
           "source_ids": [
             "SRC_NEE_MACROFAUNA_2026"
           ],
-          "source_label": "Nature Ecology & Environment",
+          "source_label": "Nature Ecology & Evolution — 2025-12-05",
           "font_px": 32,
           "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
           "title": "Two months after the test, macrofaunal density inside the mining tracks…",
@@ -2810,9 +2792,7 @@
         "generic_stock": false,
         "semantic_rationale": "Official sediment-coring footage shows the physical act of measurement while the cited plume figures retain the numerical result.",
         "semantic_link": "physical",
-        "reuse_reason": "This ocean-impact context returns from the U.S. parallel-route section at a distinct trim window, deliberately shifting from competing legal routes to the shared physical question of how disturbed sediment moves.",
-        "claim_bound_extension": true,
-        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
+        "reuse_reason": "This ocean-impact context returns from the U.S. parallel-route section at a distinct trim window, deliberately shifting from competing legal routes to the shared physical question of how disturbed sediment moves."
       },
       {
         "duration": 7.466666666666667,
@@ -2825,13 +2805,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the paper's real plume map/measurement plot.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_PLUME_2025"
           ],
-          "source_label": "Nature Communications",
+          "source_label": "Nature Communications — 2025-01-31",
           "font_px": 32,
           "eyebrow": "NATURE COMMUNICATIONS — PRIMARY EVIDENCE",
           "title": "Nature Communications: Monitoring benthic plumes, sediment…",
@@ -2883,13 +2863,13 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Highlight the transport-distance data point described by narration.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_PLUME_2025"
           ],
-          "source_label": "Nature Communications",
+          "source_label": "Nature Communications — 2025-01-31",
           "font_px": 32,
           "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
           "title": "Measurements from collector trials show that disturbed sediment can travel…",
@@ -2949,13 +2929,13 @@
         "source_slice_index": 5,
         "asset_type": "evidence",
         "semantic_rationale": "Return to the paper's confidence/limitation region as a separate content identity.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NATURE_PLUME_2025"
           ],
-          "source_label": "Nature Communications",
+          "source_label": "Nature Communications — 2025-01-31",
           "font_px": 32,
           "eyebrow": "SECTION CONTEXT — PRIMARY EVIDENCE",
           "title": "What the machine leaves…: Measurements from collector trials show that…",
@@ -3010,13 +2990,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the real experimental/food-web figure for discharge-particle effects.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NCOMMS_MIDWATER_2025"
           ],
-          "source_label": "Nature Communications",
+          "source_label": "Nature Communications — 2025-11-06",
           "font_px": 32,
           "eyebrow": "NATURE COMMUNICATIONS — PRIMARY EVIDENCE",
           "title": "Nature Communications: Deep-sea mining discharge can disrupt…",
@@ -3099,13 +3079,13 @@
         "source_slice_index": 3,
         "asset_type": "evidence",
         "semantic_rationale": "Highlight the nutritionally poor particle result in the actual source figure.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
             "SRC_NCOMMS_MIDWATER_2025"
           ],
-          "source_label": "Nature Communications",
+          "source_label": "Nature Communications — 2025-11-06",
           "font_px": 32,
           "eyebrow": "FILM CLAIM — PRIMARY EVIDENCE",
           "title": "Research suggests those discharge particles may be nutritionally poor…",
@@ -3237,9 +3217,7 @@
         "generic_stock": false,
         "semantic_rationale": "Official water-column footage directly grounds the midwater food-web mechanism while the cited paper carries the experiment and effect.",
         "semantic_link": "physical",
-        "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence.",
-        "claim_bound_extension": true,
-        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
+        "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       {
         "duration": 7.8,
@@ -3259,9 +3237,7 @@
         "contextual_footage": true,
         "generic_stock": false,
         "semantic_rationale": "Verified NOAA expedition assessment footage supports scientific judgment under uncertainty; the cited study remains responsible for the mechanism and limitation claim.",
-        "semantic_link": "physical",
-        "claim_bound_extension": true,
-        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
+        "semantic_link": "physical"
       },
       {
         "duration": 7.166666666666667,
@@ -3449,7 +3425,7 @@
         "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
         "section_id": "SEC_06_MACHINE_LEAVES_BEHIND",
         "scene_id": "scene_006",
-        "visual_role": "context",
+        "visual_role": "human_context",
         "editorial_purpose": "Present unused option synthesis evidence for this section.",
         "narration_anchor": "can govern a frontier before powerful states create alternatives. And it will test whether the phrase common heritage of mankind has",
         "source_slice_index": 6,
@@ -3557,25 +3533,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the official milestone material to distinguish demonstrated capability from obligation.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "image_sequence",
           "source_ids": [
-            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
-            "SRC_IEA_RARE_EARTHS_2026",
-            "SRC_IEA_CRITICAL_MINERALS_2026",
-            "SRC_METI_MINAMITORISHIMA_2026",
-            "SRC_UNCLOS_ARTICLES_136_137",
-            "SRC_ISA_COUNCIL_JULY_2026",
-            "SRC_WHITEHOUSE_EO14285",
-            "SRC_NOAA_DSHMRA_2026",
-            "SRC_TMC_LIFECYCLE_POSITION",
-            "SRC_NATURE_RECOVERY_2025",
-            "SRC_NEE_MACROFAUNA_2026",
-            "SRC_NATURE_PLUME_2025",
-            "SRC_NCOMMS_MIDWATER_2025"
+            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"
           ],
-          "source_label": "Multiple verified sources (recap)",
+          "source_label": "JAMSTEC — 2026-07-24",
           "font_px": 32,
           "eyebrow": "JAMSTEC — PRIMARY EVIDENCE",
           "title": "JAMSTEC: Results of the rare-earth-mud mining-system…",
@@ -3718,25 +3682,13 @@
         "source_slice_index": 7,
         "asset_type": "evidence",
         "semantic_rationale": "Use the official supply-chain evidence for the distributed-risk conclusion.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
-            "SRC_IEA_RARE_EARTHS_2026",
-            "SRC_IEA_CRITICAL_MINERALS_2026",
-            "SRC_METI_MINAMITORISHIMA_2026",
-            "SRC_UNCLOS_ARTICLES_136_137",
-            "SRC_ISA_COUNCIL_JULY_2026",
-            "SRC_WHITEHOUSE_EO14285",
-            "SRC_NOAA_DSHMRA_2026",
-            "SRC_TMC_LIFECYCLE_POSITION",
-            "SRC_NATURE_RECOVERY_2025",
-            "SRC_NEE_MACROFAUNA_2026",
-            "SRC_NATURE_PLUME_2025",
-            "SRC_NCOMMS_MIDWATER_2025"
+            "SRC_IEA_RARE_EARTHS_2026"
           ],
-          "source_label": "Multiple verified sources (recap)",
+          "source_label": "International Energy Agency — 2026",
           "font_px": 32,
           "eyebrow": "INTERNATIONAL ENERGY AGENCY — PRIMARY EVIDENCE",
           "title": "International Energy Agency: Rare Earth Elements — Executive Summary",
@@ -4035,25 +3987,13 @@
         "source_slice_index": 1,
         "asset_type": "evidence",
         "semantic_rationale": "Use the verified JAMSTEC photograph of Chikyu rather than an unidentified ship; the adjacent official 2027 diagram carries the future-trial claim.",
-        "semantic_link": "direct",
+        "semantic_link": "direct_evidence",
         "evidence": {
           "kind": "official_figure",
           "source_ids": [
-            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026",
-            "SRC_IEA_RARE_EARTHS_2026",
-            "SRC_IEA_CRITICAL_MINERALS_2026",
-            "SRC_METI_MINAMITORISHIMA_2026",
-            "SRC_UNCLOS_ARTICLES_136_137",
-            "SRC_ISA_COUNCIL_JULY_2026",
-            "SRC_WHITEHOUSE_EO14285",
-            "SRC_NOAA_DSHMRA_2026",
-            "SRC_TMC_LIFECYCLE_POSITION",
-            "SRC_NATURE_RECOVERY_2025",
-            "SRC_NEE_MACROFAUNA_2026",
-            "SRC_NATURE_PLUME_2025",
-            "SRC_NCOMMS_MIDWATER_2025"
+            "SRC_JAMSTEC_MINAMITORISHIMA_RESULTS_2026"
           ],
-          "source_label": "Multiple verified sources (recap)",
+          "source_label": "JAMSTEC — 2026-07-24",
           "font_px": 32,
           "eyebrow": "INTERNATIONAL ENERGY AGENCY — PRIMARY EVIDENCE",
           "title": "International Energy Agency: Rare Earth Elements — Executive Summary",
@@ -4247,7 +4187,7 @@
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": false,
-        "semantic_rationale": "A long dark-ocean descent closes on the distance between technical capability and agreed limits without introducing a new factual claim.",
+        "semantic_rationale": "Keep the final narrated phrase as a restrained overlay on the closing footage.",
         "semantic_link": "conceptual"
       },
       {
@@ -4255,7 +4195,7 @@
         "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
         "section_id": "SEC_07_PRECEDENT",
         "scene_id": "scene_007",
-        "visual_role": "context",
+        "visual_role": "metaphor",
         "editorial_purpose": "Remove the separate end card to avoid consecutive cards; let the final image and overlay breathe through the existing four seconds.",
         "narration_anchor": "The final narrated conclusion and its immediate closing hold.",
         "semantic_rationale": "Remove the separate end card to avoid consecutive cards; let the final image and overlay breathe through the existing four seconds.",
@@ -4267,9 +4207,10 @@
         "trim_in_sec": 18.155,
         "trim_out_sec": 22.155,
         "contextual_footage": true,
-        "generic_stock": false
+        "generic_stock": false,
+        "motion": "hold"
       }
     ],
-    "generated_at": "2026-07-31T11:37:27.986Z"
+    "generated_at": "2026-07-31T14:49:54.721Z"
   }
 }

@@ -61,9 +61,10 @@
   "selected_rendition_id": "14616453",
   "selected_reason": "NARRATION_ANCHORED_UNIQUE_HD_AND_SOURCE_TITLE_CONSTRAINED",
   "approved_for_final_edit": true,
-  "human_review_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
   "downloaded_at": "2026-07-30T22:54:56.225Z",
   "reviewed_asset_sha256": "db15a5e18c7c269c1ab137600e3e389a59d611262515b3fcc647aa9674e49f5b",
   "reviewed_contact_sheet_sha256": "63b37877b71b966180493c12c6bd6cc4831362aa494a4934f308bec07ac7ddd1",
-  "human_review_reason": "The reviewed frames clearly show a populated formal assembly with presenters and an engaged audience, providing valid generic human governance context without identifying a named institution."
+  "visual_qa_status": "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW",
+  "visual_qa_origin": "system_visual_qa",
+  "visual_qa_reason": "The reviewed frames show a populated formal assembly with presenters and an engaged audience. The footage therefore supports the institutional and precedent-setting meaning of the CLM_009 one-ocean/two-rulebooks narration without identifying a named regulator, conference or permit process; source documents retain all legal claims."
 }
