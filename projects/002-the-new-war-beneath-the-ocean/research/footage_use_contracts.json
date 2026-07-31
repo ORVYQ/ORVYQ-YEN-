@@ -116,7 +116,7 @@
       "slice_index": 0,
       "trim_in_ratio": 0,
       "motion": "hold",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "A real dark seabed or benthic survey view introduces persistent physical disturbance; tropical island imagery is forbidden for this claim."
     },
@@ -126,7 +126,7 @@
       "slice_index": 0,
       "trim_in_ratio": 0.05,
       "motion": "hold",
-      "role": "governance_context",
+      "role": "context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A restrained legal-review setting provides human rulemaking context while UNCLOS and ISA documents remain the actual legal evidence."
     },
@@ -136,7 +136,7 @@
       "slice_index": 0,
       "trim_in_ratio": 0.48,
       "motion": "pull",
-      "role": "governance_context",
+      "role": "context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A separate legal-document trim supports the distinction between an application process and a commercial permit without depicting a named proceeding."
     },
@@ -206,7 +206,7 @@
       "slice_index": 5,
       "trim_in_ratio": 0.05,
       "motion": "hold",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "A scientist handling samples represents measurement of particle effects without claiming that the generic laboratory depicts the cited experiment."
     },
@@ -216,7 +216,7 @@
       "slice_index": 4,
       "trim_in_ratio": 0.5,
       "motion": "pull",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "A separate sample-analysis trim directly represents the baseline research needed before industrial disturbance begins."
     },
@@ -226,7 +226,7 @@
       "slice_index": 6,
       "trim_in_ratio": 0.08,
       "motion": "hold",
-      "role": "governance_context",
+      "role": "context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A real international assembly gives practical meaning to common heritage while treaty and ISA sources retain the legal claim."
     },
@@ -256,7 +256,7 @@
       "slice_index": 5,
       "trim_in_ratio": 0,
       "motion": "push",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "A restrained descent through real dark water or over the deep seabed carries physical depth and persistence; science-fiction city imagery is forbidden."
     },
@@ -286,7 +286,7 @@
       "slice_index": 5,
       "trim_in_ratio": 0,
       "motion": "hold",
-      "role": "governance_context",
+      "role": "context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A real formal meeting provides human governance context for competing legal routes while primary documents retain the factual burden."
     },
@@ -296,7 +296,7 @@
       "slice_index": 3,
       "trim_in_ratio": 0.5,
       "motion": "pull",
-      "role": "governance_context",
+      "role": "context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A distinct meeting trim represents unfinished international rules and institutional choice without naming the generic participants."
     },
@@ -316,7 +316,7 @@
       "slice_index": 0,
       "trim_in_ratio": 0.08,
       "motion": "push",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "Laboratory materials research supports changing battery chemistry while the source figure carries the specific LFP composition statement."
     },
@@ -326,7 +326,7 @@
       "slice_index": 0,
       "trim_in_ratio": 0.05,
       "motion": "hold",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "Official sediment-coring footage shows the physical act of measurement while the cited plume figures retain the numerical result."
     },
@@ -336,7 +336,7 @@
       "slice_index": 8,
       "trim_in_ratio": 0.05,
       "motion": "hold",
-      "role": "scientific_context",
+      "role": "context",
       "semantic_link": "physical",
       "semantic_rationale": "Official water-column footage directly grounds the midwater food-web mechanism while the cited paper carries the experiment and effect."
     },
@@ -366,7 +366,7 @@
       "scene_id": "scene_050",
       "claim_id": "CLM_007_US_PARALLEL_ROUTE",
       "slice_index": 4,
-      "reason": "Move the regulatory-hearing context earlier inside the same claim to interrupt the 15.1-second evidence run without increasing asset reuse."
+      "reason": "Move the regulatory-hearing context earlier inside the same claim to interrupt the 15.1-second evidence run, preserve the two-use ceiling and reconcile the project through the reusable override-aware canonical-role workflow."
     }
   ]
 }

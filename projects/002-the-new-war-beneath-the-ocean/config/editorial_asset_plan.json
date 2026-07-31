@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "ready",
-  "generation_policy": "claim-bound footage use contracts plus explicit validated overrides; one scene may appear only at listed claim/slice targets; no automatic backfill, silent retirement or scene-id-wide reassignment",
+  "generation_policy": "claim-bound footage use contracts plus explicit validated overrides; editorial role aliases are normalized to canonical render roles; one scene may appear only at listed claim/slice targets; no automatic backfill, silent retirement or scene-id-wide reassignment",
   "footage_assignments": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
       "2": {
@@ -176,7 +176,7 @@
         "asset": "assets/footage/scene_038_9d962f32cfd2deda34a8ddf6.mp4",
         "trimInRatio": 0,
         "motion": "hold",
-        "role": "governance_context",
+        "role": "context",
         "semantic_anchor": "international law says belongs to humanity as a whole. And who has the authority to say no? While those negotiations",
         "semantic_rationale": "A real formal meeting provides human governance context for competing legal routes while primary documents retain the factual burden.",
         "semantic_link": "conceptual"
@@ -187,7 +187,7 @@
         "asset": "assets/footage/scene_014_9ffed5eb663a6f6f21233078.mp4",
         "trimInRatio": 0.48,
         "motion": "pull",
-        "role": "governance_context",
+        "role": "context",
         "semantic_anchor": "Convention. Instead, it regulates deep seabed mineral activity by United States companies, under a domestic law",
         "semantic_rationale": "A separate legal-document trim supports the distinction between an application process and a commercial permit without depicting a named proceeding.",
         "semantic_link": "conceptual",
@@ -305,7 +305,7 @@
         "asset": "assets/footage/scene_026_a8425569c1d990a57f193a1d.mp4",
         "trimInRatio": 0.05,
         "motion": "hold",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "occur once. They would become a new background condition. The mid -water ocean creates another uncertainty. Material",
         "semantic_rationale": "A scientist handling samples represents measurement of particle effects without claiming that the generic laboratory depicts the cited experiment.",
         "semantic_link": "physical"
@@ -314,7 +314,7 @@
         "asset": "assets/footage/scene_053_direct.mp4",
         "trimInRatio": 0.05,
         "motion": "hold",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "Research suggests those discharge particles may be nutritionally poor compared with the particles many mid -water organisms normally consume.",
         "semantic_rationale": "Official water-column footage directly grounds the midwater food-web mechanism while the cited paper carries the experiment and effect.",
         "semantic_link": "physical"
@@ -402,7 +402,7 @@
         "asset": "assets/footage/scene_029_bec7ca5e63295de8aa016832.mp4",
         "trimInRatio": 0.08,
         "motion": "hold",
-        "role": "governance_context",
+        "role": "context",
         "semantic_anchor": "can govern a frontier before powerful states create alternatives. And it will test whether the phrase common heritage of mankind has",
         "semantic_rationale": "A real international assembly gives practical meaning to common heritage while treaty and ISA sources retain the legal claim.",
         "semantic_link": "conceptual"
@@ -505,7 +505,7 @@
         "asset": "assets/footage/scene_038_9d962f32cfd2deda34a8ddf6.mp4",
         "trimInRatio": 0.5,
         "motion": "pull",
-        "role": "governance_context",
+        "role": "context",
         "semantic_anchor": "lost after industrial activity begins. The decision is not between progress and preservation. It",
         "semantic_rationale": "A distinct meeting trim represents unfinished international rules and institutional choice without naming the generic participants.",
         "semantic_link": "conceptual",
@@ -515,7 +515,7 @@
         "asset": "assets/footage/scene_026_a8425569c1d990a57f193a1d.mp4",
         "trimInRatio": 0.5,
         "motion": "pull",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "preservation. It is between different forms of risk distributed across different people, places and generations.",
         "semantic_rationale": "A separate sample-analysis trim directly represents the baseline research needed before industrial disturbance begins.",
         "semantic_link": "physical",
@@ -612,7 +612,7 @@
         "asset": "assets/footage/scene_012_official_reuse.mp4",
         "trimInRatio": 0,
         "motion": "hold",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "Moving extraction to the ocean does not automatically move separation, metal production or magnet manufacturing out",
         "semantic_rationale": "A real dark seabed or benthic survey view introduces persistent physical disturbance; tropical island imagery is forbidden for this claim.",
         "semantic_link": "physical"
@@ -630,7 +630,7 @@
         "asset": "assets/footage/scene_032_official_reuse.mp4",
         "trimInRatio": 0,
         "motion": "push",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "The deep ocean is not empty. It is dark, slow and poorly understood. Many organisms live on inside or",
         "semantic_rationale": "A restrained descent through real dark water or over the deep seabed carries physical depth and persistence; science-fiction city imagery is forbidden.",
         "semantic_link": "physical"
@@ -641,7 +641,7 @@
         "asset": "assets/footage/scene_014_9ffed5eb663a6f6f21233078.mp4",
         "trimInRatio": 0.05,
         "motion": "hold",
-        "role": "governance_context",
+        "role": "context",
         "semantic_anchor": "authority was created to organize and control mineral activities in that area. It has issued exploration",
         "semantic_rationale": "A restrained legal-review setting provides human rulemaking context while UNCLOS and ISA documents remain the actual legal evidence.",
         "semantic_link": "conceptual"
@@ -652,7 +652,7 @@
         "asset": "assets/footage/scene_048_b73c8e4d41145089ab22de6e.mp4",
         "trimInRatio": 0.08,
         "motion": "push",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "simple. Battery chemistry is changing. Lithium ion phosphate batteries use neither nickel nor cobalt.",
         "semantic_rationale": "Laboratory materials research supports changing battery chemistry while the source figure carries the specific LFP composition statement.",
         "semantic_link": "physical"
@@ -693,7 +693,7 @@
         "asset": "assets/footage/scene_052_direct.mp4",
         "trimInRatio": 0.05,
         "motion": "hold",
-        "role": "scientific_context",
+        "role": "context",
         "semantic_anchor": "lower. Species richness was 32 lower. Outside the direct tracks, the effects of the sediment",
         "semantic_rationale": "Official sediment-coring footage shows the physical act of measurement while the cited plume figures retain the numerical result.",
         "semantic_link": "physical"
@@ -852,7 +852,7 @@
     ]
   },
   "last_footage_use_contract_application": {
-    "generated_at": "2026-07-31T11:28:07.511Z",
+    "generated_at": "2026-07-31T11:37:27.734Z",
     "managed_scene_count": 28,
     "pruned_scene_count": 5,
     "assignment_count": 32,
