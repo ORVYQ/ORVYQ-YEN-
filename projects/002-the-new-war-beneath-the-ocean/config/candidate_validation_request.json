@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 30,
-  "reason": "Re-run exact-head Candidate Validation after completing the system-wide source-safe extension policy. Contiguous approved footage first shifts inside its real source range, then may use only a bounded 0.75-1.00 playback rate; looping, synthetic frames, excessive slowdown and project-specific substitutions remain forbidden. Hook-aware source budgeting remains active and no video render is permitted.",
+  "request_revision": 31,
+  "reason": "Re-run exact-head Candidate Validation after adding a system-wide claim-evidence preservation invariant. Visual rebalancing may reduce cards and source-derived graphics, but it must retain the shortest source-backed beat whenever a replacement would otherwise erase a claim's final evidence. No project-specific substitution, QA bypass or video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T20:59:00Z"
+  "requested_at": "2026-07-31T21:38:00Z"
 }
