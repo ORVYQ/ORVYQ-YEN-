@@ -1,0 +1,54 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { requiresClaimBoundReview } from "./orvyq_prepare_footage_review_queue.mjs";
+
+const currentUse = {
+  claim_id: "CLM_009_INDUSTRY_COUNTERARGUMENT",
+  narration_anchor: "The world now has one ocean, two rule books and no commercial precedent.",
+  semantic_rationale: "A real formal assembly provides restrained human governance context while primary sources retain every factual burden.",
+};
+
+const exactApproval = {
+  asset_sha256: "a".repeat(64),
+  approved_uses: [{ ...currentUse }],
+};
+
+test("claim-bound review remains valid when bytes, claim, and narration anchor are unchanged", () => {
+  assert.equal(requiresClaimBoundReview({
+    currentUses: [currentUse],
+    approval: exactApproval,
+    assetSha256: "a".repeat(64),
+  }), false);
+});
+
+test("an approved clip is requeued when its narration use changes", () => {
+  assert.equal(requiresClaimBoundReview({
+    currentUses: [{ ...currentUse, narration_anchor: "A newly assigned narration beat." }],
+    approval: exactApproval,
+    assetSha256: "a".repeat(64),
+  }), true);
+});
+
+test("an approved clip is requeued when the current bytes change", () => {
+  assert.equal(requiresClaimBoundReview({
+    currentUses: [currentUse],
+    approval: exactApproval,
+    assetSha256: "b".repeat(64),
+  }), true);
+});
+
+test("an unapproved clip with an exact current use is queued", () => {
+  assert.equal(requiresClaimBoundReview({
+    currentUses: [currentUse],
+    approval: null,
+    assetSha256: "a".repeat(64),
+  }), true);
+});
+
+test("an unused asset is not queued solely because approval is absent", () => {
+  assert.equal(requiresClaimBoundReview({
+    currentUses: [],
+    approval: null,
+    assetSha256: "a".repeat(64),
+  }), false);
+});
