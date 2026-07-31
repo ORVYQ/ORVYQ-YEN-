@@ -6,6 +6,8 @@
     "scene_016",
     "scene_019",
     "scene_029",
+    "scene_033",
+    "scene_034",
     "scene_050",
     "scene_051",
     "scene_053",
@@ -29,6 +31,12 @@
       "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
       "slice_index": 3,
       "reason": "Retire the third use of the night-ocean metaphor and replace the two-rulebook sentence with a real human governance setting that carries the institutional meaning more directly."
+    },
+    {
+      "scene_id": "scene_033",
+      "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+      "slice_index": 7,
+      "reason": "Retire the third jellyfish use from the closing precedent sentence. The same organism footage remains at its two direct midwater-science beats; the final legal-and-environmental inheritance beat moves to a second distinct trim of the already approved scientific-review scene."
     },
     {
       "scene_id": "scene_050",
@@ -97,6 +105,48 @@
       "role": "human_context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A real international assembly gives practical meaning to common heritage while treaty and ISA sources retain the legal claim."
+    },
+    {
+      "scene_id": "scene_033",
+      "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+      "slice_index": 2,
+      "trim_in_ratio": 0,
+      "motion": "push",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "Real midwater life grounds the food-web mechanism without claiming that the jellyfish came from a cited trial."
+    },
+    {
+      "scene_id": "scene_033",
+      "claim_id": "CLM_016_DECISION_UNDER_UNCERTAINTY",
+      "slice_index": 0,
+      "trim_in_ratio": 0.5,
+      "motion": "pull",
+      "role": "context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "Verified midwater organisms keep the qualified ecological mechanism visible while the cited study figures carry the measured scientific claim.",
+      "reuse_reason": "A second, deliberately separated use at a distinct trim window connects the demonstrated midwater mechanism to the following scientific-uncertainty qualification; the clip remains contextual and never substitutes for evidence."
+    },
+    {
+      "scene_id": "scene_034",
+      "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+      "slice_index": 3,
+      "trim_in_ratio": 0.12,
+      "motion": "hold",
+      "role": "human_context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "Scientists discussing evidence embody unresolved knowledge before a commercial decision without implying that they advise a named government."
+    },
+    {
+      "scene_id": "scene_034",
+      "claim_id": "CLM_020_PRECEDENT_SYNTHESIS",
+      "slice_index": 7,
+      "trim_in_ratio": 0.4,
+      "motion": "pull",
+      "role": "human_context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A distinct scientific-review trim gives the closing sentence a human decision context: future generations inherit both the precedent and the consequences, while the narration and cited sources retain every legal and environmental claim.",
+      "reuse_reason": "A deliberate second use inside the closing synthesis, at a distinct trim window and narration target, connects unresolved evidence before the decision to the consequences passed forward after it."
     },
     {
       "scene_id": "scene_050",
