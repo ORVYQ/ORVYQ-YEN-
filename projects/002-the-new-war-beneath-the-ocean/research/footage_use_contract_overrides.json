@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "managed_scene_ids": [
+    "scene_050"
+  ],
+  "retired_targets": [
+    {
+      "scene_id": "scene_050",
+      "claim_id": "CLM_007_US_PARALLEL_ROUTE",
+      "slice_index": 4,
+      "reason": "Move the regulatory-hearing context earlier inside the same claim to interrupt the 15.1-second evidence run without increasing asset reuse."
+    }
+  ],
+  "assignments": [
+    {
+      "scene_id": "scene_050",
+      "claim_id": "CLM_007_US_PARALLEL_ROUTE",
+      "slice_index": 2,
+      "trim_in_ratio": 0,
+      "motion": "hold",
+      "role": "human_context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A real regulatory hearing interrupts the dense legal-evidence sequence while the narration explains why unresolved rules matter at industrial scale; official documents retain every legal and factual claim."
+    },
+    {
+      "scene_id": "scene_050",
+      "claim_id": "CLM_019_DISTRIBUTED_RISK_SYNTHESIS",
+      "slice_index": 2,
+      "trim_in_ratio": 0.34,
+      "motion": "drift_right",
+      "role": "human_context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A distinct formal-hearing trim represents regulatory delay while source documents retain the factual burden."
+    }
+  ]
+}
