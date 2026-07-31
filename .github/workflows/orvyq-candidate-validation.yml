@@ -60,7 +60,7 @@ jobs:
           set -euo pipefail
           if [ "${{ github.event_name }}" = "push" ]; then
             mapfile -t REQUESTS < <(
-              git diff-tree --no-commit-id --name-only -r "$SOURCE_SHA" |
+              git diff --name-only "$SOURCE_SHA^" "$SOURCE_SHA" |
                 grep -E '^projects/[^/]+/config/candidate_validation_request\.json$' || true
             )
             test "${#REQUESTS[@]}" -eq 1 || {
