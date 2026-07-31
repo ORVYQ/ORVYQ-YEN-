@@ -226,14 +226,17 @@ function applyFootageReplacement(shot, action, requests) {
   if (!replacement?.asset_path || !Number.isFinite(replacement.trim_in_sec) || !Number.isFinite(replacement.trim_out_sec)) {
     throw new Error(`shot ${action.baseline_shot_index} requires a materialized footage replacement with trim bounds`);
   }
-  if (replacement.trim_out_sec - replacement.trim_in_sec + 0.001 < Number(shot.duration)) {
+  const trimIn = Number(replacement.trim_in_sec);
+  const trimOutLimit = Number(replacement.trim_out_sec);
+  const shotDuration = Number(shot.duration);
+  if (trimOutLimit - trimIn + 0.001 < shotDuration) {
     throw new Error(`shot ${action.baseline_shot_index} footage replacement is shorter than the shot`);
   }
   const updated = clone(shot);
   updated.asset_type = "footage";
   updated.asset = replacement.asset_path;
-  updated.trim_in_sec = replacement.trim_in_sec;
-  updated.trim_out_sec = replacement.trim_out_sec;
+  updated.trim_in_sec = trimIn;
+  updated.trim_out_sec = Number((trimIn + shotDuration).toFixed(6));
   updated.visual_role = "context";
   updated.editorial_purpose = action.rationale;
   updated.semantic_rationale = action.rationale;
