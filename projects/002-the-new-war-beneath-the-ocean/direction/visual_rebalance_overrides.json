@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "reason": "Keep the verified UNCLOS page at the global two-use limit while matching the nodule-formation narration with the already approved contiguous deep-seabed footage.",
+  "reason": "Apply project-authored editorial corrections without weakening shared gates: keep the verified UNCLOS page at the global two-use limit, match the nodule-formation narration with approved deep-seabed footage, and bind the NOAA replacement to the canonical manifest path.",
   "action_overrides": [
     {
       "baseline_shot_index": 39,
@@ -11,6 +11,23 @@
         "projected_medium": "contextual_footage",
         "replacement_strategy": "extend_adjacent_footage",
         "rationale": "Continue the approved abyssal-seabed footage through the nodule-formation sentence; retain the UNCLOS page only for the two legal propositions it directly proves."
+      }
+    },
+    {
+      "baseline_shot_index": 58,
+      "expected_decision": "replace_primary_evidence",
+      "action": {
+        "decision": "replace_primary_evidence",
+        "projected_medium": "primary_evidence",
+        "asset_request_id": "REQ_EVD_US_EO_NOAA",
+        "replacement_assets": [
+          {
+            "asset_path": "assets/evidence/noaa_dshmra_final_rule_page1.png",
+            "evidence_asset_id": "EVID_NOAA_2026_FINAL_RULE_OFFICIAL_PAGE",
+            "source_region": "Federal Register page 2642 title — exploration-license and commercial-recovery-permit applications"
+          }
+        ],
+        "rationale": "Use the canonical NOAA/Federal Register page path recorded in the primary-evidence manifest; the rule title distinguishes applications from issued commercial recovery permits without asserting a permit count."
       }
     }
   ]
