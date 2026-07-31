@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 9,
-  "reason": "The exact branch head retains the finalized footage rebalance, canonical role normalization and zero pending/rejected state. Re-run render-free Candidate Validation with the reusable edit-plan diagnostic capture so any remaining canonical planning failure is persisted in the validation artifact instead of being hidden in a large job log.",
+  "request_revision": 10,
+  "reason": "The exact branch head retains the finalized footage rebalance, reusable contract overrides, canonical role normalization and zero pending/rejected state. Re-run render-free Candidate Validation with persistent full-production-plan and edit-plan diagnostics so the remaining planning failure is captured as a reusable artifact and can be fixed without weakening any quality gate.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T11:48:00Z"
+  "requested_at": "2026-07-31T11:56:00Z"
 }
