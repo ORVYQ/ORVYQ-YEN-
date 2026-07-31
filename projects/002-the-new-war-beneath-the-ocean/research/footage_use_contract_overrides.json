@@ -2,13 +2,21 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "managed_scene_ids": [
+    "scene_015",
     "scene_016",
     "scene_019",
     "scene_029",
     "scene_050",
+    "scene_053",
     "scene_054"
   ],
   "retired_targets": [
+    {
+      "scene_id": "scene_015",
+      "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+      "slice_index": 0,
+      "reason": "Retire the third use of the generic seafloor-sediment clip and replace this midwater food-web beat with approved official NOAA water-column footage that matches the narration more directly."
+    },
     {
       "scene_id": "scene_016",
       "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
@@ -29,6 +37,26 @@
     }
   ],
   "assignments": [
+    {
+      "scene_id": "scene_015",
+      "claim_id": "CLM_004_JAPAN_INDUSTRIAL_TIMELINE",
+      "slice_index": 6,
+      "trim_in_ratio": 0.12,
+      "motion": "drift_right",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "A verified dark seabed-sediment view carries the physical location and fine material form named in the sentence while primary evidence establishes the specific Japanese deposit."
+    },
+    {
+      "scene_id": "scene_015",
+      "claim_id": "CLM_013_INDUSTRIAL_TRIAL_BIODIVERSITY",
+      "slice_index": 2,
+      "trim_in_ratio": 0,
+      "motion": "hold",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "A verified underwater seafloor-sediment view grounds the physical disturbance context while the cited Nature evidence carries the measured biodiversity result."
+    },
     {
       "scene_id": "scene_016",
       "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
@@ -88,6 +116,26 @@
       "role": "human_context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A distinct formal-hearing trim represents regulatory delay while source documents retain the factual burden."
+    },
+    {
+      "scene_id": "scene_053",
+      "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+      "slice_index": 0,
+      "trim_in_ratio": 0.4,
+      "motion": "pull",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "Official NOAA water-column footage directly carries the midwater setting and suspended-particle mechanism while the cited paper retains the food-web claim and scientific qualification."
+    },
+    {
+      "scene_id": "scene_053",
+      "claim_id": "CLM_015_MIDWATER_DISCHARGE_RISK",
+      "slice_index": 8,
+      "trim_in_ratio": 0.05,
+      "motion": "hold",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "Official water-column footage directly grounds the midwater food-web mechanism while the cited paper carries the experiment and effect."
     },
     {
       "scene_id": "scene_054",
