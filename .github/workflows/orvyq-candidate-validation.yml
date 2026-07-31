@@ -26,6 +26,8 @@ on:
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
 
 concurrency:
   group: orvyq-candidate-validation-${{ inputs.project_id || github.ref_name }}-${{ github.ref }}
@@ -259,3 +261,20 @@ jobs:
 
       - name: Stop when the pre-render QA chain failed
         run: test "$(cat qa-chain.status)" = "0"
+
+      - name: Report Candidate Validation on the active pull request
+        if: always()
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          PROJECT_LABEL="${PROJECT_ID:-unresolved}"
+          QA_STATUS="$(cat qa-chain.status 2>/dev/null || echo unavailable)"
+          BODY="Candidate Validation finished with **${JOB_STATUS}**. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}. Project: \`${PROJECT_LABEL}\`. Exact source: \`${SOURCE_SHA}\`. Pre-render QA status: \`${QA_STATUS}\`. No video render was started."
+          PR_NUMBER="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$GITHUB_REF_NAME" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$PR_NUMBER" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$BODY" ||
+              echo "::warning::Could not post Candidate Validation result to PR #$PR_NUMBER."
+          fi
