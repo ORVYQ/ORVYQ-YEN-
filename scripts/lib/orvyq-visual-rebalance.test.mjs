@@ -126,7 +126,7 @@ test("materialization replaces cards with exact evidence, attribution, and foota
         replacement_assets: [{
           asset_path: "assets/footage/direct.mp4",
           trim_in_sec: 2,
-          trim_out_sec: 9,
+          trim_out_sec: 10,
         }],
       },
     ],
@@ -146,7 +146,39 @@ test("materialization replaces cards with exact evidence, attribution, and foota
   assert.equal(result[0].evidence.eyebrow, "OFFICIAL AGENCY — PRIMARY EVIDENCE");
   assert.equal(result[1].asset_type, "footage");
   assert.equal(result[1].asset, "assets/footage/direct.mp4");
+  assert.equal(result[1].trim_in_sec, 2);
   assert.equal(result[1].trim_out_sec, 9);
+  assert.equal(result[1].trim_out_sec - result[1].trim_in_sec, result[1].duration);
+});
+
+test("footage replacement fails closed when the available source window is shorter than the generated shot", () => {
+  const shots = [shot(7, "graphic", "SEC_01", { graphic: { type: "claim_recap_card" } })];
+  const plan = {
+    status: "materialized",
+    actions: [{
+      baseline_shot_index: 0,
+      claim_id: "CLM_001",
+      duration_seconds: 7,
+      decision: "replace_contextual_footage",
+      projected_medium: "contextual_footage",
+      asset_request_id: "REQ_FTG_DIRECT",
+      rationale: "Use a physically direct process shot for the narrated action.",
+      replacement_assets: [{
+        asset_path: "assets/footage/direct.mp4",
+        trim_in_sec: 2,
+        trim_out_sec: 8.5,
+      }],
+    }],
+  };
+
+  assert.throws(
+    () => materializeVisualRebalancePlan({
+      shots,
+      plan,
+      assetRequests: [{ asset_request_id: "REQ_FTG_DIRECT", status: "ready" }],
+    }),
+    /footage replacement is shorter than the shot/,
+  );
 });
 
 test("primary-evidence replacement fails closed when canonical provenance is missing", () => {
