@@ -181,7 +181,7 @@
         "claim_id": "CLM_007_US_PARALLEL_ROUTE",
         "section_id": "SEC_01_MUD_TO_DAYLIGHT",
         "scene_id": "scene_001",
-        "visual_role": "governance_context",
+        "visual_role": "context",
         "editorial_purpose": "Shift from the physical frontier to a restrained human decision setting without identifying the generic meeting as a named institution.",
         "narration_anchor": "Opening visual premise before the first narrated sentence.",
         "semantic_rationale": "Shift from the physical frontier to a restrained human decision setting without identifying the generic meeting as a named institution.",
@@ -4270,6 +4270,6 @@
         "generic_stock": false
       }
     ],
-    "generated_at": "2026-07-31T11:16:21.273Z"
+    "generated_at": "2026-07-31T11:28:07.768Z"
   }
 }
