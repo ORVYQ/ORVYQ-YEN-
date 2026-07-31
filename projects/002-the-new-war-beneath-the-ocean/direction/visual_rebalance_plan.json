@@ -736,7 +736,7 @@
         {
           "asset_path": "assets/footage/scene_054_direct.mp4",
           "trim_in_sec": 0,
-          "trim_out_sec": 7.033333333333333
+          "trim_out_sec": 8
         }
       ],
       "rationale": "Replace the generic JAMSTEC comparison with a directly related scientific decision/field-assessment moment."
