@@ -63,6 +63,44 @@ async function loadDecisionRounds(dir, projectId) {
   };
 }
 
+async function applyOfficialSourceOverrides(dir, projectId) {
+  const overridesFile = path.join(dir, "research", "footage_constraint_overrides.json");
+  const planFile = path.join(dir, "research", "footage_acquisition_plan.json");
+  if (!(await pathExists(overridesFile)) || !(await pathExists(planFile))) return 0;
+
+  const [overrides, plan] = await Promise.all([readJson(overridesFile), readJson(planFile)]);
+  if (overrides.project_id !== projectId || plan.project_id !== projectId) {
+    throw new Error("official footage override project_id mismatch");
+  }
+  const sources = overrides.official_sources || {};
+  const expectedScenes = new Set(Object.keys(sources));
+  if (!expectedScenes.size) return 0;
+
+  let applied = 0;
+  plan.assets = (plan.assets || []).map((asset) => {
+    const source = sources[asset.scene_id];
+    if (!source) return asset;
+    for (const required of ["provider_asset_id", "source_page_url", "media_url", "source_institution", "license_url"]) {
+      if (!String(source[required] || "").trim()) {
+        throw new Error(`${asset.scene_id}: official source is missing ${required}`);
+      }
+    }
+    expectedScenes.delete(asset.scene_id);
+    applied += 1;
+    return {
+      ...asset,
+      queries: [],
+      fallback_queries: [],
+      direct_source: source,
+    };
+  });
+  if (expectedScenes.size) {
+    throw new Error(`Official footage override scenes are absent from the acquisition plan: ${[...expectedScenes].join(", ")}`);
+  }
+  await writeJsonAtomic(planFile, plan);
+  return applied;
+}
+
 function materializeOpeningHook(shots, motionHook) {
   const replaceCount = Number(motionHook.replace_opening_shot_count || motionHook.shots?.length || 0);
   if (!replaceCount || !Array.isArray(motionHook.shots) || motionHook.shots.length !== replaceCount) {
@@ -153,6 +191,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
     await writeJsonAtomic(provenanceFile, provenance);
   }
 
+  const officialFallbacksApplied = await applyOfficialSourceOverrides(dir, projectId);
   const wasMaterialized = rebalance.status === "materialized";
   rebalance.status = result.ready_for_materialization ? "materialized" : "blocked_pending_assets";
   const pendingRequestIds = (result.requests.requests || [])
@@ -190,6 +229,7 @@ export async function applyProjectFootageVisualDecisions(projectId) {
     project_id: projectId,
     decision_rounds: decisions.round_files,
     ready_for_materialization: result.ready_for_materialization,
+    official_fallbacks_applied: officialFallbacksApplied,
     applied_approvals: result.applied_approvals,
     applied_rejections: result.applied_rejections,
     stale_decisions: result.stale_decisions,
