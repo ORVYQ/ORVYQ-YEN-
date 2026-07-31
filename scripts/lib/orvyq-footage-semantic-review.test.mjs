@@ -61,3 +61,59 @@ test("production audit requires an exact approval for every narration use", () =
   assert.equal(result.pass, false);
   assert.match(result.failures.join("; "), /no exact approved use/);
 });
+
+test("an explicit adjacent narration extension may reuse approved bytes only inside the same claim", () => {
+  const asset = "assets/footage/context.mp4";
+  const approval = {
+    provider_asset_id: "900",
+    asset_sha256: "f".repeat(64),
+    contact_sheet_sha256: "1".repeat(64),
+    approved_uses: [{
+      claim_id: "CLM_010",
+      narration_anchor: "The first reviewed sentence in this claim.",
+      semantic_rationale: "The reviewed footage directly supports the physical setting described by this claim.",
+    }],
+  };
+  const result = auditFootageSemanticReviews({
+    footageShots: [{
+      asset,
+      claim_id: "CLM_010",
+      narration_anchor: "The immediately adjacent sentence continues the same claim.",
+      semantic_rationale: "The same physical setting remains visible while the claim continues into the adjacent narration slice.",
+      claim_bound_extension: true,
+      claim_bound_extension_basis: "The exact active bytes were already reviewed for this claim and the adjacent slice keeps the same semantic role.",
+    }],
+    provenanceByPath: new Map([[asset, { provider_asset_id: "900", sha256: "f".repeat(64) }]]),
+    reviews: { approved_assets: [approval] },
+  });
+  assert.equal(result.pass, true, result.failures.join("; "));
+});
+
+test("claim-bound extension cannot cross into a different claim", () => {
+  const asset = "assets/footage/context.mp4";
+  const result = auditFootageSemanticReviews({
+    footageShots: [{
+      asset,
+      claim_id: "CLM_011",
+      narration_anchor: "A different claim must not inherit the approval.",
+      semantic_rationale: "This long rationale cannot override the claim identity boundary enforced by the audit.",
+      claim_bound_extension: true,
+      claim_bound_extension_basis: "The caller tried to label this as an extension even though the claim identity changed.",
+    }],
+    provenanceByPath: new Map([[asset, { provider_asset_id: "901", sha256: "2".repeat(64) }]]),
+    reviews: {
+      approved_assets: [{
+        provider_asset_id: "901",
+        asset_sha256: "2".repeat(64),
+        contact_sheet_sha256: "3".repeat(64),
+        approved_uses: [{
+          claim_id: "CLM_010",
+          narration_anchor: "The approved claim sentence.",
+          semantic_rationale: "The reviewed footage directly supports only the original claim and not another claim.",
+        }],
+      }],
+    },
+  });
+  assert.equal(result.pass, false);
+  assert.match(result.failures.join("; "), /no exact approved use/);
+});
