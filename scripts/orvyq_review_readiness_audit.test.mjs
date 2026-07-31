@@ -87,17 +87,15 @@ test("pre-review readiness fails closed when unresolved footage remains", async 
   );
 });
 
-test("Project 002 real footage and contact-sheet bytes are ready for the seven-scene human review", async () => {
+test("Project 002 exact remaining footage bytes are ready for system-owned visual QA", async () => {
   const report = await buildReviewReadinessReport("002-the-new-war-beneath-the-ocean", {
     generatedAt: "2026-07-31T00:00:00.000Z"
   });
   assert.equal(report.review_ready, true);
   assert.equal(report.checks.footage_plan_complete, 49);
   assert.deepEqual(report.checks.pending_review_scenes, [
-    "scene_002",
     "scene_003",
     "scene_004",
-    "scene_005",
     "scene_012",
     "scene_024",
     "scene_032"
