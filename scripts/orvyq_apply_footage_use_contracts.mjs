@@ -11,6 +11,7 @@ import {
 import { canonicalVisualRole } from "./lib/orvyq-visual-roles.mjs";
 import { materializeVisualRebalancePlan } from "./lib/orvyq-visual-rebalance.mjs";
 import { enforceFootageUseBudget } from "./lib/orvyq-footage-use-budget.mjs";
+import { fitContiguousFootageRunsToSources } from "./lib/orvyq-footage-trim-fit.mjs";
 
 function sceneIdFromAsset(assetPath) {
   const match = String(assetPath || "").match(/(?:^|\/)scene_(\d{3})(?:_|\.mp4)/);
@@ -212,6 +213,13 @@ export async function applyFootageUseContracts(projectId) {
   for (const record of runtime.records || []) {
     provenanceByScene.set(record.scene_id, await readJson(path.join(dir, `${record.path}.provenance.json`)));
   }
+  const sourceDurationByAsset = new Map(
+    (runtime.records || []).map((record) => {
+      const provenance = provenanceByScene.get(record.scene_id) || {};
+      const duration = Number(provenance.actual_duration_seconds || provenance.duration_seconds || provenance.duration || 0);
+      return [record.path, duration];
+    }),
+  );
 
   const shots = blueprint.full_production?.shots || [];
   const shotsByTarget = new Map();
@@ -324,8 +332,12 @@ export async function applyFootageUseContracts(projectId) {
     rebalancePlan,
     assetRequests: assetRequests.requests || [],
   });
-  const budgetResult = enforceFootageUseBudget({
+  const trimFitResult = fitContiguousFootageRunsToSources({
     shots: synchronizedShots,
+    sourceDurationByAsset,
+  });
+  const budgetResult = enforceFootageUseBudget({
+    shots: trimFitResult.shots,
     maxUsesPerSource: Number(blueprint.global_rules?.max_uses_per_source),
     minimumHookSeconds: Number(motionHook.minimum_seconds),
   });
@@ -346,6 +358,9 @@ export async function applyFootageUseContracts(projectId) {
     override_file: overrides ? "research/footage_use_contract_overrides.json" : null,
     visual_rebalance_resynchronized: Boolean(rebalancePlan?.status === "materialized"),
     deferred_targets: deferredTargets,
+    source_duration_fit: {
+      shifted_contiguous_runs: trimFitResult.shifted_runs,
+    },
     footage_use_budget: {
       max_uses_per_source: Number(blueprint.global_rules?.max_uses_per_source),
       minimum_hook_seconds: Number(motionHook.minimum_seconds),
@@ -375,6 +390,7 @@ export async function applyFootageUseContracts(projectId) {
     deferred_target_count: deferredTargets.length,
     removed_previous_assignments: removedAssignments,
     explicit_retirement_count: (contracts.retired_targets || []).length,
+    shifted_contiguous_run_count: trimFitResult.shifted_runs.length,
     removed_optional_hook_use_count: budgetResult.removed_hook_uses.length,
     override_applied: Boolean(overrides),
     pruned_plan_assets: originalPlanCount - plan.assets.length,
