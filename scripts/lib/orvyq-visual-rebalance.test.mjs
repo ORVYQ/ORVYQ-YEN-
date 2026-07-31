@@ -15,6 +15,21 @@ function shot(duration, asset_type, section_id, extra = {}) {
   };
 }
 
+function primaryEvidenceAsset(overrides = {}) {
+  return {
+    evidence_asset_id: "EVID_OFFICIAL",
+    source_ids: ["SRC_OFFICIAL"],
+    source_url: "https://example.org/official-source.pdf",
+    source_institution: "Official Agency",
+    source_title: "Official Source Publication",
+    source_date: "2026-07-31",
+    content_identity: "SRC_OFFICIAL:figure-1",
+    caption: "Official Agency — verified Figure 1",
+    limitation: "The figure supports only the specific result shown.",
+    ...overrides,
+  };
+}
+
 test("rebalance decisions are exclusive, complete, and tighten-only compliant", () => {
   const shots = [
     shot(65, "footage", "SEC_01"),
@@ -67,7 +82,7 @@ test("missing replacement asset fails closed", () => {
   assert.equal(result.materialization_ready, false);
 });
 
-test("materialization replaces cards with exact evidence and footage assets", () => {
+test("materialization replaces cards with exact evidence, attribution, and footage assets", () => {
   const shots = [
     shot(8, "graphic", "SEC_01", {
       graphic: { type: "claim_recap_card" },
@@ -116,12 +131,52 @@ test("materialization replaces cards with exact evidence and footage assets", ()
     ],
   };
 
-  const result = materializeVisualRebalancePlan({ shots, plan, assetRequests: requests });
+  const result = materializeVisualRebalancePlan({
+    shots,
+    plan,
+    assetRequests: requests,
+    primaryEvidenceAssets: [primaryEvidenceAsset()],
+  });
   assert.equal(result[0].asset_type, "evidence");
   assert.deepEqual(result[0].evidence.evidence_asset_ids, ["EVID_OFFICIAL"]);
+  assert.deepEqual(result[0].evidence.source_ids, ["SRC_OFFICIAL"]);
+  assert.equal(result[0].evidence.source_label, "Official Agency — 2026-07-31");
+  assert.equal(result[0].evidence.title, "Official Agency — verified Figure 1");
+  assert.equal(result[0].evidence.eyebrow, "OFFICIAL AGENCY — PRIMARY EVIDENCE");
   assert.equal(result[1].asset_type, "footage");
   assert.equal(result[1].asset, "assets/footage/direct.mp4");
   assert.equal(result[1].trim_out_sec, 9);
+});
+
+test("primary-evidence replacement fails closed when canonical provenance is missing", () => {
+  const shots = [shot(8, "graphic", "SEC_01", { graphic: { type: "claim_recap_card" } })];
+  const plan = {
+    status: "materialized",
+    actions: [{
+      baseline_shot_index: 0,
+      claim_id: "CLM_001",
+      duration_seconds: 8,
+      decision: "replace_primary_evidence",
+      projected_medium: "primary_evidence",
+      asset_request_id: "REQ_EVD_DIRECT",
+      rationale: "Use the exact official source figure for the narrated claim.",
+      replacement_assets: [{
+        asset_path: "assets/evidence/official.png",
+        evidence_asset_id: "EVID_OFFICIAL",
+        source_region: "Figure 1",
+      }],
+    }],
+  };
+
+  assert.throws(
+    () => materializeVisualRebalancePlan({
+      shots,
+      plan,
+      assetRequests: [{ asset_request_id: "REQ_EVD_DIRECT", status: "ready" }],
+      primaryEvidenceAssets: [primaryEvidenceAsset({ source_date: "" })],
+    }),
+    /lacks canonical provenance fields: source_date/,
+  );
 });
 
 test("materialization redesigns source-derived graphic-card evidence", () => {
