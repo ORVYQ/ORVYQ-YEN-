@@ -29,6 +29,14 @@ function decisionRoundOrder(name) {
   return Number.MAX_SAFE_INTEGER;
 }
 
+function normalizeReviewOrigin(value) {
+  const origin = String(value || "legacy_system_visual_qa").trim();
+  if (!["system_visual_qa", "legacy_system_visual_qa", "human_exception_review"].includes(origin)) {
+    throw new Error(`Unsupported footage visual review_origin ${origin}`);
+  }
+  return origin;
+}
+
 async function loadDecisionRounds(dir, projectId) {
   const researchDir = path.join(dir, "research");
   const names = (await fs.readdir(researchDir))
@@ -40,8 +48,11 @@ async function loadDecisionRounds(dir, projectId) {
   for (const name of names) {
     const round = await readJson(path.join(researchDir, name));
     if (round.project_id !== projectId) throw new Error(`${name} project_id does not match ${projectId}`);
-    bases.push(`${name}: ${round.review_basis}`);
-    for (const decision of round.decisions || []) byScene.set(decision.scene_id, decision);
+    const reviewOrigin = normalizeReviewOrigin(round.review_origin);
+    bases.push(`${name} [${reviewOrigin}]: ${round.review_basis}`);
+    for (const decision of round.decisions || []) {
+      byScene.set(decision.scene_id, { ...decision, review_origin: reviewOrigin });
+    }
   }
   return {
     schema_version: "1.0",
@@ -126,13 +137,17 @@ export async function applyProjectFootageVisualDecisions(projectId) {
     if (String(provenance.provider_asset_id) !== String(decision.provider_asset_id)) {
       throw new Error(`${decision.scene_id}: provenance provider does not match the reviewed asset`);
     }
+    const reviewOrigin = normalizeReviewOrigin(decision.review_origin);
     provenance.approved_for_final_edit = decision.decision === "approve";
-    provenance.human_review_status = decision.decision === "approve"
+    provenance.visual_qa_status = decision.decision === "approve"
       ? "APPROVED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW"
       : "REJECTED_CLAIM_SPECIFIC_CONTACT_SHEET_REVIEW";
+    provenance.visual_qa_origin = reviewOrigin;
     provenance.reviewed_asset_sha256 = decision.asset_sha256;
     provenance.reviewed_contact_sheet_sha256 = decision.contact_sheet_sha256;
-    provenance.human_review_reason = decision.reason;
+    provenance.visual_qa_reason = decision.reason;
+    delete provenance.human_review_status;
+    delete provenance.human_review_reason;
     if (decision.decision === "approve") delete provenance.fail_closed_reason;
     else provenance.fail_closed_reason = decision.reason;
     await writeJsonAtomic(provenanceFile, provenance);
