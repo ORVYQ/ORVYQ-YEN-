@@ -25,6 +25,52 @@ function unique(values) {
   return [...new Set(values.filter((value) => typeof value === "string" && value.trim()).map((value) => value.trim()))];
 }
 
+function sourceIdsForShot(shot) {
+  return unique([...(shot.evidence?.source_ids || []), ...(shot.editorial_overlay?.source_ids || [])]);
+}
+
+function isSourceBackedEvidenceShot(shot) {
+  if (shot.asset_type === "evidence") return sourceIdsForShot(shot).length > 0;
+  return shot.asset_type === "graphic" && shot.source_derived === true && sourceIdsForShot(shot).length > 0;
+}
+
+function actionLeavesSourceBackedEvidence(shot, action) {
+  if (!action) return isSourceBackedEvidenceShot(shot);
+  if (action.decision === "replace_primary_evidence") return true;
+  if (action.decision === "replace_contextual_footage" || action.decision === "remove") return false;
+  return isSourceBackedEvidenceShot(shot);
+}
+
+// Rebalancing may reduce cards and source-derived graphics, but it may
+// never erase the final source-backed visual for a claim. When a plan
+// would do so, retain the shortest affected baseline evidence beat.
+// This minimizes presentation time while preserving claim provenance.
+function protectedClaimEvidenceIndices(shots, actions) {
+  const indicesByClaim = new Map();
+  shots.forEach((shot, index) => {
+    if (!shot.claim_id) return;
+    const indices = indicesByClaim.get(shot.claim_id) || [];
+    indices.push(index);
+    indicesByClaim.set(shot.claim_id, indices);
+  });
+
+  const protectedIndices = new Set();
+  for (const indices of indicesByClaim.values()) {
+    const baselineEvidence = indices.filter((index) => isSourceBackedEvidenceShot(shots[index]));
+    if (!baselineEvidence.length) continue;
+    if (indices.some((index) => actionLeavesSourceBackedEvidence(shots[index], actions.get(index)))) continue;
+
+    const candidate = baselineEvidence
+      .filter((index) => {
+        const action = actions.get(index);
+        return action && (action.decision === "replace_contextual_footage" || action.decision === "remove");
+      })
+      .sort((left, right) => Number(shots[left].duration) - Number(shots[right].duration) || left - right)[0];
+    if (Number.isInteger(candidate)) protectedIndices.add(candidate);
+  }
+  return protectedIndices;
+}
+
 function requireReadyRequest(requests, action) {
   const request = requests.get(action.asset_request_id);
   if (!request) throw new Error(`shot ${action.baseline_shot_index} references unknown asset request ${action.asset_request_id}`);
@@ -316,6 +362,7 @@ export function materializeVisualRebalancePlan({
     ? loadPrimaryEvidenceAssets(effectivePlan, primaryEvidenceAssets)
     : [];
   const output = clone(shots || []);
+  const protectedEvidenceIndices = protectedClaimEvidenceIndices(output, actions);
 
   for (let index = 0; index < output.length; index += 1) {
     const action = actions.get(index);
@@ -323,6 +370,7 @@ export function materializeVisualRebalancePlan({
     if (action.claim_id !== output[index].claim_id) {
       throw new Error(`shot ${index} claim drift blocks rebalance materialization`);
     }
+    if (protectedEvidenceIndices.has(index)) continue;
     if (action.decision === "redesign" || action.decision === "keep") {
       output[index] = applyRedesign(output[index], action);
     } else if (action.decision === "replace_primary_evidence") {
