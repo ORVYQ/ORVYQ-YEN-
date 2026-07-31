@@ -1493,21 +1493,23 @@
         "claim_id": "CLM_007_US_PARALLEL_ROUTE",
         "section_id": "SEC_04_TWO_RULEBOOKS",
         "scene_id": "scene_004",
-        "visual_role": "context",
+        "visual_role": "human_context",
         "editorial_purpose": "Present us parallel route evidence for this section.",
         "narration_anchor": "fails. This is not a minor delay in paperwork. These rules are supposed to answer questions humanity has never answered at industrial",
         "source_slice_index": 2,
         "asset_type": "footage",
-        "asset": "assets/footage/scene_014_9ffed5eb663a6f6f21233078.mp4",
-        "trim_in_sec": 1.8,
-        "trim_out_sec": 9.3,
-        "motion": "drift_left",
+        "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
+        "trim_in_sec": 0,
+        "trim_out_sec": 7.5,
+        "motion": "hold",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure.",
+        "semantic_rationale": "A real regulatory hearing interrupts the dense legal-evidence sequence while the narration explains why unresolved rules matter at industrial scale; official documents retain every legal and factual claim.",
         "semantic_link": "conceptual",
-        "reuse_reason": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure."
+        "reuse_reason": "This ocean-impact context is introduced while explaining the U.S. parallel route and returns under plume complexity at a distinct trim window, linking regulatory divergence to the environmental behaviour that any route must measure.",
+        "claim_bound_extension": true,
+        "claim_bound_extension_basis": "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale."
       },
       {
         "duration": 6,
@@ -3832,14 +3834,14 @@
         "source_slice_index": 2,
         "asset_type": "footage",
         "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
-        "trim_in_sec": 5.1,
-        "trim_out_sec": 12.767,
+        "trim_in_sec": 4.597,
+        "trim_out_sec": 12.263,
         "motion": "drift_right",
         "hook_footage": false,
         "contextual_footage": true,
         "generic_stock": true,
-        "semantic_rationale": "A distinct formal hearing trim represents regulatory delay while source documents retain the factual burden.",
-        "semantic_link": "physical",
+        "semantic_rationale": "A distinct formal-hearing trim represents regulatory delay while source documents retain the factual burden.",
+        "semantic_link": "conceptual",
         "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
       },
       {
@@ -4268,6 +4270,6 @@
         "generic_stock": false
       }
     ],
-    "generated_at": "2026-07-31T09:44:14.490Z"
+    "generated_at": "2026-07-31T11:16:21.273Z"
   }
 }

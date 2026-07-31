@@ -836,5 +836,6 @@
     "max_retry_delay_ms": 3000
   },
   "planned_asset_count": 49,
-  "use_contract": "research/footage_use_contracts.json"
+  "use_contract": "research/footage_use_contracts.json",
+  "use_contract_overrides": "research/footage_use_contract_overrides.json"
 }

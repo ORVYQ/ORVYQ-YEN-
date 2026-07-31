@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "ready",
-  "generation_policy": "claim-bound footage use contracts; one scene may appear only at explicitly listed claim/slice targets; current runtime paths are resolved by scene id; no automatic backfill or scene-id-wide reassignment",
+  "generation_policy": "claim-bound footage use contracts plus explicit validated overrides; one scene may appear only at listed claim/slice targets; no automatic backfill, silent retirement or scene-id-wide reassignment",
   "footage_assignments": {
     "CLM_001_JAPAN_TECHNICAL_MILESTONE": {
       "2": {
@@ -163,13 +163,14 @@
         "role": "context",
         "reuse_reason": "The rulebook image returns from the opening hook under the U.S. parallel-route claim at a different trim window, a deliberate geopolitical callback rather than an incidental repeat."
       },
-      "4": {
+      "2": {
         "asset": "assets/footage/scene_050_863b8a7dd26b4dd288235b75.mp4",
         "trimInRatio": 0,
         "motion": "hold",
         "role": "human_context",
-        "semantic_anchor": "In 2026, NOAA revised its process so exploration and commercial recovery applications could move through a consolidated review structure.",
-        "semantic_rationale": "A regulatory hearing breaks up the dense document sequence in the United States route while NOAA and executive-order captures retain the factual burden."
+        "semantic_anchor": "fails. This is not a minor delay in paperwork. These rules are supposed to answer questions humanity has never answered at industrial",
+        "semantic_rationale": "A real regulatory hearing interrupts the dense legal-evidence sequence while the narration explains why unresolved rules matter at industrial scale; official documents retain every legal and factual claim.",
+        "semantic_link": "conceptual"
       },
       "5": {
         "asset": "assets/footage/scene_038_9d962f32cfd2deda34a8ddf6.mp4",
@@ -495,9 +496,10 @@
         "trimInRatio": 0.34,
         "motion": "drift_right",
         "role": "human_context",
-        "semantic_anchor": "Every year without agreed international rules gives national alternatives more room.",
-        "semantic_rationale": "A distinct formal hearing trim represents regulatory delay while source documents retain the factual burden.",
-        "reuse_reason": "A second, deliberately separated use at a distinct trim window connects two related narration beats; the clip remains contextual and never substitutes for factual evidence."
+        "semantic_anchor": "alternatives more room to become the default. And every year without baseline ecological research makes it harder to know what was lost after",
+        "semantic_rationale": "A distinct formal-hearing trim represents regulatory delay while source documents retain the factual burden.",
+        "semantic_link": "conceptual",
+        "reuse_reason": "A deliberate claim-bound reuse of scene_050 at a distinct narration target and trim window."
       },
       "3": {
         "asset": "assets/footage/scene_038_9d962f32cfd2deda34a8ddf6.mp4",
@@ -850,11 +852,13 @@
     ]
   },
   "last_footage_use_contract_application": {
-    "generated_at": "2026-07-31T09:44:14.241Z",
-    "managed_scene_count": 27,
+    "generated_at": "2026-07-31T11:16:21.026Z",
+    "managed_scene_count": 28,
     "pruned_scene_count": 5,
-    "assignment_count": 30,
-    "removed_previous_assignments": 30,
+    "assignment_count": 32,
+    "removed_previous_assignments": 32,
+    "explicit_retirement_count": 1,
+    "override_file": "research/footage_use_contract_overrides.json",
     "deferred_targets": []
   }
 }
