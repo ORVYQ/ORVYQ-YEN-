@@ -148,6 +148,9 @@ jobs:
       - name: Stop when canonical full production plan failed
         run: test "$(cat full-production-plan.status)" = "0"
 
+      - name: Reconcile claim-bound footage contracts after shot generation
+        run: node scripts/orvyq_apply_footage_use_contracts.mjs --project-id="$PROJECT_ID"
+
       - name: Validate canonical schemas and recovered project data
         run: npm run validate:canonical
 
