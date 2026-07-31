@@ -2,47 +2,47 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "review_origin": "system_visual_qa",
-  "review_basis": "Sixth ORVYQ system-owned byte-bound semantic visual-QA round. The stricter Pexels replacements were inspected against every claim-bound use. All five remain visually misleading, so the system rejects them and switches these specialized slots to verified official NOAA or USGS direct-source footage.",
+  "review_basis": "Seventh system-owned byte-bound semantic QA pass. The exact five current assets remain unsuitable for their claim-bound uses and are rejected so the verified official direct sources can replace them. The prior sixth-pass record remains preserved in Git history.",
   "decisions": [
     {
       "scene_id": "scene_003",
-      "provider_asset_id": "33151454",
-      "asset_sha256": "918e412d4333f4c5ed9df10498a58bb0264e0aae2d05a2ffb2d82e77666379c3",
-      "contact_sheet_sha256": "81d091fad2fc71ffca43d12623ee08e0638b112c0388e674820138bdd50b06b4",
+      "provider_asset_id": "5668613",
+      "asset_sha256": "a906b7b46969a6f77e2a4fd24036d3628e04c8e263f5a777851df18b9b1b2c0f",
+      "contact_sheet_sha256": "509c60445742218f333758672561add01660f256ae6adc2f22ea9bb259e00633",
       "decision": "reject",
-      "reason": "The contact sheet shows a stingray on a bright sandy seabed. It is not an abyssal plain, deep-ocean ROV survey, or restrained Clarion-Clipperton Zone context."
+      "reason": "Shows open-water surface, not an abyssal seabed or deep-ocean survey required by the assigned narration."
     },
     {
       "scene_id": "scene_004",
-      "provider_asset_id": "30768552",
-      "asset_sha256": "700f94ab7d06d5f3a76cd828afc5484845dfdce6f4129f263c38a4376924f012",
-      "contact_sheet_sha256": "7f81b8041f49aeb9f10e1bd29197e97f1d4bd53cd5e9a3f24231252e907b6151",
+      "provider_asset_id": "4336054",
+      "asset_sha256": "25e87892bd1bb822fbe91296b2fbf10f4351e62fbc04d289bafa9d4f3cff3f44",
+      "contact_sheet_sha256": "bdd81a573c2327d993d012fbc0509b5ece4e1283fc6436e284c976ee525a1196",
       "decision": "reject",
-      "reason": "The contact sheet shows cranes and construction barges in sheltered inland water. It does not show an offshore working-vessel deck, pipe handling, or marine lifting equipment."
+      "reason": "Shows routine sand unloading, not offshore scientific operations or relevant subsea lifting hardware."
     },
     {
       "scene_id": "scene_012",
-      "provider_asset_id": "33872851",
-      "asset_sha256": "277685b16fabf4e9f9bd49d40c9525b6870c81041329386a492b60cdeff752fc",
-      "contact_sheet_sha256": "286b412cb356f3291f86dbd3615ee95e9f63ca691b8bfe25cdd982fba9150e7a",
+      "provider_asset_id": "34311344",
+      "asset_sha256": "c861aafcf7e699dc0cbec7cc5f06f36a44434f5a55bd6d0f22c6f115022e1485",
+      "contact_sheet_sha256": "31fa39b1be0f801d811cb793a66364d6944f677d9d0e5a9eb5a40a2a7068831b",
       "decision": "reject",
-      "reason": "The contact sheet shows a stingray naturally stirring shallow sand. It cannot represent persistent deep-seabed extraction tracks, benthic survey work, or long-term industrial disturbance."
+      "reason": "Shows a bright sandy wildlife scene, not benthic survey work or persistent industrial seabed disturbance."
     },
     {
       "scene_id": "scene_024",
-      "provider_asset_id": "35239446",
-      "asset_sha256": "15ca2a2ace60e18d9f59c4b98208fc6ea80fe1bd4ad12126ff1d015655a606b4",
-      "contact_sheet_sha256": "0a222e242626829ff4591f32a88799b5976cc3de29896109cb14bc2046d74d3d",
+      "provider_asset_id": "36212341",
+      "asset_sha256": "b0c368da9bfa20da7da226f732de45e86044d9533b3b753cea6ee2a39ae92781",
+      "contact_sheet_sha256": "0f44c8410f1f2998cea902fd8a5b383532a24e9580e5b240c5ba98c0643ed37d",
       "decision": "reject",
-      "reason": "The contact sheet shows a naval or military vessel with visible weapon hardware. It is not an oceanographic research vessel, survey crew, or scientific mapping operation."
+      "reason": "Shows an unidentified vessel without visible oceanographic survey, mapping, or scientific-operation context."
     },
     {
       "scene_id": "scene_032",
-      "provider_asset_id": "29881943",
-      "asset_sha256": "49de51c2e4112fb490b4722886b732cb3f2703dd6c6915b5f0f0a3e513827812",
-      "contact_sheet_sha256": "8e3d55f143aad7735dd9bf1a10ddf329b36948ec134d7e4f36117e32d907b362",
+      "provider_asset_id": "7846334",
+      "asset_sha256": "8d0edf8563337dbcf521c69cb3a7ef00b1c5da9c01a72c9eb5d5d664e9cf2f3e",
+      "contact_sheet_sha256": "e5dc8d9754a0296739501fa9073cc3f470e23e55888d87ccbecd9dfb74a40ab9",
       "decision": "reject",
-      "reason": "The contact sheet is a stylized creature close-up and appears synthetic or highly staged. It does not show a real deep-ocean descent, seafloor survey, or defensible abyssal ecosystem context."
+      "reason": "Shows an indoor artificial-light scene unrelated to deep water, seabed ecosystems, or ocean descent."
     }
   ]
 }
