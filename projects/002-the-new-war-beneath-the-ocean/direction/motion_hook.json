@@ -62,7 +62,7 @@
       "motion_variant": "drift_left",
       "hook_footage": true,
       "claim_id": "CLM_007_US_PARALLEL_ROUTE",
-      "visual_role": "governance_context",
+      "visual_role": "context",
       "generic_stock": true,
       "editorial_purpose": "Shift from the physical frontier to a restrained human decision setting without identifying the generic meeting as a named institution."
     },
