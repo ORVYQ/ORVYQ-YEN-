@@ -313,6 +313,78 @@ Current status (last verified 2026-07-30):
 
 ## 15. Change log
 
+### 2026-07-31 — Review-readiness audit: the stages after the review render, and project selection
+
+A full review-readiness pass over the system found defects concentrated in
+the parts of the chain no run had ever reached. Every one was root-caused and
+fixed in shared code, per section 12.
+
+**The stages after the Full-Length Review had never executed, and could not
+have succeeded.** Three independent blockers sat in `orvyq-final-encode.yml`:
+
+- *Review/final parity could never pass.* Both `orvyq-review.yml` and
+  `orvyq-final-encode.yml` hand-inlined their render manifest in a `node -e`
+  heredoc writing `schema_version: '3.0'`, while
+  `scripts/orvyq_review_final_parity.mjs` required `"2.0"` and its unit tests
+  built their own `"2.0"` fixtures. Three copies of one format, drifted — the
+  same duplicated-definition trap this log has already recorded twice. Because
+  the fixtures never ran the code the workflows run, the tests stayed green
+  while the real gate was guaranteed to fail. Fixed by adding
+  `scripts/orvyq_render_manifest.mjs` as the single writer both workflows
+  call; it imports `SCHEMA_VERSION` and the identity field list from the
+  verifier, so the two cannot drift again. The verifier moved to `"3.0"`
+  rather than the workflows to `"2.0"`, because real review manifests already
+  on file carry `"3.0"`. The fixture-only tests were replaced with tests that
+  exercise the real builder.
+- *Post-render media QA could never run.* `orvyq_media_qa.mjs` reads
+  `qa/speech_transcript.json`, which is gitignored build output and is not
+  carried in the render bundle. Final Encode installed no speech tooling and
+  ran no speech QA, so the step always died on a missing file. It now runs the
+  same speech verification against its own rendered file that the review runs
+  against its own.
+- *The deliverable encode verified less than the review it reproduces.* Final
+  Encode copied six named asset files out of the approved bundle and
+  hash-checked exactly those, skipping the asset manifest (every binary asset)
+  and the `render_ready_project` tree hash. It now places the whole approved
+  assets tree and runs `orvyq_verify_bundle_integrity.mjs`, the same check the
+  review uses, and additionally verifies that `approved_review_run_id` names a
+  successful `orvyq-review.yml` run — the mirror of the check the review
+  already performs on its validation run. That run's commit is compared
+  against the approval's own `candidate_source_sha`, never against the current
+  HEAD: recording an approval is itself a commit, so HEAD has legitimately
+  moved on by the time this workflow runs, and comparing to HEAD would reject
+  every correctly approved candidate. This is the same distinction
+  `orvyq_verify_approval.mjs` already documents.
+
+**Artifacts that assert validity were published before the gate that decides
+it.** Candidate Validation uploaded the `orvyq-validated-candidate-*` bundle
+before the pre-render QA chain ran, and the review uploaded the render bundle
+Final Encode consumes before post-render media and near-black QA. Both uploads
+now follow their gates. Diagnostic artifacts and the rendered MP4 still upload
+unconditionally, so a failure stays fully inspectable — section 7 forbids
+presenting a failed candidate as review-ready, not diagnosing one.
+
+**Narration Validation could commit a failed transcript.** Its speech-QA gate
+was the last step in the job, so the alignment was built and, with
+`commit_alignment`, pushed to the branch before the failure surfaced. The gate
+now runs before anything derived from the transcript is written.
+
+**Ten project-scoped scripts ignored `--project-id`.** They resolved the
+project only from `ORVYQ_PROJECT_ID` and never read argv, so the flag was
+accepted and silently discarded. Nine are the audits that decide
+review-readiness (evidence, evidence-asset, evidence-spec, semantic-visual,
+pacing, mobile legibility, music-cue, license, alignment score), plus the
+canonical edit-plan smoke test. Under a conflicting environment variable each
+audits a different project than the one named and reports a pass under the
+requested id — a section 10 isolation violation that presents as a green
+check. This log already records fixing exactly this once for
+`orvyq_fetch_primary_evidence.mjs`, so the fix closes the class rather than
+the instances: alongside the ten entrypoints,
+`scripts/orvyq_cli_project_selection.test.mjs` enumerates every project-scoped
+CLI script and fails on any that does not read the project id from its own
+arguments, and pins the precedence behaviour against a conflicting
+environment.
+
 ### 2026-07-30 — Project-independent QA and visual-balance hardening
 
 - Removed automatic Candidate Validation → Full-Length Review orchestration

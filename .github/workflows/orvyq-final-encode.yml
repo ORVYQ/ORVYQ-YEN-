@@ -60,23 +60,6 @@ jobs:
             await loadProductionPolicy(process.env.PROJECT_ID);
           "
 
-      # The mirror of orvyq-review.yml's "Verify the named Candidate Validation
-      # run" check. Without it the approval record was the only thing tying
-      # this encode to a review run, so a run id naming a different workflow,
-      # a different commit, or a review that FAILED its post-render QA was
-      # accepted as long as the committed approval quoted the same number.
-      - name: Verify the named Full-Length Review run
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const runId = Number('${{ inputs.approved_review_run_id }}');
-            const { data: run } = await github.rest.actions.getWorkflowRun({ owner: context.repo.owner, repo: context.repo.repo, run_id: runId });
-            const failures = [];
-            if (!run.path || !run.path.endsWith("orvyq-review.yml")) failures.push(`run ${runId} is not a Full-Length Candidate Review`);
-            if (run.conclusion !== "success") failures.push(`run ${runId} conclusion is ${run.conclusion}`);
-            if (run.head_sha !== context.sha) failures.push(`run ${runId} rendered ${run.head_sha}, expected ${context.sha}`);
-            if (failures.length) core.setFailed(failures.join("; "));
-
       - name: Verify approval record exists and names this review run
         run: |
           set -euo pipefail
@@ -85,7 +68,34 @@ jobs:
             const approval = require('./projects/$PROJECT_ID/qa/proof_approval.json');
             if (approval.approved !== true) throw new Error('approval.approved is not true');
             if (String(approval.review_run_id) !== String('${{ inputs.approved_review_run_id }}')) throw new Error('approval review_run_id does not match workflow input');
-          "
+            if (!approval.candidate_source_sha) throw new Error('approval has no candidate_source_sha');
+            console.log('APPROVED_CANDIDATE_SOURCE_SHA=' + approval.candidate_source_sha);
+          " | tee -a "$GITHUB_ENV"
+
+      # The mirror of orvyq-review.yml's "Verify the named Candidate Validation
+      # run" check. Without it the approval record was the only thing tying
+      # this encode to a review run, so a run id naming a different workflow or
+      # a review that FAILED its post-render QA was accepted as long as the
+      # committed approval quoted the same number.
+      #
+      # The commit is compared against the approval's own candidate_source_sha,
+      # NOT against the current HEAD. Recording an approval is itself a commit,
+      # so by the time this workflow runs HEAD has legitimately moved past the
+      # commit the candidate was rendered from -- the exact distinction
+      # scripts/orvyq_verify_approval.mjs documents at length. Comparing to
+      # HEAD here would reject every correctly approved candidate.
+      - name: Verify the named Full-Length Review run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = Number('${{ inputs.approved_review_run_id }}');
+            const approvedSourceSha = process.env.APPROVED_CANDIDATE_SOURCE_SHA;
+            const { data: run } = await github.rest.actions.getWorkflowRun({ owner: context.repo.owner, repo: context.repo.repo, run_id: runId });
+            const failures = [];
+            if (!run.path || !run.path.endsWith("orvyq-review.yml")) failures.push(`run ${runId} is not a Full-Length Candidate Review`);
+            if (run.conclusion !== "success") failures.push(`run ${runId} conclusion is ${run.conclusion}`);
+            if (run.head_sha !== approvedSourceSha) failures.push(`run ${runId} rendered ${run.head_sha}, but the approval covers a candidate built from ${approvedSourceSha}`);
+            if (failures.length) core.setFailed(failures.join("; "));
 
       - name: Download approved project render bundle
         uses: actions/download-artifact@v4
@@ -98,7 +108,7 @@ jobs:
       - name: Verify bundle project identity
         run: |
           set -euo pipefail
-          test "$(cat render-bundle/render-source-sha.txt)" = "$GITHUB_SHA"
+          test "$(cat render-bundle/render-source-sha.txt)" = "$APPROVED_CANDIDATE_SOURCE_SHA"
           node -e "
             const profile = require('./render-bundle/projects/$PROJECT_ID/config/production_profile.json');
             const manifest = require('./render-bundle/projects/$PROJECT_ID/qa/review_render_manifest.json');
