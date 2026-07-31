@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 24,
-  "reason": "Re-run exact-head Candidate Validation after fixing footage replacement materialization at the system layer. Replacement trim bounds now define an available source window, the materializer clamps trim_out_sec to the generated shot duration, and a regression test verifies both exact timeline matching and fail-closed rejection of undersized windows. This revalidates the scene_015/scene_051 reuse correction. No video render is permitted.",
+  "request_revision": 25,
+  "reason": "Re-run exact-head Candidate Validation after eliminating the JAMSTEC evidence reuse overage. CLM_004 now rotates three distinct official captures across its three native evidence occurrences, while baseline shot 123 uses the previously unused official borehole result instead of reusing mining-system and 2027-trial diagrams already at their ceilings. No video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T17:55:00Z"
+  "requested_at": "2026-07-31T18:03:00Z"
 }
