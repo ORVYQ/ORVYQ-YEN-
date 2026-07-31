@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 4,
-  "reason": "All 49 footage assets have canonical byte-bound visual approval; pending and rejected counts are zero; the visual rebalance is materialized; the production blueprint is ready; local footage, semantic-use and visual-balance audits all pass. Run exact-head Candidate Validation without rendering video after fixing exact parent-diff request resolution.",
+  "request_revision": 5,
+  "reason": "All 49 footage assets have canonical byte-bound visual approval; pending and rejected counts are zero; the visual rebalance is materialized; the production blueprint is ready; local footage, semantic-use and visual-balance audits all pass. Run exact-head Candidate Validation without rendering video after updating the completed visual-QA readiness regression.",
   "requested_by": "orvyq_system",
   "requested_at": "2026-07-31T09:50:00Z"
 }
