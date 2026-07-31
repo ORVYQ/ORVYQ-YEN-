@@ -10,6 +10,7 @@ import {
 } from "./lib/fs-utils.mjs";
 import { canonicalVisualRole } from "./lib/orvyq-visual-roles.mjs";
 import { materializeVisualRebalancePlan } from "./lib/orvyq-visual-rebalance.mjs";
+import { enforceFootageUseBudget } from "./lib/orvyq-footage-use-budget.mjs";
 
 function sceneIdFromAsset(assetPath) {
   const match = String(assetPath || "").match(/(?:^|\/)scene_(\d{3})(?:_|\.mp4)/);
@@ -144,6 +145,8 @@ export async function applyFootageUseContracts(projectId) {
     runtime: path.join(dir, "assets", "footage_acquisition.runtime.json"),
     plan: path.join(dir, "research", "footage_acquisition_plan.json"),
     blueprint: path.join(dir, "direction", "editorial_blueprint.json"),
+    pauseMap: path.join(dir, "direction", "editorial_pause_map.json"),
+    motionHook: path.join(dir, "direction", "motion_hook.json"),
     rebalancePlan: path.join(dir, "direction", "visual_rebalance_plan.json"),
     assetRequests: path.join(dir, "research", "visual_asset_requests.json"),
   };
@@ -154,6 +157,8 @@ export async function applyFootageUseContracts(projectId) {
     runtime,
     plan,
     blueprint,
+    pauseMap,
+    motionHook,
     rebalancePlan,
     assetRequests,
   ] = await Promise.all([
@@ -163,6 +168,8 @@ export async function applyFootageUseContracts(projectId) {
     readJson(files.runtime),
     readJson(files.plan),
     readJson(files.blueprint),
+    readJson(files.pauseMap),
+    readJson(files.motionHook),
     readJsonSafe(files.rebalancePlan, null),
     readJsonSafe(files.assetRequests, { project_id: projectId, requests: [] }),
   ]);
@@ -172,6 +179,8 @@ export async function applyFootageUseContracts(projectId) {
     runtime,
     plan,
     blueprint,
+    pauseMap,
+    motionHook,
     ...(rebalancePlan ? { rebalancePlan } : {}),
     assetRequests,
   })) {
@@ -310,11 +319,22 @@ export async function applyFootageUseContracts(projectId) {
     }
   }
 
-  blueprint.full_production.shots = synchronizeVisualRebalanceShots({
+  const synchronizedShots = synchronizeVisualRebalanceShots({
     shots: nextShots,
     rebalancePlan,
     assetRequests: assetRequests.requests || [],
   });
+  const budgetResult = enforceFootageUseBudget({
+    shots: synchronizedShots,
+    maxUsesPerSource: Number(blueprint.global_rules?.max_uses_per_source),
+    minimumHookSeconds: Number(motionHook.minimum_seconds),
+  });
+  blueprint.full_production.shots = budgetResult.shots;
+  const canonicalDurationSeconds = Math.round(
+    budgetResult.shots.reduce((sum, shot) => sum + Number(shot.duration || 0), 0) * 1000
+  ) / 1000;
+  blueprint.full_production.generated_total_duration_seconds = canonicalDurationSeconds;
+  pauseMap.duration_policy.minimum_final_duration_seconds = canonicalDurationSeconds;
 
   editorial.last_footage_use_contract_application = {
     generated_at: new Date().toISOString(),
@@ -326,6 +346,12 @@ export async function applyFootageUseContracts(projectId) {
     override_file: overrides ? "research/footage_use_contract_overrides.json" : null,
     visual_rebalance_resynchronized: Boolean(rebalancePlan?.status === "materialized"),
     deferred_targets: deferredTargets,
+    footage_use_budget: {
+      max_uses_per_source: Number(blueprint.global_rules?.max_uses_per_source),
+      minimum_hook_seconds: Number(motionHook.minimum_seconds),
+      removed_optional_hook_uses: budgetResult.removed_hook_uses,
+      final_use_counts: budgetResult.use_counts,
+    },
   };
 
   const originalPlanCount = (plan.assets || []).length;
@@ -339,6 +365,7 @@ export async function applyFootageUseContracts(projectId) {
     writeJsonAtomic(files.editorial, editorial),
     writeJsonAtomic(files.plan, plan),
     writeJsonAtomic(files.blueprint, blueprint),
+    writeJsonAtomic(files.pauseMap, pauseMap),
   ]);
   return {
     project_id: projectId,
@@ -348,6 +375,7 @@ export async function applyFootageUseContracts(projectId) {
     deferred_target_count: deferredTargets.length,
     removed_previous_assignments: removedAssignments,
     explicit_retirement_count: (contracts.retired_targets || []).length,
+    removed_optional_hook_use_count: budgetResult.removed_hook_uses.length,
     override_applied: Boolean(overrides),
     pruned_plan_assets: originalPlanCount - plan.assets.length,
     active_plan_assets: plan.assets.length,
