@@ -8,7 +8,6 @@
     "node": ">=18"
   },
   "scripts": {
-    "postinstall": "python3 scripts/orvyq_validate_review_readiness.py",
     "validate:canonical": "node scripts/validate_canonical.mjs",
     "test": "node --test",
     "orvyq:new-project": "node scripts/orvyq_new_project.mjs",
@@ -36,6 +35,7 @@
     "orvyq:duplicate-footage-audit": "node scripts/orvyq_duplicate_footage_audit.mjs",
     "orvyq:footage-semantic-review-audit": "node scripts/orvyq_footage_semantic_review_audit.mjs",
     "orvyq:visual-rebalance-audit": "node scripts/orvyq_visual_rebalance_audit.mjs",
+    "orvyq:review-readiness": "node scripts/orvyq_review_readiness_audit.mjs",
     "orvyq:tension-card-audit": "node scripts/orvyq_tension_card_audit.mjs",
     "orvyq:generic-card-audit": "node scripts/orvyq_generic_card_audit.mjs",
     "orvyq:leaked-instruction-audit": "node scripts/orvyq_leaked_instruction_audit.mjs",
