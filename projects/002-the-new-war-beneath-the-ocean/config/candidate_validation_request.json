@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 7,
-  "reason": "The final governance-footage retiming is materialized: scene_050 now interrupts the CLM_007 evidence run at the earlier approved institutional beat while remaining at two total uses. Pending and rejected footage counts are zero, the visual rebalance and production blueprint are ready, and the reusable footage-contract override and silent-removal guards are covered by tests. Run exact-head Candidate Validation without rendering video.",
+  "request_revision": 8,
+  "reason": "The final canonical footage state is materialized on the exact branch head: scene_050 interrupts the former 15.1-second CLM_007 evidence run while remaining within the two-use ceiling; all footage contract roles are normalized through the shared canonical visual-role registry; override changes route through the reusable footage workflow; pending, rejected and blocked counts are zero; and the visual rebalance plus production blueprint are ready. Run exact-head Candidate Validation without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T11:18:00Z"
+  "requested_at": "2026-07-31T11:40:00Z"
 }
