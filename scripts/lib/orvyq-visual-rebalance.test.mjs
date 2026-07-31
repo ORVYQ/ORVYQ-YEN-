@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   auditVisualRebalancePlan,
   materializeVisualRebalancePlan,
+  resolveVisualRebalancePlan,
 } from "./orvyq-visual-rebalance.mjs";
 
 function shot(duration, asset_type, section_id, extra = {}) {
@@ -176,6 +177,85 @@ test("primary-evidence replacement fails closed when canonical provenance is mis
       primaryEvidenceAssets: [primaryEvidenceAsset({ source_date: "" })],
     }),
     /lacks canonical provenance fields: source_date/,
+  );
+});
+
+test("validated action override converts a redundant evidence beat into contiguous approved footage", () => {
+  const shots = [
+    shot(7, "footage", "SEC_01", {
+      asset: "assets/footage/abyss.mp4",
+      trim_in_sec: 1,
+      trim_out_sec: 8,
+      visual_role: "context",
+      motion: "push",
+      contextual_footage: true,
+      generic_stock: false,
+      semantic_link: "physical",
+      semantic_rationale: "The verified abyssal view establishes the physical setting.",
+    }),
+    shot(6, "graphic", "SEC_01", {
+      graphic: { type: "claim_recap_card" },
+      narration_anchor: "The nodules formed layer by layer.",
+    }),
+  ];
+  const plan = {
+    status: "materialized",
+    actions: [{
+      baseline_shot_index: 1,
+      claim_id: "CLM_001",
+      duration_seconds: 6,
+      decision: "replace_primary_evidence",
+      projected_medium: "primary_evidence",
+      asset_request_id: "REQ_EVD_DIRECT",
+      rationale: "Use the source document.",
+      replacement_assets: [{
+        asset_path: "assets/evidence/official.png",
+        evidence_asset_id: "EVID_OFFICIAL",
+      }],
+    }],
+  };
+  const actionOverrides = [{
+    baseline_shot_index: 1,
+    expected_decision: "replace_primary_evidence",
+    action: {
+      decision: "remove",
+      projected_medium: "contextual_footage",
+      replacement_strategy: "extend_adjacent_footage",
+      rationale: "Continue the approved abyssal footage through the physical formation sentence.",
+    },
+  }];
+
+  const result = materializeVisualRebalancePlan({ shots, plan, actionOverrides });
+  assert.equal(result[1].asset_type, "footage");
+  assert.equal(result[1].asset, "assets/footage/abyss.mp4");
+  assert.equal(result[1].trim_in_sec, 8);
+  assert.equal(result[1].trim_out_sec, 14);
+  assert.equal(result[1].motion, "push");
+  assert.equal(result[1].generic_stock, false);
+  assert.equal(result[1].evidence, undefined);
+});
+
+test("visual-rebalance override rejects stale expected decisions", () => {
+  const plan = {
+    actions: [{
+      baseline_shot_index: 2,
+      claim_id: "CLM_001",
+      duration_seconds: 6,
+      decision: "redesign",
+      projected_medium: "graphic_card",
+    }],
+  };
+  assert.throws(
+    () => resolveVisualRebalancePlan(plan, [{
+      baseline_shot_index: 2,
+      expected_decision: "replace_primary_evidence",
+      action: {
+        decision: "remove",
+        projected_medium: "contextual_footage",
+        replacement_strategy: "extend_adjacent_footage",
+      },
+    }]),
+    /expected replace_primary_evidence, found redesign/,
   );
 });
 
