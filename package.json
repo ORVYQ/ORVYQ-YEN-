@@ -8,6 +8,7 @@
     "node": ">=18"
   },
   "scripts": {
+    "postinstall": "python3 scripts/orvyq_apply_provider_resilience_patch.py",
     "validate:canonical": "node scripts/validate_canonical.mjs",
     "test": "node --test",
     "orvyq:new-project": "node scripts/orvyq_new_project.mjs",
