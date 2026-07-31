@@ -866,6 +866,12 @@
     }
   ],
   "acquisition_policy": {
-    "pages_per_query": 3
+    "pages_per_query": 2,
+    "max_queries_per_scene": 4,
+    "max_requests_per_run": 80,
+    "rate_limit_reserve": 20,
+    "request_delay_ms": 200,
+    "max_search_retries": 1,
+    "max_retry_delay_ms": 3000
   }
 }

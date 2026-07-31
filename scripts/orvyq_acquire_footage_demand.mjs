@@ -207,19 +207,72 @@ async function loadPlan(dir, projectId) {
   return plan;
 }
 
-async function search(query, key, perPage, page = 1) {
+const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
+
+function numericHeader(headers, name) {
+  const raw = headers?.get?.(name);
+  if (raw === null || raw === undefined || raw === "") return null;
+  const value = Number(raw);
+  return Number.isFinite(value) ? value : null;
+}
+
+export async function searchPexels(
+  query,
+  key,
+  perPage,
+  page = 1,
+  {
+    fetchFn = fetch,
+    sleepFn = wait,
+    maxRetries = 1,
+    maxRetryDelayMs = 3000,
+  } = {},
+) {
   const url = new URL(PEXELS_API);
   url.searchParams.set("query", query);
   url.searchParams.set("orientation", "landscape");
   url.searchParams.set("size", "large");
   url.searchParams.set("per_page", String(perPage));
   url.searchParams.set("page", String(page));
-  const response = await fetch(url, {
-    headers: { Authorization: key, "user-agent": "ORVYQ-demand-footage/1.1" },
-    signal: AbortSignal.timeout(60000),
-  });
-  if (!response.ok) throw new Error(`Pexels search ${response.status}: ${query}`);
-  return (await response.json()).videos || [];
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
+    try {
+      const response = await fetchFn(url, {
+        headers: { Authorization: key, "user-agent": "ORVYQ-demand-footage/1.2" },
+        signal: AbortSignal.timeout(60000),
+      });
+      if (response.ok) {
+        const payload = await response.json();
+        return {
+          videos: payload.videos || [],
+          rate_limit: {
+            limit: numericHeader(response.headers, "x-ratelimit-limit"),
+            remaining: numericHeader(response.headers, "x-ratelimit-remaining"),
+            reset_epoch_seconds: numericHeader(response.headers, "x-ratelimit-reset"),
+          },
+        };
+      }
+      const error = new Error(`Pexels search ${response.status}: ${query}`);
+      error.status = response.status;
+      error.provider = "pexels";
+      lastError = error;
+      const retryable = response.status === 429 || response.status >= 500;
+      if (!retryable || attempt >= maxRetries) throw error;
+      const retryAfterSeconds = numericHeader(response.headers, "retry-after");
+      const retryDelay = Math.min(
+        maxRetryDelayMs,
+        retryAfterSeconds !== null ? retryAfterSeconds * 1000 : 500 * (2 ** attempt),
+      );
+      await sleepFn(Math.max(0, retryDelay));
+    } catch (error) {
+      lastError = error;
+      const status = Number(error?.status || 0);
+      const retryable = status === 429 || status >= 500 || status === 0;
+      if (!retryable || attempt >= maxRetries) throw error;
+      await sleepFn(Math.min(maxRetryDelayMs, 500 * (2 ** attempt)));
+    }
+  }
+  throw lastError;
 }
 
 export function pick(videos, usedIds, item, searchQuery = "") {
@@ -260,41 +313,123 @@ export function pick(videos, usedIds, item, searchQuery = "") {
   return candidates[0] || null;
 }
 
-export async function preflightPexelsSelections(items, key, usedIds, policy, searchFn = search) {
+export async function preflightPexelsSelections(
+  items,
+  key,
+  usedIds,
+  policy,
+  searchFn = searchPexels,
+) {
   const selectedByScene = new Map();
   const failures = [];
+  const providerIssues = [];
+  const searchCache = new Map();
+  const pagesPerQuery = Math.max(1, Math.min(3, Number(policy.pages_per_query || 2)));
+  const perPage = Math.max(1, Math.min(80, Number(policy.results_per_query || 30)));
+  const maxQueriesPerScene = Math.max(1, Math.min(8, Number(policy.max_queries_per_scene || 4)));
+  const maxRequestsPerRun = Math.max(1, Math.min(180, Number(policy.max_requests_per_run || 80)));
+  const rateLimitReserve = Math.max(0, Number(policy.rate_limit_reserve || 20));
+  const requestDelayMs = Math.max(0, Number(policy.request_delay_ms || 200));
+  let requestCount = 0;
+  let lastRequestAt = 0;
+  let providerUnavailable = false;
+
   for (const item of items) {
     const id = sceneId(item.scene_id);
     const queries = [...new Set([...(item.queries || []), ...(item.fallback_queries || [])]
       .map(String)
       .map((query) => query.trim())
-      .filter(Boolean))];
+      .filter(Boolean))]
+      .slice(0, maxQueriesPerScene);
     let selected;
     let selectedQuery;
-    const pagesPerQuery = Math.max(1, Math.min(10, Number(policy.pages_per_query || 3)));
-    const perPage = Number(policy.results_per_query || 30);
-    for (const query of queries) {
-      const videosById = new Map();
-      for (let page = 1; page <= pagesPerQuery; page += 1) {
-        const pageVideos = await searchFn(query, key, perPage, page);
-        for (const video of pageVideos) videosById.set(String(video.id), video);
-        if (pageVideos.length < perPage) break;
-      }
-      const candidate = pick([...videosById.values()], usedIds, item, query);
-      if (!candidate) continue;
-      const candidateDistance = Math.abs(candidate.video.duration - (Number(item.min_duration_seconds || 8) + 4));
-      const selectedDistance = selected
-        ? Math.abs(selected.video.duration - (Number(item.min_duration_seconds || 8) + 4))
-        : Number.POSITIVE_INFINITY;
-      if (
-        !selected ||
-        candidate.semanticScore > selected.semanticScore ||
-        (candidate.semanticScore === selected.semanticScore && candidateDistance < selectedDistance)
-      ) {
-        selected = candidate;
-        selectedQuery = query;
+    let strongMetadataMatch = false;
+
+    if (!providerUnavailable) {
+      for (const query of queries) {
+        const videosById = new Map();
+        for (let page = 1; page <= pagesPerQuery; page += 1) {
+          const cacheKey = `${query} ${perPage} ${page}`;
+          let result = searchCache.get(cacheKey);
+          if (!result) {
+            if (requestCount >= maxRequestsPerRun) {
+              providerIssues.push({
+                scene_id: id,
+                query,
+                page,
+                type: "request_budget_exhausted",
+                max_requests_per_run: maxRequestsPerRun,
+              });
+              providerUnavailable = true;
+              break;
+            }
+            const elapsed = Date.now() - lastRequestAt;
+            if (lastRequestAt && elapsed < requestDelayMs) await wait(requestDelayMs - elapsed);
+            try {
+              result = await searchFn(query, key, perPage, page, {
+                maxRetries: Number(policy.max_search_retries || 1),
+                maxRetryDelayMs: Number(policy.max_retry_delay_ms || 3000),
+              });
+              requestCount += 1;
+              lastRequestAt = Date.now();
+              if (Array.isArray(result)) result = { videos: result, rate_limit: {} };
+              searchCache.set(cacheKey, result);
+            } catch (error) {
+              requestCount += 1;
+              lastRequestAt = Date.now();
+              providerIssues.push({
+                scene_id: id,
+                query,
+                page,
+                type: Number(error?.status) === 429 ? "rate_limited" : "provider_search_error",
+                status: Number(error?.status || 0) || null,
+                message: error.message,
+              });
+              if (Number(error?.status) === 429) providerUnavailable = true;
+              break;
+            }
+          }
+          const pageVideos = result?.videos || [];
+          for (const video of pageVideos) videosById.set(String(video.id), video);
+          const candidate = pick([...videosById.values()], usedIds, item, query);
+          if (candidate) {
+            const candidateDistance = Math.abs(candidate.video.duration - (Number(item.min_duration_seconds || 8) + 4));
+            const selectedDistance = selected
+              ? Math.abs(selected.video.duration - (Number(item.min_duration_seconds || 8) + 4))
+              : Number.POSITIVE_INFINITY;
+            if (
+              !selected ||
+              candidate.semanticScore > selected.semanticScore ||
+              (candidate.semanticScore === selected.semanticScore && candidateDistance < selectedDistance)
+            ) {
+              selected = candidate;
+              selectedQuery = query;
+            }
+            if (candidate.semanticMetadataFullyMatched) {
+              strongMetadataMatch = true;
+              break;
+            }
+          }
+          const remaining = Number(result?.rate_limit?.remaining);
+          if (Number.isFinite(remaining) && remaining <= rateLimitReserve) {
+            providerIssues.push({
+              scene_id: id,
+              query,
+              page,
+              type: "rate_limit_reserve_reached",
+              remaining,
+              reserve: rateLimitReserve,
+              reset_epoch_seconds: result?.rate_limit?.reset_epoch_seconds ?? null,
+            });
+            providerUnavailable = true;
+            break;
+          }
+          if (pageVideos.length < perPage) break;
+        }
+        if (strongMetadataMatch || providerUnavailable) break;
       }
     }
+
     if (!selected) {
       failures.push(id);
       continue;
@@ -302,7 +437,13 @@ export async function preflightPexelsSelections(items, key, usedIds, policy, sea
     usedIds.add(String(selected.video.id));
     selectedByScene.set(id, { selected, selectedQuery });
   }
-  return { selectedByScene, failures };
+  return {
+    selectedByScene,
+    failures,
+    providerIssues,
+    requestCount,
+    providerUnavailable,
+  };
 }
 
 async function probe(file) {
@@ -681,7 +822,13 @@ export async function acquireDemandFootage(projectId) {
     }
   }
   const policy = plan.acquisition_policy || plan.policy || {};
-  const { selectedByScene: preselected, failures } = await preflightPexelsSelections(
+  const {
+    selectedByScene: preselected,
+    failures,
+    providerIssues,
+    requestCount,
+    providerUnavailable,
+  } = await preflightPexelsSelections(
     pendingPexels,
     key,
     new Set(usedIds),
@@ -733,6 +880,9 @@ export async function acquireDemandFootage(projectId) {
     reused_existing: reused,
     semantic_constraints_applied: plan.assets.filter((item) => item.semantic_title_constraints).length,
     unresolved_scene_ids: [...unresolved],
+    provider_search_issues: providerIssues,
+    provider_request_count: requestCount,
+    provider_unavailable: providerUnavailable,
     records,
     pass: unresolved.size === 0 && records.length === plan.assets.length,
   });
@@ -749,6 +899,9 @@ export async function acquireDemandFootage(projectId) {
     total: records.length,
     partial: unresolved.size > 0,
     unresolved: [...unresolved],
+    provider_issues: providerIssues,
+    provider_request_count: requestCount,
+    provider_unavailable: providerUnavailable,
     capacity,
     ...materialized,
   };
