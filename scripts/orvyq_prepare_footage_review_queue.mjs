@@ -38,6 +38,26 @@ function sha256(buffer) {
   return crypto.createHash("sha256").update(buffer).digest("hex");
 }
 
+export function resolveContactSheetIdentity(buffer) {
+  const pointerSha256 = sha256(buffer);
+  const text = buffer.toString("utf8");
+  const lfsMatch = text.match(
+    /^version https:\/\/git-lfs\.github\.com\/spec\/v1\r?\noid sha256:([0-9a-f]{64})\r?\nsize \d+\r?\n?$/i,
+  );
+  if (!lfsMatch) {
+    return {
+      contact_sheet_sha256: pointerSha256,
+      contact_sheet_pointer_sha256: null,
+      contact_sheet_is_lfs_pointer: false,
+    };
+  }
+  return {
+    contact_sheet_sha256: lfsMatch[1].toLowerCase(),
+    contact_sheet_pointer_sha256: pointerSha256,
+    contact_sheet_is_lfs_pointer: true,
+  };
+}
+
 export function requiresClaimBoundReview({ currentUses, approval, assetSha256 }) {
   const uses = Array.isArray(currentUses) ? currentUses : [];
   if (!uses.length) return false;
@@ -72,6 +92,7 @@ async function buildCurrentReviewEntry(dir, record, existingEntry = {}) {
   if (declaredHash && declaredHash !== assetHash) {
     throw new Error(`${record.scene_id}: footage bytes do not match provenance while building the review queue`);
   }
+  const contactSheetIdentity = resolveContactSheetIdentity(sheetBytes);
   return {
     ...existingEntry,
     scene_id: record.scene_id,
@@ -82,7 +103,11 @@ async function buildCurrentReviewEntry(dir, record, existingEntry = {}) {
     creator: provenance.creator,
     asset_sha256: assetHash,
     contact_sheet_path: contactSheetPath,
-    contact_sheet_sha256: sha256(sheetBytes),
+    contact_sheet_sha256: contactSheetIdentity.contact_sheet_sha256,
+    ...(contactSheetIdentity.contact_sheet_pointer_sha256
+      ? { contact_sheet_pointer_sha256: contactSheetIdentity.contact_sheet_pointer_sha256 }
+      : {}),
+    contact_sheet_is_lfs_pointer: contactSheetIdentity.contact_sheet_is_lfs_pointer,
     reviewed_frame_count: Number(existingEntry.reviewed_frame_count || 12),
     duration_seconds: Number(provenance.actual_duration_seconds || provenance.duration || existingEntry.duration_seconds),
     editorial_role: provenance.editorial_role || record.role || existingEntry.editorial_role,
