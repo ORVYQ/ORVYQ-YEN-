@@ -26,15 +26,15 @@
       "role": "context"
     },
     {
-      "path": "assets/footage/scene_003_1145b70577485244ed057bc2.mp4",
+      "path": "assets/footage/scene_003_official_reuse.mp4",
       "scene_id": "scene_003",
-      "provider_asset_id": "5668613",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_SEASCAPE_ALASKA_DIVE07_BIODIVERSITY_2023_scene_003",
       "role": "context"
     },
     {
-      "path": "assets/footage/scene_004_33ac05fd9ba670217d788e30.mp4",
+      "path": "assets/footage/scene_004_official_reuse.mp4",
       "scene_id": "scene_004",
-      "provider_asset_id": "4336054",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_WALTON_SMITH_ROV_DEPLOYMENT_2024_scene_004",
       "role": "context"
     },
     {
@@ -80,9 +80,9 @@
       "role": "context"
     },
     {
-      "path": "assets/footage/scene_012_90ee2a1757d0c6dd678c8bdd.mp4",
+      "path": "assets/footage/scene_012_official_reuse.mp4",
       "scene_id": "scene_012",
-      "provider_asset_id": "34311344",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_D2_2018_TECHNOLOGY_scene_012",
       "role": "context"
     },
     {
@@ -146,9 +146,9 @@
       "role": "human_context"
     },
     {
-      "path": "assets/footage/scene_024_d436738e463152286e0f20b3.mp4",
+      "path": "assets/footage/scene_024_official_reuse.mp4",
       "scene_id": "scene_024",
-      "provider_asset_id": "36212341",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_DEEP_SEARCH_LEG1_HIGHLIGHTS_2019_scene_024",
       "role": "context"
     },
     {
@@ -188,9 +188,9 @@
       "role": "human_context"
     },
     {
-      "path": "assets/footage/scene_032_c74bc31839ca725b88465e1b.mp4",
+      "path": "assets/footage/scene_032_official_reuse.mp4",
       "scene_id": "scene_032",
-      "provider_asset_id": "7846334",
+      "provider_asset_id": "ORVYQ_REUSE_NOAA_WATER_COLUMN_2012_scene_032",
       "role": "context"
     },
     {
