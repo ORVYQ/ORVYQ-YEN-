@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orvyq.dev/schemas/editorial_signoff.schema.json",
+  "title": "Editorial Sign-off",
+  "description": "Human sign-off on the EDITORIAL content warnings (real-evidence coverage, generic-card usage, emphasis-beat pacing) of one specific frozen candidate, modeled on schemas/proof_approval.schema.json's identity-hash pattern. proof_approval.json approves that the candidate is technically the one a human reviewed; this file approves that a human has actually read the current editorial QA warnings for that same candidate and accepts them -- automated QA (scripts/orvyq_real_asset_coverage_audit.mjs, orvyq_generic_card_audit.mjs, orvyq_tension_card_audit.mjs) intentionally treats coverage/margin/pacing shortfalls as warnings rather than hard failures, to avoid blocking legitimate creative choices in CI -- but that means nothing anywhere previously required a human to have actually seen them. This also concretely fulfills orvyq_alignment_score.mjs's own long-standing qa/alignment_readiness.json.human_rendered_video_review ({required: true, status: 'pending'}), which nothing has ever read back or transitioned. This schema, and scripts/orvyq_verify_approval.mjs's verifyEditorialSignoff(), close that gap the same way verifyApprovalRecord() already closes it for technical identity: candidate_hash ties this record to one exact qa/frozen_candidate.json, so any re-edit/re-render invalidates it automatically, and acknowledged_warnings must list every warning string those reports currently produce, so a NEW warning introduced later cannot silently ride on an old sign-off.",
+  "type": "object",
+  "required": ["approved", "approved_at", "candidate_hash", "candidate_source_sha", "reviewer", "acknowledged_warnings"],
+  "properties": {
+    "approved": { "type": "boolean" },
+    "approved_at": { "type": "string", "format": "date-time" },
+    "candidate_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "The signed-off frozen candidate's own canonical_candidate_identity-derived candidate_hash field -- same field proof_approval.json uses, not a whole-file hash." },
+    "candidate_source_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$", "description": "The source commit SHA the signed-off candidate was built from (canonical_candidate_identity.source_commit_sha), carried for the same consistency-only reason as proof_approval.json's field of the same name -- never compared against the current git HEAD." },
+    "reviewer": { "type": "string", "description": "Identity of the human who reviewed the editorial warnings (name or email), not an automated actor." },
+    "acknowledged_warnings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Verbatim copies of every warning string currently produced by qa/real_asset_coverage_audit.json, qa/generic_card_audit.json, and qa/tension_card_audit.json at the time of review. verifyEditorialSignoff() fails if any warning those reports currently produce is not present here -- a warning introduced after this sign-off was recorded must be reviewed again, not inherited silently."
+    },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

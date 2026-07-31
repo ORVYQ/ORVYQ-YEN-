@@ -13,6 +13,25 @@ const PROJECTS_DIR = path.resolve("projects");
 const FIXTURE_PROJECT_ID = "000-example-project";
 const ajv = loadCanonicalAjv();
 const results = [];
+const warnings = [];
+
+// direction/editorial_blueprint.json's global_rules is meant to be a shared,
+// project-agnostic policy-key contract -- several scripts do read these
+// exact key names with a fallback default (grep-verified below, not
+// assumed). But a project is free to declare ANY key in global_rules,
+// including ones no script has ever read: that's not invalid JSON, so ajv
+// can't catch it, and it's silently misleading -- editing the value changes
+// nothing. This is a non-blocking warning (declaring extra data is not an
+// error), not a validation failure, so it never affects `failed`/exit code.
+// If a script starts reading a new key, add it below in the same commit --
+// this list is intentionally exhaustive against the current codebase, not a
+// standing schema.
+const CONSUMED_GLOBAL_RULES_KEYS = new Set([
+  "max_uses_per_source", // orvyq_asset_registry.mjs, orvyq_edit_plan.mjs, orvyq_edit_plan_tests.mjs, orvyq_semantic_visual_audit.mjs
+  "max_shot_seconds", // orvyq_edit_plan.mjs, orvyq_edit_plan_tests.mjs, orvyq_full_production_plan.mjs, orvyq_pacing_audit.mjs
+  "minimum_overlay_font_px", // orvyq_edit_plan.mjs, orvyq_edit_plan_tests.mjs, orvyq_mobile_legibility_audit.mjs
+  "minimum_script_similarity" // orvyq_edit_plan_tests.mjs, orvyq_media_qa.mjs, orvyq_speech_qa.py
+]);
 
 function check(label, schemaFile, data, { kind }) {
   const validate = ajv.getSchema(schemaFile);
@@ -78,6 +97,14 @@ function validateReadyProject(project) {
   const projectConfig = readJsonIfExists(path.join(project.directory, "config", "project_config.json"))
     || readJsonIfExists(path.join(project.directory, "project.json"));
   const blueprint = readJsonIfExists(path.join(project.directory, "direction", "editorial_blueprint.json"));
+
+  if (blueprint?.global_rules) {
+    const deadKeys = Object.keys(blueprint.global_rules).filter((key) => !CONSUMED_GLOBAL_RULES_KEYS.has(key));
+    if (deadKeys.length) {
+      warnings.push(`${project.id}/direction/editorial_blueprint.json declares global_rules key(s) no script reads, so editing them has no effect: ${deadKeys.join(", ")}`);
+    }
+  }
+
   if (!videoConfig || !projectConfig || !blueprint?.full_production?.generated_total_duration_seconds) {
     results.push({
       label: `${project.id}/canonical project assembly`,
@@ -319,6 +346,17 @@ const fixtureApproval = {
 };
 check("generic fixture approval", "proof_approval.schema.json", fixtureApproval, { kind: "fixture" });
 
+const fixtureEditorialSignoff = {
+  approved: false,
+  approved_at: "2026-01-01T00:00:00Z",
+  candidate_hash: "1".repeat(64),
+  candidate_source_sha: "0".repeat(40),
+  reviewer: "",
+  acknowledged_warnings: [],
+  notes: "Fixture only; no sign-off granted.",
+};
+check("generic fixture editorial signoff", "editorial_signoff.schema.json", fixtureEditorialSignoff, { kind: "fixture" });
+
 const fixtureAlignment = {
   schema_version: "1.0-canonical",
   project_id: FIXTURE_PROJECT_ID,
@@ -362,4 +400,5 @@ for (const result of results) {
   if (!result.ok) console.log(JSON.stringify(result.errors, null, 2));
 }
 console.log(`\n${results.length - failed}/${results.length} checks passed across ${readyProjects().length} ready project(s).`);
+for (const warning of warnings) console.log(`[WARN] ${warning}`);
 if (failed > 0) process.exitCode = 1;
