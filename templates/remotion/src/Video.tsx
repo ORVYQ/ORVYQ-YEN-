@@ -37,6 +37,7 @@ type FootageShot = BaseShot & {
   video_asset: string;
   trim_in_sec: number;
   trim_out_sec: number;
+  playback_rate?: number;
   motion_variant?: FootageMotion;
 };
 type GraphicShot = BaseShot & {
@@ -114,6 +115,7 @@ export const FactForgeVideo: React.FC = () => {
                 videoSrc={staticFile(shot.video_asset)}
                 trimInSec={shot.trim_in_sec}
                 trimOutSec={shot.trim_out_sec}
+                playbackRate={shot.playback_rate || 1}
                 motionVariant={shot.motion_variant || "hold"}
                 editorialOverlay={shot.editorial_overlay || null}
                 emphasisCard={shot.emphasis_card || null}
