@@ -59,30 +59,44 @@
     {
       "scene_id": "scene_003",
       "role": "context",
-      "queries": [
-        "underwater robot deep sea",
-        "submersible underwater darkness"
-      ],
-      "fallback_queries": [
-        "underwater exploration lights",
-        "ocean floor underwater"
-      ],
+      "queries": [],
+      "fallback_queries": [],
       "min_duration_seconds": 8,
-      "editorial_note": "Deep-ocean atmosphere only; do not label as the Clarion-Clipperton Zone."
+      "editorial_note": "Deep-ocean atmosphere only; do not label as the Clarion-Clipperton Zone.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_EX1907_SEAFLOOR_EYES_2019",
+        "source_page_url": "https://oceanexplorer.noaa.gov/multimedia/okeanos-explorations-ex1907-dailyupdates-nov16-media-dive09-seafloor-eyes/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2019/11/dive09-seafloor-eyes-1280x720-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration, 2019 Southeastern U.S. Deep-sea Exploration",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted expedition media. Use only as verified deep-seafloor context; do not identify it as the Clarion-Clipperton Zone or a mining site.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 4,
+        "output_duration_seconds": 12
+      }
     },
     {
       "scene_id": "scene_004",
       "role": "context",
-      "queries": [
-        "offshore oil rig ocean",
-        "industrial platform at sea"
-      ],
-      "fallback_queries": [
-        "offshore drilling platform",
-        "oil rig ocean waves"
-      ],
+      "queries": [],
+      "fallback_queries": [],
       "min_duration_seconds": 8,
-      "editorial_note": "Visible offshore industrial hardware establishes physical scale without claiming that the depicted platform or system is Japan's riser."
+      "editorial_note": "Visible offshore industrial hardware establishes physical scale without claiming that the depicted platform or system is Japan's riser.",
+      "direct_source": {
+        "provider": "usgs_official_media",
+        "provider_asset_id": "USGS_ESCANABA_EXPEDITION_INTRO_2022",
+        "source_page_url": "https://oceanexplorer.noaa.gov/multimedia/explorations-22escanaba-gallery-media-escanaba-intro/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2022/06/escanaba-intro-1920x1080-1.mp4",
+        "source_institution": "U.S. Geological Survey",
+        "creator": "U.S. Geological Survey Escanaba Trough Expedition",
+        "license_url": "https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits",
+        "license_note": "Official USGS expedition media hosted by NOAA Ocean Exploration. Preserve USGS credit and use only as marine field-operation context, not as Japan’s named riser system.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 5,
+        "output_duration_seconds": 12
+      }
     },
     {
       "scene_id": "scene_005",
@@ -185,16 +199,23 @@
     {
       "scene_id": "scene_012",
       "role": "context",
-      "queries": [
-        "pacific island aerial",
-        "remote ocean island"
-      ],
-      "fallback_queries": [
-        "small island ocean aerial",
-        "remote coastline"
-      ],
+      "queries": [],
+      "fallback_queries": [],
       "min_duration_seconds": 8,
-      "editorial_note": "Geographic isolation motif; never label as Minamitorishima without official imagery."
+      "editorial_note": "Geographic isolation motif; never label as Minamitorishima without official imagery.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_EX1903_NEW_SEEP_SITE_2019",
+        "source_page_url": "https://oceanexplorer.noaa.gov/multimedia/video-playlist-ex1903-new-seep/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2019/07/new-seep-1920x1080-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration, Windows to the Deep 2019",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted deep-seafloor expedition media. Use as benthic observation context only; measured mining-track persistence remains carried by the cited evidence.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 4,
+        "output_duration_seconds": 12
+      }
     },
     {
       "scene_id": "scene_013",
@@ -368,17 +389,24 @@
     {
       "scene_id": "scene_024",
       "role": "context",
-      "queries": [
-        "ocean mapping sonar research ship",
-        "marine survey vessel control room"
-      ],
-      "fallback_queries": [
-        "bathymetric mapping vessel",
-        "ocean survey equipment ship"
-      ],
+      "queries": [],
+      "fallback_queries": [],
       "min_duration_seconds": 12,
       "max_duration_seconds": 120,
-      "editorial_note": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere."
+      "editorial_note": "Survey and mapping operations are the physical first step named in the narration; maps, permits and legal claims remain represented by their source-backed evidence elsewhere.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_OKEANOS_EXPLORER_TOUR_2018",
+        "source_page_url": "https://oceanexplorer.noaa.gov/technology/noaa-ship-okeanos-explorer/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2017/08/tour-1280x720-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ship Okeanos Explorer",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted research-vessel media. Use only for oceanographic mapping and survey operations; do not imply it is Chikyu or a commercial mining vessel.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 3,
+        "output_duration_seconds": 14
+      }
     },
     {
       "scene_id": "scene_026",
@@ -473,17 +501,24 @@
     {
       "scene_id": "scene_032",
       "role": "context",
-      "queries": [
-        "deep sea submersible descending darkness",
-        "underwater exploration lights deep ocean"
-      ],
-      "fallback_queries": [
-        "ROV descent dark ocean",
-        "submersible lights abyss"
-      ],
+      "queries": [],
+      "fallback_queries": [],
       "min_duration_seconds": 14,
       "max_duration_seconds": 120,
-      "editorial_note": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits."
+      "editorial_note": "A restrained descent into darkness returns the film to physical depth while the narration shifts to the moral distance between technical capability and agreed limits.",
+      "direct_source": {
+        "provider": "noaa_ocean_exploration",
+        "provider_asset_id": "NOAA_EX2107_HOLE_BOTTOM_SEA_2021",
+        "source_page_url": "https://oceanexplorer.noaa.gov/multimedia/okeanos-explorations-ex2107-gallery-media-dive08-hole-at-the-bottom-of-the-sea/",
+        "media_url": "https://oceanexplorer.noaa.gov/wp-content/uploads/2021/11/dive08-hole-at-the-bottom-of-the-sea-1280x720-1.mp4",
+        "source_institution": "NOAA Ocean Exploration",
+        "creator": "NOAA Ocean Exploration, Windows to the Deep 2021",
+        "license_url": "https://www.noaa.gov/disclaimer",
+        "license_note": "Official NOAA-hosted deep-ocean ROV media. Use as verified dark deep-sea descent and ecosystem context; do not identify the location as the Clarion-Clipperton Zone.",
+        "attribution_required": true,
+        "source_trim_start_seconds": 4,
+        "output_duration_seconds": 18
+      }
     },
     {
       "scene_id": "scene_033",
