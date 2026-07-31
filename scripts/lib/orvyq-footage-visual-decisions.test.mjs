@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { applyFootageVisualDecisions } from "./orvyq-footage-visual-decisions.mjs";
+import {
+  applyFootageVisualDecisions,
+  matchesContactSheetDecision,
+} from "./orvyq-footage-visual-decisions.mjs";
 
 const project_id = "002-example-project";
 const policy = {
@@ -111,4 +114,64 @@ test("applies matching decisions, ignores stale decisions and updates request st
   assert.equal(result.applied_rejections, 1);
   assert.equal(result.stale_decisions, 1);
   assert.equal(result.ready_for_materialization, false);
+});
+
+test("accepts legacy LFS pointer decisions and persists canonical contact-sheet identity", () => {
+  const canonicalSheetSha = "c".repeat(64);
+  const pointerSheetSha = "p".repeat(64);
+  const queueEntry = {
+    ...entry("scene_029", "34495148", "a", "c", [use]),
+    contact_sheet_sha256: canonicalSheetSha,
+    contact_sheet_pointer_sha256: pointerSheetSha,
+  };
+  assert.equal(matchesContactSheetDecision(queueEntry, canonicalSheetSha), true);
+  assert.equal(matchesContactSheetDecision(queueEntry, pointerSheetSha), true);
+  assert.equal(matchesContactSheetDecision(queueEntry, "x".repeat(64)), false);
+
+  const result = applyFootageVisualDecisions({
+    queue: { project_id, entries: [queueEntry] },
+    decisions: {
+      project_id,
+      review_basis: "Legacy pointer-bound decision migrated to canonical LFS content identity.",
+      decisions: [{
+        scene_id: queueEntry.scene_id,
+        provider_asset_id: queueEntry.provider_asset_id,
+        asset_sha256: queueEntry.asset_sha256,
+        contact_sheet_sha256: pointerSheetSha,
+        decision: "approve",
+        reason: "The reviewed frames support this exact use.",
+      }],
+    },
+    reviews: {
+      project_id,
+      review_basis: "fixture",
+      policy,
+      summary: {},
+      pending_frame_review_scene_ids: [],
+      rejected_assets: [],
+      approved_assets: [],
+    },
+    runtime: {
+      project_id,
+      records: [{
+        scene_id: queueEntry.scene_id,
+        provider_asset_id: queueEntry.provider_asset_id,
+        path: queueEntry.asset_path,
+      }],
+    },
+    requests: {
+      project_id,
+      requests: [{
+        asset_request_id: "REQ_FTG_CANONICAL",
+        type: "contextual_footage",
+        status: "pending_frame_review",
+        resolved_asset_paths: [queueEntry.asset_path],
+      }],
+    },
+  });
+
+  assert.equal(result.applied_approvals, 1);
+  assert.equal(result.stale_decisions, 0);
+  assert.equal(result.ready_for_materialization, true);
+  assert.equal(result.reviews.approved_assets[0].contact_sheet_sha256, canonicalSheetSha);
 });
