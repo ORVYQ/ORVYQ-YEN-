@@ -1,6 +1,15 @@
 #!/usr/bin/env node
+import crypto from "node:crypto";
 import path from "node:path";
-import { projectDir, readJson, writeJsonAtomic, parseArgs, printJson } from "./lib/fs-utils.mjs";
+import { promises as fs } from "node:fs";
+import {
+  projectDir,
+  readJson,
+  writeJsonAtomic,
+  pathExists,
+  parseArgs,
+  printJson,
+} from "./lib/fs-utils.mjs";
 
 function normalizeUse(use) {
   return {
@@ -21,16 +30,67 @@ function sceneIdFromAsset(assetPath) {
   return match ? `scene_${match[1]}` : null;
 }
 
+function sha256(buffer) {
+  return crypto.createHash("sha256").update(buffer).digest("hex");
+}
+
+async function reconcileManifestEntries(dir, manifest, runtime) {
+  const recordByScene = new Map((runtime.records || []).map((record) => [record.scene_id, record]));
+  return Promise.all((manifest.entries || []).map(async (entry) => {
+    const record = recordByScene.get(entry.scene_id);
+    if (!record || record.path === entry.asset_path) return entry;
+    const assetFile = path.join(dir, record.path);
+    const provenanceFile = `${assetFile}.provenance.json`;
+    const contactSheetPath = `qa/footage-contact-sheets/${entry.scene_id}.jpg`;
+    const contactSheetFile = path.join(dir, contactSheetPath);
+    for (const [label, file] of Object.entries({ assetFile, provenanceFile, contactSheetFile })) {
+      if (!(await pathExists(file))) {
+        throw new Error(`${entry.scene_id}: ${label} is missing while reconciling the footage review manifest`);
+      }
+    }
+    const [provenance, assetBytes, sheetBytes] = await Promise.all([
+      readJson(provenanceFile),
+      fs.readFile(assetFile),
+      fs.readFile(contactSheetFile),
+    ]);
+    const assetHash = sha256(assetBytes);
+    const declaredHash = String(provenance.actual_sha256 || provenance.sha256 || "").toLowerCase();
+    if (declaredHash && declaredHash !== assetHash) {
+      throw new Error(`${entry.scene_id}: reconciled footage bytes do not match provenance`);
+    }
+    return {
+      ...entry,
+      asset_path: record.path,
+      provider: provenance.provider,
+      provider_asset_id: String(provenance.provider_asset_id),
+      source_page_url: provenance.source_page_url,
+      creator: provenance.creator,
+      asset_sha256: assetHash,
+      contact_sheet_path: contactSheetPath,
+      contact_sheet_sha256: sha256(sheetBytes),
+      duration_seconds: Number(provenance.actual_duration_seconds || provenance.duration || entry.duration_seconds),
+      editorial_role: provenance.editorial_role || record.role || entry.editorial_role,
+      narration_anchor: provenance.narration_anchor || entry.narration_anchor || null,
+      claim_id: provenance.target_claim_id || entry.claim_id || null,
+      semantic_rationale: provenance.editorial_note || entry.semantic_rationale,
+      status: "pending_visual_review",
+    };
+  }));
+}
+
 export async function prepareFootageReviewQueue(projectId) {
   const dir = projectDir(projectId);
-  const [manifest, editorial, rebalance, blueprint, motionHook] = await Promise.all([
-    readJson(path.join(dir, "qa", "footage_contact_sheets.json")),
+  const manifestFile = path.join(dir, "qa", "footage_contact_sheets.json");
+  const [manifest, runtime, editorial, rebalance, blueprint, motionHook] = await Promise.all([
+    readJson(manifestFile),
+    readJson(path.join(dir, "assets", "footage_acquisition.runtime.json")),
     readJson(path.join(dir, "config", "editorial_asset_plan.json")),
     readJson(path.join(dir, "direction", "visual_rebalance_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
     readJson(path.join(dir, "direction", "motion_hook.json")),
   ]);
 
+  manifest.entries = await reconcileManifestEntries(dir, manifest, runtime);
   const usesByPath = new Map();
   const currentPathByScene = new Map((manifest.entries || []).map((entry) => [entry.scene_id, entry.asset_path]));
   const addUse = (assetPath, rawUse) => {
@@ -84,7 +144,9 @@ export async function prepareFootageReviewQueue(projectId) {
     if (action.decision !== "replace_contextual_footage") continue;
     const shot = shots[action.baseline_shot_index] || {};
     for (const replacement of action.replacement_assets || []) {
-      addUse(replacement.asset_path, {
+      const sceneId = sceneIdFromAsset(replacement.asset_path);
+      const currentAssetPath = currentPathByScene.get(sceneId) || replacement.asset_path;
+      addUse(currentAssetPath, {
         claim_id: action.claim_id,
         narration_anchor: shot.narration_anchor || shot.editorial_purpose || action.rationale,
         semantic_rationale: action.rationale,
@@ -111,7 +173,10 @@ export async function prepareFootageReviewQueue(projectId) {
     entries_with_exact_uses: entries.filter((entry) => entry.approved_uses_if_visually_valid.length > 0).length,
     entries,
   };
-  await writeJsonAtomic(path.join(dir, "qa", "footage_review_queue.json"), report);
+  await Promise.all([
+    writeJsonAtomic(manifestFile, { ...manifest, generated_at: report.generated_at }),
+    writeJsonAtomic(path.join(dir, "qa", "footage_review_queue.json"), report),
+  ]);
   return report;
 }
 
