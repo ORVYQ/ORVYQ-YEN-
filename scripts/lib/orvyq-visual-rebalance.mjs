@@ -1,6 +1,7 @@
 import {
   classifyVisualMedium,
   resolveVisualBalanceThresholds,
+  GRAPHIC_CARD_EVIDENCE_KINDS,
 } from "./orvyq-visual-balance.mjs";
 
 const DECISIONS = new Set([
@@ -89,9 +90,15 @@ function applyRedesign(shot, action) {
   if (updated.graphic) {
     updated.graphic.template_id = action.template_id;
     updated.graphic.design_system = "orvyq_cinematic_v1";
+  } else if (
+    updated.asset_type === "evidence" &&
+    GRAPHIC_CARD_EVIDENCE_KINDS.has(updated.evidence?.kind)
+  ) {
+    updated.evidence.template_id = action.template_id;
+    updated.evidence.design_system = "orvyq_cinematic_v1";
   } else {
     const overlay = updated.emphasis_card || updated.editorial_overlay || updated.overlay;
-    if (!overlay) throw new Error(`shot ${action.baseline_shot_index} redesign has no graphic or dominant overlay`);
+    if (!overlay) throw new Error(`shot ${action.baseline_shot_index} redesign has no graphic, source-derived card, or dominant overlay`);
     overlay.template_id = action.template_id;
     overlay.design_system = "orvyq_cinematic_v1";
   }
