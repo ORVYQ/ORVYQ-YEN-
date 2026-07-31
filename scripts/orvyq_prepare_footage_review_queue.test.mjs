@@ -1,7 +1,10 @@
 import fs from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { requiresClaimBoundReview } from "./orvyq_prepare_footage_review_queue.mjs";
+import {
+  requiresClaimBoundReview,
+  resolveContactSheetIdentity,
+} from "./orvyq_prepare_footage_review_queue.mjs";
 
 const currentUse = {
   claim_id: "CLM_009_INDUSTRY_COUNTERARGUMENT",
@@ -52,6 +55,25 @@ test("an unused asset is not queued solely because approval is absent", () => {
     approval: null,
     assetSha256: "a".repeat(64),
   }), false);
+});
+
+test("Git LFS contact-sheet pointers resolve to the visual object SHA", () => {
+  const objectSha = "c".repeat(64);
+  const pointer = Buffer.from(
+    `version https://git-lfs.github.com/spec/v1\noid sha256:${objectSha}\nsize 614489\n`,
+  );
+  const identity = resolveContactSheetIdentity(pointer);
+  assert.equal(identity.contact_sheet_sha256, objectSha);
+  assert.equal(identity.contact_sheet_is_lfs_pointer, true);
+  assert.match(identity.contact_sheet_pointer_sha256, /^[0-9a-f]{64}$/);
+  assert.notEqual(identity.contact_sheet_pointer_sha256, objectSha);
+});
+
+test("materialized contact sheets retain their direct byte SHA", () => {
+  const identity = resolveContactSheetIdentity(Buffer.from("real jpeg fixture bytes"));
+  assert.match(identity.contact_sheet_sha256, /^[0-9a-f]{64}$/);
+  assert.equal(identity.contact_sheet_pointer_sha256, null);
+  assert.equal(identity.contact_sheet_is_lfs_pointer, false);
 });
 
 test("claim-bound queue excludes planning-only editorial assignment anchors", () => {
