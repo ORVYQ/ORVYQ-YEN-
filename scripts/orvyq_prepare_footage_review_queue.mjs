@@ -12,7 +12,9 @@ import {
 } from "./lib/fs-utils.mjs";
 
 // The queue is always rebuilt against current runtime bytes; stale acquisition paths are never authoritative.
-// Reconciliation also provides the deterministic trigger boundary for re-running materialization after shared QA fixes.
+// Exact-use review is derived only from rendered narration surfaces (motion hook, materialized blueprint and
+// contextual-footage replacements). Editorial planning labels are deliberately excluded because they are not
+// narration anchors audited by the final semantic gate.
 function normalizeUse(use) {
   return {
     claim_id: use.claim_id,
@@ -96,7 +98,6 @@ async function reconcileManifestEntries(dir, manifest, runtime) {
   return Promise.all((manifest.entries || []).map(async (entry) => {
     const record = recordByScene.get(entry.scene_id);
     if (!record) return entry;
-    if (record.path === entry.asset_path) return buildCurrentReviewEntry(dir, record, entry);
     return buildCurrentReviewEntry(dir, record, entry);
   }));
 }
@@ -104,10 +105,9 @@ async function reconcileManifestEntries(dir, manifest, runtime) {
 export async function prepareFootageReviewQueue(projectId) {
   const dir = projectDir(projectId);
   const manifestFile = path.join(dir, "qa", "footage_contact_sheets.json");
-  const [manifest, runtime, editorial, rebalance, blueprint, motionHook, reviews] = await Promise.all([
+  const [manifest, runtime, rebalance, blueprint, motionHook, reviews] = await Promise.all([
     readJson(manifestFile),
     readJson(path.join(dir, "assets", "footage_acquisition.runtime.json")),
-    readJson(path.join(dir, "config", "editorial_asset_plan.json")),
     readJson(path.join(dir, "direction", "visual_rebalance_plan.json")),
     readJson(path.join(dir, "direction", "editorial_blueprint.json")),
     readJson(path.join(dir, "direction", "motion_hook.json")),
@@ -126,16 +126,6 @@ export async function prepareFootageReviewQueue(projectId) {
     existing.set(keyForUse(use), use);
     usesByPath.set(assetPath, existing);
   };
-
-  for (const [claimId, assignments] of Object.entries(editorial.footage_assignments || {})) {
-    for (const assignment of Object.values(assignments || {})) {
-      addUse(assignment.asset, {
-        claim_id: claimId,
-        narration_anchor: assignment.semantic_anchor,
-        semantic_rationale: assignment.semantic_rationale || assignment.reuse_reason,
-      });
-    }
-  }
 
   for (const hookShot of motionHook.shots || []) {
     const sceneId = sceneIdFromAsset(hookShot.video_asset);
