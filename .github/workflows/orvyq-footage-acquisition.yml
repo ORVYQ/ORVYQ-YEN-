@@ -29,6 +29,7 @@ on:
       - "projects/*/research/footage_semantic_constraints.json"
       - "projects/*/research/footage_constraint_overrides.json"
       - "projects/*/research/footage_use_contracts.json"
+      - "projects/*/research/footage_use_contract_overrides.json"
       - "projects/*/research/footage_visual_decisions*.json"
       - "projects/*/research/visual_asset_requests.json"
       - "projects/*/research/visual_asset_reviews.json"
@@ -68,7 +69,7 @@ jobs:
           else
             CHANGED_INPUT="$(
               git diff-tree --no-commit-id --name-only -r "$GITHUB_SHA" |
-                grep -E '^projects/[^/]+/(direction/motion_hook|research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|footage_use_contracts|footage_visual_decisions[^/]*|visual_asset_requests|visual_asset_reviews))\.json$' |
+                grep -E '^projects/[^/]+/(direction/motion_hook|research/(footage_acquisition_plan|footage_semantic_constraints|footage_constraint_overrides|footage_use_contracts|footage_use_contract_overrides|footage_visual_decisions[^/]*|visual_asset_requests|visual_asset_reviews))\.json$' |
                 head -n 1 || true
             )"
             if [ -n "$CHANGED_INPUT" ]; then
@@ -264,6 +265,8 @@ jobs:
             "projects/$PROJECT_ID/direction/motion_hook.json" \
             "projects/$PROJECT_ID/direction/visual_rebalance_plan.json" \
             "projects/$PROJECT_ID/direction/editorial_blueprint.json"
+          test ! -f "projects/$PROJECT_ID/research/footage_use_contract_overrides.json" || \
+            git add "projects/$PROJECT_ID/research/footage_use_contract_overrides.json"
           git add "projects/$PROJECT_ID/research"/footage_visual_decisions*.json
           git add -f \
             "projects/$PROJECT_ID/assets/footage" \
@@ -302,6 +305,7 @@ jobs:
             projects/${{ steps.project.outputs.project_id }}/research/footage_semantic_constraints.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_constraint_overrides.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_use_contracts.json
+            projects/${{ steps.project.outputs.project_id }}/research/footage_use_contract_overrides.json
             projects/${{ steps.project.outputs.project_id }}/research/footage_visual_decisions*.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_requests.json
             projects/${{ steps.project.outputs.project_id }}/research/visual_asset_reviews.json
