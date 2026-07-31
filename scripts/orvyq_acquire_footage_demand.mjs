@@ -38,23 +38,39 @@ function normalizeText(value) {
     .trim();
 }
 
-export function matchesSemanticText(value, item) {
+function containsSemanticTerm(normalizedHaystack, value) {
+  const term = normalizeText(value);
+  if (!term) return false;
+  return ` ${normalizedHaystack} `.includes(` ${term} `);
+}
+
+export function semanticMatchScore(value, item) {
   const constraints = item.semantic_title_constraints;
-  if (!constraints) return true;
+  if (!constraints) return 0;
   const haystack = normalizeText(value);
-  const groups = Array.isArray(constraints.required_any_groups)
-    ? constraints.required_any_groups
-    : [];
-  for (const group of groups) {
-    const terms = Array.isArray(group) ? group : [];
-    if (!terms.length || !terms.some((term) => haystack.includes(normalizeText(term)))) {
-      return false;
-    }
-  }
   const forbidden = Array.isArray(constraints.forbidden_terms)
     ? constraints.forbidden_terms
     : [];
-  return !forbidden.some((term) => haystack.includes(normalizeText(term)));
+  if (forbidden.some((term) => containsSemanticTerm(haystack, term))) {
+    return Number.NEGATIVE_INFINITY;
+  }
+  const groups = Array.isArray(constraints.required_any_groups)
+    ? constraints.required_any_groups
+    : [];
+  let score = 0;
+  for (const group of groups) {
+    const terms = Array.isArray(group) ? group : [];
+    const matched = terms
+      .map((term) => normalizeText(term))
+      .filter((term) => term && containsSemanticTerm(haystack, term));
+    if (!terms.length || !matched.length) return Number.NEGATIVE_INFINITY;
+    score += Math.max(...matched.map((term) => term.split(" ").length * 100 + term.length));
+  }
+  return score;
+}
+
+export function matchesSemanticText(value, item) {
+  return Number.isFinite(semanticMatchScore(value, item));
 }
 
 export function matchesSemanticMetadata(video, item) {
@@ -141,12 +157,13 @@ async function loadPlan(dir, projectId) {
   return plan;
 }
 
-async function search(query, key, perPage) {
+async function search(query, key, perPage, page = 1) {
   const url = new URL(PEXELS_API);
   url.searchParams.set("query", query);
   url.searchParams.set("orientation", "landscape");
   url.searchParams.set("size", "large");
   url.searchParams.set("per_page", String(perPage));
+  url.searchParams.set("page", String(page));
   const response = await fetch(url, {
     headers: { Authorization: key, "user-agent": "ORVYQ-demand-footage/1.1" },
     signal: AbortSignal.timeout(60000),
@@ -155,12 +172,13 @@ async function search(query, key, perPage) {
   return (await response.json()).videos || [];
 }
 
-function pick(videos, usedIds, item) {
+export function pick(videos, usedIds, item) {
   const min = Number(item.min_duration_seconds || 8);
   const max = Number(item.max_duration_seconds || 120);
   const candidates = [];
+  const rejectedIds = new Set((item.rejected_provider_asset_ids || []).map(String));
   for (const video of videos) {
-    if (usedIds.has(String(video.id)) || video.duration < min || video.duration > max) continue;
+    if (usedIds.has(String(video.id)) || rejectedIds.has(String(video.id)) || video.duration < min || video.duration > max) continue;
     if (!matchesSemanticMetadata(video, item)) continue;
     const files = (video.video_files || []).filter((file) =>
       file.file_type === "video/mp4" &&
@@ -171,9 +189,12 @@ function pick(videos, usedIds, item) {
     );
     if (!files.length) continue;
     files.sort((a, b) => Math.abs(a.width * a.height - 1920 * 1080) - Math.abs(b.width * b.height - 1920 * 1080));
-    candidates.push({ video, rendition: files[0] });
+    candidates.push({ video, rendition: files[0], semanticScore: semanticMatchScore(`${video?.url || ""} ${video?.user?.name || ""}`, item) });
   }
-  candidates.sort((a, b) => Math.abs(a.video.duration - (min + 4)) - Math.abs(b.video.duration - (min + 4)));
+  candidates.sort((a, b) =>
+    b.semanticScore - a.semanticScore ||
+    Math.abs(a.video.duration - (min + 4)) - Math.abs(b.video.duration - (min + 4))
+  );
   return candidates[0] || null;
 }
 
@@ -188,15 +209,28 @@ export async function preflightPexelsSelections(items, key, usedIds, policy, sea
       .filter(Boolean))];
     let selected;
     let selectedQuery;
+    const pagesPerQuery = Math.max(1, Math.min(10, Number(policy.pages_per_query || 3)));
+    const perPage = Number(policy.results_per_query || 30);
     for (const query of queries) {
-      selected = pick(
-        await searchFn(query, key, Number(policy.results_per_query || 30)),
-        usedIds,
-        item,
-      );
-      if (selected) {
+      const videosById = new Map();
+      for (let page = 1; page <= pagesPerQuery; page += 1) {
+        const pageVideos = await searchFn(query, key, perPage, page);
+        for (const video of pageVideos) videosById.set(String(video.id), video);
+        if (pageVideos.length < perPage) break;
+      }
+      const candidate = pick([...videosById.values()], usedIds, item);
+      if (!candidate) continue;
+      const candidateDistance = Math.abs(candidate.video.duration - (Number(item.min_duration_seconds || 8) + 4));
+      const selectedDistance = selected
+        ? Math.abs(selected.video.duration - (Number(item.min_duration_seconds || 8) + 4))
+        : Number.POSITIVE_INFINITY;
+      if (
+        !selected ||
+        candidate.semanticScore > selected.semanticScore ||
+        (candidate.semanticScore === selected.semanticScore && candidateDistance < selectedDistance)
+      ) {
+        selected = candidate;
         selectedQuery = query;
-        break;
       }
     }
     if (!selected) {

@@ -3,103 +3,552 @@
   "project_id": "002-the-new-war-beneath-the-ocean",
   "scenes": {
     "scene_002": {
-      "queries": ["research vessel ocean crew", "offshore support vessel deck", "marine workboat operations"],
-      "fallback_queries": ["ocean expedition ship", "working vessel crew at sea", "scientific marine vessel"],
-      "required_any_groups": [
-        ["research", "scientific", "expedition", "offshore", "marine", "support", "work", "working", "operations"],
-        ["vessel", "ship", "boat", "workboat", "deck", "crew"]
+      "queries": [
+        "research vessel ocean crew",
+        "offshore support vessel deck",
+        "marine workboat operations"
       ],
-      "forbidden_terms": ["cargo", "container", "tanker", "oil", "ferry", "cruise", "yacht", "sailboat", "fishing", "shipyard", "welding", "dry dock", "dockyard"]
+      "fallback_queries": [
+        "ocean expedition ship",
+        "working vessel crew at sea",
+        "scientific marine vessel"
+      ],
+      "required_any_groups": [
+        [
+          "research",
+          "scientific",
+          "expedition",
+          "offshore",
+          "marine",
+          "support",
+          "work",
+          "working",
+          "operations"
+        ],
+        [
+          "vessel",
+          "ship",
+          "boat",
+          "workboat",
+          "deck",
+          "crew"
+        ]
+      ],
+      "forbidden_terms": [
+        "cargo",
+        "container",
+        "tanker",
+        "oil",
+        "ferry",
+        "cruise",
+        "yacht",
+        "sailboat",
+        "fishing",
+        "shipyard",
+        "welding",
+        "dry dock",
+        "dockyard"
+      ]
     },
     "scene_003": {
-      "queries": ["dark deep seabed", "deep ocean floor lights", "abyssal seafloor underwater"],
-      "fallback_queries": ["submersible lights ocean floor", "dark underwater seabed", "deep sea floor exploration"],
-      "required_any_groups": [
-        ["underwater", "ocean", "sea", "seabed", "seafloor", "ocean-floor", "ocean floor"],
-        ["deep", "dark", "abyssal", "submersible", "lights", "exploration", "floor"]
+      "queries": [
+        "dark deep seabed",
+        "deep ocean floor lights",
+        "abyssal seafloor underwater"
       ],
-      "forbidden_terms": ["ray", "fish", "shark", "whale", "dolphin", "coral", "reef", "diver", "scuba", "snorkel", "aquarium", "tropical", "clear blue"]
+      "fallback_queries": [
+        "submersible lights ocean floor",
+        "dark underwater seabed",
+        "deep sea floor exploration"
+      ],
+      "required_any_groups": [
+        [
+          "underwater",
+          "ocean",
+          "sea",
+          "seabed",
+          "seafloor",
+          "ocean-floor",
+          "ocean floor"
+        ],
+        [
+          "deep",
+          "dark",
+          "abyssal",
+          "submersible",
+          "lights",
+          "exploration",
+          "floor"
+        ]
+      ],
+      "forbidden_terms": [
+        "ray",
+        "fish",
+        "shark",
+        "whale",
+        "dolphin",
+        "coral",
+        "reef",
+        "diver",
+        "scuba",
+        "snorkel",
+        "aquarium",
+        "tropical",
+        "clear blue"
+      ]
     },
     "scene_004": {
-      "queries": ["offshore vessel deck equipment", "marine industrial pipe handling", "work ship machinery deck"],
-      "fallback_queries": ["offshore equipment operation", "industrial marine deck", "ship deck crane machinery"],
-      "required_any_groups": [
-        ["offshore", "marine", "ship", "vessel", "deck"],
-        ["equipment", "machinery", "industrial", "pipe", "crane", "operation", "working"]
+      "queries": [
+        "offshore vessel deck equipment",
+        "marine industrial pipe handling",
+        "work ship machinery deck"
       ],
-      "forbidden_terms": ["oil", "petroleum", "tanker", "fuel", "gas", "drilling rig", "refinery"]
+      "fallback_queries": [
+        "offshore equipment operation",
+        "industrial marine deck",
+        "ship deck crane machinery"
+      ],
+      "required_any_groups": [
+        [
+          "offshore",
+          "marine",
+          "ship",
+          "vessel",
+          "deck"
+        ],
+        [
+          "equipment",
+          "machinery",
+          "industrial",
+          "pipe",
+          "crane",
+          "operation",
+          "working"
+        ]
+      ],
+      "forbidden_terms": [
+        "oil",
+        "petroleum",
+        "tanker",
+        "fuel",
+        "gas",
+        "drilling rig",
+        "refinery"
+      ]
     },
     "scene_005": {
-      "queries": ["industrial control room operators", "ship control room crew", "engineers monitoring control center"],
-      "fallback_queries": ["operators monitoring screens", "technical operations control room", "workers control center"],
-      "required_any_groups": [
-        ["control", "operator", "monitoring", "engineer", "technician", "operations"],
-        ["room", "center", "screens", "console", "crew", "team", "workers"]
+      "queries": [
+        "industrial control room operators",
+        "ship control room crew",
+        "engineers monitoring control center"
       ],
-      "forbidden_terms": ["interview", "recording", "camera", "film", "studio", "television", "podcast", "gaming", "smartphone", "empty"]
+      "fallback_queries": [
+        "operators monitoring screens",
+        "technical operations control room",
+        "workers control center"
+      ],
+      "required_any_groups": [
+        [
+          "control",
+          "operator",
+          "monitoring",
+          "engineer",
+          "technician",
+          "operations"
+        ],
+        [
+          "room",
+          "center",
+          "screens",
+          "console",
+          "crew",
+          "team",
+          "workers"
+        ]
+      ],
+      "forbidden_terms": [
+        "interview",
+        "recording",
+        "camera",
+        "film",
+        "studio",
+        "television",
+        "podcast",
+        "gaming",
+        "smartphone",
+        "empty",
+        "textile",
+        "garment",
+        "sewing",
+        "fabric",
+        "clothing"
+      ]
     },
     "scene_006": {
-      "queries": ["industrial robotics factory assembly", "precision machinery manufacturing", "automated factory production line"],
-      "fallback_queries": ["electric motor factory assembly", "robotic manufacturing line", "precision industrial production"],
-      "required_any_groups": [
-        ["motor", "robot", "robotic", "automation", "automated", "precision", "machinery", "engine", "electric"],
-        ["factory", "manufacturing", "assembly", "production", "industrial", "line"]
+      "queries": [
+        "industrial robotics factory assembly",
+        "precision machinery manufacturing",
+        "automated factory production line"
       ],
-      "forbidden_terms": ["motorcycle", "bicycle", "repair", "toy", "grinding", "welding-only"]
+      "fallback_queries": [
+        "electric motor factory assembly",
+        "robotic manufacturing line",
+        "precision industrial production"
+      ],
+      "required_any_groups": [
+        [
+          "motor",
+          "robot",
+          "robotic",
+          "automation",
+          "automated",
+          "precision",
+          "machinery",
+          "engine",
+          "electric"
+        ],
+        [
+          "factory",
+          "manufacturing",
+          "assembly",
+          "production",
+          "industrial",
+          "line"
+        ]
+      ],
+      "forbidden_terms": [
+        "motorcycle",
+        "bicycle",
+        "repair",
+        "toy",
+        "grinding",
+        "welding-only"
+      ]
     },
     "scene_007": {
-      "queries": ["government conference delegates", "international conference audience", "parliament assembly officials"],
-      "fallback_queries": ["conference speaker audience", "official delegates meeting", "public policy conference"],
-      "required_any_groups": [
-        ["conference", "meeting", "assembly", "summit", "parliament", "government"],
-        ["delegate", "official", "speaker", "audience", "people", "participants"]
+      "queries": [
+        "government conference delegates",
+        "international conference audience",
+        "parliament assembly officials"
       ],
-      "forbidden_terms": ["wedding", "classroom", "party", "sales", "product launch"]
+      "fallback_queries": [
+        "conference speaker audience",
+        "official delegates meeting",
+        "public policy conference"
+      ],
+      "required_any_groups": [
+        [
+          "conference",
+          "meeting",
+          "assembly",
+          "summit",
+          "parliament",
+          "government"
+        ],
+        [
+          "delegate",
+          "official",
+          "speaker",
+          "audience",
+          "people",
+          "participants"
+        ]
+      ],
+      "forbidden_terms": [
+        "wedding",
+        "classroom",
+        "party",
+        "sales",
+        "product launch"
+      ]
     },
     "scene_008": {
-      "queries": ["wind turbine people working", "wind farm workers", "engineer near wind turbine"],
-      "fallback_queries": ["people at wind farm", "wind energy worker", "wind turbine team"],
-      "required_any_groups": [
-        ["wind", "turbine", "wind-farm", "wind farm"],
-        ["worker", "engineer", "technician", "crew", "team", "people", "person", "man", "woman", "working", "maintenance", "install"]
+      "queries": [
+        "wind turbine people working",
+        "wind farm workers",
+        "engineer near wind turbine"
       ],
-      "forbidden_terms": ["sunset", "silhouette", "scenic", "timelapse", "animation"]
+      "fallback_queries": [
+        "people at wind farm",
+        "wind energy worker",
+        "wind turbine team"
+      ],
+      "required_any_groups": [
+        [
+          "wind",
+          "turbine",
+          "wind-farm",
+          "wind farm"
+        ],
+        [
+          "worker",
+          "engineer",
+          "technician",
+          "crew",
+          "team",
+          "people",
+          "person",
+          "man",
+          "woman",
+          "working",
+          "maintenance",
+          "install"
+        ]
+      ],
+      "forbidden_terms": [
+        "sunset",
+        "silhouette",
+        "scenic",
+        "timelapse",
+        "animation"
+      ]
     },
     "scene_012": {
-      "queries": ["deep seabed survey", "benthic ocean floor research", "deep sea track seafloor"],
-      "fallback_queries": ["dark seabed observation", "underwater ocean floor survey", "deep sea benthic exploration"],
-      "required_any_groups": [
-        ["seabed", "seafloor", "ocean floor", "benthic", "underwater", "deep sea"],
-        ["survey", "research", "observation", "track", "disturbance", "exploration", "dark"]
+      "queries": [
+        "deep seabed survey",
+        "benthic ocean floor research",
+        "deep sea track seafloor"
       ],
-      "forbidden_terms": ["island", "coast", "coastline", "beach", "tropical", "resort", "coral", "reef"]
+      "fallback_queries": [
+        "dark seabed observation",
+        "underwater ocean floor survey",
+        "deep sea benthic exploration"
+      ],
+      "required_any_groups": [
+        [
+          "seabed",
+          "seafloor",
+          "ocean floor",
+          "benthic",
+          "underwater",
+          "deep sea"
+        ],
+        [
+          "survey",
+          "research",
+          "observation",
+          "track",
+          "disturbance",
+          "exploration",
+          "dark"
+        ]
+      ],
+      "forbidden_terms": [
+        "island",
+        "coast",
+        "coastline",
+        "beach",
+        "tropical",
+        "resort",
+        "coral",
+        "reef"
+      ]
     },
     "scene_024": {
-      "queries": ["research vessel survey equipment", "offshore work boat equipment", "scientific vessel operations"],
-      "fallback_queries": ["survey ship at sea", "marine work vessel crew", "ocean research boat equipment"],
-      "required_any_groups": [
-        ["research", "survey", "scientific", "work", "offshore", "operations"],
-        ["vessel", "ship", "boat", "equipment", "crew", "deck"]
+      "queries": [
+        "research vessel survey equipment",
+        "offshore work boat equipment",
+        "scientific vessel operations"
       ],
-      "forbidden_terms": ["yacht", "leisure", "speedboat", "sailboat", "tourist", "recreation", "tiny boat"]
+      "fallback_queries": [
+        "survey ship at sea",
+        "marine work vessel crew",
+        "ocean research boat equipment"
+      ],
+      "required_any_groups": [
+        [
+          "research",
+          "survey",
+          "scientific",
+          "work",
+          "offshore",
+          "operations"
+        ],
+        [
+          "vessel",
+          "ship",
+          "boat",
+          "equipment",
+          "crew",
+          "deck"
+        ]
+      ],
+      "forbidden_terms": [
+        "yacht",
+        "leisure",
+        "speedboat",
+        "sailboat",
+        "tourist",
+        "recreation",
+        "tiny boat",
+        "fishing",
+        "fisherman",
+        "trawler",
+        "angler"
+      ]
     },
     "scene_029": {
-      "queries": ["international assembly delegates", "government conference podium", "official policy meeting audience"],
-      "fallback_queries": ["international conference participants", "delegates formal meeting", "public policy assembly"],
-      "required_any_groups": [
-        ["international", "government", "official", "policy", "delegate", "assembly"],
-        ["conference", "meeting", "podium", "audience", "participants", "delegates"]
+      "queries": [
+        "international assembly delegates",
+        "government conference podium",
+        "official policy meeting audience"
       ],
-      "forbidden_terms": ["ship", "boat", "ocean", "sea", "empty", "wedding", "party", "sales"]
+      "fallback_queries": [
+        "international conference participants",
+        "delegates formal meeting",
+        "public policy assembly"
+      ],
+      "required_any_groups": [
+        [
+          "international",
+          "government",
+          "official",
+          "policy",
+          "delegate",
+          "assembly"
+        ],
+        [
+          "conference",
+          "meeting",
+          "podium",
+          "audience",
+          "participants",
+          "delegates"
+        ]
+      ],
+      "forbidden_terms": [
+        "ship",
+        "boat",
+        "ocean",
+        "sea",
+        "empty",
+        "wedding",
+        "party",
+        "sales",
+        "school",
+        "student",
+        "classroom",
+        "graduation",
+        "children",
+        "child"
+      ]
     },
     "scene_032": {
-      "queries": ["deep underwater darkness lights", "submersible deep sea floor", "dark ocean seabed descent"],
-      "fallback_queries": ["deep sea exploration lights", "underwater vehicle ocean floor", "abyssal underwater darkness"],
-      "required_any_groups": [
-        ["underwater", "deep sea", "ocean", "seabed", "seafloor", "submersible"],
-        ["dark", "darkness", "lights", "descent", "exploration", "floor"]
+      "queries": [
+        "deep underwater darkness lights",
+        "submersible deep sea floor",
+        "dark ocean seabed descent"
       ],
-      "forbidden_terms": ["city", "rooftop", "robot", "android", "futuristic", "science fiction", "sci-fi", "building", "street"]
+      "fallback_queries": [
+        "deep sea exploration lights",
+        "underwater vehicle ocean floor",
+        "abyssal underwater darkness"
+      ],
+      "required_any_groups": [
+        [
+          "underwater",
+          "deep sea",
+          "ocean",
+          "seabed",
+          "seafloor",
+          "submersible"
+        ],
+        [
+          "dark",
+          "darkness",
+          "lights",
+          "descent",
+          "exploration",
+          "floor"
+        ]
+      ],
+      "forbidden_terms": [
+        "city",
+        "rooftop",
+        "robot",
+        "android",
+        "futuristic",
+        "science fiction",
+        "sci-fi",
+        "building",
+        "street"
+      ]
+    },
+    "scene_018": {
+      "queries": [
+        "metal recycling industrial sorting",
+        "scrap metal recycling facility",
+        "industrial metal waste processing"
+      ],
+      "fallback_queries": [
+        "metal recovery conveyor",
+        "scrap steel recycling plant",
+        "industrial material sorting metal"
+      ],
+      "required_any_groups": [
+        [
+          "metal",
+          "steel",
+          "scrap",
+          "aluminum",
+          "copper"
+        ],
+        [
+          "recycling",
+          "sorting",
+          "recovery",
+          "processing",
+          "facility",
+          "plant"
+        ]
+      ],
+      "forbidden_terms": [
+        "paper",
+        "cardboard",
+        "plastic",
+        "bottle",
+        "glass",
+        "household"
+      ]
+    },
+    "scene_025": {
+      "queries": [
+        "underwater ROV robot seafloor",
+        "deep sea submersible robot",
+        "ocean floor remotely operated vehicle"
+      ],
+      "fallback_queries": [
+        "underwater exploration robot",
+        "marine ROV deep ocean",
+        "submersible vehicle seabed"
+      ],
+      "required_any_groups": [
+        [
+          "underwater",
+          "deep sea",
+          "ocean",
+          "seafloor",
+          "seabed",
+          "marine"
+        ],
+        [
+          "rov",
+          "robot",
+          "robotic",
+          "submersible",
+          "vehicle"
+        ]
+      ],
+      "forbidden_terms": [
+        "massage",
+        "therapy",
+        "medical",
+        "toy",
+        "humanoid",
+        "android",
+        "warehouse",
+        "delivery"
+      ]
     }
   }
 }
