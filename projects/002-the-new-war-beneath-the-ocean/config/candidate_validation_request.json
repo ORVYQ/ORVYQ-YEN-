@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 6,
-  "reason": "All 49 footage assets have canonical byte-bound visual approval; pending and rejected counts are zero; the visual rebalance is materialized; the production blueprint is ready; local footage, semantic-use and visual-balance audits all pass. Run exact-head Candidate Validation without rendering video after making readiness validation use the completed canonical approval registry instead of the historical review queue.",
+  "request_revision": 7,
+  "reason": "The final governance-footage retiming is materialized: scene_050 now interrupts the CLM_007 evidence run at the earlier approved institutional beat while remaining at two total uses. Pending and rejected footage counts are zero, the visual rebalance and production blueprint are ready, and the reusable footage-contract override and silent-removal guards are covered by tests. Run exact-head Candidate Validation without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T09:50:00Z"
+  "requested_at": "2026-07-31T11:18:00Z"
 }
