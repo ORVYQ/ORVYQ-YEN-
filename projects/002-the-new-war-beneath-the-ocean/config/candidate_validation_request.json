@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 12,
-  "reason": "The exact branch head retains the finalized footage rebalance, reusable contract overrides, canonical role normalization, resilient official-evidence retrieval and zero pending/rejected state. Full-production planning and primary-evidence verification already pass. The reusable visual-rebalance materializer now emits the canonical direct_evidence semantic link for every primary-evidence replacement, with a regression test preventing project-specific or invalid aliases. Re-run exact-head Candidate Validation without rendering video.",
+  "request_revision": 13,
+  "reason": "The reusable visual-rebalance materializer now resolves every primary-evidence replacement through the canonical primary_evidence_manifest, carries source IDs plus visible institution/date/title hierarchy into the materialized shot, and fails closed when institution, title, date, URL or content identity is missing. Regression tests cover both attribution preservation and missing-provenance rejection. Re-run exact-head Candidate Validation without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T12:18:00Z"
+  "requested_at": "2026-07-31T13:33:00Z"
 }
