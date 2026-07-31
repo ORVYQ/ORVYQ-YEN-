@@ -52,7 +52,14 @@ export function auditFootageSemanticReviews({ footageAssets, footageShots, prove
           use.claim_id === shot.claim_id &&
           use.narration_anchor === shot.narration_anchor
         );
-        if (!approvedUse || String(approvedUse.semantic_rationale || "").length < 24) {
+        const sameClaimUse = (approval.approved_uses || []).find((use) =>
+          use.claim_id === shot.claim_id && String(use.semantic_rationale || "").length >= 24
+        );
+        const validExtension = shot.claim_bound_extension === true &&
+          String(shot.claim_bound_extension_basis || "").length >= 24 &&
+          String(shot.semantic_rationale || "").length >= 24 &&
+          Boolean(sameClaimUse);
+        if ((!approvedUse || String(approvedUse.semantic_rationale || "").length < 24) && !validExtension) {
           failures.push(`${assetPath}: no exact approved use for ${shot.claim_id} / ${shot.narration_anchor}`);
         }
       }
