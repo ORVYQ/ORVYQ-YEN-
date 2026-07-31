@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 21,
-  "reason": "Re-run exact-head Candidate Validation after adding safe timing headroom to the approved scene_054 replacement at baseline shot 113. The 18.065-second official NOAA clip now exposes an 8-second trim window so small ASR alignment drift cannot make the replacement shorter than the generated shot. This also re-verifies the scene_015 two-use fix without rendering video.",
+  "request_revision": 22,
+  "reason": "Re-run exact-head Candidate Validation after retiring the excess CLM_015 slice-0 footage assignment without forcing a semantically weaker replacement. Scene_015 now has only its two direct seabed uses, scene_053 retains only its two approved midwater-research uses, and the canonical generated evidence/context treatment remains at the retired target. No video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T17:12:00Z"
+  "requested_at": "2026-07-31T17:24:00Z"
 }
