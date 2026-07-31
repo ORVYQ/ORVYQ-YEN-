@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "request_revision": 8,
+  "request_revision": 9,
   "policy": {
     "selection_basis": "Pexels source-page title/slug must satisfy explicit positive and negative terms before download; the Full-Length Review remains the frame-level human verification gate.",
     "blind_keyword_acceptance_forbidden": true
@@ -90,84 +90,95 @@
     },
     "scene_003": {
       "queries": [
-        "dark deep seabed",
-        "deep ocean floor lights",
-        "abyssal seafloor underwater"
+        "ROV lights abyssal seafloor",
+        "dark empty deep ocean floor",
+        "submersible over seabed at night"
       ],
       "fallback_queries": [
-        "submersible lights ocean floor",
-        "dark underwater seabed",
-        "deep sea floor exploration"
+        "abyssal plain underwater lights",
+        "deep sea floor no divers",
+        "dark seafloor exploration vehicle"
       ],
       "required_any_groups": [
         [
-          "underwater",
-          "ocean",
-          "sea",
           "seabed",
           "seafloor",
-          "ocean-floor",
-          "ocean floor"
+          "ocean floor",
+          "abyssal",
+          "deep ocean"
         ],
         [
-          "deep",
-          "dark",
-          "abyssal",
+          "rov",
           "submersible",
+          "vehicle",
           "lights",
-          "exploration",
+          "dark",
           "floor"
         ]
       ],
       "forbidden_terms": [
-        "ray",
-        "fish",
-        "shark",
-        "whale",
-        "dolphin",
-        "coral",
-        "reef",
+        "cave",
+        "cavern",
+        "diving",
         "diver",
         "scuba",
         "snorkel",
-        "aquarium",
+        "swimmer",
+        "reef",
+        "coral",
+        "fish",
+        "shark",
+        "ray",
+        "wreck",
         "tropical",
-        "clear blue"
+        "clear blue",
+        "aquarium"
       ]
     },
     "scene_004": {
       "queries": [
-        "offshore vessel deck equipment",
-        "marine industrial pipe handling",
-        "work ship machinery deck"
+        "offshore supply vessel deck winch",
+        "marine pipe handling work vessel",
+        "ship deck crane equipment operation"
       ],
       "fallback_queries": [
-        "offshore equipment operation",
-        "industrial marine deck",
-        "ship deck crane machinery"
+        "offshore workboat deck machinery",
+        "vessel deck hose winch",
+        "marine operations deck crane"
       ],
       "required_any_groups": [
         [
           "offshore",
           "marine",
-          "ship",
           "vessel",
+          "ship",
+          "workboat",
           "deck"
         ],
         [
-          "equipment",
-          "machinery",
-          "industrial",
           "pipe",
+          "winch",
+          "hose",
           "crane",
-          "operation",
-          "working"
+          "deck equipment",
+          "machinery"
         ]
       ],
       "forbidden_terms": [
+        "cargo",
+        "container",
+        "port",
+        "harbor",
+        "harbour",
+        "dock",
+        "terminal",
+        "bulk",
+        "coal",
+        "ore carrier",
+        "freighter",
+        "tanker",
         "oil",
         "petroleum",
-        "tanker",
         "fuel",
         "gas",
         "drilling rig",
@@ -434,14 +445,14 @@
     },
     "scene_012": {
       "queries": [
-        "deep seabed survey",
-        "benthic ocean floor research",
-        "deep sea track seafloor"
+        "ROV dark benthic seafloor survey",
+        "abyssal seabed track research",
+        "deep ocean floor disturbance survey"
       ],
       "fallback_queries": [
-        "dark seabed observation",
-        "underwater ocean floor survey",
-        "deep sea benthic exploration"
+        "dark seafloor ROV observation",
+        "benthic track deep sea",
+        "abyssal floor research lights"
       ],
       "required_any_groups": [
         [
@@ -449,28 +460,38 @@
           "seafloor",
           "ocean floor",
           "benthic",
-          "underwater",
+          "abyssal",
           "deep sea"
         ],
         [
+          "rov",
           "survey",
           "research",
-          "observation",
           "track",
           "disturbance",
-          "exploration",
-          "dark"
+          "dark",
+          "observation"
         ]
       ],
       "forbidden_terms": [
+        "diver",
+        "diving",
+        "scuba",
+        "snorkel",
+        "swimmer",
+        "cave",
+        "cavern",
         "island",
         "coast",
-        "coastline",
         "beach",
+        "shallow",
+        "clear blue",
         "tropical",
         "resort",
         "coral",
-        "reef"
+        "reef",
+        "fish",
+        "wreck"
       ]
     },
     "scene_013": {
@@ -791,41 +812,51 @@
         "35844496"
       ],
       "queries": [
-        "research vessel survey equipment",
-        "offshore work boat equipment",
-        "scientific vessel operations"
+        "oceanographic research vessel deck equipment",
+        "scientific survey ship crew at sea",
+        "marine research vessel instruments"
       ],
       "fallback_queries": [
-        "survey ship at sea",
-        "marine work vessel crew",
-        "ocean research boat equipment"
+        "research ship operations offshore",
+        "survey vessel deck crew",
+        "ocean science workboat equipment"
       ],
       "required_any_groups": [
         [
           "research",
-          "survey",
           "scientific",
-          "work",
-          "offshore",
-          "operations"
+          "survey",
+          "oceanographic",
+          "ocean science"
         ],
         [
           "vessel",
           "ship",
-          "boat",
-          "equipment",
+          "deck",
           "crew",
-          "deck"
+          "equipment",
+          "instruments"
         ]
       ],
       "forbidden_terms": [
+        "port",
+        "harbor",
+        "harbour",
+        "canal",
+        "river",
+        "barge",
+        "cargo",
+        "container",
+        "dock",
+        "terminal",
+        "dredging",
+        "construction",
         "yacht",
         "leisure",
         "speedboat",
         "sailboat",
         "tourist",
         "recreation",
-        "tiny boat",
         "fishing",
         "fisherman",
         "trawler",
@@ -1053,20 +1084,20 @@
         "9338834"
       ],
       "queries": [
-        "deep underwater darkness lights",
-        "submersible deep sea floor",
-        "dark ocean seabed descent"
+        "submersible descending dark deep ocean",
+        "abyssal underwater darkness lights",
+        "dark empty ocean floor descent"
       ],
       "fallback_queries": [
-        "deep sea exploration lights",
-        "underwater vehicle ocean floor",
-        "abyssal underwater darkness"
+        "deep sea vehicle lights darkness",
+        "underwater descent no diver",
+        "abyssal seafloor dark blue"
       ],
       "required_any_groups": [
         [
           "underwater",
           "deep sea",
-          "ocean",
+          "deep ocean",
           "seabed",
           "seafloor",
           "submersible"
@@ -1074,13 +1105,26 @@
         [
           "dark",
           "darkness",
-          "lights",
           "descent",
-          "exploration",
+          "lights",
+          "abyssal",
           "floor"
         ]
       ],
       "forbidden_terms": [
+        "diver",
+        "diving",
+        "scuba",
+        "snorkel",
+        "swimmer",
+        "cave",
+        "cavern",
+        "reef",
+        "coral",
+        "fish",
+        "tropical",
+        "clear blue",
+        "wreck",
         "city",
         "rooftop",
         "robot",

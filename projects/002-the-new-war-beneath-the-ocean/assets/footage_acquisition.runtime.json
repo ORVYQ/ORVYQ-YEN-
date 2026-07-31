@@ -1,7 +1,7 @@
 {
   "schema_version": "1.3-incremental-demand-led-semantic-metadata",
   "project_id": "002-the-new-war-beneath-the-ocean",
-  "generated_at": "2026-07-31T07:36:20.439Z",
+  "generated_at": "2026-07-31T07:44:47.149Z",
   "source": "pexels",
   "license_url": "https://www.pexels.com/license/",
   "planned_asset_count": 49,
@@ -10,7 +10,7 @@
   "semantic_constraints_applied": 43,
   "unresolved_scene_ids": [],
   "provider_search_issues": [],
-  "provider_request_count": 25,
+  "provider_request_count": 29,
   "provider_unavailable": false,
   "records": [
     {
@@ -26,15 +26,15 @@
       "role": "context"
     },
     {
-      "path": "assets/footage/scene_003_357338d36996314e4379479c.mp4",
+      "path": "assets/footage/scene_003_fe4cd2265cbee22028b515c8.mp4",
       "scene_id": "scene_003",
-      "provider_asset_id": "33132093",
+      "provider_asset_id": "33151454",
       "role": "context"
     },
     {
-      "path": "assets/footage/scene_004_feed076e493369110dd2e610.mp4",
+      "path": "assets/footage/scene_004_c51a189c61e9aeb2f007d98a.mp4",
       "scene_id": "scene_004",
-      "provider_asset_id": "29928556",
+      "provider_asset_id": "30768552",
       "role": "context"
     },
     {
@@ -80,9 +80,9 @@
       "role": "context"
     },
     {
-      "path": "assets/footage/scene_012_c666c877e98e2809478ae853.mp4",
+      "path": "assets/footage/scene_012_53cbfc483d206f886de331b9.mp4",
       "scene_id": "scene_012",
-      "provider_asset_id": "34310800",
+      "provider_asset_id": "33872851",
       "role": "context"
     },
     {
@@ -146,9 +146,9 @@
       "role": "human_context"
     },
     {
-      "path": "assets/footage/scene_024_3654c303b6220e4097fd418d.mp4",
+      "path": "assets/footage/scene_024_5ed9585f85fe45d33b59d5be.mp4",
       "scene_id": "scene_024",
-      "provider_asset_id": "32834333",
+      "provider_asset_id": "35239446",
       "role": "context"
     },
     {
@@ -188,9 +188,9 @@
       "role": "human_context"
     },
     {
-      "path": "assets/footage/scene_032_c227d6af07e6cc6e8697660c.mp4",
+      "path": "assets/footage/scene_032_483fc2523314e06bd95d90d9.mp4",
       "scene_id": "scene_032",
-      "provider_asset_id": "31774645",
+      "provider_asset_id": "29881943",
       "role": "context"
     },
     {
