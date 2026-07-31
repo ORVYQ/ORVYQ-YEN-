@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { loadCanonicalAjv, readJson } from "./lib/schema-validate.mjs";
+import { validateLocalFootage } from "./orvyq_validate_local_footage.mjs";
 
 test("Project 002 byte-bound footage visual decision rounds satisfy their schema", () => {
   const ajv = loadCanonicalAjv();
@@ -23,4 +24,8 @@ test("Project 002 byte-bound footage visual decision rounds satisfy their schema
       `${file} must not contain duplicate scene decisions`,
     );
   }
+});
+
+test("legacy local-footage validator entrypoint remains callable", () => {
+  assert.equal(typeof validateLocalFootage, "function");
 });
