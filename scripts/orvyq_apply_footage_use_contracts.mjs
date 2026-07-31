@@ -3,6 +3,7 @@ import path from "node:path";
 import {
   projectDir,
   readJson,
+  readJsonSafe,
   writeJsonAtomic,
   parseArgs,
   printJson,
@@ -17,36 +18,152 @@ function targetKey(claimId, sliceIndex) {
   return `${claimId}:${Number(sliceIndex)}`;
 }
 
+function retirementKey(sceneId, claimId, sliceIndex) {
+  return `${sceneId}:${targetKey(claimId, sliceIndex)}`;
+}
+
 function clone(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function validateAssignment(item, label) {
+  if (!item || typeof item !== "object") throw new Error(`${label} must be an object`);
+  if (!/^scene_\d{3}$/.test(String(item.scene_id || ""))) throw new Error(`${label}.scene_id is invalid`);
+  if (!String(item.claim_id || "").trim()) throw new Error(`${label}.claim_id is required`);
+  if (!Number.isInteger(Number(item.slice_index)) || Number(item.slice_index) < 0)
+    throw new Error(`${label}.slice_index must be a non-negative integer`);
+  if (!Number.isFinite(Number(item.trim_in_ratio || 0)) || Number(item.trim_in_ratio || 0) < 0 || Number(item.trim_in_ratio || 0) >= 1)
+    throw new Error(`${label}.trim_in_ratio must be in [0, 1)`);
+  if (!String(item.semantic_rationale || "").trim()) throw new Error(`${label}.semantic_rationale is required`);
+}
+
+function validateRetirement(item, label) {
+  if (!item || typeof item !== "object") throw new Error(`${label} must be an object`);
+  if (!/^scene_\d{3}$/.test(String(item.scene_id || ""))) throw new Error(`${label}.scene_id is invalid`);
+  if (!String(item.claim_id || "").trim()) throw new Error(`${label}.claim_id is required`);
+  if (!Number.isInteger(Number(item.slice_index)) || Number(item.slice_index) < 0)
+    throw new Error(`${label}.slice_index must be a non-negative integer`);
+  if (String(item.reason || "").trim().length < 16) throw new Error(`${label}.reason must explain the retirement`);
+}
+
+export function mergeFootageUseContractOverrides(contracts, overrides = null) {
+  const merged = clone(contracts);
+  merged.managed_scene_ids ||= [];
+  merged.pruned_scene_ids ||= [];
+  merged.assignments ||= [];
+  merged.retired_targets ||= [];
+
+  if (!overrides) return merged;
+  if (overrides.schema_version !== "1.0") throw new Error("footage_use_contract_overrides schema_version must be 1.0");
+  if (overrides.project_id !== contracts.project_id)
+    throw new Error(`footage_use_contract_overrides project_id ${overrides.project_id} does not match ${contracts.project_id}`);
+
+  const overrideManaged = new Set(overrides.managed_scene_ids || []);
+  for (const sceneId of overrideManaged) {
+    if (!/^scene_\d{3}$/.test(String(sceneId))) throw new Error(`footage_use_contract_overrides has invalid managed scene ${sceneId}`);
+  }
+
+  const overrideAssignments = overrides.assignments || [];
+  overrideAssignments.forEach((item, index) => validateAssignment(item, `footage_use_contract_overrides.assignments[${index}]`));
+  const overrideRetirements = overrides.retired_targets || [];
+  overrideRetirements.forEach((item, index) => validateRetirement(item, `footage_use_contract_overrides.retired_targets[${index}]`));
+
+  // An override is authoritative for every scene it explicitly manages. This
+  // lets an editor move a clip to a better narration beat without rewriting
+  // the entire project contract, while keeping the final merged contract as
+  // the single canonical source written back to disk.
+  merged.assignments = merged.assignments.filter((item) => !overrideManaged.has(item.scene_id));
+  merged.retired_targets = merged.retired_targets.filter((item) => !overrideManaged.has(item.scene_id));
+  merged.assignments.push(...clone(overrideAssignments));
+  merged.retired_targets.push(...clone(overrideRetirements));
+  merged.managed_scene_ids = [...new Set([...merged.managed_scene_ids, ...overrideManaged])].sort();
+
+  const targetKeys = new Set();
+  for (const [index, item] of merged.assignments.entries()) {
+    validateAssignment(item, `merged footage assignment[${index}]`);
+    const key = targetKey(item.claim_id, item.slice_index);
+    if (targetKeys.has(key)) throw new Error(`Merged footage contracts have duplicate target ${key}`);
+    targetKeys.add(key);
+  }
+
+  const retirementKeys = new Set();
+  for (const [index, item] of merged.retired_targets.entries()) {
+    validateRetirement(item, `merged retired target[${index}]`);
+    const key = retirementKey(item.scene_id, item.claim_id, item.slice_index);
+    if (retirementKeys.has(key)) throw new Error(`Merged footage contracts have duplicate retirement ${key}`);
+    retirementKeys.add(key);
+  }
+  return merged;
+}
+
+export function assertNoSilentManagedAssignmentRemoval({
+  editorialAssignments,
+  managedSceneIds,
+  prunedSceneIds,
+  finalAssignments,
+  retiredTargets,
+}) {
+  const managedScenes = new Set(managedSceneIds || []);
+  const prunedScenes = new Set(prunedSceneIds || []);
+  const finalByTarget = new Map((finalAssignments || []).map((item) => [targetKey(item.claim_id, item.slice_index), item.scene_id]));
+  const retirementKeys = new Set((retiredTargets || []).map((item) => retirementKey(item.scene_id, item.claim_id, item.slice_index)));
+
+  const unaccounted = [];
+  for (const [claimId, claimAssignments] of Object.entries(editorialAssignments || {})) {
+    for (const [sliceIndex, assignment] of Object.entries(claimAssignments || {})) {
+      const sceneId = sceneIdFromAsset(assignment?.asset);
+      if (!managedScenes.has(sceneId)) continue;
+      const key = targetKey(claimId, sliceIndex);
+      const finalScene = finalByTarget.get(key);
+      if (finalScene === sceneId || prunedScenes.has(sceneId) || retirementKeys.has(retirementKey(sceneId, claimId, sliceIndex))) continue;
+      unaccounted.push(`${sceneId} at ${key}`);
+    }
+  }
+  if (unaccounted.length) {
+    throw new Error(
+      `Footage use contracts would silently remove ${unaccounted.length} managed assignment(s): ${unaccounted.join(", ")}. ` +
+        "Add a replacement assignment or an explicit retired_targets entry with a specific reason."
+    );
+  }
 }
 
 export async function applyFootageUseContracts(projectId) {
   const dir = projectDir(projectId);
   const files = {
     contracts: path.join(dir, "research", "footage_use_contracts.json"),
+    overrides: path.join(dir, "research", "footage_use_contract_overrides.json"),
     editorial: path.join(dir, "config", "editorial_asset_plan.json"),
     runtime: path.join(dir, "assets", "footage_acquisition.runtime.json"),
     plan: path.join(dir, "research", "footage_acquisition_plan.json"),
     blueprint: path.join(dir, "direction", "editorial_blueprint.json"),
   };
-  const [contracts, editorial, runtime, plan, blueprint] = await Promise.all([
+  const [baseContracts, overrides, editorial, runtime, plan, blueprint] = await Promise.all([
     readJson(files.contracts),
+    readJsonSafe(files.overrides, null),
     readJson(files.editorial),
     readJson(files.runtime),
     readJson(files.plan),
     readJson(files.blueprint),
   ]);
-  for (const [label, value] of Object.entries({ contracts, editorial, runtime, plan, blueprint })) {
+  for (const [label, value] of Object.entries({ baseContracts, editorial, runtime, plan, blueprint })) {
     if (value.project_id !== projectId) throw new Error(`${label} project_id does not match ${projectId}`);
   }
 
+  const contracts = mergeFootageUseContractOverrides(baseContracts, overrides);
   const managedScenes = new Set(contracts.managed_scene_ids || []);
   const prunedScenes = new Set(contracts.pruned_scene_ids || []);
   const assignments = contracts.assignments || [];
   const targetKeys = new Set(assignments.map((item) => targetKey(item.claim_id, item.slice_index)));
   const duplicateTargets = assignments.length - targetKeys.size;
   if (duplicateTargets) throw new Error(`footage_use_contracts has ${duplicateTargets} duplicate claim/slice target(s)`);
+
+  assertNoSilentManagedAssignmentRemoval({
+    editorialAssignments: editorial.footage_assignments,
+    managedSceneIds: contracts.managed_scene_ids,
+    prunedSceneIds: contracts.pruned_scene_ids,
+    finalAssignments: assignments,
+    retiredTargets: contracts.retired_targets,
+  });
 
   const currentByScene = new Map((runtime.records || []).map((record) => [record.scene_id, record]));
   const provenanceByScene = new Map();
@@ -109,7 +226,7 @@ export async function applyFootageUseContracts(projectId) {
   const activeRecords = (runtime.records || []).filter((record) => !prunedScenes.has(record.scene_id));
   editorial.full_footage_pool = [...new Set(activeRecords.map((record) => record.path))];
   editorial.generation_policy =
-    "claim-bound footage use contracts; one scene may appear only at explicitly listed claim/slice targets; current runtime paths are resolved by scene id; no automatic backfill or scene-id-wide reassignment";
+    "claim-bound footage use contracts plus explicit validated overrides; one scene may appear only at listed claim/slice targets; no automatic backfill, silent retirement or scene-id-wide reassignment";
 
   const nextShots = clone(shots);
   const nextShotsByTarget = new Map();
@@ -167,6 +284,8 @@ export async function applyFootageUseContracts(projectId) {
     pruned_scene_count: prunedScenes.size,
     assignment_count: assignments.length,
     removed_previous_assignments: removedAssignments,
+    explicit_retirement_count: (contracts.retired_targets || []).length,
+    override_file: overrides ? "research/footage_use_contract_overrides.json" : null,
     deferred_targets: deferredTargets,
   };
 
@@ -174,8 +293,10 @@ export async function applyFootageUseContracts(projectId) {
   plan.assets = (plan.assets || []).filter((item) => !prunedScenes.has(item.scene_id));
   plan.planned_asset_count = plan.assets.length;
   plan.use_contract = "research/footage_use_contracts.json";
+  plan.use_contract_overrides = overrides ? "research/footage_use_contract_overrides.json" : null;
 
   await Promise.all([
+    writeJsonAtomic(files.contracts, contracts),
     writeJsonAtomic(files.editorial, editorial),
     writeJsonAtomic(files.plan, plan),
     writeJsonAtomic(files.blueprint, blueprint),
@@ -186,6 +307,8 @@ export async function applyFootageUseContracts(projectId) {
     materialized_shot_count: materializedShotCount,
     deferred_target_count: deferredTargets.length,
     removed_previous_assignments: removedAssignments,
+    explicit_retirement_count: (contracts.retired_targets || []).length,
+    override_applied: Boolean(overrides),
     pruned_plan_assets: originalPlanCount - plan.assets.length,
     active_plan_assets: plan.assets.length,
   };
