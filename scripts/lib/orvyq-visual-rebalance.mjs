@@ -34,7 +34,7 @@ function applyPrimaryEvidenceReplacement(shot, action, requests) {
   updated.visual_role = "evidence";
   updated.editorial_purpose = action.rationale;
   updated.semantic_rationale = action.rationale;
-  updated.semantic_link = "direct";
+  updated.semantic_link = "direct_evidence";
   updated.evidence = {
     ...(updated.evidence || {}),
     kind: replacements.length > 1 ? "image_sequence" : "official_figure",
