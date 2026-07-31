@@ -8,6 +8,7 @@ import {
   parseArgs,
   printJson,
 } from "./lib/fs-utils.mjs";
+import { canonicalVisualRole } from "./lib/orvyq-visual-roles.mjs";
 
 function sceneIdFromAsset(assetPath) {
   const match = String(assetPath || "").match(/(?:^|\/)scene_(\d{3})(?:_|\.mp4)/);
@@ -34,6 +35,7 @@ function validateAssignment(item, label) {
     throw new Error(`${label}.slice_index must be a non-negative integer`);
   if (!Number.isFinite(Number(item.trim_in_ratio || 0)) || Number(item.trim_in_ratio || 0) < 0 || Number(item.trim_in_ratio || 0) >= 1)
     throw new Error(`${label}.trim_in_ratio must be in [0, 1)`);
+  canonicalVisualRole(item.role || "context");
   if (!String(item.semantic_rationale || "").trim()) throw new Error(`${label}.semantic_rationale is required`);
 }
 
@@ -150,6 +152,10 @@ export async function applyFootageUseContracts(projectId) {
   }
 
   const contracts = mergeFootageUseContractOverrides(baseContracts, overrides);
+  contracts.assignments = (contracts.assignments || []).map((item) => ({
+    ...item,
+    role: canonicalVisualRole(item.role || "context"),
+  }));
   const managedScenes = new Set(contracts.managed_scene_ids || []);
   const prunedScenes = new Set(contracts.pruned_scene_ids || []);
   const assignments = contracts.assignments || [];
@@ -212,7 +218,7 @@ export async function applyFootageUseContracts(projectId) {
       asset: record.path,
       trimInRatio: Number(contract.trim_in_ratio || 0),
       motion: contract.motion || "hold",
-      role: contract.role || record.role || "context",
+      role: contract.role,
       semantic_anchor: narrationAnchor,
       semantic_rationale: contract.semantic_rationale,
       semantic_link: contract.semantic_link || "physical",
@@ -226,7 +232,7 @@ export async function applyFootageUseContracts(projectId) {
   const activeRecords = (runtime.records || []).filter((record) => !prunedScenes.has(record.scene_id));
   editorial.full_footage_pool = [...new Set(activeRecords.map((record) => record.path))];
   editorial.generation_policy =
-    "claim-bound footage use contracts plus explicit validated overrides; one scene may appear only at listed claim/slice targets; no automatic backfill, silent retirement or scene-id-wide reassignment";
+    "claim-bound footage use contracts plus explicit validated overrides; editorial role aliases are normalized to canonical render roles; one scene may appear only at listed claim/slice targets; no automatic backfill, silent retirement or scene-id-wide reassignment";
 
   const nextShots = clone(shots);
   const nextShotsByTarget = new Map();
@@ -263,7 +269,7 @@ export async function applyFootageUseContracts(projectId) {
       const trimOut = Math.round((trimCursor + duration) * 1000) / 1000;
       shot.asset_type = "footage";
       shot.asset = assignment.record.path;
-      shot.visual_role = assignment.role || assignment.record.role || "context";
+      shot.visual_role = assignment.role;
       shot.motion = assignment.motion || "hold";
       shot.trim_in_sec = trimIn;
       shot.trim_out_sec = trimOut;
