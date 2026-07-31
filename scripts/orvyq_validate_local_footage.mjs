@@ -17,6 +17,15 @@ function normalizeHash(value) {
   return String(value || "").trim().toLowerCase();
 }
 
+function sceneIdFromAsset(assetPath) {
+  const match = String(assetPath || "").match(/(?:^|\/)scene_(\d{3})(?:_|\.|$)/);
+  return match ? `scene_${match[1]}` : null;
+}
+
+function deleteFields(target, fields) {
+  for (const field of fields) delete target[field];
+}
+
 export async function reconcileActiveLocalFootage(projectId) {
   const dir = projectDir(projectId);
   const runtimeFile = path.join(dir, "assets", "footage_acquisition.runtime.json");
@@ -93,10 +102,151 @@ export async function reconcileActiveLocalFootage(projectId) {
   };
 }
 
+export async function reconcileSemanticShotAssignments(projectId) {
+  const dir = projectDir(projectId);
+  const blueprintFile = path.join(dir, "direction", "editorial_blueprint.json");
+  const runtimeFile = path.join(dir, "assets", "footage_acquisition.runtime.json");
+  const reviewsFile = path.join(dir, "research", "visual_asset_reviews.json");
+  const correctionsFile = path.join(dir, "direction", "semantic_shot_corrections.json");
+  const [blueprint, runtime, reviews] = await Promise.all([
+    readJson(blueprintFile),
+    readJson(runtimeFile),
+    readJson(reviewsFile),
+  ]);
+  const shots = blueprint.full_production?.shots || [];
+  const recordByScene = new Map((runtime.records || []).map((record) => [record.scene_id, record]));
+  const recordByPath = new Map((runtime.records || []).map((record) => [record.path, record]));
+  const approvalByProvider = new Map(
+    (reviews.approved_assets || []).map((approval) => [String(approval.provider_asset_id), approval]),
+  );
+
+  let normalizedPaths = 0;
+  for (const shot of shots) {
+    if (shot.asset_type !== "footage") continue;
+    const sceneId = sceneIdFromAsset(shot.asset);
+    const current = recordByScene.get(sceneId);
+    if (current && current.path !== shot.asset) {
+      shot.asset = current.path;
+      normalizedPaths += 1;
+    }
+  }
+
+  let appliedCorrections = 0;
+  if (await pathExists(correctionsFile)) {
+    const corrections = await readJson(correctionsFile);
+    if (corrections.project_id !== projectId) throw new Error("semantic shot correction project_id mismatch");
+    for (const correction of corrections.corrections || []) {
+      const shot = shots[correction.shot_index];
+      if (!shot) throw new Error(`Semantic correction targets missing shot ${correction.shot_index}`);
+      if (shot.claim_id !== correction.expected_claim_id) {
+        throw new Error(`Semantic correction claim drift at shot ${correction.shot_index}`);
+      }
+      const currentSceneId = sceneIdFromAsset(shot.asset);
+      if (correction.expected_asset_scene_id && currentSceneId !== correction.expected_asset_scene_id) {
+        const alreadyApplied = correction.replacement_type === "primary_evidence" && shot.asset_type === "evidence";
+        const replacementScene = correction.replacement_type === "contextual_footage" &&
+          currentSceneId === correction.source_scene_id;
+        if (!alreadyApplied && !replacementScene) {
+          throw new Error(`Semantic correction asset drift at shot ${correction.shot_index}`);
+        }
+      }
+
+      if (correction.replacement_type === "primary_evidence") {
+        shot.asset_type = "evidence";
+        shot.visual_role = "evidence";
+        shot.editorial_purpose = correction.editorial_purpose;
+        shot.semantic_rationale = correction.semantic_rationale;
+        shot.semantic_link = "direct_evidence";
+        shot.evidence = structuredClone(correction.evidence);
+        deleteFields(shot, [
+          "asset",
+          "trim_in_sec",
+          "trim_out_sec",
+          "motion",
+          "hook_footage",
+          "contextual_footage",
+          "generic_stock",
+          "reuse_reason",
+          "claim_bound_extension",
+          "claim_bound_extension_basis",
+          "graphic",
+          "emphasis_card",
+          "editorial_overlay",
+          "overlay",
+        ]);
+      } else if (correction.replacement_type === "contextual_footage") {
+        const replacement = recordByScene.get(correction.source_scene_id);
+        if (!replacement) throw new Error(`Semantic correction source ${correction.source_scene_id} is not active`);
+        if (Number(correction.trim_out_sec) - Number(correction.trim_in_sec) + 0.001 < Number(shot.duration)) {
+          throw new Error(`Semantic correction trim is shorter than shot ${correction.shot_index}`);
+        }
+        shot.asset_type = "footage";
+        shot.asset = replacement.path;
+        shot.trim_in_sec = correction.trim_in_sec;
+        shot.trim_out_sec = correction.trim_out_sec;
+        shot.visual_role = "scientific_context";
+        shot.editorial_purpose = correction.editorial_purpose;
+        shot.semantic_rationale = correction.semantic_rationale;
+        shot.semantic_link = correction.semantic_link || "physical";
+        shot.contextual_footage = true;
+        shot.generic_stock = false;
+        deleteFields(shot, [
+          "evidence",
+          "graphic",
+          "emphasis_card",
+          "editorial_overlay",
+          "overlay",
+          "reuse_reason",
+        ]);
+      } else {
+        throw new Error(`Unsupported semantic correction type ${correction.replacement_type}`);
+      }
+      appliedCorrections += 1;
+    }
+  }
+
+  let claimBoundExtensions = 0;
+  for (const shot of shots) {
+    if (shot.asset_type !== "footage") continue;
+    const record = recordByPath.get(shot.asset);
+    const approval = record && approvalByProvider.get(String(record.provider_asset_id));
+    const exactUse = (approval?.approved_uses || []).some((use) =>
+      use.claim_id === shot.claim_id && use.narration_anchor === shot.narration_anchor
+    );
+    if (exactUse) {
+      delete shot.claim_bound_extension;
+      delete shot.claim_bound_extension_basis;
+      continue;
+    }
+    const sameClaimUse = (approval?.approved_uses || []).some((use) =>
+      use.claim_id === shot.claim_id && String(use.semantic_rationale || "").length >= 24
+    );
+    if (sameClaimUse && String(shot.semantic_rationale || "").length >= 24) {
+      shot.claim_bound_extension = true;
+      shot.claim_bound_extension_basis =
+        "The exact active bytes are already approved for this claim; this shot is an adjacent narration slice with an explicit semantic rationale.";
+      claimBoundExtensions += 1;
+    } else {
+      delete shot.claim_bound_extension;
+      delete shot.claim_bound_extension_basis;
+    }
+  }
+
+  blueprint.full_production.shots = shots;
+  await writeJsonAtomic(blueprintFile, blueprint);
+  return {
+    project_id: projectId,
+    normalized_paths: normalizedPaths,
+    applied_corrections: appliedCorrections,
+    claim_bound_extensions: claimBoundExtensions,
+  };
+}
+
 export async function reconcileAndValidateLocalFootage(projectId) {
   const reconciliation = await reconcileActiveLocalFootage(projectId);
+  const semanticAssignments = await reconcileSemanticShotAssignments(projectId);
   const validation = await validateLocalFootage(projectId);
-  return { ...validation, reconciliation };
+  return { ...validation, reconciliation, semantic_assignments: semanticAssignments };
 }
 
 const isMain = process.argv[1] &&
