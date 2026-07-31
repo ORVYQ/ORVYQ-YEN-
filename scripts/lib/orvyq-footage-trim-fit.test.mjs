@@ -30,12 +30,15 @@ test("a downstream extension that overruns the source tail shifts the run earlie
   ];
   const result = fitContiguousFootageRunsToSources({
     shots,
-    sourceDurationByAsset: new Map([["a.mp4", 18]]),
+    sourceDurationByAsset: new Map([["a.mp4", 14]]),
   });
-  assert.equal(result.shifted_runs.length, 0);
+  assert.equal(result.shifted_runs.length, 1);
   assert.equal(result.slowed_runs.length, 0);
-  assert.equal(result.shots[0].trim_in_sec, 8);
-  assert.equal(result.shots[1].trim_out_sec, 18);
+  assert.equal(result.shots[0].trim_in_sec, 4);
+  assert.equal(result.shots[0].trim_out_sec, 10);
+  assert.equal(result.shots[1].trim_in_sec, 10);
+  assert.equal(result.shots[1].trim_out_sec, 14);
+  assert.equal(result.shots[0].playback_rate, undefined);
 });
 
 test("an overlong contiguous run uses one bounded playback rate instead of looping or synthetic frames", () => {
