@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 15,
-  "reason": "The stale NOAA replacement path is corrected through the validated project override layer, and a repository-wide regression test now requires every effective primary-evidence replacement path to match the canonical primary_evidence_manifest local_asset for its evidence_asset_id. Shared quality thresholds and the two-use limit remain unchanged. Re-run exact-head Candidate Validation without rendering video.",
+  "request_revision": 16,
+  "reason": "Claim-matched scene_054 expedition-field footage and scene_029 formal-assembly footage replace the semantically incorrect third uses in CLM_009 while the global two-use limit remains unchanged. The exact-use review queue now detects narration drift, ignores planning-only anchors, binds contact sheets to canonical Git LFS object identities and preserves legacy decisions safely. Footage-contract reconciliation now immediately re-materializes the effective visual-rebalance plan into the canonical blueprint. The footage workflow passes with 49 approved assets, zero rejected or pending assets, zero blocked requests, a materialized plan and a ready blueprint. Re-run exact-head Candidate Validation without rendering video.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T14:10:00Z"
+  "requested_at": "2026-07-31T14:55:00Z"
 }
