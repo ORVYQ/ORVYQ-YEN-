@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 import os
+import shutil
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -13,6 +14,12 @@ def run(*args: str) -> None:
     print("+", " ".join(args), flush=True)
     subprocess.run(args, check=True)
 
+
+# Some full-suite audio tests create tiny local fixtures with ffmpeg. Installing the
+# test dependency is not a render and must happen before the suite starts.
+if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+    run("sudo", "apt-get", "update", "-qq")
+    run("sudo", "apt-get", "install", "-y", "-qq", "ffmpeg")
 
 # Keep this validation strictly render-free.
 run("npm", "test", "--", "--test-concurrency=1")
