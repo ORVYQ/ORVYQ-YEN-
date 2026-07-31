@@ -123,3 +123,35 @@ test("materialization replaces cards with exact evidence and footage assets", ()
   assert.equal(result[1].asset, "assets/footage/direct.mp4");
   assert.equal(result[1].trim_out_sec, 9);
 });
+
+test("materialization redesigns source-derived graphic-card evidence", () => {
+  const shots = [
+    shot(8, "evidence", "SEC_01", {
+      evidence: {
+        kind: "concept_map",
+        template_id: "legacy_concept_map",
+        necessity: "mechanism",
+        title: "A source-derived comparison",
+        source_ids: ["SRC_001"],
+      },
+    }),
+  ];
+  const plan = {
+    status: "materialized",
+    actions: [{
+      baseline_shot_index: 0,
+      claim_id: "CLM_001",
+      duration_seconds: 8,
+      decision: "redesign",
+      projected_medium: "graphic_card",
+      template_id: "orvyq_single_comparison",
+      rationale: "Keep one concise source-derived comparison in the cinematic design system.",
+    }],
+  };
+
+  const result = materializeVisualRebalancePlan({ shots, plan });
+  assert.equal(result[0].asset_type, "evidence");
+  assert.equal(result[0].evidence.kind, "concept_map");
+  assert.equal(result[0].evidence.template_id, "orvyq_single_comparison");
+  assert.equal(result[0].evidence.design_system, "orvyq_cinematic_v1");
+});
