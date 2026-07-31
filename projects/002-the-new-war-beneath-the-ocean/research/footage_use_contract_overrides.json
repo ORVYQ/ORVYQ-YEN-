@@ -2,9 +2,25 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "managed_scene_ids": [
-    "scene_050"
+    "scene_016",
+    "scene_019",
+    "scene_029",
+    "scene_050",
+    "scene_054"
   ],
   "retired_targets": [
+    {
+      "scene_id": "scene_016",
+      "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+      "slice_index": 2,
+      "reason": "The asset is verified NOAA deep-ocean wall footage, not a marine-science laboratory; retire the semantically incorrect third use while retaining its two physically direct depth-context uses."
+    },
+    {
+      "scene_id": "scene_019",
+      "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+      "slice_index": 3,
+      "reason": "Retire the third use of the night-ocean metaphor and replace the two-rulebook sentence with a real human governance setting that carries the institutional meaning more directly."
+    },
     {
       "scene_id": "scene_050",
       "claim_id": "CLM_007_US_PARALLEL_ROUTE",
@@ -13,6 +29,46 @@
     }
   ],
   "assignments": [
+    {
+      "scene_id": "scene_016",
+      "claim_id": "CLM_001_JAPAN_TECHNICAL_MILESTONE",
+      "slice_index": 2,
+      "trim_in_ratio": 0.02,
+      "motion": "drift_right",
+      "role": "context",
+      "semantic_link": "physical",
+      "semantic_rationale": "Official NOAA deep-ocean wall footage directly establishes darkness, cold and crushing-pressure conditions while JAMSTEC primary evidence retains the named Japanese operation."
+    },
+    {
+      "scene_id": "scene_019",
+      "claim_id": "CLM_005_COMMON_HERITAGE_PRINCIPLE",
+      "slice_index": 4,
+      "trim_in_ratio": 0.02,
+      "motion": "hold",
+      "role": "metaphor",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A restrained night-ocean view carries the scale and remoteness of the shared frontier without replacing treaty text or asserting a named location."
+    },
+    {
+      "scene_id": "scene_029",
+      "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+      "slice_index": 3,
+      "trim_in_ratio": 0.5,
+      "motion": "pull",
+      "role": "human_context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A populated formal assembly gives human form to the sentence about one ocean, two rulebooks and no commercial precedent; primary legal documents retain every factual proposition."
+    },
+    {
+      "scene_id": "scene_029",
+      "claim_id": "CLM_017_UNUSED_OPTION_SYNTHESIS",
+      "slice_index": 6,
+      "trim_in_ratio": 0.08,
+      "motion": "hold",
+      "role": "human_context",
+      "semantic_link": "conceptual",
+      "semantic_rationale": "A real international assembly gives practical meaning to common heritage while treaty and ISA sources retain the legal claim."
+    },
     {
       "scene_id": "scene_050",
       "claim_id": "CLM_007_US_PARALLEL_ROUTE",
@@ -32,6 +88,16 @@
       "role": "human_context",
       "semantic_link": "conceptual",
       "semantic_rationale": "A distinct formal-hearing trim represents regulatory delay while source documents retain the factual burden."
+    },
+    {
+      "scene_id": "scene_054",
+      "claim_id": "CLM_009_INDUSTRY_COUNTERARGUMENT",
+      "slice_index": 2,
+      "trim_in_ratio": 0.08,
+      "motion": "drift_left",
+      "role": "human_context",
+      "semantic_link": "physical",
+      "semantic_rationale": "Official expedition field-operations footage physically expresses the gap between a plan and an operating system without presenting the generic mission as a commercial mining project."
     }
   ]
 }
