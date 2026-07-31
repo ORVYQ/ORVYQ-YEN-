@@ -2,8 +2,8 @@
   "schema_version": "1.0",
   "project_id": "002-the-new-war-beneath-the-ocean",
   "status": "requested",
-  "request_revision": 23,
-  "reason": "Re-run exact-head Candidate Validation after replacing the stale third scene_015 use at CLM_015 slice 0 with a distinct approved trim of official NOAA scene_051 ROV research footage. Scene_015 now has exactly two continuous-use groups, scene_051 has exactly two separated uses with an explicit callback reason on the second, and scene_053 remains within its two-use ceiling. No video render is permitted.",
+  "request_revision": 24,
+  "reason": "Re-run exact-head Candidate Validation after fixing footage replacement materialization at the system layer. Replacement trim bounds now define an available source window, the materializer clamps trim_out_sec to the generated shot duration, and a regression test verifies both exact timeline matching and fail-closed rejection of undersized windows. This revalidates the scene_015/scene_051 reuse correction. No video render is permitted.",
   "requested_by": "orvyq_system",
-  "requested_at": "2026-07-31T17:45:00Z"
+  "requested_at": "2026-07-31T17:55:00Z"
 }
