@@ -115,9 +115,41 @@ jobs:
       - name: Print every QA report
         run: |
           set -euo pipefail
+          # captions.json and edit_plan.json are large canonical documents, not
+          # findings; summarise them instead of dumping thousands of lines that
+          # would push the actual QA verdicts out of a readable log.
           find inspect-qa -name '*.json' | sort | while read -r f; do
-            echo "===== QA REPORT: $f"
-            python3 -m json.tool "$f" || cat "$f"
+            case "$(basename "$f")" in
+              captions.json|edit_plan.json)
+                echo "===== SUMMARY: $f"
+                python3 -c "
+          import json,sys
+          d=json.load(open(sys.argv[1]))
+          if 'captions' in d:
+              c=d['captions']
+              print('captions:',len(c))
+              print('style:',json.dumps(d.get('style')))
+              print('source:',d.get('source'),'| text_source:',d.get('text_source'))
+              print('longest:',max((len(x['text']) for x in c), default=0),'chars')
+              print('first:',repr(c[0]['text']) if c else None)
+              print('last:',repr(c[-1]['text']) if c else None)
+          if 'shots' in d:
+              sh=d['shots']
+              print('shots:',len(sh),'| fps',d.get('fps'),'| frames',d.get('duration_frames'))
+              from collections import Counter
+              print('asset_type:',Counter(x.get('asset_type') for x in sh))
+              print('visual_role:',Counter(x.get('visual_role') for x in sh))
+              print('section:',Counter(x.get('section_id') for x in sh))
+              dur=[(x['end_frame']-x['start_frame'])/d['fps'] for x in sh]
+              dur.sort()
+              print('shot seconds: min %.2f p50 %.2f p90 %.2f max %.2f' % (dur[0],dur[len(dur)//2],dur[int(len(dur)*0.9)],dur[-1]))
+          " "$f" || true
+                ;;
+              *)
+                echo "===== QA REPORT: $f"
+                python3 -m json.tool "$f" || cat "$f"
+                ;;
+            esac
           done
 
       - name: Probe the rendered file
@@ -133,21 +165,22 @@ jobs:
           sha256sum "$VIDEO"
 
       - name: Measure luma, audio and cut rhythm over the whole film
+        continue-on-error: true
         run: |
           set -euo pipefail
           VIDEO='${{ steps.probe.outputs.video }}'
           echo "===== SCENE CUTS (threshold 0.30)"
           ffmpeg -nostdin -hide_banner -nostats -i "$VIDEO" -an \
             -vf "select='gt(scene,0.30)',metadata=print:file=-" -f null - 2>/dev/null \
-            | grep -E 'pts_time' | awk '{print $NF}' | head -400
+            | { grep -E 'pts_time' || true; } | awk '{print $NF}' | head -400
           echo "===== LUMA EVERY 2s"
           ffmpeg -nostdin -hide_banner -nostats -i "$VIDEO" -an \
             -vf "fps=1/2,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-" -f null - 2>/dev/null \
-            | grep -Eo 'YAVG=[0-9.]+' | head -600
+            | { grep -Eo 'YAVG=[0-9.]+' || true; } | head -600
           echo "===== AUDIO LEVEL EVERY 2s (RMS dB)"
           ffmpeg -nostdin -hide_banner -nostats -i "$VIDEO" -vn \
             -af "astats=metadata=1:reset=60,ametadata=print:key=lavfi.astats.Overall.RMS_level:file=-" -f null - 2>/dev/null \
-            | grep -Eo 'RMS_level=[-0-9.]+' | head -200
+            | { grep -Eo 'RMS_level=[-0-9.]+' || true; } | head -200
 
       - name: Emit sampled frames as base64 for log-side visual inspection
         run: |
