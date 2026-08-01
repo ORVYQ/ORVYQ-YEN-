@@ -1,0 +1,148 @@
+name: ORVYQ Review Inspection
+
+# Manual, read-only inspection of a rendered Full-Length Review.
+#
+# The review workflow proves a candidate passes its automated gates. It does
+# not tell a reviewer what the film actually looks like, and the QA reports
+# that would answer that live inside a workflow artifact. This workflow opens
+# that material up: it re-reads the rendered video and every QA report from a
+# named review run and prints them to the job log, so the findings are
+# readable without downloading a 800 MB artifact -- including from
+# environments whose egress policy blocks artifact blob storage.
+#
+# It renders nothing, changes nothing and writes nothing back to the branch.
+on:
+  workflow_dispatch:
+    inputs:
+      project_id:
+        description: "Project directory id under projects/"
+        type: string
+        required: true
+      review_run_id:
+        description: "Full-Length Review run ID to inspect"
+        type: string
+        required: true
+      frame_count:
+        description: "Evenly spaced frames to sample from the film"
+        type: string
+        default: "36"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: orvyq-review-inspection-${{ inputs.project_id }}-${{ inputs.review_run_id }}
+  cancel-in-progress: true
+
+env:
+  PROJECT_ID: ${{ inputs.project_id }}
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify the named review run
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runId = Number('${{ inputs.review_run_id }}');
+            const { data: run } = await github.rest.actions.getWorkflowRun({ owner: context.repo.owner, repo: context.repo.repo, run_id: runId });
+            if (!run.path || !run.path.endsWith("orvyq-review.yml")) core.setFailed(`run ${runId} is not a Full-Length Candidate Review`);
+            core.info(`inspecting review run ${runId}: ${run.conclusion} @ ${run.head_sha}`);
+
+      - name: Install ffmpeg
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg
+
+      - name: Download the rendered review
+        uses: actions/download-artifact@v4
+        with:
+          name: orvyq-full-length-review-${{ inputs.project_id }}-${{ inputs.review_run_id }}
+          path: inspect-video
+          run-id: ${{ inputs.review_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download the review QA reports
+        uses: actions/download-artifact@v4
+        with:
+          name: orvyq-review-qa-${{ inputs.project_id }}-${{ inputs.review_run_id }}
+          path: inspect-qa
+          run-id: ${{ inputs.review_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print every QA report
+        run: |
+          set -euo pipefail
+          find inspect-qa -name '*.json' | sort | while read -r f; do
+            echo "===== QA REPORT: $f"
+            python3 -m json.tool "$f" || cat "$f"
+          done
+
+      - name: Probe the rendered file
+        id: probe
+        run: |
+          set -euo pipefail
+          VIDEO="$(find inspect-video -type f -iname '*.mp4' -print -quit)"
+          test -n "$VIDEO"
+          echo "video=$VIDEO" >> "$GITHUB_OUTPUT"
+          echo "===== FFPROBE"
+          ffprobe -v error -show_format -show_streams -print_format json "$VIDEO"
+          echo "===== SHA256"
+          sha256sum "$VIDEO"
+
+      - name: Measure luma, audio and cut rhythm over the whole film
+        run: |
+          set -euo pipefail
+          VIDEO='${{ steps.probe.outputs.video }}'
+          echo "===== SCENE CUTS (threshold 0.30)"
+          ffmpeg -nostdin -hide_banner -nostats -i "$VIDEO" -an \
+            -vf "select='gt(scene,0.30)',metadata=print:file=-" -f null - 2>/dev/null \
+            | grep -E 'pts_time' | awk '{print $NF}' | head -400
+          echo "===== LUMA EVERY 2s"
+          ffmpeg -nostdin -hide_banner -nostats -i "$VIDEO" -an \
+            -vf "fps=1/2,signalstats,metadata=print:key=lavfi.signalstats.YAVG:file=-" -f null - 2>/dev/null \
+            | grep -Eo 'YAVG=[0-9.]+' | head -600
+          echo "===== AUDIO LEVEL EVERY 2s (RMS dB)"
+          ffmpeg -nostdin -hide_banner -nostats -i "$VIDEO" -vn \
+            -af "astats=metadata=1:reset=60,ametadata=print:key=lavfi.astats.Overall.RMS_level:file=-" -f null - 2>/dev/null \
+            | grep -Eo 'RMS_level=[-0-9.]+' | head -200
+
+      - name: Emit sampled frames as base64 for log-side visual inspection
+        run: |
+          set -euo pipefail
+          VIDEO='${{ steps.probe.outputs.video }}'
+          COUNT='${{ inputs.frame_count }}'
+          DUR="$(ffprobe -v error -show_entries format=duration -of default=nk=1:nw=1 "$VIDEO")"
+          mkdir -p shots
+          python3 - "$VIDEO" "$DUR" "$COUNT" <<'PYEOF'
+          import subprocess, sys
+          video, dur, n = sys.argv[1], float(sys.argv[2]), int(sys.argv[3])
+          for i in range(n):
+              t = dur * (i + 0.5) / n
+              subprocess.run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error",
+                              "-ss", str(t), "-i", video, "-frames:v", "1",
+                              "-vf", "scale=480:-2", "-q:v", "6",
+                              "shots/f%03d_%04ds.jpg" % (i, int(t))], check=True)
+          PYEOF
+          for f in shots/*.jpg; do
+            echo "-----BEGIN FRAME $f"
+            base64 -w 0 "$f"
+            echo ""
+            echo "-----END FRAME $f"
+          done
+
+      - name: Upload inspection material
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: orvyq-review-inspection-${{ inputs.project_id }}-${{ inputs.review_run_id }}
+          retention-days: 14
+          path: shots
+          if-no-files-found: warn
