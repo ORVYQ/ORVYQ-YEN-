@@ -248,7 +248,7 @@ After every meaningful discovery, update the live acceptance record and change l
 - [x] A 720p Full-Length Review is generated
 - [ ] User corrections are collected and applied
 - [x] Reusable defects discovered during review are fixed system-wide
-- [ ] A corrected Full-Length Review passes again
+- [x] A corrected Full-Length Review passes again
 - [ ] The user explicitly approves the candidate
 - [ ] The 1080p Final Encode succeeds
 - [x] A fresh blank project proves scaffold isolation and deterministic repeatability
@@ -311,6 +311,27 @@ Current status (last verified 2026-07-30):
   The candidate measures 1,037.6s (17:17.6) at 30fps with a 14s motion hook.
   This closes the last unchecked pre-review item in section 13; the candidate
   is genuinely review-ready rather than review-ready by assumption.
+- **The corrected 720p Full-Length Review rendered and passed every
+  post-render gate.** Run `30685593071` (commit `7f4e0ea`, validated candidate
+  `30672139066`, dispatched on the user's explicit instruction) rendered the
+  complete 1280×720 film in 2h12m47s and then passed speech verification,
+  post-render media QA and the near-black audit — the first review in this
+  project's history to clear post-render QA, the stage the previous review
+  (`30491571952`) failed on the project-leaked opening sentence.
+  - Review video sha256
+    `e507c249a11346645df02f0b3ac8efb746452ed8359635e07ef379365b97ddfe`,
+    1,037.6s, artifact `orvyq-full-length-review-…-30685593071` (820 MB).
+  - The render bundle (`orvyq-render-bundle-…-30685593071`, 572 MB) was
+    published only after the post-render QA gate, under the ordering fixed in
+    this pass. It is the exact input Final Encode consumes.
+  - `scripts/orvyq_render_manifest.mjs` wrote its first real review manifest
+    here; the review/final parity path it feeds is now exercised in production,
+    not just in tests.
+  - Contact sheet, mobile review sheet and ffprobe report are in
+    `orvyq-review-qa-…-30685593071` for the user's own inspection.
+- Awaiting the user's review of that film. Final Encode remains forbidden
+  until they approve it explicitly and a `qa/proof_approval.json` naming
+  review run `30685593071` is committed.
 - PR `#4` joined the previously divergent histories without rewriting either
   one and merged the complete working system into `main` as `59e608d`. The
   default branch now contains the real pipeline rather than the placeholder
