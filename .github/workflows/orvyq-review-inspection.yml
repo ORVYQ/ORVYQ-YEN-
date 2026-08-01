@@ -206,6 +206,38 @@ jobs:
             echo "-----END FRAME $f"
           done
 
+      # Printed last, deliberately. The QA reports at the top of this job are
+      # pushed out of any readable log window by qa/speech_transcript.json's
+      # word-level timings and by the base64 frames, so the verdicts a
+      # reviewer actually needs are re-emitted compactly at the very end.
+      - name: Print the verdict digest
+        if: always()
+        run: |
+          set -euo pipefail
+          python3 - <<'PYEOF'
+          import json, glob, os
+          def load(p):
+              try:
+                  with open(p) as fh: return json.load(fh)
+              except Exception: return None
+          print("========== ORVYQ REVIEW VERDICT DIGEST ==========")
+          for path in sorted(glob.glob("inspect-qa/**/*.json", recursive=True)):
+              name = os.path.basename(path)
+              if name in ("captions.json", "edit_plan.json", "speech_transcript.json",
+                          "full_narration_speech_qa.json"):
+                  continue
+              d = load(path)
+              if not isinstance(d, dict):
+                  continue
+              keep = {k: v for k, v in d.items()
+                      if not isinstance(v, (list, dict)) or k in ("loudness", "duration", "speech", "captions", "sound_design", "thresholds")}
+              print(f"----- {name}")
+              print(json.dumps(keep, indent=2)[:4000])
+          for f in ("media-qa.status", "near-black.status"):
+              for path in glob.glob(f"inspect-qa/**/{f}", recursive=True) + glob.glob(f):
+                  print(f"{f}:", open(path).read().strip())
+          PYEOF
+
       - name: Upload inspection material
         if: always()
         uses: actions/upload-artifact@v4
