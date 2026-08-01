@@ -1,0 +1,8 @@
+{
+  "schema_version": "1.0",
+  "project_id": "002-the-new-war-beneath-the-ocean",
+  "review_run_id": "30685593071",
+  "frame_count": 36,
+  "reason": "Full reviewer-facing inspection of the first Full-Length Review to pass post-render QA.",
+  "render_policy": "read-only; renders nothing and writes nothing back"
+}
